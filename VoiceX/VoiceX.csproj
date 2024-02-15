@@ -1,0 +1,643 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <EnableTypeInfoReflection>false</EnableTypeInfoReflection>
+    <DebugType>pdbonly</DebugType>
+    <ProjectGuid>{BBEE3202-3850-4908-9A90-6E9937E4AA05}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VoiceX</RootNamespace>
+    <AssemblyName>VoiceX</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.22621.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <AppxBundle>Never</AppxBundle>
+    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
+    <AppInstallerUri>C:\Users\user\Work</AppInstallerUri>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <PackageCertificateThumbprint>C771EC8ECDAABFFE8F8023FEE2AA4CBE28A54A7E</PackageCertificateThumbprint>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
+    <AppxPackageSigningTimestampServerUrl>
+    </AppxPackageSigningTimestampServerUrl>
+    <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <Use64BitCompiler>true</Use64BitCompiler>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <EnableTypeInfoReflection>false</EnableTypeInfoReflection>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+    <EnableGatekeeperAnalysis>false</EnableGatekeeperAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <EnableTypeInfoReflection>false</EnableTypeInfoReflection>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;CODE_ANALYSIS</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+    <EnableGatekeeperAnalysis>false</EnableGatekeeperAnalysis>
+    <DotNetNativeVersion>2.2.3</DotNetNativeVersion>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <EnableTypeInfoReflection>false</EnableTypeInfoReflection>
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM64'">
+    <EnableTypeInfoReflection>false</EnableTypeInfoReflection>
+    <OutputPath>bin\ARM64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <EnableTypeInfoReflection>false</EnableTypeInfoReflection>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Optimize>true</Optimize>
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
+    <EnableGatekeeperAnalysis>false</EnableGatekeeperAnalysis>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Context\AddDbContext.cs" />
+    <Compile Include="DAL\Entity\HistoryNotes.cs" />
+    <Compile Include="DAL\Entity\HotKeyUser.cs" />
+    <Compile Include="DAL\Entity\LogginNotes.cs" />
+    <Compile Include="Enums\Keypads.cs" />
+    <Compile Include="Enums\StatusCall.cs" />
+    <Compile Include="Items\ContactPad.xaml.cs">
+      <DependentUpon>ContactPad.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Items\DeviceItem.xaml.cs">
+      <DependentUpon>DeviceItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Items\FaxFileItem.xaml.cs">
+      <DependentUpon>FaxFileItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Items\HeadingContactList.xaml.cs">
+      <DependentUpon>HeadingContactList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Items\HotKeyItem.xaml.cs">
+      <DependentUpon>HotKeyItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Items\RegExItem.xaml.cs">
+      <DependentUpon>RegExItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Items\CallItem.xaml.cs">
+      <DependentUpon>CallItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Items\Contact.xaml.cs">
+      <DependentUpon>Contact.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Items\HistoryNote.xaml.cs">
+      <DependentUpon>HistoryNote.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Items\PauseItem.xaml.cs">
+      <DependentUpon>PauseItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\account_data.cs" />
+    <Compile Include="Models\contact.cs" />
+    <Compile Include="Models\contacts_list.cs" />
+    <Compile Include="Models\data.cs" />
+    <Compile Include="Models\get_certificate.cs" />
+    <Compile Include="Models\get_pauses.cs" />
+    <Compile Include="Models\ldap_settings.cs" />
+    <Compile Include="Models\pause.cs" />
+    <Compile Include="Models\regex_note.cs" />
+    <Compile Include="Models\responce_model.cs" />
+    <Compile Include="Models\sip_settings.cs" />
+    <Compile Include="Models\status_pause.cs" />
+    <Compile Include="Models\user_data.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\BackgroundTaskService.cs" />
+    <Compile Include="Services\CoreService.cs" />
+    <Compile Include="Services\ErrorService.cs" />
+    <Compile Include="Services\WebService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Views\ControlPages\AdditionPage.xaml.cs">
+      <DependentUpon>AdditionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlPages\ClickToCallPage.xaml.cs">
+      <DependentUpon>ClickToCallPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientCardPages\ClientCard.xaml.cs">
+      <DependentUpon>ClientCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientCardPages\DocksPage.xaml.cs">
+      <DependentUpon>DocksPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientCardPages\EventsPage.xaml.cs">
+      <DependentUpon>EventsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientCardPages\FamilyPage.xaml.cs">
+      <DependentUpon>FamilyPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientCardPages\HistoryPage.xaml.cs">
+      <DependentUpon>HistoryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientCardPages\TasksPage.xaml.cs">
+      <DependentUpon>TasksPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FaxPage.xaml.cs">
+      <DependentUpon>FaxPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlPages\GeneralSettingPage.xaml.cs">
+      <DependentUpon>GeneralSettingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HistoryPage.xaml.cs">
+      <DependentUpon>HistoryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientsPage.xaml.cs">
+      <DependentUpon>ClientsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlPages\ProfilePage.xaml.cs">
+      <DependentUpon>ProfilePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientCardPages\InfoContent.xaml.cs">
+      <DependentUpon>InfoContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientCardPages\InfoPage.xaml.cs">
+      <DependentUpon>InfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HotKeyPage.xaml.cs">
+      <DependentUpon>HotKeyPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhonePages\ActivCallPage.xaml.cs">
+      <DependentUpon>ActivCallPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhonePages\CallPage.xaml.cs">
+      <DependentUpon>CallPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhonePages\DialpadCallPage.xaml.cs">
+      <DependentUpon>DialpadCallPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhonePages\DialpadPage.xaml.cs">
+      <DependentUpon>DialpadPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RegistrationPage.xaml.cs">
+      <DependentUpon>RegistrationPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Icone_v2\BackgroundTopElement.png" />
+    <Content Include="Assets\Icone_v2\Backspace.png" />
+    <Content Include="Assets\Icone_v2\Box.png" />
+    <Content Include="Assets\Icone_v2\calendar.png" />
+    <Content Include="Assets\Icone_v2\carbon_order-details.png" />
+    <Content Include="Assets\Icone_v2\ClockCount.png" />
+    <Content Include="Assets\Icone_v2\Cloud.png" />
+    <Content Include="Assets\Icone_v2\Coffee.png" />
+    <Content Include="Assets\Icone_v2\ContactInfo.png" />
+    <Content Include="Assets\Icone_v2\ContactMessage.png" />
+    <Content Include="Assets\Icone_v2\ContactPhone.png" />
+    <Content Include="Assets\Icone_v2\contactsNavigate.png" />
+    <Content Include="Assets\Icone_v2\Copy.png" />
+    <Content Include="Assets\Icone_v2\Devise.png" />
+    <Content Include="Assets\Icone_v2\Doc.png" />
+    <Content Include="Assets\Icone_v2\Error.png" />
+    <Content Include="Assets\Icone_v2\exitApp.png" />
+    <Content Include="Assets\Icone_v2\faxNavigate.png" />
+    <Content Include="Assets\Icone_v2\FileIcone.png" />
+    <Content Include="Assets\Icone_v2\FileText.png" />
+    <Content Include="Assets\Icone_v2\GreyUser.png" />
+    <Content Include="Assets\Icone_v2\Illustration.png" />
+    <Content Include="Assets\Icone_v2\Keyboard.png" />
+    <Content Include="Assets\Icone_v2\LinePhone.png" />
+    <Content Include="Assets\Icone_v2\ListChek.png" />
+    <Content Include="Assets\Icone_v2\LodingIcone.gif" />
+    <Content Include="Assets\Icone_v2\Folder.png" />
+    <Content Include="Assets\Icone_v2\historyNavigate.png" />
+    <Content Include="Assets\Icone_v2\homeNavigate.png" />
+    <Content Include="Assets\Icone_v2\Key.png" />
+    <Content Include="Assets\Icone_v2\microphone.png" />
+    <Content Include="Assets\Icone_v2\phoneNavigate.png" />
+    <Content Include="Assets\Icone_v2\refresh.png" />
+    <Content Include="Assets\Icone_v2\refreshblue.png" />
+    <Content Include="Assets\Icone_v2\Reload.png" />
+    <Content Include="Assets\Icone_v2\SmartPhone.png" />
+    <Content Include="Assets\Icone_v2\SpeakerHigh.png" />
+    <Content Include="Assets\Icone_v2\Success.png" />
+    <Content Include="Assets\Icone_v2\TopLogo.png" />
+    <Content Include="Assets\Icone_v2\TransferCall.png" />
+    <Content Include="Assets\Icone_v2\trash.png" />
+    <Content Include="Assets\Icone_v2\UserTree.png" />
+    <Content Include="Assets\Icone_v2\Warning.png" />
+    <Content Include="Assets\Logo100x40.png" />
+    <Content Include="Assets\Logo284.scale-100.png" />
+    <Content Include="Assets\Logo284.scale-125.png" />
+    <Content Include="Assets\Logo284.scale-150.png" />
+    <Content Include="Assets\Logo284.scale-200.png" />
+    <Content Include="Assets\Logo284.scale-400.png" />
+    <Content Include="Assets\Logo400.scale-400.png" />
+    <Content Include="Assets\Ring\ringtone.mkv" />
+    <Content Include="Assets\Ring\ringtone.mp3" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-125.png" />
+    <Content Include="Assets\SplashScreen.scale-150.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Square310x310Logo.scale-100.png" />
+    <Content Include="Assets\Square310x310Logo.scale-125.png" />
+    <Content Include="Assets\Square310x310Logo.scale-150.png" />
+    <Content Include="Assets\Square310x310Logo.scale-200.png" />
+    <Content Include="Assets\Square310x310Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-48.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-125.png" />
+    <Content Include="Assets\StoreLogo.scale-150.png" />
+    <Content Include="Assets\StoreLogo.scale-200.png" />
+    <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <None Include="Package.StoreAssociation.xml" />
+    <Content Include="Properties\Default.rd.xml" />
+    <None Include="Assets\default-windowsrsa.crt" />
+    <Content Include="Assets\Fonts\Jost-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Fonts\NunitoSans_10pt-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="default-windowsrsa.p12" />
+    <None Include="Package_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Items\ContactPad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Items\DeviceItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Items\FaxFileItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Items\HeadingContactList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Items\HotKeyItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Items\RegExItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Items\CallItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Items\Contact.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Items\HistoryNote.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Items\PauseItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Style\Style.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlPages\AdditionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlPages\ClickToCallPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientCardPages\ClientCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientCardPages\DocksPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientCardPages\EventsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientCardPages\FamilyPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientCardPages\HistoryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientCardPages\TasksPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FaxPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlPages\GeneralSettingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HistoryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlPages\ProfilePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientCardPages\InfoContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientCardPages\InfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HotKeyPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PhonePages\ActivCallPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PhonePages\CallPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PhonePages\DialpadCallPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PhonePages\DialpadPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RegistrationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="LinphoneSDK">
+      <Version>5.1.62</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Data.Sqlite">
+      <Version>1.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Net.Http">
+      <Version>2.2.29</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+      <Version>6.2.14</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="NSwag.Core">
+      <Version>13.20.0</Version>
+    </PackageReference>
+    <PackageReference Include="WindowsAzure.Messaging.Managed">
+      <Version>0.1.7.9</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Fonts\Inter-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Fonts\Montserrat-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="Microsoft.Services.Store.Engagement, Version=10.0">
+      <Name>Microsoft Engagement Framework</Name>
+    </SDKReference>
+    <SDKReference Include="Microsoft.VCLibs.120, Version=14.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Universal</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsDesktop, Version=10.0.16299.0">
+      <Name>Windows Desktop Extensions for the UWP %28WindowsDesktop, Version=10.0.16299.0%29</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsDesktop, Version=10.0.17134.0">
+      <Name>Windows Desktop Extensions for the UWP %28WindowsDesktop, Version=10.0.17134.0%29</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsDesktop, Version=10.0.17763.0">
+      <Name>Windows Desktop Extensions for the UWP %28WindowsDesktop, Version=10.0.17763.0%29</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsDesktop, Version=10.0.18362.0">
+      <Name>Windows Desktop Extensions for the UWP %28WindowsDesktop, Version=10.0.18362.0%29</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsDesktop, Version=10.0.19041.0">
+      <Name>Windows Desktop Extensions for the UWP %28WindowsDesktop, Version=10.0.19041.0%29</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsDesktop, Version=10.0.20348.0">
+      <Name>Windows Desktop Extensions for the UWP %28WindowsDesktop, Version=10.0.20348.0%29</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsDesktop, Version=10.0.22000.0">
+      <Name>Windows Desktop Extensions for the UWP %28WindowsDesktop, Version=10.0.22000.0%29</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsDesktop, Version=10.0.22621.0">
+      <Name>Windows Desktop Extensions for the UWP %28WindowsDesktop, Version=10.0.22621.0%29</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VoiceXBackground\VoiceXBackground.csproj">
+      <Project>{35fe0746-bb53-47d7-95f2-385b3efba238}</Project>
+      <Name>VoiceXBackground</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'VoiceX|x86'">
+    <OutputPath>bin\x86\VoiceX\</OutputPath>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+    <EnableGatekeeperAnalysis>false</EnableGatekeeperAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'VoiceX|ARM'">
+    <OutputPath>bin\ARM\VoiceX\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'VoiceX|ARM64'">
+    <OutputPath>bin\ARM64\VoiceX\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'VoiceX|x64'">
+    <OutputPath>bin\x64\VoiceX\</OutputPath>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'VoiceX|Win32'">
+    <OutputPath>bin\Win32\VoiceX\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

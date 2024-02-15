@@ -1,0 +1,289 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Class="VoiceX.Views.PhonePages.DialpadPage"
+    mc:Ignorable="d" x:Name="phonePage" Loaded="PhonePage_Loaded" Background="White" MinWidth="215" PointerPressed="PhonePage_PointerPressed" MinHeight="365" >
+
+    <Grid x:Name="MainGrid" Width="245" PointerPressed="PhonePage_PointerPressed">
+        <Grid PointerPressed="PhonePage_PointerPressed"  VerticalAlignment="Top" Height="45" >
+            <Grid.Background>
+                <ImageBrush>
+                    <ImageBrush.ImageSource>
+                        <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/BackgroundTopElement.png" DecodePixelWidth="350" DecodePixelHeight="400"/>
+                    </ImageBrush.ImageSource>
+                </ImageBrush>
+            </Grid.Background>
+            <Image PointerPressed="PhonePage_PointerPressed" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="24,2,0,0" Width="55">
+                <Image.Source>
+                    <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/TopLogo.png" DecodePixelWidth="200" DecodePixelHeight="90"/>
+                </Image.Source>
+            </Image>
+            <Button PointerPressed="PhonePage_PointerPressed" PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" BorderThickness="0" ToolTipService.ToolTip="Pauses" ToolTipService.Placement="Mouse" x:Name="Pauses" Click="Pauses_Click" Height="30" Width="30" Style="{StaticResource ButtonStyleStandart}" Background="Transparent" Padding="0,0,0,0" HorizontalAlignment="Right" Margin="0,0,16,0">
+                <Button.Content>
+                    <Grid BorderThickness="1" BorderBrush="#FFC3B1FD" Height="28" Width="28"  Background="#FFFDFEFF" CornerRadius="50">
+                        <Image Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image.Source>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/Coffee.png" DecodePixelWidth="60" DecodePixelHeight="60"/>
+                            </Image.Source>
+                        </Image>
+                    </Grid>
+                </Button.Content>
+            </Button>
+        </Grid>
+        <Frame  x:Name="PhonePageContent" PointerPressed="PhonePage_PointerPressed" Margin="0,45,0,50" />
+        
+
+        <Grid x:Name="Menu" VerticalAlignment="Bottom" Margin="0,0,0,-50">
+            <Grid CornerRadius="15, 15, 1, 1" Height="100" VerticalAlignment="Bottom" Background="#FFC3B1FD">
+                <Button Name="Contacts" PointerEntered="Navigate_PointerEntered" PointerExited="Navigate_PointerExited" Margin="15,10,0,0" Click="Navigate_Click" Style="{StaticResource ButtonStyleMenu}" Width="18" BorderBrush="{x:Null}" Padding="0,0,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Center">
+                    <Button.Background>
+                        <ImageBrush>
+                            <ImageBrush.ImageSource>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/contactsNavigate.png" DecodePixelWidth="80" DecodePixelHeight="80"/>
+                            </ImageBrush.ImageSource>
+                        </ImageBrush>
+                    </Button.Background>
+                </Button>
+                <Button Name="Control" PointerEntered="Navigate_PointerEntered" PointerExited="Navigate_PointerExited" Margin="20,10,0,0" Click="Navigate_Click" Style="{StaticResource ButtonStyleMenu}" Width="18" BorderBrush="{x:Null}" Padding="0,0,0,0" Height="18" VerticalAlignment="Top">
+                    <Button.Background>
+                        <ImageBrush>
+                            <ImageBrush.ImageSource>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/homeNavigate.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
+                            </ImageBrush.ImageSource>
+                        </ImageBrush>
+                    </Button.Background>
+                </Button>
+                <Button  Name="History" PointerEntered="Navigate_PointerEntered" PointerExited="Navigate_PointerExited" VerticalAlignment="Top" Margin="165,10,0,0" Click="Navigate_Click" Style="{StaticResource ButtonStyleMenu}" Width="18" BorderBrush="{x:Null}" Padding="0,0,0,0" Height="18">
+                    <Button.Background>
+                        <ImageBrush>
+                            <ImageBrush.ImageSource>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/historyNavigate.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
+                            </ImageBrush.ImageSource>
+                        </ImageBrush>
+                    </Button.Background>
+                </Button>
+                <Button  Name="Fax" PointerEntered="Navigate_PointerEntered" PointerExited="Navigate_PointerExited" VerticalAlignment="Top" Margin="20,55,0,0" Click="Navigate_Click" Style="{StaticResource ButtonStyleMenu}" Width="18" BorderBrush="{x:Null}" Padding="0,0,0,0" Height="18">
+                    <Button.Background>
+                        <ImageBrush>
+                            <ImageBrush.ImageSource>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/faxNavigate.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
+                            </ImageBrush.ImageSource>
+                        </ImageBrush>
+                    </Button.Background>
+                </Button>
+                <Button  PointerEntered="Navigate_PointerEntered" PointerExited="Navigate_PointerExited" x:Name="MenuMore" Click="Menu_Click" Style="{StaticResource ButtonStyleMenu}" Background="Transparent" Width="18" BorderBrush="{x:Null}" Padding="0,0,0,0" Height="18" VerticalAlignment="Top" Margin="204,10,0,0" Grid.ColumnSpan="2">
+                    <Button.Content>
+                        <StackPanel>
+                            <Grid x:Name="Butter" Height="13">
+                                <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5"  VerticalAlignment="Top"/>
+                                <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" HorizontalAlignment="Center"/>
+                                <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" VerticalAlignment="Bottom"/>
+                            </Grid>
+                            <Grid Visibility="Collapsed" x:Name="Cross">
+                                <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" RenderTransformOrigin="0.5,0.5">
+                                    <Rectangle.RenderTransform>
+                                        <CompositeTransform Rotation="-45"/>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                                <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" RenderTransformOrigin="0.5,0.5">
+                                    <Rectangle.RenderTransform>
+                                        <CompositeTransform Rotation="45"/>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                            </Grid>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button  Name="HotKeys" PointerEntered="Navigate_PointerEntered" PointerExited="Navigate_PointerExited" VerticalAlignment="Top" Margin="70,55,0,0" Click="Navigate_Click" Style="{StaticResource ButtonStyleMenu}" Width="18" BorderBrush="{x:Null}" Padding="0,0,0,0" Height="18">
+                    <Button.Background>
+                        <ImageBrush>
+                            <ImageBrush.ImageSource>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/Keyboard.png" DecodePixelWidth="90" DecodePixelHeight="90"/>
+                            </ImageBrush.ImageSource>
+                        </ImageBrush>
+                    </Button.Background>
+                </Button>
+                <TextBlock Text="HotKeys" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="57.5,75,0,0"/>
+                <TextBlock Text="Clients" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="111,30,0,0"/>
+                <TextBlock Text="Profile" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="14,30,0,0"/>
+                <TextBlock Text="History" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="0,30,51,0"/>
+                <TextBlock Text="Fax" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="20,75,0,0"/>
+                <TextBlock Text="More" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="0,30,15,0" Grid.ColumnSpan="2"/>
+            </Grid>
+            <Grid CornerRadius="50" BorderThickness="2" BorderBrush="#FFFDFEFF" Background="#FFC3B1FD" Width="45" Height="45" VerticalAlignment="Top" Margin="57,-13,0,10" HorizontalAlignment="Left" >
+                <Image Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image.Source>
+                        <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/phoneNavigate.png" DecodePixelWidth="80" DecodePixelHeight="80"/>
+                    </Image.Source>
+                </Image>
+            </Grid>
+        </Grid>
+        <Grid Visibility="Collapsed" x:Name="NumpadFild" Background="#CC202244">
+            <Grid CornerRadius="12" Background="White" Width="204" Height="374">
+                <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed"  Name="Close" Click="Close_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Style="{StaticResource ButtonStyleMenu}" Background="Transparent" HorizontalAlignment="Right" Margin="0,5,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                    <Button.Content>
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="-1,0,0,0">
+                            <Grid CornerRadius="0.5" Width="9.4" Height="1" Background="#FF898989" RenderTransformOrigin="0.5,0.5">
+                                <Grid.RenderTransform>
+                                    <CompositeTransform Rotation="-45"/>
+                                </Grid.RenderTransform>
+                            </Grid>
+                            <Grid CornerRadius="0.5" Width="9.4" Height="1" Background="#FF898989" RenderTransformOrigin="0.5,0.5">
+                                <Grid.RenderTransform>
+                                    <CompositeTransform Rotation="45"/>
+                                </Grid.RenderTransform>
+                            </Grid>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+                <TextBlock x:Name="TitleNumpad" Text="Add contacts" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0" FontSize="20" FontFamily="Nunito Sans 10pt Normal"/>
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="25" MaxWidth="500" Margin="5,53,5,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" Grid.Column="0" IsChecked="True" GroupName="Filter" Name="Keypad" Checked="Filter_Checked" Style="{StaticResource RadioButtonStyle}" MinWidth="55" Background="Transparent" MinHeight="25" HorizontalAlignment="Stretch">
+                        <StackPanel PointerPressed="PhonePage_PointerPressed" Margin="0,4,0,4">
+                            <TextBlock PointerPressed="PhonePage_PointerPressed" FontFamily="Nunito Sans 10pt Normal" x:Name="KeyText" Text="Keypad" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0,1,0,0" Foreground="#FF252422"/>
+                            <Grid PointerPressed="PhonePage_PointerPressed" x:Name="GeneralCheck" Height="1.5" Background="#FF8A63FB" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" Grid.Column="2" MinWidth="55" MinHeight="25" Name="Contactspad" GroupName="Filter" Checked="Filter_Checked" Style="{StaticResource RadioButtonStyle}" HorizontalAlignment="Stretch">
+                        <StackPanel PointerPressed="PhonePage_PointerPressed" Margin="0,4,0,4">
+                            <TextBlock PointerPressed="PhonePage_PointerPressed" FontFamily="Nunito Sans 10pt Normal" x:Name="ContactspadText" Text="Contacts" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0,1,0,0" Foreground="#FF252422"/>
+                            <Grid PointerPressed="PhonePage_PointerPressed" x:Name="AdditionChek" Height="1.5" VerticalAlignment="Stretch" Background="#FFFDFEFF" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </RadioButton>
+                </Grid>
+                <Grid Margin="0,93,0,0">
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Top" >
+                        <TextBox Style="{StaticResource TextBoxStyle}" TextChanging="KeypadFild_TextChanging" PlaceholderText="Enter phone number" x:Name="KeypadFild" TextAlignment="Center" BorderThickness="0,0,0,1" PointerPressed="PhonePage_PointerPressed" MinHeight="23"  FontFamily="Nunito Sans 10pt Normal"   Canvas.Left="2" Margin="10,0,10,0" BorderBrush="#FFC2C3C3" SelectionHighlightColor="#FF5C66BD"  FontSize="14" Height="23" VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Width="189" Padding="10,0,6,0" Background="#FFFDFEFF"/>
+                        <Button BorderBrush="Transparent" BorderThickness="0" Visibility="Collapsed" Click="BackspaceNum_Click" Height="15" Background="Transparent" Padding="-2,-2,-2,-2" Width="15" x:Name="BackspaceNum" Style="{StaticResource ButtonStyleMenu}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,25,2" >
+                            <Button.Content>
+                                <Image Height="15" Width="15" Stretch="Fill">
+                                    <Image.Source>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/Backspace.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
+                                    </Image.Source>
+                                </Image>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <Grid  Width="146" Margin="0,35,0,0">
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Name="Num" Click="Num_Click" Style="{StaticResource ButtonStyleNumpad}" Content="1" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Grid.RowSpan="2"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="Num_Click" Content="2" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" HorizontalAlignment="Center" Grid.RowSpan="2"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="Num_Click" Content="3" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" HorizontalAlignment="Right" Grid.RowSpan="2"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="Num_Click" Content="4" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,48,0,0" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="Num_Click" Content="5" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,48,0,0" HorizontalAlignment="Center" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="Num_Click" Content="6" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,48,0,0" HorizontalAlignment="Right" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="Num_Click" Content="7" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,96,0,0" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="Num_Click" Content="8" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,96,0,0" HorizontalAlignment="Center" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="Num_Click" Content="9" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,96,0,0" HorizontalAlignment="Right" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="Num_Click" Content="*" VerticalAlignment="Top" Width="36" Height="36" Background="Transparent" FontSize="44" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,5,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,144,0,0" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="Num_Click" Content="0" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,144,0,0" HorizontalAlignment="Center" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="Num_Click" Content="#" VerticalAlignment="Top" Width="36" Height="36" Background="Transparent" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,144,0,0" HorizontalAlignment="Right" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Name="AddContact" Click="AddContact_Click" VerticalAlignment="Top" Width="38" Height="38" Background="#FF06D665" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,190,0,0" HorizontalAlignment="Center" Grid.Row="1">
+                            <Button.Content>
+                                <StackPanel>
+                                    <Image Width="18" Height="18">
+                                        <Image.Source>
+                                            <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/phoneNavigate.png" DecodePixelWidth="60" DecodePixelHeight="60"/>
+                                        </Image.Source>
+                                    </Image>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Grid Visibility="Collapsed" x:Name="ContactListPad" Margin="0,93,0,0" Background="White">
+                    <Grid VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,2,0,0">
+                        <TextBox BorderThickness="0, 0, 0, 1" PlaceholderText="Contacts" x:Name="Search"  MinHeight="26" TextChanging="SearchFild_TextChanging" Width="172" BorderBrush="#FFC2C3C3" SelectionHighlightColor="#FFA7B7F5" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="11" Height="25" Padding="10,5,20,5"/>
+                        <Grid Height="15" x:Name="magnifyingGlass" Width="15" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,3">
+                            <Grid x:Name="magnifyingGlassLine" Background="#FF898989" Height="1.1" Width="6" CornerRadius="1" RenderTransformOrigin="0.5,0.5" Margin="8,8.6,0,0">
+                                <Grid.RenderTransform>
+                                    <CompositeTransform Rotation="44.45"/>
+                                </Grid.RenderTransform>
+                            </Grid>
+                            <Ellipse x:Name="magnifyingGlassEllipse" Fill="White" StrokeThickness="1" Width="10" Height="11" Stroke="#FF898989"/>
+                        </Grid>
+                    </Grid>
+                    <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" Name="AddContacts" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleStandart}" ToolTipService.ToolTip="Send Fax" ToolTipService.Placement="Mouse" Grid.Column="1" Content="Add" Click="AddContacts_Click" VerticalAlignment="Top" Margin="0,240,0,0" Background="#FF8A63FB" Width="124" Height="32" FontSize="18" FontFamily="Jost" Foreground="#E4FFFFFF" Padding="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
+                    <ListBox Width="172" PointerPressed="PhonePage_PointerPressed" x:Name="ContactsList" MaxWidth="500" Margin="0,40,0,50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Padding="0,0,10,0"/>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid x:Name="KeyPad" Visibility="Collapsed" Background="#CC202244">
+            <Grid CornerRadius="12" Background="White" Width="204" Height="294">
+                <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Click="Close_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Style="{StaticResource ButtonStyleMenu}" Background="Transparent" HorizontalAlignment="Right" Margin="0,5,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                    <Button.Content>
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="-1,0,0,0">
+                            <Grid CornerRadius="0.5" Width="9.4" Height="1" Background="#FF898989" RenderTransformOrigin="0.5,0.5">
+                                <Grid.RenderTransform>
+                                    <CompositeTransform Rotation="-45"/>
+                                </Grid.RenderTransform>
+                            </Grid>
+                            <Grid CornerRadius="0.5" Width="9.4" Height="1" Background="#FF898989" RenderTransformOrigin="0.5,0.5">
+                                <Grid.RenderTransform>
+                                    <CompositeTransform Rotation="45"/>
+                                </Grid.RenderTransform>
+                            </Grid>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+                <TextBlock  Text="Key Pad" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0" FontSize="20" FontFamily="Nunito Sans 10pt Normal"/>
+                <Grid Margin="0,59,0,0">
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
+                        <TextBox TextChanging="DTMFFild_TextChanging" PlaceholderText="Enter phone number" x:Name="DTMFFild" TextAlignment="Center" BorderThickness="0,0,0,1" PointerPressed="PhonePage_PointerPressed" MinHeight="23"  FontFamily="Nunito Sans 10pt Normal"  Canvas.Left="2" BorderBrush="#FFC2C3C3" SelectionHighlightColor="#FF5C66BD" FontSize="14" Height="23" VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Width="189" Padding="10,0,6,0" Background="#FFFDFEFF"/>
+                        <Button BorderBrush="Transparent" BorderThickness="0" Visibility="Collapsed" Click="Backspace_Click" Height="15" Background="Transparent" Padding="-2,-2,-2,-2" Width="15" x:Name="Backspace" Style="{StaticResource ButtonStyleMenu}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,21,2" >
+                            <Button.Content>
+                                <Image Height="15" Width="15" Stretch="Fill">
+                                    <Image.Source>
+                                        <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/Backspace.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
+                                    </Image.Source>
+                                </Image>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <Grid  Width="146" Margin="0,35,0,0">
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Name="NumDTMF" Click="NumDTMF_Click" Style="{StaticResource ButtonStyleNumpad}" Content="1" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Grid.RowSpan="2"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="NumDTMF_Click" Content="2" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" HorizontalAlignment="Center" Grid.RowSpan="2"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="NumDTMF_Click" Content="3" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" HorizontalAlignment="Right" Grid.RowSpan="2"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="NumDTMF_Click" Content="4" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,48,0,0" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="NumDTMF_Click" Content="5" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,48,0,0" HorizontalAlignment="Center" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="NumDTMF_Click" Content="6" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,48,0,0" HorizontalAlignment="Right" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="NumDTMF_Click" Content="7" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,96,0,0" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="NumDTMF_Click" Content="8" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,96,0,0" HorizontalAlignment="Center" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="NumDTMF_Click" Content="9" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,96,0,0" HorizontalAlignment="Right" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="NumDTMF_Click" Content="*" VerticalAlignment="Top" Width="36" Height="36" Background="Transparent" FontSize="44" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,5,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,144,0,0" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="NumDTMF_Click" Content="0" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,144,0,0" HorizontalAlignment="Center" Grid.Row="1"/>
+                        <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleNumpad}" Click="NumDTMF_Click" Content="#" VerticalAlignment="Top" Width="36" Height="36" Background="Transparent" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" Margin="0,144,0,0" HorizontalAlignment="Right" Grid.Row="1"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid Visibility="Collapsed" x:Name="PausesFild" Background="#CC202244">
+            <Grid CornerRadius="12" Background="White" Width="204" Height="246">
+                <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" PointerPressed="PhonePage_PointerPressed" Click="Close_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Style="{StaticResource ButtonStyleMenu}" Background="Transparent" HorizontalAlignment="Right" Margin="0,5,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                    <Button.Content>
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="-1,0,0,0">
+                            <Grid CornerRadius="0.5" Width="9.4" Height="1" Background="#FF252422" RenderTransformOrigin="0.5,0.5">
+                                <Grid.RenderTransform>
+                                    <CompositeTransform Rotation="-45"/>
+                                </Grid.RenderTransform>
+                            </Grid>
+                            <Grid CornerRadius="0.5" Width="9.4" Height="1" Background="#FF252422" RenderTransformOrigin="0.5,0.5">
+                                <Grid.RenderTransform>
+                                    <CompositeTransform Rotation="45"/>
+                                </Grid.RenderTransform>
+                            </Grid>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+                <TextBlock Text="Pauses" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0" FontSize="20" FontFamily="Nunito Sans 10pt Normal"/>
+                <Button PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleStandart}" Content="Save" x:Name="Save" Click="Save_Click" VerticalAlignment="Bottom" Margin="0,0,10,15" Background="#FF8A63FB" Width="148" Height="32" FontSize="18" FontFamily="Jost" Foreground="#E4FFFFFF" Padding="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <ListBox PointerPressed="PhonePage_PointerPressed"  SelectionChanged="PauseList_SelectionChanged" x:Name="PauseList" Height="137" Margin="0,0,0,8" Width="187" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

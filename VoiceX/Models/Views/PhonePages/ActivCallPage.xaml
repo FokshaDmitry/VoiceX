@@ -1,0 +1,163 @@
+﻿<Page
+    x:Class="VoiceX.Views.PhonePages.ActivCallPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VoiceX.Views.PhonePages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="#FFFDFEFF" x:Name="ActivPage" Loaded="ActivPage_Loaded" PointerPressed="PhonePage_PointerPressed">
+    <Page.Resources>
+        <Style x:Key="ButtonStyle3" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource ButtonBackground}"/>
+            <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
+            <Setter Property="Padding" Value="{StaticResource ButtonPadding}"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" Background="{TemplateBinding Background}" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" CornerRadius="50" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#FFE9EAFF"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </ContentPresenter>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Grid PointerPressed="PhonePage_PointerPressed" x:Name="Activ" Background="White">
+        <TextBlock PointerPressed="PhonePage_PointerPressed" x:Name="StatusCurrentCall" HorizontalAlignment="Center" Text="Incoming call" VerticalAlignment="Top" Margin="0,10,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="12" Foreground="#FF898989"/>
+        <TextBlock PointerPressed="PhonePage_PointerPressed" x:Name="UserNameText" HorizontalAlignment="Center" Text="Amelia Rogers" VerticalAlignment="Top" Margin="0,30,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Foreground="#FF252422" FontWeight="Normal"/>
+        <TextBlock PointerPressed="PhonePage_PointerPressed" x:Name="PhoneText" HorizontalAlignment="Center" Text="050 245 3654" VerticalAlignment="Top" Margin="0,55,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="14" Foreground="#FF252422" FontWeight="Normal"/>
+        <TextBlock PointerPressed="PhonePage_PointerPressed" x:Name="Time" HorizontalAlignment="Center" Text="00:00" VerticalAlignment="Top" Margin="0,95,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="12" Foreground="#FF252422" FontWeight="Normal"/>
+        <Grid PointerPressed="PhonePage_PointerPressed" HorizontalAlignment="Center" VerticalAlignment="Top" Width="184" Height="121" Margin="0,120,0,0">
+            <Button PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" x:Name="TransferCall" Click="TransferCall_Click" Style="{StaticResource ButtonStyle3}" VerticalAlignment="Top" Width="38" Height="38" Background="Transparent" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="#FFDDDBFF" Margin="5,0,0,0">
+                <Button.Content>
+                    <StackPanel>
+                        <Image Source="/Assets/Icone_v2/TransferCall.png" Width="20" Height="20" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" Name="Profile" Click="Profile_Click" Style="{StaticResource ButtonStyle3}"  VerticalAlignment="Top" Width="38" Height="38" Background="Transparent" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="#FFDDDBFF" HorizontalAlignment="Center">
+                <Button.Content>
+                    <StackPanel>
+                        <Image Source="/Assets/Icone_v2/GreyUser.png" Width="20" Height="20" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" x:Name="AddCall" Click="AddCall_Click" Style="{StaticResource ButtonStyle3}"  VerticalAlignment="Top" Width="38" Height="38" Background="Transparent" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="#FFDDDBFF" HorizontalAlignment="Right" Margin="0,0,5,0">
+                <Button.Content>
+                    <Grid>
+                        <Grid Background="#FF898989" CornerRadius="0.5" Height="1" Width="17.5" />
+                        <Grid Background="#FF898989" CornerRadius="0.5" Height="17.5" Width="1" />
+                    </Grid>
+                </Button.Content>
+            </Button>
+            <Button PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" Name="AutoAnswer" Click="AutoAnswer_Click" Style="{StaticResource ButtonStyle3}"  VerticalAlignment="Top" Width="38" Height="38" Background="Transparent" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="#FFDDDBFF" HorizontalAlignment="Left" Margin="5,65,0,0">
+                <Button.Content>
+                    <StackPanel>
+                        <Image x:Name="AutoAnswerImage" Source="/Assets/Icone_v2/refresh.png" Width="20" Height="20" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" Style="{StaticResource ButtonStyle3}" x:Name="Pause" Click="PauseButton_Click"  VerticalAlignment="Top" Width="38" Height="38" Background="Transparent" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="#FFDDDBFF" HorizontalAlignment="Center" Margin="0,65,0,0">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle x:Name="PauseRect" Height="18" Width="6" Stroke="#FF898989" />
+                        <Rectangle x:Name="PauseRect1" Height="18" Width="6" Stroke="#FF898989" Margin="3,0,0,0" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" x:Name="KeyPadActiv" Click="KeyPadActiv_Click" Style="{StaticResource ButtonStyle3}" VerticalAlignment="Top" Width="38" Height="38" Background="Transparent" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="#FFDDDBFF" HorizontalAlignment="Right" Margin="0,65,5,0">
+                <Button.Content>
+                    <Grid Height="20.2" Width="14">
+                        <Ellipse Width="3.5" Height="3.5" Fill="#FF898989" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Ellipse Width="3.5" Height="3.5" Fill="#FF898989" VerticalAlignment="Top"/>
+                        <Ellipse Width="3.5" Height="3.5" Fill="#FF898989" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <Ellipse Width="3.5" Height="3.5" Fill="#FF898989" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5.5,0,0"/>
+                        <Ellipse Width="3.5" Height="3.5" Fill="#FF898989" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5.5,0,0"/>
+                        <Ellipse Width="3.5" Height="3.5" Fill="#FF898989" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5.5,0,0"/>
+                        <Ellipse Width="3.5" Height="3.5" Fill="#FF898989" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,11,0,0"/>
+                        <Ellipse Width="3.5" Height="3.5" Fill="#FF898989" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,11,0,0"/>
+                        <Ellipse Width="3.5" Height="3.5" Fill="#FF898989" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,11,0,0"/>
+                        <Ellipse Width="3.5" Height="3.5" Fill="#FF898989" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10,0,0"/>
+                    </Grid>
+                </Button.Content>
+            </Button>
+            <TextBlock Foreground="#FF898989" Text="Forwarding" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,40,0,0" />
+            <TextBlock Foreground="#FF898989" Text="Profile" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,40,0,0" />
+            <TextBlock Foreground="#FF898989" Text="Add" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,14,0" />
+            <TextBlock Foreground="#FF898989" x:Name="AutoAnswerText" Text="AA" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,108,0,0" />
+            <TextBlock Foreground="#FF898989" Text="Hold" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,108,0,0" />
+            <TextBlock Foreground="#FF898989" Text="KeyPad" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,108,7,0" />
+        </Grid>
+        <Button PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" Name="EndCall" Click="EndCall_Click" Style="{StaticResource ButtonStyle3}"  VerticalAlignment="Top" Width="40" Height="40" Background="#FFF31E38" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="{x:Null}" HorizontalAlignment="Center" Margin="0,265,0,0">
+            <Button.Content>
+                <StackPanel>
+                    <Image Source="/Assets/Icone_v2/phoneNavigate.png" Width="24" Height="24" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <CompositeTransform Rotation="135"/>
+                        </Image.RenderTransform>
+                    </Image>
+                </StackPanel>
+            </Button.Content>
+        </Button>
+        <Button PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" Click="Sound_Click" Background="Transparent" Style="{StaticResource ButtonStyle3}" VerticalAlignment="Top" Margin="0,274,128,0" BorderBrush="{x:Null}" Width="22" Height="22" Padding="-2,0,0,0" HorizontalAlignment="Center">
+            <Button.Content>
+                <Grid>
+                    <Image Source="/Assets/Icone_v2/SpeakerHigh.png" Width="22" Height="22.4"/>
+                    <Grid Visibility="Collapsed" x:Name="CloseSound">
+                        <Grid CornerRadius="1" Width="1.25" Height="25" Background="#FF898989" RenderTransformOrigin="0.5,0.5" Margin="0,-2,0,0">
+                            <Grid.RenderTransform>
+                                <CompositeTransform Rotation="45"/>
+                            </Grid.RenderTransform>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Button.Content>
+        </Button>
+        <Button PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" Click="Microphone_Click" Background="Transparent" Style="{StaticResource ButtonStyle3}" VerticalAlignment="Top" Margin="132,274,0,0" BorderBrush="{x:Null}" Width="24" Height="24" Padding="-2,-2,0,0" HorizontalAlignment="Center">
+            <Button.Content>
+                <Grid>
+                    <Image Source="/Assets/Icone_v2/microphone.png" Width="22" Height="22"/>
+                    <Grid Visibility="Collapsed" x:Name="CloseMicrophone">
+                        <Grid CornerRadius="1" Width="1.25" Height="25" Background="#FF898989" RenderTransformOrigin="0.5,0.5" Margin="0,-2,0,0">
+                            <Grid.RenderTransform>
+                                <CompositeTransform Rotation="45"/>
+                            </Grid.RenderTransform>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Button.Content>
+        </Button>
+    </Grid>
+</Page>

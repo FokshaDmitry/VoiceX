@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:uap2="http://schemas.microsoft.com/appx/manifest/uap/windows10/2"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  IgnorableNamespaces="uap rescap desktop uap2 uap3">
+
+  <Identity
+    Name="7293X-Cloud.VoiceXApp"
+    Publisher="CN=4C1825AD-D2C4-47D7-9171-B719C613D0B4"
+    Version="1.0.1.0" />
+
+  <Properties>
+    <DisplayName>VoiceX App</DisplayName>
+    <PublisherDisplayName>X-Cloud</PublisherDisplayName>
+    <Logo>Images\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14393.0" MaxVersionTested="10.0.14393.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="$targetentrypoint$">
+      <uap:VisualElements
+        DisplayName="VoiceX App"
+        Description="X-Cloud"
+        BackgroundColor="transparent"
+        Square150x150Logo="Images\Square150x150Logo.png"
+        Square44x44Logo="Images\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Images\Wide310x150Logo.png"  Square71x71Logo="Images\Square71x71Logo.png" Square310x310Logo="Images\Square310x310Logo.png">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square310x310Logo"/>
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile >
+        <uap:SplashScreen Image="Images\SplashScreen.png" />
+        <uap:LockScreen Notification="badgeAndTileText"  BadgeLogo="Images\BadgeLogo.png"/>
+      </uap:VisualElements>
+	    <Extensions>
+			<uap:Extension Category="windows.voipCall">
+				<uap:VoipCall/>
+			</uap:Extension>
+			<desktop:Extension Category="windows.fullTrustProcess" Executable="SystrayComponent/SystrayComponent.exe"/>
+			
+		    <uap:Extension Category="windows.appService">
+                <uap:AppService Name="ClickToCallConnection" />
+            </uap:Extension>
+			
+		    <uap:Extension Category="windows.fileTypeAssociation">
+			
+		      <uap:FileTypeAssociation Name="foo">
+			
+		        <uap:SupportedFileTypes>
+			
+		          <uap:FileType>.pdf</uap:FileType>
+
+		        </uap:SupportedFileTypes>
+			
+		        <uap:DisplayName>VoiceX</uap:DisplayName>
+			
+		        <uap:Logo>Square44x44Logo.altform-lightunplated_targetsize-16.png</uap:Logo>
+			
+		        <uap:EditFlags OpenIsSafe="true" AlwaysUnsafe="true"/>
+
+		      </uap:FileTypeAssociation>
+				
+		    </uap:Extension>
+			<Extension Category="windows.backgroundTasks" EntryPoint="VoiceXBackground.VoiceXBackTask">
+
+				<BackgroundTasks>
+
+					<Task Type="pushNotification"/>
+
+				</BackgroundTasks>
+
+			</Extension>
+			<uap:Extension Category="windows.protocol">
+			<uap:Protocol Name="tel">
+			<uap:Logo>Square44x44Logo.altform-lightunplated_targetsize-16.png</uap:Logo>
+			<uap:DisplayName>Call via telephone</uap:DisplayName>
+			</uap:Protocol>
+			</uap:Extension>
+        </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+	  <rescap:Capability Name="runFullTrust" />
+	  <rescap:Capability Name="confirmAppClose"/>
+	  <Capability Name="internetClient" />
+	  <uap:Capability Name="voipCall"/>
+	  <uap:Capability Name="removableStorage"/>
+	  <uap:Capability Name="contacts"/>
+	  <uap3:Capability Name="userNotificationListener"/>
+	  <uap:Capability Name="sharedUserCertificates"/>
+	  <uap:Capability Name="phoneCall"/>
+	  <uap2:Capability Name="phoneCallHistoryPublic"/>
+	  <DeviceCapability Name="microphone"/>
+  </Capabilities>
+</Package>

@@ -1,0 +1,133 @@
+﻿<ListBoxItem
+    x:Class="VoiceX.Items.FaxFileItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VoiceX.Items"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="Transparent" PointerPressed="ListBoxItem_PointerPressed" Padding="0,0,0,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+    <ListBoxItem.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource ButtonBackground}"/>
+            <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
+            <Setter Property="Padding" Value="{StaticResource ButtonPadding}"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" CornerRadius="{TemplateBinding CornerRadius}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </ContentPresenter>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ButtonStyle1" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource ButtonBackground}"/>
+            <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
+            <Setter Property="Padding" Value="{StaticResource ButtonPadding}"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+            <Setter Property="FocusVisualMargin" Value="-3"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" Background="{TemplateBinding Background}" BorderThickness="0" BorderBrush="{TemplateBinding BorderBrush}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" CornerRadius="50" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundDisabled}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </ContentPresenter>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ListBoxItem.Resources>
+    <Grid PointerPressed="ListBoxItem_PointerPressed" Background="#FFFDFEFF" >
+        <Button Visibility="Collapsed" PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" Click="AddFaxItem_Click" Background="Transparent" Style="{StaticResource ButtonStyle}" x:Name="Cloud" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="{x:Null}" >
+            <Button.Content>
+                <StackPanel >
+                    <Image Width="62" Height="40" Source="/Assets/Icone_v2/Cloud.png"/>
+                    <TextBlock TextAlignment="Center" Text="Drag here or pick file." TextWrapping="Wrap" FontSize="14" FontFamily="Nunito Sans 10pt Normal" FlowDirection="LeftToRight" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="145" Margin="1,0,0,0" Foreground="#FF545454" TextReadingOrder="Default"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
+        
+        <Grid x:Name="FaileInfo">
+            <Grid x:Name="ImageBackgound" CornerRadius="50" Width="36" Height="36" HorizontalAlignment="Left" Background="#FFEEF7FE" VerticalAlignment="Top">
+                <Image Source="/Assets/Icone_v2/Doc.png" Width="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+            <TextBlock TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" PointerPressed="ListBoxItem_PointerPressed" x:Name="FileName" Text="Projects.docx" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="45,2,0,0" FontSize="14" Foreground="#FF22215B" FontFamily="Nunito Sans 10pt Normal" Width="135"/>
+            <TextBlock TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" PointerPressed="ListBoxItem_PointerPressed"  Text="Novemaber 300KB" x:Name="Size" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="45,19,0,0" FontSize="12" Foreground="#FF797A9D" FontFamily="Nunito Sans 10pt Normal" Width="135"/>
+            <Button  PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" x:Name="Remove" Click="Remove_Click" Height="20" Padding="0,0,0,0" BorderBrush="Transparent" Width="20" Style="{StaticResource ButtonStyle}" Background="Transparent" HorizontalAlignment="Right" Margin="0,1,16,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <Button.Content>
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="-1,0,0,0">
+                        <Grid CornerRadius="0.5" Width="11" Height="1" Background="#FF898989" RenderTransformOrigin="0.5,0.5">
+                            <Grid.RenderTransform>
+                                <CompositeTransform Rotation="-45"/>
+                            </Grid.RenderTransform>
+                        </Grid>
+                        <Grid CornerRadius="0.5" Width="11" Height="1" Background="#FF898989" RenderTransformOrigin="0.5,0.5">
+                            <Grid.RenderTransform>
+                                <CompositeTransform Rotation="45"/>
+                            </Grid.RenderTransform>
+                        </Grid>
+                    </Grid>
+                </Button.Content>
+            </Button>
+        </Grid>
+        <Grid x:Name="AddButtom" Visibility="Collapsed" PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" Background="White">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Add field" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFA0A0A0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,3,0"/>
+                <Button Style="{StaticResource ButtonStyle1}"  HorizontalContentAlignment="Center" x:Name="AddFaxItem" Click="AddFaxItem_Click" VerticalContentAlignment="Center" Background="#FFBBBAFF" Width="26" Height="26" Padding="0,0,0,0" HorizontalAlignment="Center">
+                    <Button.Content>
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid CornerRadius="0.5" Background="#FF141312" Width="1" Height="12"/>
+                            <Grid CornerRadius="0.5" Background="#FF141312" Width="12" Height="1" />
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</ListBoxItem>
