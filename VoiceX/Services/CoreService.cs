@@ -41,7 +41,7 @@ namespace VoiceX.Services
                     factory.ImageResourcesDir = Path.Combine(assetsPath, "images");
                     
                     factory.MspluginsDir = ".";
-
+                    
                     core = factory.CreateCore("", "", IntPtr.Zero);
                     core.CallkitEnabled = false;
                     core.MaxCalls = 15;
@@ -50,6 +50,8 @@ namespace VoiceX.Services
                     transports.UdpPort = -1;
                     transports.TcpPort = -1;
                     transports.TlsPort = -1;
+                    core.Transports = transports;
+                    
                     core.DnsSrvEnabled = !NatIgnore;
                     core.SipTransportTimeout = 5000;
                     core.Config.SetInt("net", "enable_nat_helper", 0);
@@ -116,20 +118,19 @@ namespace VoiceX.Services
             Core.Listener.OnAccountRegistrationStateChanged += OnAccountRegistrationStateChanged;
         }
 
-        public void LogIn(string sipAccount, string sipPassword, string sipDomain, string sipProxy, TransportType type, int port)
+        public void LogIn(string sipAccount, string sipPassword, string sipDomain, string sipProxy, TransportType type)
         {
             var sipAddress = $"sip:{sipAccount}@{sipDomain}";
             //Create Adress
             Address address = Factory.Instance.CreateAddress(sipProxy);
             AuthInfo authInfo = Factory.Instance.CreateAuthInfo(sipAccount, "", sipPassword, "", "", "");
-
+            
             address.Transport = type;
-            address.Port = 0;
 
             //Params
             AccountParams accountParams = core.CreateAccountParams();
             accountParams.IdentityAddress = Factory.Instance.CreateAddress(sipAddress);
-
+            
             accountParams.RegisterEnabled = true;
             accountParams.PushNotificationAllowed = false;
             accountParams.ServerAddress = address;
@@ -139,7 +140,7 @@ namespace VoiceX.Services
 
             core.AddAuthInfo(authInfo);
             core.AddAccount(account);
-
+            
             core.DefaultAccount = account;
         }
         public void LogOut()

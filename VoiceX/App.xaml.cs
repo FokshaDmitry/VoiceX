@@ -31,7 +31,6 @@ using System.Text;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.WindowManagement.Preview;
 using Windows.UI.Core.Preview;
-using System.Threading;
 
 namespace VoiceX
 {
@@ -43,7 +42,7 @@ namespace VoiceX
         public static string UserPbx { get; set; }
         public static CoreCursor Hand { get; set; }
         public static CoreCursor Arrow { get; set; }
-        public static int Port;
+        public static String Address { get; set; }
         public static BackgroundTaskDeferral AppServiceDeferral = null;
         public static AppServiceConnection Connection = null;
         public static event EventHandler<AppServiceTriggerDetails> AppServiceConnected;
@@ -66,6 +65,7 @@ namespace VoiceX
             timeOut = new DateTime();
             timeOut = DateTime.Now;
             MyComputer = true;
+            Address = "sip:rsip.x-cloud.info";
             Hand = new CoreCursor(CoreCursorType.Hand, 1);
             Arrow = new CoreCursor(CoreCursorType.Arrow, 1);
         }

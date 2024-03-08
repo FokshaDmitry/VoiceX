@@ -24,7 +24,6 @@ namespace VoiceX.Views.ControlPages
         }
         private void AdditionPage_Loaded(object sender, RoutedEventArgs e)
         {
-            Port.Text = App.Port.ToString();
             Microphones.Items.Clear();
             Audio.Items.Clear();
             CoreService.Instance.Core.ReloadSoundDevices();
@@ -102,10 +101,11 @@ namespace VoiceX.Views.ControlPages
             if (flag)
             {
                 ApplicationData.Current.LocalSettings.Values["NewAdress"] = NewAdress.Text;
+                App.Address = NewAdress.Text;
                 CoreService.NatIgnore = false;
                 CoreService.Instance.LogOut();
                 CoreService.Instance.CoreStart(CoreApplication.GetCurrentView().CoreWindow.Dispatcher);
-                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, NewAdress.Text, transportType, App.Port);
+                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, transportType);
             }
             else
             {
@@ -113,7 +113,7 @@ namespace VoiceX.Views.ControlPages
                 CoreService.NatIgnore = true;
                 CoreService.Instance.LogOut(); 
                 CoreService.Instance.CoreStart(CoreApplication.GetCurrentView().CoreWindow.Dispatcher);
-                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, "sip:rsip.x-cloud.info", transportType, App.Port);
+                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, transportType);
             }
         }
 
@@ -158,46 +158,6 @@ namespace VoiceX.Views.ControlPages
         private void Cursor_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             Window.Current.CoreWindow.PointerCursor = App.Hand;
-        }
-
-        private void ChangePort_Click(object sender, RoutedEventArgs e)
-        {
-            if (Port.IsReadOnly)
-            {
-                Port.IsReadOnly = false;
-                Pencil.Visibility = Visibility.Collapsed;
-                Check.Visibility = Visibility.Visible;
-                Port.Focus(FocusState.Keyboard);
-            }
-            else
-            {
-                if (!String.IsNullOrEmpty(Port.Text))
-                {
-                    Pencil.Visibility = Visibility.Visible;
-                    Check.Visibility = Visibility.Collapsed;
-                    string port = Port.Text;
-                    if (port.All(char.IsDigit))
-                    {
-                        try
-                        {
-                            App.Port = Convert.ToInt32(port);
-                        }
-                        catch 
-                        {
-                            Port.IsReadOnly = true;
-                            return;
-                        }
-                        ApplicationData.Current.LocalSettings.Values["Port"] = port;
-                        ReloadCore(false);
-                    }
-                    else
-                    {
-                        Port.IsReadOnly = true;
-                        return;
-                    }
-                }
-                Port.IsReadOnly = true;
-            }
         }
     }
 }

@@ -209,7 +209,7 @@
                         </Grid>
                     </Grid>
                     <Button PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" Name="AddContacts" PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleStandart}" ToolTipService.ToolTip="Send Fax" ToolTipService.Placement="Mouse" Grid.Column="1" Content="Add" Click="AddContacts_Click" VerticalAlignment="Top" Margin="0,240,0,0" Background="#FF8A63FB" Width="124" Height="32" FontSize="18" FontFamily="Jost" Foreground="#E4FFFFFF" Padding="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
-                    <ListBox Width="172" PointerPressed="PhonePage_PointerPressed" x:Name="ContactsList" MaxWidth="500" Margin="0,40,0,50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Padding="0,0,10,0"/>
+                    <ListBox Style="{StaticResource ListBoxStyle}" Width="172" PointerPressed="PhonePage_PointerPressed" x:Name="ContactsList" MaxWidth="500" Margin="0,40,0,50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Padding="0,0,10,0"/>
                 </Grid>
             </Grid>
         </Grid>
@@ -282,7 +282,7 @@
                 </Button>
                 <TextBlock Text="Pauses" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0" FontSize="20" FontFamily="Nunito Sans 10pt Normal"/>
                 <Button PointerPressed="PhonePage_PointerPressed" Style="{StaticResource ButtonStyleStandart}" Content="Save" x:Name="Save" Click="Save_Click" VerticalAlignment="Bottom" Margin="0,0,10,15" Background="#FF8A63FB" Width="148" Height="32" FontSize="18" FontFamily="Jost" Foreground="#E4FFFFFF" Padding="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <ListBox PointerPressed="PhonePage_PointerPressed"  SelectionChanged="PauseList_SelectionChanged" x:Name="PauseList" Height="137" Margin="0,0,0,8" Width="187" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+                <ListBox Style="{StaticResource ListBoxStyle}" PointerPressed="PhonePage_PointerPressed"  SelectionChanged="PauseList_SelectionChanged" x:Name="PauseList" Height="137" Margin="0,0,0,8" Width="187" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
             </Grid>
         </Grid>
     </Grid>

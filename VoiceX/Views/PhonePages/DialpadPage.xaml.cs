@@ -235,6 +235,9 @@ namespace VoiceX.Views.PhonePages
                     {
                         PhonePageContent.Navigate(typeof(DialpadCallPage), this);
                     }
+                    var type = CoreService.Instance.Core.DefaultAccount.Transport;
+                    CoreService.Instance.LogOut();
+                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, type);
                     break;
                 case CallState.Error:
                     // send message from user notification
@@ -273,7 +276,9 @@ namespace VoiceX.Views.PhonePages
                     {
 
                     }
-                    
+                    var typet = CoreService.Instance.Core.DefaultAccount.Transport;
+                    CoreService.Instance.LogOut();
+                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, typet);
                     break;
             }
         }

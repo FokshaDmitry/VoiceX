@@ -157,21 +157,6 @@ namespace VoiceX.Views.ControlPages
                     }
                 }
             }
-            if (ApplicationData.Current.LocalSettings.Values.Keys.Contains("Port"))
-            {
-                try
-                {
-                    App.Port = Convert.ToInt32(ApplicationData.Current.LocalSettings.Values["Port"]);
-                }
-                catch
-                {
-                    App.Port = 5060;
-                }
-            }
-            else
-            {
-                App.Port = 5060;
-            }
             if (!String.IsNullOrEmpty(App.AccountData.Data.Sip_Settings.Sip_username))
             {
                 InitNotificationsAsync(App.AccountData.Data.Sip_Settings.Sip_username);

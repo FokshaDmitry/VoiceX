@@ -134,16 +134,17 @@ namespace VoiceX.Views.ControlPages
             {
                 if (ApplicationData.Current.LocalSettings.Values["NewAdress"].ToString() != "")
                 {
-                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, ApplicationData.Current.LocalSettings.Values["NewAdress"].ToString(), type, App.Port);
+                    App.Address = ApplicationData.Current.LocalSettings.Values["NewAdress"].ToString();
+                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, type);
                 }
                 else
                 {
-                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, "sip:rsip.x-cloud.info", type, App.Port);
+                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, type);
                 }
             }
             else
             {
-                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, "sip:rsip.x-cloud.info", type, App.Port);
+                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, type);
             }
         }
         private async void SmartPhone_Toggled(object sender, RoutedEventArgs e)

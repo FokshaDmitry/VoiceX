@@ -9,35 +9,8 @@
     Background="White" MaxWidth="500" x:Name="additionPage" PointerPressed="AdditionPage_PointerPressed">
     <Grid>
         <TextBox PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" Style="{StaticResource TextBoxStyleBorder}" BorderThickness="1" PointerPressed="AdditionPage_PointerPressed" x:Name="NewAdress" MaxHeight="40" Foreground="#FF252422" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" MinHeight="20"  TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Height="24" Margin="10,20,49,0" MinWidth="100" FontWeight="Bold" Padding="6,3,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
-        <TextBox x:Name="Port" IsReadOnly="True" ToolTipService.ToolTip="Change Porn" ToolTipService.Placement="Mouse" FontFamily="Nunito Sans 10pt Normal" BorderBrush="#FFBBBAFF" BorderThickness="1" Padding="6,4,0,0" Text="5060" Background="Transparent" Style="{StaticResource TextBoxStyleBorder}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="58" Height="32" Margin="16,65,0,0" FontSize="16"/>
         <ToggleSwitch PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" PointerPressed="AdditionPage_PointerPressed" Style="{StaticResource ToggleSwitchStyleBorder}" Toggled="Include_Toggled"  x:Name="Include" VerticalAlignment="Top" Width="30" HorizontalAlignment="Right" Margin="0,15,9,0" />
-        <Button Click="ChangePort_Click" PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" ToolTipService.ToolTip="Change Porn" ToolTipService.Placement="Mouse" x:Name="ChangePort" VerticalAlignment="Top" Padding="0,0,0,0" Style="{StaticResource ButtonStyleMenu}" Background="Transparent" Width="24" Height="25" Margin="80,68,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-            <Button.Content>
-                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Grid x:Name="Pencil" Width="22" Height="22">
-                        <Grid CornerRadius="0.1" BorderThickness="1.5, 0, 0,1.5" BorderBrush="#FFADABFF" Width="6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="6"/>
-                        <Grid CornerRadius="0.1" BorderThickness="1.5,1.5,1.5,0" BorderBrush="#FFADABFF" RenderTransformOrigin="0.5,0.5" Width="9" Margin="0,0.1,0,0" Height="21.7">
-                            <Grid.RenderTransform>
-                                <CompositeTransform Rotation="45"/>
-                            </Grid.RenderTransform>
-                        </Grid>
-                    </Grid>
-                    <Grid x:Name="Check" Visibility="Collapsed" HorizontalAlignment="Right" Width="24" Height="24" VerticalAlignment="Top">
-                        <Grid Height="2" CornerRadius="1" Width="18" Background="#FFADABFF" RenderTransformOrigin="0.5,0.5" Margin="5,0,0,0" >
-                            <Grid.RenderTransform>
-                                <CompositeTransform Rotation="-36.467"/>
-                            </Grid.RenderTransform>
-                        </Grid>
-                        <Grid Height="2" CornerRadius="1" Width="10" Background="#FFADABFF" Margin="-2,4.7,11,0" RenderTransformOrigin="0.5,0.5" >
-                            <Grid.RenderTransform>
-                                <CompositeTransform Rotation="48.044"/>
-                            </Grid.RenderTransform>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Button.Content>
-        </Button>
-        <ComboBox PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" SelectionChanged="Microphones_SelectionChanged" MaxDropDownHeight="90" IsDropDownOpen="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Style="{StaticResource ComboBoxStyleAdd}"  Header="Available microphones" x:Name="Microphones" Background="Transparent" Width="213" Margin="16,115,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422"/>
-        <ComboBox PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" SelectionChanged="Audio_SelectionChanged" MaxDropDownHeight="90" IsDropDownOpen="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Style="{StaticResource ComboBoxStyleAdd}" Header="Available audio" x:Name="Audio" Background="Transparent" Width="213" Margin="16,190,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422"/>
+        <ComboBox PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" SelectionChanged="Microphones_SelectionChanged" MaxDropDownHeight="90" IsDropDownOpen="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Style="{StaticResource ComboBoxStyleAdd}"  Header="Available microphones" x:Name="Microphones" Background="Transparent" Width="213" Margin="16,60,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422"/>
+        <ComboBox PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" SelectionChanged="Audio_SelectionChanged" MaxDropDownHeight="90" IsDropDownOpen="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Style="{StaticResource ComboBoxStyleAdd}" Header="Available audio" x:Name="Audio" Background="Transparent" Width="213" Margin="16,135,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422"/>
     </Grid>
 </Page>
