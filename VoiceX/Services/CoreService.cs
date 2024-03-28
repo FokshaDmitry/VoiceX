@@ -122,7 +122,7 @@ namespace VoiceX.Services
         {
             var sipAddress = $"sip:{sipAccount}@{sipDomain}";
             //Create Adress
-            Address address = Factory.Instance.CreateAddress(sipProxy);
+            Address address = Factory.Instance.CreateAddress("sip:" + sipProxy);
             AuthInfo authInfo = Factory.Instance.CreateAuthInfo(sipAccount, "", sipPassword, "", "", "");
             
             address.Transport = type;
@@ -182,32 +182,32 @@ namespace VoiceX.Services
         }
         public void CreateConference(params string[] Adresses)
         {
-            _ = new Conference();
-            Conference conference;
-            if (core.Conference == null)
-            {
-                var paramsConf = core.CreateConferenceParams();
-                paramsConf.AudioEnabled = true;
-                paramsConf.VideoEnabled = false;
-                paramsConf.LocalParticipantEnabled = true;
-                paramsConf.ChatEnabled = false;
-                conference = core.CreateConferenceWithParams(paramsConf);
-            }
-            else
-            {
-                conference = core.Conference;
-            }
-            if (conference != null)
-            {
-                foreach (var item in Adresses)
-                {
-                    var address = core.InterpretUrl(item);
-                    address.Transport = core.DefaultAccount.Transport;
-                    address.Domain = core.DefaultAccount.Params.ServerAddress.Domain;
-                    conference.AddParticipant(address);
-                }
-                conference.InviteParticipants(conference.Participants, core.CreateCallParams(null));
-            }
+            //_ = new Conference();
+            //Conference conference;
+            //if (core.Conference == null)
+            //{
+            //    //var paramsConf = core.CreateConferenceParams();
+            //    //paramsConf.AudioEnabled = true;
+            //    //paramsConf.VideoEnabled = false;
+            //    //paramsConf.LocalParticipantEnabled = true;
+            //    //paramsConf.ChatEnabled = false;
+            //    //conference = core.CreateConferenceWithParams(paramsConf);
+            //}
+            //else
+            //{
+            //    conference = core.Conference;
+            //}
+            //if (conference != null)
+            //{
+            //    foreach (var item in Adresses)
+            //    {
+            //        var address = core.InterpretUrl(item);
+            //        address.Transport = core.DefaultAccount.Transport;
+            //        address.Domain = core.DefaultAccount.Params.ServerAddress.Domain;
+            //        conference.AddParticipant(address);
+            //    }
+            //    conference.InviteParticipants(conference.Participants, core.CreateCallParams(null));
+            //}
         }
 
         public async Task OpenMicrophonePopup()

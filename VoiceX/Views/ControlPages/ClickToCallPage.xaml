@@ -26,56 +26,32 @@
                 <TextBlock Text="Enter Data" Margin="16,0,0,0" FontFamily="Nunito Sans 10pt Normal"/>
                 <Button PointerPressed="ClickToCall_PointerPressed" PointerEntered="Navigate_PointerEntered" PointerExited="Navigate_PointerExited" Click="Remove_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Style="{StaticResource ButtonStyleMenu}" Background="Transparent" HorizontalAlignment="Right" Margin="0,1,16,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
                     <Button.Content>
-                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="-1,0,0,0">
-                            <Grid CornerRadius="0.5" Width="9.4" Height="1" Background="#FF898989" RenderTransformOrigin="0.5,0.5">
-                                <Grid.RenderTransform>
-                                    <CompositeTransform Rotation="-45"/>
-                                </Grid.RenderTransform>
-                            </Grid>
-                            <Grid CornerRadius="0.5" Width="9.4" Height="1" Background="#FF898989" RenderTransformOrigin="0.5,0.5">
-                                <Grid.RenderTransform>
-                                    <CompositeTransform Rotation="45"/>
-                                </Grid.RenderTransform>
-                            </Grid>
-                        </Grid>
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/x.png" DecodePixelWidth="40" DecodePixelHeight="40"/>
+                            </Image.Source>
+                        </Image>
                     </Button.Content>
                 </Button>
-                <Button PointerPressed="ClickToCall_PointerPressed" PointerEntered="Navigate_PointerEntered" PointerExited="Navigate_PointerExited"  Click="UpBotton_Click" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Style="{StaticResource ButtonStyleMenu}" Background="Transparent" HorizontalAlignment="Right" Margin="0,1,35,0">
+                <Button PointerPressed="ClickToCall_PointerPressed" PointerEntered="Navigate_PointerEntered" PointerExited="Navigate_PointerExited"  Click="UpBotton_Click" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Style="{StaticResource ButtonStyleMenu}" Background="Transparent" HorizontalAlignment="Right" Margin="0,1,35,0" RenderTransformOrigin="0.5,0.5">
+                    <Button.RenderTransform>
+                        <CompositeTransform Rotation="180"/>
+                    </Button.RenderTransform>
                     <Button.Content>
-                        <Grid>
-                            <Grid Width="1" Height="8.3" CornerRadius="0.5" Background="#FF898989"/>
-                            <Grid Width="1" Height="6.4" CornerRadius="0.5" Background="#FF898989" RenderTransformOrigin="0.5,0.5" Margin="-5,-1,0,2" UseLayoutRounding="False" d:LayoutRounding="Auto">
-                                <Grid.RenderTransform>
-                                    <CompositeTransform Rotation="45"/>
-                                </Grid.RenderTransform>
-                            </Grid>
-                            <Grid Width="1" Height="6.4" CornerRadius="0.5" Background="#FF898989" Margin="-1,-0.3,0,0" UseLayoutRounding="False" d:LayoutRounding="Auto">
-                                <Grid.RenderTransform>
-                                    <CompositeTransform Rotation="-45"/>
-                                </Grid.RenderTransform>
-                            </Grid>
-                        </Grid>
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/Arrow.png" DecodePixelWidth="40" DecodePixelHeight="40"/>
+                            </Image.Source>
+                        </Image>
                     </Button.Content>
                 </Button>
                 <Button PointerPressed="ClickToCall_PointerPressed" x:Name="Down" Click="Down_Click" PointerEntered="Navigate_PointerEntered" PointerExited="Navigate_PointerExited" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Style="{StaticResource ButtonStyleMenu}" Background="Transparent" HorizontalAlignment="Right" Margin="0,1,55,0">
                     <Button.Content>
-                        <Grid RenderTransformOrigin="0.5,0.5">
-                            <Grid.RenderTransform>
-                                <CompositeTransform Rotation="180"/>
-                            </Grid.RenderTransform>
-                            
-                            <Grid Width="1" Height="6.4" CornerRadius="0.5" Background="#FF898989" RenderTransformOrigin="0.5,0.5" Margin="-5,-2.7,0,0" UseLayoutRounding="False" d:LayoutRounding="Auto">
-                                <Grid.RenderTransform>
-                                    <CompositeTransform Rotation="45"/>
-                                </Grid.RenderTransform>
-                            </Grid>
-                            <Grid Width="1" Height="6.4" CornerRadius="0.5" Background="#FF898989" Margin="-1,-0.3,0,0" UseLayoutRounding="False" d:LayoutRounding="Auto">
-                                <Grid.RenderTransform>
-                                    <CompositeTransform Rotation="-45"/>
-                                </Grid.RenderTransform>
-                            </Grid>
-                            <Grid Width="1" Height="8.3" CornerRadius="0.5" Background="#FF898989"/>
-                        </Grid>
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/Arrow.png" DecodePixelWidth="40" DecodePixelHeight="40"/>
+                            </Image.Source>
+                        </Image>
                     </Button.Content>
                 </Button>
                 <Button PointerPressed="ClickToCall_PointerPressed" PointerEntered="Navigate_PointerEntered" Background="Transparent" PointerExited="Navigate_PointerExited" Click="ServerButton_Click" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="15" Padding="0,0,0,0" BorderBrush="Transparent" Width="15" Style="{StaticResource ButtonStyleMenu}" HorizontalAlignment="Right" Margin="0,1,75,0">

@@ -22,7 +22,7 @@
                     <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/TopLogo.png" DecodePixelWidth="200" DecodePixelHeight="90"/>
                 </Image.Source>
             </Image>
-            <Button PointerPressed="Page_PointerPressed" PointerExited="Cursor_PointerExited" BorderThickness="0" ToolTipService.ToolTip="Pauses" ToolTipService.Placement="Mouse" x:Name="Pauses" Click="Pauses_Click" Height="30" Width="30" Style="{StaticResource ButtonStyleStandart}" Background="Transparent" Padding="0,0,0,0" HorizontalAlignment="Right" Margin="0,0,16,0">
+            <Button PointerPressed="Page_PointerPressed" PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" BorderThickness="0" ToolTipService.ToolTip="Pauses" ToolTipService.Placement="Mouse" x:Name="Pauses" Click="Pauses_Click" Height="30" Width="30" Style="{StaticResource ButtonStyleStandart}" Background="Transparent" Padding="0,0,0,0" HorizontalAlignment="Right" Margin="0,0,16,0">
                 <Button.Content>
                     <Grid BorderThickness="1" BorderBrush="#FFC3B1FD" Height="28" Width="28"  Background="#FFFDFEFF" CornerRadius="50">
                         <Image Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center">

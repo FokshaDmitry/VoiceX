@@ -2,10 +2,8 @@
 
 namespace VoiceX.Models
 {
-    public class Get_certificate
+    public class Get_certificate : Responce_model
     {
-        public HttpStatusCode ResponseCode { get; set; }
-        public string ResponseMessage { get; set; }
         public string Error { get; set; }
         public string P12l { get; set; }
         public string P12 { get; set; }

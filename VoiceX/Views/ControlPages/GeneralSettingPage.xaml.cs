@@ -134,17 +134,17 @@ namespace VoiceX.Views.ControlPages
             {
                 if (ApplicationData.Current.LocalSettings.Values["NewAdress"].ToString() != "")
                 {
-                    App.Address = ApplicationData.Current.LocalSettings.Values["NewAdress"].ToString();
-                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, type);
+                    App.AccountData.Data.Sip_Settings.Sip_proxy = ApplicationData.Current.LocalSettings.Values["NewAdress"].ToString();
+                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, type);
                 }
                 else
                 {
-                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, type);
+                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, type);
                 }
             }
             else
             {
-                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, type);
+                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, type);
             }
         }
         private async void SmartPhone_Toggled(object sender, RoutedEventArgs e)

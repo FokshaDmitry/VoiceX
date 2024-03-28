@@ -101,11 +101,11 @@ namespace VoiceX.Views.ControlPages
             if (flag)
             {
                 ApplicationData.Current.LocalSettings.Values["NewAdress"] = NewAdress.Text;
-                App.Address = NewAdress.Text;
+                App.AccountData.Data.Sip_Settings.Sip_proxy = NewAdress.Text;
                 CoreService.NatIgnore = false;
                 CoreService.Instance.LogOut();
                 CoreService.Instance.CoreStart(CoreApplication.GetCurrentView().CoreWindow.Dispatcher);
-                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, transportType);
+                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, transportType);
             }
             else
             {
@@ -113,7 +113,7 @@ namespace VoiceX.Views.ControlPages
                 CoreService.NatIgnore = true;
                 CoreService.Instance.LogOut(); 
                 CoreService.Instance.CoreStart(CoreApplication.GetCurrentView().CoreWindow.Dispatcher);
-                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, transportType);
+                CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, transportType);
             }
         }
 

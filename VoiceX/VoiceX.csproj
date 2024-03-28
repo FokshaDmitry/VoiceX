@@ -161,6 +161,9 @@
     <Compile Include="DAL\Entity\LogginNotes.cs" />
     <Compile Include="Enums\Keypads.cs" />
     <Compile Include="Enums\StatusCall.cs" />
+    <Compile Include="Items\ClientItem.xaml.cs">
+      <DependentUpon>ClientItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Items\ContactPad.xaml.cs">
       <DependentUpon>ContactPad.xaml</DependentUpon>
     </Compile>
@@ -201,15 +204,24 @@
     <Compile Include="Models\pause.cs" />
     <Compile Include="Models\regex_note.cs" />
     <Compile Include="Models\responce_model.cs" />
+    <Compile Include="Models\response_data.cs" />
     <Compile Include="Models\sip_settings.cs" />
     <Compile Include="Models\status_pause.cs" />
     <Compile Include="Models\user_data.cs" />
+    <Compile Include="Models\user_dbinfo.cs" />
+    <Compile Include="Models\user_info.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BackgroundTaskService.cs" />
     <Compile Include="Services\CoreService.cs" />
     <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\WebService.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Views\ClientPages\ContactsPage.xaml.cs">
+      <DependentUpon>ContactsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClientPages\OperatorsPage.xaml.cs">
+      <DependentUpon>OperatorsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControlPages\AdditionPage.xaml.cs">
       <DependentUpon>AdditionPage.xaml</DependentUpon>
@@ -244,7 +256,7 @@
     <Compile Include="Views\HistoryPage.xaml.cs">
       <DependentUpon>HistoryPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ClientsPage.xaml.cs">
+    <Compile Include="Views\ClientPages\ClientsPage.xaml.cs">
       <DependentUpon>ClientsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControlPages\ProfilePage.xaml.cs">
@@ -281,6 +293,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Icone_v2\Arrow.png" />
     <Content Include="Assets\Icone_v2\BackgroundTopElement.png" />
     <Content Include="Assets\Icone_v2\Backspace.png" />
     <Content Include="Assets\Icone_v2\Box.png" />
@@ -302,6 +315,7 @@
     <Content Include="Assets\Icone_v2\FileIcone.png" />
     <Content Include="Assets\Icone_v2\FileText.png" />
     <Content Include="Assets\Icone_v2\GreyUser.png" />
+    <Content Include="Assets\Icone_v2\homeNavigate.png" />
     <Content Include="Assets\Icone_v2\Illustration.png" />
     <Content Include="Assets\Icone_v2\Keyboard.png" />
     <Content Include="Assets\Icone_v2\LinePhone.png" />
@@ -309,7 +323,6 @@
     <Content Include="Assets\Icone_v2\LodingIcone.gif" />
     <Content Include="Assets\Icone_v2\Folder.png" />
     <Content Include="Assets\Icone_v2\historyNavigate.png" />
-    <Content Include="Assets\Icone_v2\homeNavigate.png" />
     <Content Include="Assets\Icone_v2\Key.png" />
     <Content Include="Assets\Icone_v2\microphone.png" />
     <Content Include="Assets\Icone_v2\phoneNavigate.png" />
@@ -324,6 +337,7 @@
     <Content Include="Assets\Icone_v2\trash.png" />
     <Content Include="Assets\Icone_v2\UserTree.png" />
     <Content Include="Assets\Icone_v2\Warning.png" />
+    <Content Include="Assets\Icone_v2\x.png" />
     <Content Include="Assets\Logo100x40.png" />
     <Content Include="Assets\Logo284.scale-100.png" />
     <Content Include="Assets\Logo284.scale-125.png" />
@@ -395,6 +409,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Items\ClientItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Items\ContactPad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -436,6 +454,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Style\Style.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientPages\ContactsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClientPages\OperatorsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -483,7 +509,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ClientsPage.xaml">
+    <Page Include="Views\ClientPages\ClientsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

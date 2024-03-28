@@ -31,8 +31,8 @@ namespace VoiceX.Views.ClientCardPages
         public InfoContent()
         {
             this.InitializeComponent();
-            AccountFild.Text = ClientCard.UserName;
-            phoneNumber.Text = ClientCard.Number;
+            AccountFild.Text = ClientCard.clientCard.data.username;
+            phoneNumber.Text = ClientCard.clientCard.data.phone1;
             frame = new Frame();
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)

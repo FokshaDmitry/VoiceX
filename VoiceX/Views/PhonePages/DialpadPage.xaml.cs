@@ -18,8 +18,7 @@ using System.Text;
 using VoiceX.DAL.Entity;
 using VoiceX.Enums;
 using VoiceX.Views.ControlPages;
-using Windows.UI.ViewManagement;
-using System.Threading;
+using VoiceX.Views.ClientPages;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -237,7 +236,7 @@ namespace VoiceX.Views.PhonePages
                     }
                     var type = CoreService.Instance.Core.DefaultAccount.Transport;
                     CoreService.Instance.LogOut();
-                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, type);
+                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, type);
                     break;
                 case CallState.Error:
                     // send message from user notification
@@ -278,7 +277,7 @@ namespace VoiceX.Views.PhonePages
                     }
                     var typet = CoreService.Instance.Core.DefaultAccount.Transport;
                     CoreService.Instance.LogOut();
-                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.Address, typet);
+                    CoreService.Instance.LogIn(App.AccountData.Data.Sip_Settings.Sip_username.ToString(), App.AccountData.Data.Sip_Settings.Sip_secret, App.AccountData.Data.Sip_Settings.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, typet);
                     break;
             }
         }
@@ -403,7 +402,7 @@ namespace VoiceX.Views.PhonePages
             if (keyPads != KeyPads.DTMFPad)
             {
                 ContactsList.Items.Clear();
-                if (contacts.responseCode == HttpStatusCode.OK)
+                if (contacts.ResponseCode == HttpStatusCode.OK)
                 {
                     if (contacts.contacts != null)
                     {

@@ -26,6 +26,7 @@ using Windows.Networking.PushNotifications;
 using Microsoft.WindowsAzure.Messaging;
 using System.Text;
 using System.ServiceModel.Channels;
+using VoiceX.Views.ClientPages;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -159,7 +160,7 @@ namespace VoiceX.Views.ControlPages
             }
             if (!String.IsNullOrEmpty(App.AccountData.Data.Sip_Settings.Sip_username))
             {
-                InitNotificationsAsync(App.AccountData.Data.Sip_Settings.Sip_username);
+                InitNotificationsAsync(App.AccountData.Data.Sip_Settings.Sip_username + "@" + App.AccountData.Data.Sip_Settings.Sip_server);
             }
         }
 

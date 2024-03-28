@@ -2,11 +2,8 @@
 
 namespace VoiceX.Models
 {
-    public class Account_data
+    public class Account_data : Responce_model
     {
-        
-        public HttpStatusCode ResponseCode { get; set; }
-        public string ResponseMessage { get; set; }
         public Data Data { get; set; }
         public Account_data()
         {

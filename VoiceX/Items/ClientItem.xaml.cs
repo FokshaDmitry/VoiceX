@@ -1,18 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices.WindowsRuntime;
 using VoiceX.Services;
 using VoiceX.Views.ClientCardPages;
 using VoiceX.Views.ControlPages;
 using VoiceX.Views.PhonePages;
-using Windows.ApplicationModel.Core;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
 using Windows.UI;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -21,21 +25,19 @@ namespace VoiceX.Items
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Contact : ListBoxItem
+    public sealed partial class ClientItem : ListBoxItem
     {
-        public string contactName;
-        public string contactPhone;
-        public Contact(string Name, string Phone, int color)
+        private string idDb;
+        public ClientItem(string Name, string Phone, string Email, string IdDB, int color)
         {
             this.InitializeComponent();
-            contactName = Name;
-            contactPhone = Phone;
+            idDb = IdDB;
             FirstWord.Text = Name.Substring(0, 1);
-            this.UserName.Text = Name;
+            UserName.Text = Name;
             this.Phone.Text = Phone;
-            contactBackgroundColor.Background = color == 1 ?  new SolidColorBrush(Color.FromArgb(255, 138, 99, 251)) : new SolidColorBrush(Color.FromArgb(255, 229, 167, 224));
+            this.Email.Text = Email;
+            contactBackgroundColor.Background = color == 1 ? new SolidColorBrush(Color.FromArgb(255, 138, 99, 251)) : new SolidColorBrush(Color.FromArgb(255, 229, 167, 224));
         }
-
         private void ListBoxItem_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             App.timeOut = DateTime.Now;
@@ -80,11 +82,16 @@ namespace VoiceX.Items
                     }
                     CoreService.Instance.Call(phone);
                 }
-                catch 
+                catch
                 {
-                    
+
                 }
             }
+        }
+
+        private async void Info_Click(object sender, RoutedEventArgs e)
+        {
+            await App.OpenWindow(typeof(ClientCard), idDb);
         }
     }
 }

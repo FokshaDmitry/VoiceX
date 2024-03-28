@@ -20,11 +20,17 @@ namespace VoiceX.Services
         private Account_data account;
         Get_certificate certificate;
         readonly string userToken;
+        response_data responseData;
+        user_dbinfo user_dbinfo;
         public WebService(string userToken)
         {
             account = new Account_data();
             certificate = new Get_certificate();
             this.userToken = userToken;
+            responseData = new response_data();
+            responseData.data = new List<user_info>();
+            user_dbinfo = new user_dbinfo();
+            user_dbinfo.data = new data(); 
         }
         public async Task<string> PostToFax(string user_id, string message, string[] phones, byte[] fax_file, string pbxCode)
         {
@@ -161,26 +167,26 @@ namespace VoiceX.Services
             };
             if (String.IsNullOrEmpty(sip_username))
             {
-                contacts.responseCode = System.Net.HttpStatusCode.NotFound;
-                contacts.responseMessage = "Empty User Name";
+                contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
+                contacts.ResponseMessage = "Empty User Name";
                 return contacts;
             }
             if (String.IsNullOrEmpty(companyID))
             {
-                contacts.responseCode = System.Net.HttpStatusCode.NotFound;
-                contacts.responseMessage = "Company ID is 0";
+                contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
+                contacts.ResponseMessage = "Company ID is 0";
                 return contacts;
             }
             if (String.IsNullOrEmpty(pbxCode))
             {
-                contacts.responseCode = System.Net.HttpStatusCode.NotFound;
-                contacts.responseMessage = "PBX not exist";
+                contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
+                contacts.ResponseMessage = "PBX not exist";
                 return contacts;
             }
             if (pbxCode.Where(char.IsDigit).Count() != 3)
             {
-                contacts.responseCode = System.Net.HttpStatusCode.NotFound;
-                contacts.responseMessage = "Wrong PBX";
+                contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
+                contacts.ResponseMessage = "Wrong PBX";
                 return contacts;
             }
             string responseBody = "";
@@ -201,8 +207,8 @@ namespace VoiceX.Services
             }
             catch (Exception ex)
             {
-                contacts.responseCode = System.Net.HttpStatusCode.NotFound;
-                contacts.responseMessage = ex.Message;
+                contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
+                contacts.ResponseMessage = ex.Message;
                 return contacts;
             }
             if (!String.IsNullOrEmpty(responseBody))
@@ -227,8 +233,8 @@ namespace VoiceX.Services
                 }
                 catch (Exception ex)
                 {
-                    contacts.responseCode = System.Net.HttpStatusCode.Conflict;
-                    contacts.responseMessage = ex.Message;
+                    contacts.ResponseCode = System.Net.HttpStatusCode.Conflict;
+                    contacts.ResponseMessage = ex.Message;
                     return contacts;
                 }
             }
@@ -357,6 +363,102 @@ namespace VoiceX.Services
 
             }
             return account;
+        }
+        public async Task<response_data> SearchClient(string searchText, string pbxCode)
+        {
+            #region GET
+            string responseBody = "";
+            try
+            {
+                var content = new HttpStringContent("{" + $"\"search_string\":\"{searchText}\"" + "}", UnicodeEncoding.Utf8);
+                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                var clientCertificate = certificate.First();
+                var filter = new HttpBaseProtocolFilter();
+                filter.ClientCertificate = clientCertificate;
+                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                {
+                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/phonebook/search_contacts.php"), content);
+                    responseBody = await response.Content.ReadAsStringAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                responseData.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                responseData.ResponseMessage = ex.Message;
+                return responseData;
+            }
+            #endregion
+            if (!String.IsNullOrEmpty(responseBody))
+            {
+                try
+                {
+                    responseData = JsonConvert.DeserializeObject<response_data>(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    responseData.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                    responseData.ResponseMessage = ex.Message;
+                    return responseData;
+                }
+
+            }
+            else
+            {
+                responseData.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                responseData.ResponseMessage = "Responce is empty";
+                return responseData;
+            }
+            return responseData;
+        }
+        public async Task<user_dbinfo> GetClient(string idDB, string pbxCode)
+        {
+            #region GET
+            string responseBody = "";
+            try
+            {
+                var content = new HttpStringContent("{" + $"\"db_id\":\"{idDB}\"" + "}", UnicodeEncoding.Utf8);
+                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                var clientCertificate = certificate.First();
+                var filter = new HttpBaseProtocolFilter();
+                filter.ClientCertificate = clientCertificate;
+                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                {
+                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/phonebook/get_contact.php"), content);
+                    responseBody = await response.Content.ReadAsStringAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                user_dbinfo.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                user_dbinfo.ResponseMessage = ex.Message;
+                return user_dbinfo;
+            }
+            #endregion
+            if (!String.IsNullOrEmpty(responseBody))
+            {
+                try
+                {
+                    user_dbinfo = JsonConvert.DeserializeObject<user_dbinfo>(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    user_dbinfo.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                    user_dbinfo.ResponseMessage = ex.Message;
+                    return user_dbinfo;
+                }
+
+            }
+            else
+            {
+                user_dbinfo.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                user_dbinfo.ResponseMessage = "Responce is empty";
+                return user_dbinfo;
+            }
+            return user_dbinfo;
         }
         public async Task<Get_pauses> GetPauses(string sipUsername, string pbxCode)
         {

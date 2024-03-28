@@ -17,6 +17,7 @@ using Windows.UI.Core;
 using VoiceX.Models;
 using VoiceX.Views.PhonePages;
 using VoiceX.Views.ControlPages;
+using VoiceX.Views.ClientPages;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace VoiceX.Views

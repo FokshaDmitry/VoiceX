@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace VoiceX.Models
 {
-    public class Get_pauses
+    public class Get_pauses : Responce_model
     {
-        public HttpStatusCode ResponseCode { get; set; }
-        public string ResponseMessage { get; set; }
         public Status_pause ResponseData { get; set; }
     }
 }

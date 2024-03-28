@@ -11,10 +11,12 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace VoiceX.Views
+namespace VoiceX.Views.ClientPages
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -22,100 +24,26 @@ namespace VoiceX.Views
     public sealed partial class ClientsPage : Page
     {
         readonly WebService webService;
-        contacts_list contacts;
         public static List<Items.Contact> userContactsList;
-        readonly ErrorService errorService;
+        public ErrorService errorService;
         public ClientsPage()
         {
             this.InitializeComponent();
             webService = new WebService(App.userToken);
-            contacts = new contacts_list
-            {
-                contacts = new List<Models.Contact>()
-            };
             userContactsList = new List<Items.Contact>();
             this.SizeChanged += ContactsPage_SizeChanged;
             errorService = new ErrorService(MainGrid);
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            PageContent.Navigate(typeof(OperatorsPage), this);
+        }
         private void ContactsPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             
         }
-
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            int color = 1;
-            contacts = await webService.GetcontactsList(App.AccountData.Data.Sip_Settings.Sip_username, App.AccountData.Data.User_Data.CompanyID, App.UserPbx);
-            if (contacts.responseCode == HttpStatusCode.OK)
-            {
-                if(contacts.contacts != null)
-                {
-                    
-                    var groupContacts = contacts.contacts.GroupBy(c => c.Name[0].ToString().ToUpper()).OrderBy(c => c.Key);
-                    foreach (var groupcontact in groupContacts)
-                    {
-                        if (groupcontact.Key.All(char.IsDigit))
-                            ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString()));
-                        else
-                            ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
-                        foreach (var contact in groupcontact)
-                        {
-                            ContactsList.Items.Add(new Items.Contact(contact.Name, contact.Telephone, color));
-                            userContactsList.Add(new Items.Contact(contact.Name, contact.Telephone, color));
-                            color = color == 1 ? 0 : 1;
-                        }
-                    }
-                }
-
-            }
-            else
-            {
-                errorService.ShowError(contacts.responseMessage);
-            }
-        }
-        private void SearchFild_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
-        {
-            SolidColorBrush magnifyingGlassColorGrey = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
-            SolidColorBrush magnifyingGlassColorBlack = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
-            ContactsList.Items.Clear();
-
-            if (String.IsNullOrEmpty(Search.Text))
-            {
-                var groupContacts = userContactsList.GroupBy(c => c.contactName[0].ToString().ToUpper()).OrderBy(c => c.Key);
-                foreach (var groupcontact in groupContacts.ToList())
-                {
-                    if (groupcontact.Key.All(char.IsDigit))
-                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString()));
-                    else
-                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
-                    foreach (var contact in groupcontact)
-                    {
-                        ContactsList.Items.Add(contact);
-                    }
-                }
-                magnifyingGlass.Margin = new Thickness(0, 0, 5, 2);
-                magnifyingGlassEllipse.Stroke =  magnifyingGlassColorGrey;
-                magnifyingGlassLine.Background = magnifyingGlassColorGrey;
-            }
-            else
-            {
-                foreach (var contact in userContactsList)
-                {
-                    if (contact.contactName.Contains(Search.Text))
-                    {
-                        ContactsList.Items.Add(contact);
-                    }
-                    else if (contact.contactPhone.Contains(Search.Text))
-                    {
-                        ContactsList.Items.Add(contact);
-                    }
-                }
-                magnifyingGlass.Margin = new Thickness(0, 0, 23, 2);
-                magnifyingGlassEllipse.Stroke = magnifyingGlassColorBlack;
-                magnifyingGlassLine.Background = magnifyingGlassColorBlack;
-            }
-        }
+        
         #region Navigate
         private async void Navigate_Click(object sender, RoutedEventArgs e)
         {
@@ -217,7 +145,26 @@ namespace VoiceX.Views
             }
             PausesFild.Visibility = Visibility.Visible;
         }
+        private void Filter_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton filter = (RadioButton)sender;
+            var blueLine = new SolidColorBrush(Color.FromArgb(255, 138, 99, 251));
+            var whiteLine = new SolidColorBrush(Color.FromArgb(255, 253, 254, 255));
 
+            if (filter.Name == "Operators")
+            {
+                OperatorsCheck.Background = blueLine;
+                ClientsChek.Background = whiteLine;
+
+                PageContent.Navigate(typeof(OperatorsPage), this, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
+            }
+            else if (filter.Name == "Clients")
+            {
+                OperatorsCheck.Background = whiteLine;
+                ClientsChek.Background = blueLine;
+                PageContent.Navigate(typeof(ContactsPage), this , new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
+            }
+        }
         private void PauseList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var list = (ListBox)sender;

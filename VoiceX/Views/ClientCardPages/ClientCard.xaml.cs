@@ -18,24 +18,23 @@ namespace VoiceX.Views.ClientCardPages
     /// </summary>
     public sealed partial class ClientCard : Page
     {
-        public static string Number { get; set; }
-        public static string UserName { get; set; }
         readonly ErrorService errorService;
         readonly WebService webService;
+        public static user_dbinfo clientCard { get; private set; }  
         public ClientCard()
         {
             this.InitializeComponent();
             errorService = new ErrorService(MainGrid);
             webService = new WebService(App.userToken);
+            clientCard = new user_dbinfo();
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             if (!String.IsNullOrEmpty(e?.Parameter.ToString()))
             {
-                var Params = e?.Parameter.ToString().Split(';');
-                Number = Params[0];
-                UserName = Params[1];
+                var id = e?.Parameter.ToString();
+                clientCard = await webService.GetClient(id, App.UserPbx);
             }
             CardContent.Navigate(typeof(InfoContent), CardContent);
         }

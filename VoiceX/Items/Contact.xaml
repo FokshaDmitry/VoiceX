@@ -12,22 +12,13 @@
             <Grid x:Name="contactBackgroundColor" Background="#FFE5A7E0" CornerRadius="50" >
                 <TextBlock Text="N" x:Name="FirstWord" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Inter" Foreground="#FFFDFEFF"/>
             </Grid>
-            <Grid PointerPressed="ListBoxItem_PointerPressed" Width="9" CornerRadius="50" BorderThickness="1" Height="9" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#FF4CB04E" BorderBrush="White">
+            <!--<Grid PointerPressed="ListBoxItem_PointerPressed" Width="9" CornerRadius="50" BorderThickness="1" Height="9" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#FF4CB04E" BorderBrush="White">
                 <Image PointerPressed="ListBoxItem_PointerPressed" Source="/Assets/Icone/Chek.png" Width="5.7" Margin="0.1,0.8,0,0" />
-            </Grid>
+            </Grid>-->
         </Grid>
-        <TextBlock PointerPressed="ListBoxItem_PointerPressed" TextTrimming="CharacterEllipsis" FontFamily="Nunito Sans 10pt Normal" Text="Name" x:Name="UserName" HorizontalAlignment="Left" Margin="40,5,0,0"  TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="12" Foreground="Black" Width="85"/>
-        <TextBlock PointerPressed="ListBoxItem_PointerPressed" FontFamily="Nunito Sans 10pt Normal" Text="Phone" x:Name="Phone" HorizontalAlignment="Left" Margin="40,22,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="10" Foreground="#FF727070" Width="85"/>
-        <Button x:Name="Info" Click="Info_Click" Style="{StaticResource ButtonStyleMenu}" PointerEntered="Info_PointerEntered"  PointerExited="Info_PointerExited" Height="20" Width="20" HorizontalAlignment="Right" Margin="0,6,15,0" VerticalAlignment="Top" Padding="0,0,0,0" BorderBrush="{x:Null}">
-            <Button.Background>
-                <ImageBrush>
-                    <ImageBrush.ImageSource>
-                        <BitmapImage UriSource="ms-appx:///Assets/Icone_v2/ContactInfo.png" DecodePixelWidth="70" DecodePixelHeight="70"/>
-                    </ImageBrush.ImageSource>
-                </ImageBrush>
-            </Button.Background>
-        </Button>
-        <Button Style="{StaticResource ButtonStyleMenu}" PointerEntered="Info_PointerEntered"  PointerExited="Info_PointerExited" Height="18" Width="18" HorizontalAlignment="Right" Margin="0,6,40,0" VerticalAlignment="Top" Padding="0,0,0,0" BorderBrush="{x:Null}">
+        <TextBlock PointerPressed="ListBoxItem_PointerPressed" TextTrimming="CharacterEllipsis" FontFamily="Nunito Sans 10pt Normal" Text="Name" x:Name="UserName" HorizontalAlignment="Left" Margin="40,4,0,0"  TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="14" Foreground="Black" Width="85"/>
+        <TextBlock PointerPressed="ListBoxItem_PointerPressed" FontFamily="Nunito Sans 10pt Normal" Text="Phone" x:Name="Phone" HorizontalAlignment="Left" Margin="40,21,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="11" Foreground="#FF727070" Width="85"/>
+        <Button Style="{StaticResource ButtonStyleMenu}" PointerEntered="Info_PointerEntered"  PointerExited="Info_PointerExited" Height="18" Width="18" HorizontalAlignment="Right" Margin="0,6,15,0" VerticalAlignment="Top" Padding="0,0,0,0" BorderBrush="{x:Null}">
             <Button.Background>
                 <ImageBrush>
                     <ImageBrush.ImageSource>
@@ -36,7 +27,7 @@
                 </ImageBrush>
             </Button.Background>
         </Button>
-        <Button x:Name="Call" Click="Call_Click" Style="{StaticResource ButtonStyleMenu}" PointerEntered="Info_PointerEntered"  PointerExited="Info_PointerExited" Height="20" Width="20" HorizontalAlignment="Right" Margin="0,6,62,0" VerticalAlignment="Top" Padding="0,0,0,0" BorderBrush="{x:Null}">
+        <Button x:Name="Call" Click="Call_Click" Style="{StaticResource ButtonStyleMenu}" PointerEntered="Info_PointerEntered"  PointerExited="Info_PointerExited" Height="20" Width="20" HorizontalAlignment="Right" Margin="0,6,40,0" VerticalAlignment="Top" Padding="0,0,0,0" BorderBrush="{x:Null}">
             <Button.Background>
                 <ImageBrush>
                     <ImageBrush.ImageSource>

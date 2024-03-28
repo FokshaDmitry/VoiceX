@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
@@ -54,9 +55,13 @@ namespace VoiceX.Views.PhonePages
             {
                 return;
             }
+            await CallNumber(NumberFild.Text);
+        }
+        private async Task CallNumber(string phone)
+        {
             if (DialpadPage.currentCall == null)
             {
-                try 
+                try
                 {
                     await CoreService.Instance.OpenMicrophonePopup();
                 }
@@ -65,7 +70,6 @@ namespace VoiceX.Views.PhonePages
                     phonePage.errorService.ShowError("Microphone not found");
                     return;
                 }
-                var phone = NumberFild.Text;
                 foreach (var regex in ProfilePage.regexNotes.Where(r => r.Check))
                 {
                     phone = phone.Replace(regex.Search, regex.Replace);
@@ -109,24 +113,7 @@ namespace VoiceX.Views.PhonePages
             CallItem callItem = (CallItem)ContactList.SelectedItem;
             if (callItem != null)
             {
-                try
-                {
-                    await CoreService.Instance.OpenMicrophonePopup();
-                }
-                catch
-                {
-                    phonePage.errorService.ShowError("Microphone not found");
-                    return;
-                }
-                var phone = callItem.UserPhone;
-                foreach (var regex in ProfilePage.regexNotes.Where(r => r.Check))
-                {
-                    phone = phone.Replace(regex.Search, regex.Replace);
-                }
-                CoreService.Instance.Call(phone);
-                NumberFild.Text = "";
-                ContactList.Items.Clear();
-                Frame.Navigate(typeof(ActivCallPage), phonePage);
+                await CallNumber(callItem.UserPhone);
             }
         }
 
@@ -148,26 +135,7 @@ namespace VoiceX.Views.PhonePages
                 {
                     return;
                 }
-                if (DialpadPage.currentCall == null)
-                {
-                    try
-                    {
-                        await CoreService.Instance.OpenMicrophonePopup();
-                    }
-                    catch
-                    {
-                        phonePage.errorService.ShowError("Microphone not found");
-                        return;
-                    }
-                    var phone = NumberFild.Text;
-                    foreach (var regex in ProfilePage.regexNotes.Where(r => r.Check))
-                    {
-                        phone = phone.Replace(regex.Search, regex.Replace);
-                    }
-                    CoreService.Instance.Call(phone);
-                    NumberFild.Text = "";
-                    Frame.Navigate(typeof(ActivCallPage), phonePage);
-                }
+                await CallNumber(NumberFild.Text);
             }
         }
         private void Cursor_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)

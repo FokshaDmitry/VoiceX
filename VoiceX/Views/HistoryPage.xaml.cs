@@ -7,6 +7,7 @@ using VoiceX.DAL.Entity;
 using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
+using VoiceX.Views.ClientPages;
 using VoiceX.Views.ControlPages;
 using VoiceX.Views.PhonePages;
 using Windows.UI;
