@@ -1,5 +1,6 @@
 ﻿using Linphone;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,7 +54,9 @@ namespace VoiceX.Services
                     core.Transports = transports;
                     
                     core.DnsSrvEnabled = !NatIgnore;
-                    core.SipTransportTimeout = 5000;
+                    core.SipTransportTimeout = 25000;
+                    
+                    core.DelayedTimeout = 30;
                     core.Config.SetInt("net", "enable_nat_helper", 0);
                     if (!NatIgnore)
                     {
@@ -182,32 +185,32 @@ namespace VoiceX.Services
         }
         public void CreateConference(params string[] Adresses)
         {
-            //_ = new Conference();
-            //Conference conference;
-            //if (core.Conference == null)
-            //{
-            //    //var paramsConf = core.CreateConferenceParams();
-            //    //paramsConf.AudioEnabled = true;
-            //    //paramsConf.VideoEnabled = false;
-            //    //paramsConf.LocalParticipantEnabled = true;
-            //    //paramsConf.ChatEnabled = false;
-            //    //conference = core.CreateConferenceWithParams(paramsConf);
-            //}
-            //else
-            //{
-            //    conference = core.Conference;
-            //}
-            //if (conference != null)
-            //{
-            //    foreach (var item in Adresses)
-            //    {
-            //        var address = core.InterpretUrl(item);
-            //        address.Transport = core.DefaultAccount.Transport;
-            //        address.Domain = core.DefaultAccount.Params.ServerAddress.Domain;
-            //        conference.AddParticipant(address);
-            //    }
-            //    conference.InviteParticipants(conference.Participants, core.CreateCallParams(null));
-            //}
+            _ = new Conference();
+            Conference conference;
+            if (core.Conference == null)
+            {
+                var paramsConf = core.CreateConferenceParams();
+                paramsConf.AudioEnabled = true;
+                paramsConf.VideoEnabled = false;
+                paramsConf.LocalParticipantEnabled = true;
+                paramsConf.ChatEnabled = false;
+                conference = core.CreateConferenceWithParams(paramsConf);
+            }
+            else
+            {
+                conference = core.Conference;
+            }
+            if (conference != null)
+            {
+                foreach (var item in Adresses)
+                {
+                    var address = core.InterpretUrl(item);
+                    address.Transport = core.DefaultAccount.Transport;
+                    address.Domain = core.DefaultAccount.Params.ServerAddress.Domain;
+                    conference.AddParticipant(address);
+                }
+                conference.InviteParticipants(conference.Participants, core.CreateCallParams(null));
+            }
         }
 
         public async Task OpenMicrophonePopup()

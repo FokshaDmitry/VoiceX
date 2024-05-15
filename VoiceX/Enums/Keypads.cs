@@ -1,5 +1,4 @@
-﻿
-namespace VoiceX.Enums
+﻿namespace VoiceX.Enums
 {
     public enum KeyPads
     {

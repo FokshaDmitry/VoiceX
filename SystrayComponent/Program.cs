@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Win32;
 using PdfScribeCore;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Advanced;
@@ -14,7 +14,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Threading;
 using TTT.WindowsControls;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.AppService;
@@ -137,6 +136,7 @@ namespace SystrayComponent
                 // Follow C:\Users\user\AppData\Local\Temp
                 WatchDirectory(Path.GetTempPath());
                 RunPipe();
+                SetStartup();
                 mutex = new Mutex(false, "MySystrayExtensionMutex");
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -472,6 +472,14 @@ namespace SystrayComponent
                 return "";
             }
             return globalSelectedText;
+        }
+        private static void SetStartup()
+        {
+            using (RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            {
+                reg.SetValue("SystrayComponent", Application.ExecutablePath.ToString() + "SystrayComponent.exe");
+                
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ namespace VoiceX.Views.PhonePages
         public static bool Ignore { get; private set; }
         public static bool TerminateAllCalls { get; set; }
         public static List<string> CallAdtess { get; set; }
-        public static Call currentCall;
+        public static Call currentCall { get; set; }
         public static StatusCall StatusCall { get; set; }
         readonly AddDbContext addDbContext;
         public static List<string> AutoAnswerNumbers { get; set; }
@@ -70,6 +70,15 @@ namespace VoiceX.Views.PhonePages
         {
             switch (state)
             {
+                case CallState.Paused:
+                    currentCall = call;
+                    break;
+                case CallState.Pausing:
+                    currentCall = call;
+                    break;
+                case CallState.Resuming:
+                    currentCall = call;
+                    break;
                 case CallState.IncomingReceived:
                     if (currentCall == null)
                     {

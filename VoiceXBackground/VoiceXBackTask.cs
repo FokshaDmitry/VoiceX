@@ -17,10 +17,7 @@ namespace VoiceXBackground
         public void Run(IBackgroundTaskInstance taskInstance)
         {
             _deferral = taskInstance.GetDeferral();
-            if (ApplicationData.Current.LocalSettings.Values["AppState"].ToString() == "Open")
-            {
-                ApplicationData.Current.LocalSettings.Values["MessageRecive"] = "Recive";
-            }
+            ApplicationData.Current.LocalSettings.Values["MessageRecive"] = "Recive";
             _deferral.Complete();
         }
     }

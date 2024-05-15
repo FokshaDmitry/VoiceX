@@ -12,6 +12,7 @@ using Windows.Storage;
 using Newtonsoft.Json;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Diagnostics;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -252,23 +253,24 @@ namespace VoiceX.Views.PhonePages
                 {
                     if (pause)
                     {
-                        pause = false;
                         DialpadPage.currentCall.Resume();
+                        pause = false;
                         Pause.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 221, 219, 255));
                         PauseRect.Stroke = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
                         PauseRect1.Stroke = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
                     }
                     else
                     {
-                        pause = true;
                         DialpadPage.currentCall.Pause();
+                        pause = true;
                         Pause.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 240, 186, 105));
                         PauseRect.Stroke = new SolidColorBrush(Color.FromArgb(255, 240, 186, 105));
                         PauseRect1.Stroke = new SolidColorBrush(Color.FromArgb(255, 240, 186, 105));
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Debug.WriteLine(ex.ToString());
                     return;
                 }
             }

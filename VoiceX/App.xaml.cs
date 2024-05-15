@@ -421,9 +421,9 @@ namespace VoiceX
         // show and save linphone core log
         public void OnLoggin(LoggingService logService, string domain, LogLevel lev, string message)
         {
-            StringBuilder builder = new StringBuilder();
-            _ = builder.Append("Linphone-[").Append(lev.ToString()).Append("](").Append(domain).Append(")").Append(message);
-            Debug.WriteLine(builder.ToString());
+            //StringBuilder builder = new StringBuilder();
+            //_ = builder.Append("Linphone-[").Append(lev.ToString()).Append("](").Append(domain).Append(")").Append(message);
+            //Debug.WriteLine(builder.ToString());
             //try
             //{
             //    //await Task.Run(() => dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Domain = domain, Level = lev, Message = message }));
