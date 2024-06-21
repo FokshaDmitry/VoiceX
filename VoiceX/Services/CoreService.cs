@@ -2,10 +2,15 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
 using Windows.Media.Audio;
+using Windows.Media.Capture;
+using Windows.Media.Effects;
 using Windows.UI.Core;
 using static Linphone.CoreListener;
 using static Linphone.LoggingServiceListener;
@@ -40,9 +45,9 @@ namespace VoiceX.Services
                     factory.SoundResourcesDir = Path.Combine(assetsPath, "sounds", "linphone");
                     factory.RingResourcesDir = Path.Combine(factory.SoundResourcesDir, "rings");
                     factory.ImageResourcesDir = Path.Combine(assetsPath, "images");
-                    
+
                     factory.MspluginsDir = ".";
-                    
+
                     core = factory.CreateCore("", "", IntPtr.Zero);
                     core.CallkitEnabled = false;
                     core.MaxCalls = 15;
@@ -52,9 +57,10 @@ namespace VoiceX.Services
                     transports.TcpPort = -1;
                     transports.TlsPort = -1;
                     core.Transports = transports;
-                    
                     core.DnsSrvEnabled = !NatIgnore;
                     core.SipTransportTimeout = 25000;
+                    core.EchoCancellationEnabled = true;
+                    core.EchoLimiterEnabled = true;
                     
                     core.DelayedTimeout = 30;
                     core.Config.SetInt("net", "enable_nat_helper", 0);
@@ -185,8 +191,7 @@ namespace VoiceX.Services
         }
         public void CreateConference(params string[] Adresses)
         {
-            _ = new Conference();
-            Conference conference;
+            Conference conference = new Conference();
             if (core.Conference == null)
             {
                 var paramsConf = core.CreateConferenceParams();
@@ -215,17 +220,18 @@ namespace VoiceX.Services
 
         public async Task OpenMicrophonePopup()
         {
+            PropertySet p = new PropertySet();
+            p.Add("Mix", 0.5);
             AudioGraphSettings settings = new AudioGraphSettings(Windows.Media.Render.AudioRenderCategory.Media);
-
+            
             CreateAudioGraphResult result = await AudioGraph.CreateAsync(settings);
             AudioGraph audioGraph = result.Graph;
-
+            
             CreateAudioDeviceInputNodeResult resultNode = await audioGraph.CreateDeviceInputNodeAsync(Windows.Media.Capture.MediaCategory.Media);
             AudioDeviceInputNode deviceInputNode = resultNode.DeviceInputNode;
-
+            
             deviceInputNode.Dispose();
             audioGraph.Dispose();
         }
-
     }
 }

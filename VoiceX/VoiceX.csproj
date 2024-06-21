@@ -567,7 +567,7 @@
       <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="NSwag.Core">
-      <Version>13.20.0</Version>
+      <Version>14.0.7</Version>
     </PackageReference>
     <PackageReference Include="WindowsAzure.Messaging.Managed">
       <Version>0.1.7.9</Version>

@@ -27,7 +27,6 @@ using System.IO;
 using Windows.Security.Cryptography.Certificates;
 using System.Linq;
 using System.Diagnostics;
-using System.Text;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.WindowManagement.Preview;
 using Windows.UI.Core.Preview;
