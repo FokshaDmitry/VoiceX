@@ -254,6 +254,7 @@ namespace SystrayComponent
                     if (connectionStatus != AppServiceConnectionStatus.Success)
                     {
                         System.Windows.MessageBox.Show("Status: " + connectionStatus.ToString());
+                        Application.Exit();
                         return;
                     }
                 }
@@ -261,7 +262,7 @@ namespace SystrayComponent
             }
             catch
             {
-                Application.Exit();
+                throw;
             }
         }
         public static void Connection_ServiceClosed(AppServiceConnection sender, AppServiceClosedEventArgs args)

@@ -27,5 +27,13 @@ namespace VoiceX.Items
             IsSelect = select;
             Check.Visibility = select ? Visibility.Visible : Visibility.Collapsed;
         }
+        private void Cursor_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            Window.Current.CoreWindow.PointerCursor = App.Arrow;
+        }
+        private void Cursor_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            Window.Current.CoreWindow.PointerCursor = App.Hand;
+        }
     }
 }

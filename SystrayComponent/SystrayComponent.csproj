@@ -347,6 +347,5 @@
     </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\UwpDesktop.10.0.14393.3\build\portable-net45+uap\UwpDesktop.targets" Condition="Exists('..\packages\UwpDesktop.10.0.14393.3\build\portable-net45+uap\UwpDesktop.targets')" />
-  <Import Project="..\packages\LinphoneSDK.5.1.62\build\net48\LinphoneSDK.targets" Condition="Exists('..\packages\LinphoneSDK.5.1.62\build\net48\LinphoneSDK.targets')" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
 </Project>

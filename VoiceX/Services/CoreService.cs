@@ -2,15 +2,11 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
-using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Media.Audio;
-using Windows.Media.Capture;
-using Windows.Media.Effects;
 using Windows.UI.Core;
 using static Linphone.CoreListener;
 using static Linphone.LoggingServiceListener;
@@ -220,8 +216,6 @@ namespace VoiceX.Services
 
         public async Task OpenMicrophonePopup()
         {
-            PropertySet p = new PropertySet();
-            p.Add("Mix", 0.5);
             AudioGraphSettings settings = new AudioGraphSettings(Windows.Media.Render.AudioRenderCategory.Media);
             
             CreateAudioGraphResult result = await AudioGraph.CreateAsync(settings);

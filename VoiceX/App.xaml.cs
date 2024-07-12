@@ -30,6 +30,7 @@ using System.Diagnostics;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.WindowManagement.Preview;
 using Windows.UI.Core.Preview;
+using System.Text;
 
 namespace VoiceX
 {
@@ -45,7 +46,7 @@ namespace VoiceX
         public static AppServiceConnection Connection = null;
         public static event EventHandler<AppServiceTriggerDetails> AppServiceConnected;
         public static bool FullTrustProcess; // flag if descktop exetration open 
-        public static List<AppWindow> appWindows; // list antive windows
+        public static List<AppWindow> appWindows { get; set; } // list antive windows
         public static DateTime timeOut { get; set; }
         public static bool MyComputer;
         public static string userToken;
@@ -158,9 +159,10 @@ namespace VoiceX
         {
             try
             {
-                if (appWindows.Contains(sender))
+                if (appWindows.Select(a => a.Title).Contains(sender.Title))
                 {
-                    appWindows.Remove(sender);
+                    var tmp = appWindows.First(a => a.Title == sender.Title);
+                    appWindows.Remove(tmp);
                 }
             }
             catch
@@ -411,7 +413,7 @@ namespace VoiceX
         public void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            if (appWindows.Count == 0 && !firstWindow)
+            if (appWindows.Count <= 1 && !firstWindow)
             {
                 ApplicationData.Current.LocalSettings.Values["AppState"] = "Close";
             }
@@ -420,9 +422,9 @@ namespace VoiceX
         // show and save linphone core log
         public void OnLoggin(LoggingService logService, string domain, LogLevel lev, string message)
         {
-            //StringBuilder builder = new StringBuilder();
-            //_ = builder.Append("Linphone-[").Append(lev.ToString()).Append("](").Append(domain).Append(")").Append(message);
-            //Debug.WriteLine(builder.ToString());
+            StringBuilder builder = new StringBuilder();
+            _ = builder.Append("Linphone-[").Append(lev.ToString()).Append("](").Append(domain).Append(")").Append(message);
+            Debug.WriteLine(builder.ToString());
             //try
             //{
             //    //await Task.Run(() => dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Domain = domain, Level = lev, Message = message }));
