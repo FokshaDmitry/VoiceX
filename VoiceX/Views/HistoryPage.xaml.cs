@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using VoiceX.DAL.Context;
 using VoiceX.DAL.Entity;
+using VoiceX.Interfeces;
 using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
@@ -22,7 +23,7 @@ namespace VoiceX.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class HistoryPage : Page
+    public sealed partial class HistoryPage : Page, IMoreItems  
     {
         readonly AddDbContext addDbContext;
         readonly List<HistoryNote> histories;
@@ -121,7 +122,7 @@ namespace VoiceX.Views
             }
             if (histories.Count == 50)
             {
-                HistoryList.Items.Add(new HistoryNote(this));
+                HistoryList.Items.Add(new MoreItems(this));
             }
             filter.Name = "AllCall";
         }
@@ -389,7 +390,7 @@ namespace VoiceX.Views
             }
             if (histories.Count == currentItems + 50)
             {
-                HistoryList.Items.Add(new HistoryNote(this));
+                HistoryList.Items.Add(new MoreItems(this));
             }
         }
     }

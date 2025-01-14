@@ -161,6 +161,7 @@
     <Compile Include="DAL\Entity\LogginNotes.cs" />
     <Compile Include="Enums\Keypads.cs" />
     <Compile Include="Enums\StatusCall.cs" />
+    <Compile Include="Interfeces\IMoreItems.cs" />
     <Compile Include="Items\ClientItem.xaml.cs">
       <DependentUpon>ClientItem.xaml</DependentUpon>
     </Compile>
@@ -178,6 +179,9 @@
     </Compile>
     <Compile Include="Items\HotKeyItem.xaml.cs">
       <DependentUpon>HotKeyItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Items\MoreItems.xaml.cs">
+      <DependentUpon>MoreItems.xaml</DependentUpon>
     </Compile>
     <Compile Include="Items\RegExItem.xaml.cs">
       <DependentUpon>RegExItem.xaml</DependentUpon>
@@ -433,6 +437,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Items\MoreItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Items\RegExItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -567,7 +575,7 @@
       <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="NSwag.Core">
-      <Version>14.0.7</Version>
+      <Version>14.2.0</Version>
     </PackageReference>
     <PackageReference Include="WindowsAzure.Messaging.Managed">
       <Version>0.1.7.9</Version>

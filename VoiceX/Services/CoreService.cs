@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
-using Windows.Foundation.Collections;
 using Windows.Media.Audio;
 using Windows.UI.Core;
 using static Linphone.CoreListener;

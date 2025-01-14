@@ -74,7 +74,7 @@ namespace VoiceX
             CoreService.NatIgnore = ApplicationData.Current.LocalSettings.Values.Keys.Contains("NewAdress") && ApplicationData.Current.LocalSettings.Values["NewAdress"].ToString() != "";
             Core.CoreStart(CoreApplication.GetCurrentView().CoreWindow.Dispatcher);
             
-            Core.AddOnLog(OnLoggin);
+            //Core.AddOnLog(OnLoggin);
 
             if (rootFrame == null)
             {
@@ -315,7 +315,16 @@ namespace VoiceX
             
             if (e is ProtocolActivatedEventArgs protocol)
             {
-                string phone = protocol.Uri.AbsolutePath;
+                string phone = "";
+                if (protocol.Uri.AbsoluteUri.Contains("voicexapp"))
+                {
+                    phone = protocol.Uri.Host;
+                }
+                else
+                {
+                    phone = protocol.Uri.AbsolutePath;
+                }
+
                 if (!String.IsNullOrEmpty(phone))
                 {
                     //Debug.WriteLine(Core.Core.DefaultAccount.ToString());

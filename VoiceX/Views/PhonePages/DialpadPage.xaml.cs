@@ -19,6 +19,7 @@ using VoiceX.DAL.Entity;
 using VoiceX.Enums;
 using VoiceX.Views.ControlPages;
 using VoiceX.Views.ClientPages;
+using System.Diagnostics;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -41,6 +42,7 @@ namespace VoiceX.Views.PhonePages
         public static List<string> AutoAnswerNumbers { get; set; }
         readonly WebService webService;
         public ErrorService errorService;
+        KeyPads keyPads;
         public DialpadPage()
         {
             this.InitializeComponent();
@@ -145,7 +147,6 @@ namespace VoiceX.Views.PhonePages
 
 
                     break;
-                //case CallState.Released:
                 case CallState.End:
                     // if event start twice
                     if (currentCall == null)
@@ -169,7 +170,7 @@ namespace VoiceX.Views.PhonePages
                         CallAdtess.Clear();
                         TerminateAllCalls = false;
                     }
-                    // if one user from conference end call, we need save other user in contact
+                    // if one user from conference end call, we need to save other user in contact
                     else if (CallAdtess.Count != 0)
                     {
                         try
@@ -178,7 +179,7 @@ namespace VoiceX.Views.PhonePages
                             {
                                 CallAdtess.Remove(call?.RemoteAddress.Username);
                             }
-                            // if last user and dialog
+                            // if last user end the dialog
                             if (CallAdtess.Count == 0)
                             {
                                 if (call.RemoteAddress.DisplayName != null)
@@ -189,7 +190,8 @@ namespace VoiceX.Views.PhonePages
                                 {
                                     await addDbContext.AddNoteAcync(new HistoryNotes { Id = Guid.NewGuid(), Name = call.RemoteAddress.Username, Phone = call.RemoteAddress.Username, StartDialog = StartCall, EndDialog = DateTime.Now, StatusCall = StatusCall });
                                 }
-                                currentCall = null;
+                                CoreService.Instance.Core.TerminateAllCalls();
+                                TerminateAllCalls = true;
                             }
                             else
                             {
@@ -265,7 +267,7 @@ namespace VoiceX.Views.PhonePages
                         {
                             if (CallAdtess.Contains(call.RemoteAddress.Username))
                             {
-                                CallAdtess.Remove(call.RemoteAddress.Username);
+                                CallAdtess.Remove(call.RemoteAddress.Username);   
                             }
                             break;
                         }
@@ -388,8 +390,9 @@ namespace VoiceX.Views.PhonePages
             }
         }
         #endregion
-        public void AddContactsList(KeyPads keyPads)
+        public void AddContactsList(KeyPads transferPad)
         {
+            keyPads = transferPad;
             switch (keyPads)
             {
                 case KeyPads.DTMFPad:
@@ -474,7 +477,7 @@ namespace VoiceX.Views.PhonePages
                         ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
                     foreach (var contact in groupcontact)
                     {
-                        ContactsList.Items.Add(contact);
+                        ContactsList.Items.Add(new ContactPad(contact.Name, contact.Telephone, keyPads == KeyPads.AddCallPad));
                     }
                 }
                 magnifyingGlass.Margin = new Thickness(0, 0, 5, 2);
@@ -487,11 +490,11 @@ namespace VoiceX.Views.PhonePages
                 {
                     if (contact.Name.Contains(Search.Text))
                     {
-                        ContactsList.Items.Add(contact);
+                        ContactsList.Items.Add(new ContactPad(contact.Name, contact.Telephone, keyPads == KeyPads.AddCallPad));
                     }
                     else if (contact.Telephone.Contains(Search.Text))
                     {
-                        ContactsList.Items.Add(contact);
+                        ContactsList.Items.Add(new ContactPad(contact.Name, contact.Telephone, keyPads == KeyPads.AddCallPad));
                     }
                 }
                 magnifyingGlass.Margin = new Thickness(0, 0, 23, 2);

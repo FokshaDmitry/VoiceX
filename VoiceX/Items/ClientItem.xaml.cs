@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using VoiceX.Services;
 using VoiceX.Views.ClientCardPages;
+using VoiceX.Views.ClientPages;
 using VoiceX.Views.ControlPages;
 using VoiceX.Views.PhonePages;
 using Windows.Foundation;
@@ -28,6 +29,7 @@ namespace VoiceX.Items
     public sealed partial class ClientItem : ListBoxItem
     {
         private string idDb;
+        ContactsPage contactsPage;
         public ClientItem(string Name, string Phone, string Email, string IdDB, int color)
         {
             this.InitializeComponent();
@@ -37,6 +39,11 @@ namespace VoiceX.Items
             this.Phone.Text = Phone;
             this.Email.Text = Email;
             contactBackgroundColor.Background = color == 1 ? new SolidColorBrush(Color.FromArgb(255, 138, 99, 251)) : new SolidColorBrush(Color.FromArgb(255, 229, 167, 224));
+        }
+
+        public ClientItem(ContactsPage contactsPage)
+        {
+            this.InitializeComponent();
         }
         private void ListBoxItem_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {

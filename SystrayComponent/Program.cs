@@ -78,58 +78,58 @@ namespace SystrayComponent
                 // because it was in use
 
             }
-            #region Config
-            if (!ApplicationData.Current.LocalSettings.Values.Keys.Contains("Rools"))
-            {
-                ApplicationData.Current.LocalSettings.Values["Rools"] = "User";
-            }
-            if (ApplicationData.Current.LocalSettings.Values["Rools"].ToString() == "User" && !pdfScribeInstaller.IsPdfScribePrinterInstalled())
-            {
+            //#region Config
+            //if (!ApplicationData.Current.LocalSettings.Values.Keys.Contains("Rools"))
+            //{
+            //    ApplicationData.Current.LocalSettings.Values["Rools"] = "User";
+            //}
+            //if (ApplicationData.Current.LocalSettings.Values["Rools"].ToString() == "User" && !pdfScribeInstaller.IsPdfScribePrinterInstalled())
+            //{
 
-                // Run app with admin root
-                ProcessStartInfo procInfo = new ProcessStartInfo
-                {
-                    UseShellExecute = true,
-                    WorkingDirectory = Environment.CurrentDirectory,
-                    FileName = Application.ExecutablePath,
-                    Verb = "runas"
-                };
-                try
-                {
-                    Process.Start(procInfo);
-                    ApplicationData.Current.LocalSettings.Values["Rools"] = "Admin";
-
-
-                }
-                catch (Exception ex)
-                {
-                    ApplicationData.Current.LocalSettings.Values["Rools"] = "User";
-                    MessageBox.Show("Unable run application as administrator." + " " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+            //    // Run app with admin root
+            //    ProcessStartInfo procInfo = new ProcessStartInfo
+            //    {
+            //        UseShellExecute = true,
+            //        WorkingDirectory = Environment.CurrentDirectory,
+            //        FileName = Application.ExecutablePath,
+            //        Verb = "runas"
+            //    };
+            //    try
+            //    {
+            //        Process.Start(procInfo);
+            //        ApplicationData.Current.LocalSettings.Values["Rools"] = "Admin";
 
 
-            }
-            else if (ApplicationData.Current.LocalSettings.Values["Rools"].ToString() == "Admin" && !pdfScribeInstaller.IsPdfScribePrinterInstalled())
-            {
-                //Run virtual printer                                                    C:\Windows\System32\spool\drivers\x64    
-                if (!pdfScribeInstaller.InstallPdfScribePrinter(Application.StartupPath, pdfScribeInstaller.RetrievePrinterDriverDirectory() + "\\SystrayComponent.exe", ""))
-                {
-                    MessageBox.Show(Application.StartupPath);
-                    MessageBox.Show("Unable run application as administrator.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    ApplicationData.Current.LocalSettings.Values["Rools"] = "User";
-                }
-                else
-                {
-                    // Copy drivers and App
-                    CopyFolder(Application.StartupPath, pdfScribeInstaller.RetrievePrinterDriverDirectory());
-                }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        ApplicationData.Current.LocalSettings.Values["Rools"] = "User";
+            //        MessageBox.Show("Unable run application as administrator." + " " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    }
 
-            }
-            else if (!pdfScribeInstaller.IsPdfScribePrinterInstalled())
-            {
-                ApplicationData.Current.LocalSettings.Values["Rools"] = "User";
-            }
-            #endregion
+
+            //}
+            //else if (ApplicationData.Current.LocalSettings.Values["Rools"].ToString() == "Admin" && !pdfScribeInstaller.IsPdfScribePrinterInstalled())
+            //{
+            //    //Run virtual printer                                                    C:\Windows\System32\spool\drivers\x64    
+            //    if (!pdfScribeInstaller.InstallPdfScribePrinter(Application.StartupPath, pdfScribeInstaller.RetrievePrinterDriverDirectory() + "\\SystrayComponent.exe", ""))
+            //    {
+            //        MessageBox.Show(Application.StartupPath);
+            //        MessageBox.Show("Unable run application as administrator.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        ApplicationData.Current.LocalSettings.Values["Rools"] = "User";
+            //    }
+            //    else
+            //    {
+            //        // Copy drivers and App
+            //        CopyFolder(Application.StartupPath, pdfScribeInstaller.RetrievePrinterDriverDirectory());
+            //    }
+
+            //}
+            //else if (!pdfScribeInstaller.IsPdfScribePrinterInstalled())
+            //{
+            //    ApplicationData.Current.LocalSettings.Values["Rools"] = "User";
+            //}
+            //#endregion
             // Singl Run
             if (!Mutex.TryOpenExisting("MySystrayExtensionMutex", out mutex))
             {

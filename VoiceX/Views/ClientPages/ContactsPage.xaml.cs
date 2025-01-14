@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using VoiceX.Interfeces;
 using VoiceX.Items;
 using VoiceX.Services;
 using Windows.UI;
@@ -15,14 +17,21 @@ namespace VoiceX.Views.ClientPages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class ContactsPage : Page
+    public sealed partial class ContactsPage : Page, IMoreItems
     {
         WebService webService;
         public ContactsPage()
         {
             this.InitializeComponent();
             webService = new WebService(App.userToken);
+            this.Loaded += ContactsPage_Loaded;
         }
+
+        private void ContactsPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            AddMoreNotes();
+        }
+
         private void SearchFild_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
         {
             SolidColorBrush magnifyingGlassColorGrey = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
@@ -38,6 +47,8 @@ namespace VoiceX.Views.ClientPages
                 magnifyingGlass.Margin = new Thickness(0, 0, 23, 2);
                 magnifyingGlassEllipse.Stroke = magnifyingGlassColorBlack;
                 magnifyingGlassLine.Background = magnifyingGlassColorBlack;
+                ContactsList.Items.Clear();
+                AddMoreNotes();
             }
         }
 
@@ -52,7 +63,6 @@ namespace VoiceX.Views.ClientPages
                     var clients = await webService.SearchClient(search, App.UserPbx);
                     if (clients.data.Count != 0)
                     {
-                        EmptyText.Visibility = Visibility.Collapsed;
                         var groupContacts = clients.data.GroupBy(c => c.username[0].ToString().ToUpper()).OrderBy(c => c.Key);
                         foreach (var groupcontact in groupContacts.ToList())
                         {
@@ -68,35 +78,50 @@ namespace VoiceX.Views.ClientPages
                             }
                         }
                     }
-                    else
-                    {
-                        EmptyText.Visibility = Visibility.Visible;
-                    }
                 }
-                else
-                {
-                    EmptyText.Visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                EmptyText.Visibility = Visibility.Visible;
             }
         }
-        private void ContactsPage_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void ContactsPage_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             App.timeOut = DateTime.Now;
         }
-        private void Cursor_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void Cursor_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             Window.Current.CoreWindow.PointerCursor = App.Arrow;
         }
 
-        private void Cursor_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void Cursor_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             Window.Current.CoreWindow.PointerCursor = App.Hand;
         }
+        public async void AddMoreNotes()
+        {
+            int count = ContactsList.Items.Count;
+            Debug.WriteLine(count);
+            count += 25;
+            ContactsList.Items.Clear();
+            ContactsList.Items.Add(new MoreItems(this));
+            var clients = await webService.SearchClient(count, App.UserPbx);
+            
+            if (clients.data != null && clients.data.Count != 0)
+            {
+                var groupContacts = clients.data.GroupBy(c => c.username[0].ToString().ToUpper()).OrderBy(c => c.Key);
+                foreach (var groupcontact in groupContacts.ToList())
+                {
+                    if (groupcontact.Key.All(char.IsDigit))
+                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString()));
+                    else
+                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
+                    int color = 0;
+                    foreach (var client in groupcontact)
+                    {
+                        ContactsList.Items.Add(new ClientItem(client.username, client.phone1, client.email, client.db_id, color));
+                        color = color == 0 ? 1 : 0;
+                    }
+                }
+            }
 
+        }
         private void Search_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)

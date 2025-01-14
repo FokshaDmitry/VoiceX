@@ -79,17 +79,5 @@
                 </Button.Background>
             </Button>
         </Grid>
-        <Button Style="{StaticResource ButtonStyleMenu}" Visibility="Collapsed" PointerEntered="MoreItems_PointerEntered" PointerExited="MoreItems_PointerExited" Background="Transparent" x:Name="MoreItems" Click="MoreItems_Click" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Button.Content>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Name="TextColor" Text="Show more" Foreground="#FF8761F6" FontFamily="Nunito Sans 10pt Normal" FontSize="14"/>
-                    <Polyline x:Name="AngleColor" Stroke="#FF8761F6" Points="0, 5, 5, 0, 10, 5" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="3,2,0,0" >
-                        <Polyline.RenderTransform>
-                            <CompositeTransform Rotation="180"/>
-                        </Polyline.RenderTransform>
-                    </Polyline>
-                </StackPanel>
-            </Button.Content>
-        </Button>
     </Grid>
 </ListBoxItem>

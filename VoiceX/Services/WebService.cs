@@ -215,7 +215,6 @@ namespace VoiceX.Services
             {
                 try
                 {
-                    // JSON parce
                     var contactsList = JObject.Parse(responseBody)?["data"];
                     if (contacts != null)
                     {
@@ -266,12 +265,12 @@ namespace VoiceX.Services
             }
         }
         //Добавить
-        public async Task GetStatuses(string SipAccaunt, string CallerAccaunt, string pbxCode)
+        public async Task GetStatuses(string SipAccount, string CallerAccount, string pbxCode)
         {
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("{" + $"\"account\":\"{SipAccaunt}\", \"caller_account\":\"{CallerAccaunt}\"" + "}", UnicodeEncoding.Utf8);
+                var content = new HttpStringContent("{" + $"\"account\":\"{SipAccount}\", \"caller_account\":\"{CallerAccount}\"" + "}", UnicodeEncoding.Utf8);
                 content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
                 var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
                 var clientCertificate = certificate.First();
@@ -407,7 +406,55 @@ namespace VoiceX.Services
             else
             {
                 responseData.ResponseCode = System.Net.HttpStatusCode.BadRequest;
-                responseData.ResponseMessage = "Responce is empty";
+                responseData.ResponseMessage = "Response is empty";
+                return responseData;
+            }
+            return responseData;
+        }
+        public async Task<response_data> SearchClient(int countNotes, string pbxCode)
+        {
+            #region GET
+            string responseBody = "";
+            try
+            {
+                var content = new HttpStringContent("{" + $"\"get_first\":\"{countNotes}\"" + "}", UnicodeEncoding.Utf8);
+                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                var clientCertificate = certificate.First();
+                var filter = new HttpBaseProtocolFilter();
+                filter.ClientCertificate = clientCertificate;
+                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                {
+                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/phonebook/search_contacts.php"), content);
+                    responseBody = await response.Content.ReadAsStringAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                responseData.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                responseData.ResponseMessage = ex.Message;
+                return responseData;
+            }
+            #endregion
+            if (!String.IsNullOrEmpty(responseBody))
+            {
+                try
+                {
+                    responseData = JsonConvert.DeserializeObject<response_data>(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    responseData.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                    responseData.ResponseMessage = ex.Message;
+                    return responseData;
+                }
+
+            }
+            else
+            {
+                responseData.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                responseData.ResponseMessage = "Response is empty";
                 return responseData;
             }
             return responseData;
@@ -455,7 +502,7 @@ namespace VoiceX.Services
             else
             {
                 user_dbinfo.ResponseCode = System.Net.HttpStatusCode.BadRequest;
-                user_dbinfo.ResponseMessage = "Responce is empty";
+                user_dbinfo.ResponseMessage = "Response is empty";
                 return user_dbinfo;
             }
             return user_dbinfo;

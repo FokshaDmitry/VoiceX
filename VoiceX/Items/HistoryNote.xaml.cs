@@ -41,13 +41,6 @@ namespace VoiceX.Items
             this.dateCall = dateCall;
             this.Loaded += HistoryNote_Loaded;
         }
-        public HistoryNote(HistoryPage historyPage)
-        {
-            this.InitializeComponent();
-            this.historyPage = historyPage;
-            MoreItems.Visibility = Visibility.Visible;
-            ContactVisability.Visibility = Visibility.Collapsed;
-        }
         private void HistoryNote_Loaded(object sender, RoutedEventArgs e)
         {
             switch (statusCall)
@@ -105,24 +98,6 @@ namespace VoiceX.Items
             App.timeOut = DateTime.Now;
         }
 
-        private void MoreItems_Click(object sender, RoutedEventArgs e)
-        {
-            historyPage.AddMoreNotes();
-        }
-
-        private void MoreItems_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            TextColor.Foreground = new SolidColorBrush(Color.FromArgb(255, 142, 142, 142));
-            AngleColor.Stroke = new SolidColorBrush(Color.FromArgb(255, 142, 142, 142));
-            Window.Current.CoreWindow.PointerCursor = App.Hand;
-        }
-
-        private void MoreItems_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            TextColor.Foreground = new SolidColorBrush(Color.FromArgb(255, 135, 97, 246));
-            AngleColor.Stroke = new SolidColorBrush(Color.FromArgb(255, 135, 97, 246));
-            Window.Current.CoreWindow.PointerCursor = App.Arrow;
-        }
     }
 
 }
