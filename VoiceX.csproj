@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Logo48.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -54,6 +55,11 @@
     <None Remove="Assets\Icone_v2\UserTree.png" />
     <None Remove="Assets\Icone_v2\Warning.png" />
     <None Remove="Assets\Icone_v2\x.png" />
+    <None Remove="Assets\Logo48.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Logo48.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -114,7 +120,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="9.0.1" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="pjsip-pjsua2-cs" Version="2.10.1" />
     <PackageReference Include="Uno.UI" Version="5.6.33" />
@@ -201,6 +208,9 @@
     </Resource>
     <Resource Include="Assets\Icone_v2\x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Logo48.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 

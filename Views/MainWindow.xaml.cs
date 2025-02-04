@@ -32,7 +32,18 @@ namespace VoiceX.Views
             profilePage = new ProfilePage();
             ExistingLigin();
         }
+        private void ShowWindow(object sender, RoutedEventArgs e)
+        {
+            this.Show();
+            this.WindowState = WindowState.Normal;
+            this.Activate();
+        }
 
+        private void ExitApplication(object sender, RoutedEventArgs e)
+        {
+            TrayIcon.Dispose();
+            Application.Current.Shutdown();
+        }
         public async void ExistingLigin()
         {
             var token = await localStoreService.LoadDataAsync("token");
@@ -44,6 +55,20 @@ namespace VoiceX.Views
                     this.MainPage.Content = profilePage;
                 }
             }
+        }
+
+        private void TrayIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            this.Show();
+            this.WindowState = WindowState.Normal;
+            this.Activate();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true; 
+            this.Hide(); 
+            this.ShowInTaskbar = false;
         }
     }
 }

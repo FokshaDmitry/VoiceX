@@ -5,21 +5,39 @@
     xmlns:local="using:VoiceX.Items"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" HorizontalAlignment="Stretch" PointerExited="Cursor_PointerExited" PointerEntered="Cursor_PointerEntered" VerticalAlignment="Stretch" Name="Select" Background="White" Foreground="#FF252422" Padding="0,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderBrush="{x:Null}">
+    mc:Ignorable="d" HorizontalAlignment="Stretch" Cursor="Hand" VerticalAlignment="Stretch" Name="Select" Background="White" Foreground="#FF252422" Padding="0,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
     <ListBoxItem.Content>
         <Grid Background="White">
             <TextBlock MinHeight="25" Text="Test Pause" x:Name="PauseName" FontSize="16" FontFamily="Nunito Sans 10pt Normal" Width="105" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,2,0,0"/>
             <Grid x:Name="Check" HorizontalAlignment="Right" Width="24" Height="24" VerticalAlignment="Top">
-                <Grid Height="2" CornerRadius="1" Width="18" Background="#FF8A63FB" RenderTransformOrigin="0.5,0.5" Margin="5,0,0,0" >
-                    <Grid.RenderTransform>
-                        <CompositeTransform Rotation="-36.467"/>
-                    </Grid.RenderTransform>
-                </Grid>
-                <Grid Height="2" CornerRadius="1" Width="10" Background="#FF8A63FB" Margin="-2,4.7,11,0" RenderTransformOrigin="0.5,0.5" >
-                    <Grid.RenderTransform>
-                        <CompositeTransform Rotation="48.044"/>
-                    </Grid.RenderTransform>
-                </Grid>
+                <Border Height="2" CornerRadius="1" Width="18" Background="#FF8A63FB" RenderTransformOrigin="0.5,0.5" Margin="5,0,0,0" >
+                    <Border.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-8"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Border.RenderTransform>
+                    <Border.LayoutTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-30"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Border.LayoutTransform>
+                </Border>
+                <Border Height="2" CornerRadius="1" Width="10" Background="#FF8A63FB" Margin="-2,4.7,11,0" RenderTransformOrigin="0.5,0.5" >
+                    <Border.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="42"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Border.RenderTransform>
+                </Border>
             </Grid>
         </Grid>
     </ListBoxItem.Content>

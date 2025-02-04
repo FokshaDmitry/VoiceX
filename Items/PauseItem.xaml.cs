@@ -1,6 +1,6 @@
-﻿using VoiceX.Models;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using VoiceX.Models;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -26,14 +26,6 @@ namespace VoiceX.Items
         {
             IsSelect = select;
             Check.Visibility = select ? Visibility.Visible : Visibility.Collapsed;
-        }
-        private void Cursor_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            Window.Current.CoreWindow.PointerCursor = App.Arrow;
-        }
-        private void Cursor_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            Window.Current.CoreWindow.PointerCursor = App.Hand;
         }
     }
 }

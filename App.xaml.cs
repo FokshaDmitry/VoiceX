@@ -17,12 +17,15 @@ namespace VoiceX
         public static string UserPbx { get; set; }
         public static string userToken { get; set; }
         public static bool MyComputer {  get; set; }
+        public static DateTime timeOut {  get; set; } 
         public App()
         {
             AccountData = new Account_data();
             UserPbx = "";
             userToken = "";
             MyComputer = false;
+            timeOut = new DateTime();
+            timeOut = DateTime.Now;
         }
     }
 

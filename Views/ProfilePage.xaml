@@ -6,7 +6,30 @@
       xmlns:local="clr-namespace:VoiceX.Views"
       mc:Ignorable="d" 
       d:DesignHeight="420" d:DesignWidth="245">
-    
+    <Grid.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border  Background="Transparent" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Grid.Resources>
     <Grid x:Name="ControlMainGrid" Background="White" Width="245">
         <Grid Cursor="Hand"  VerticalAlignment="Top" Height="45" >
             <Grid.Background>
@@ -37,22 +60,22 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <RadioButton Cursor="Hand" ToolTipService.ToolTip="General" ToolTipService.Placement="Mouse" Grid.Column="0" IsChecked="True" GroupName="Filter" Name="General" Checked="Filter_Checked" MinWidth="55" Background="Transparent" MinHeight="25" HorizontalAlignment="Stretch">
-                        <StackPanel Cursor="Hand" Margin="0,4,0,4">
-                            <TextBlock Cursor="Hand" FontFamily="Nunito Sans 10pt Normal" x:Name="GeneralText" Text="General" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" Margin="0,3,0,0" Foreground="#FF252422"/>
-                            <Grid x:Name="GeneralCheck" Height="2" Background="#FF8A63FB" Margin="0,2,0,0"/>
+                    <RadioButton  Cursor="Hand" ToolTipService.ToolTip="General" ToolTipService.Placement="Mouse" Grid.Column="0" IsChecked="True" GroupName="Filter" Name="General" Checked="Filter_Checked" MinWidth="55" Background="Transparent" MinHeight="25" HorizontalAlignment="Stretch">
+                        <StackPanel Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Center" Width="79" Height="25">
+                            <TextBlock Cursor="Hand" FontFamily="Nunito Sans 10pt Normal" x:Name="GeneralText" Text="General" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" Margin="0,3,0,7" Foreground="#FF252422"/>
+                            <Grid x:Name="GeneralCheck" Height="2" Background="#FF8A63FB" Margin="0,-6,0,0"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Cursor="Hand" ToolTipService.ToolTip="Addition" ToolTipService.Placement="Mouse" Grid.Column="2" MinWidth="55" MinHeight="25" Name="Addition" GroupName="Filter" Checked="Filter_Checked" HorizontalAlignment="Stretch">
-                        <StackPanel Margin="0,4,0,4">
+                        <StackPanel Width="78">
                             <TextBlock Cursor="Hand" FontFamily="Nunito Sans 10pt Normal" x:Name="AdditionText" Text="Addition" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" Margin="0,3,0,0" Foreground="#FF252422"/>
-                            <Grid x:Name="AdditionChek" Height="2" VerticalAlignment="Stretch" Background="#FFFDFEFF" Margin="0,2,0,0"/>
+                            <Grid x:Name="AdditionChek" Height="2" VerticalAlignment="Stretch" Background="#FFFDFEFF" Margin="0,3,0,0"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Cursor="Hand" ToolTipService.ToolTip="Click To Call" ToolTipService.Placement="Mouse" Grid.Column="1" Name="C2C" GroupName="Filter" Checked="Filter_Checked"  MinHeight="25" MinWidth="55" HorizontalAlignment="Stretch" >
-                        <StackPanel Margin="0,4,0,4" Cursor="Hand">
+                    <RadioButton Cursor="Hand" ToolTipService.ToolTip="Click To Call" ToolTipService.Placement="Mouse" Grid.Column="1" Name="C2C" GroupName="Filter" Checked="Filter_Checked"  MinHeight="25" MinWidth="55" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
+                        <StackPanel Cursor="Hand" Width="78">
                             <TextBlock FontFamily="Nunito Sans 10pt Normal" Cursor="Hand" x:Name="C2CText" Text="C2C" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" Margin="0,3,0,0" Foreground="#FF252422"/>
-                            <Grid Cursor="Hand" x:Name="C2CCheck" Height="2" VerticalAlignment="Stretch" Background="#FFFDFEFF" Margin="0,2,0,0"/>
+                            <Grid Cursor="Hand" x:Name="C2CCheck" Height="2" VerticalAlignment="Stretch" Background="#FFFDFEFF" Margin="0,3,0,0"/>
                         </StackPanel>
                     </RadioButton>
                 </Grid>
@@ -61,43 +84,61 @@
                 </Grid>
             </Grid>
             <Grid x:Name="Menu" VerticalAlignment="Bottom" Margin="0,0,0,-50">
+
                 <Border CornerRadius="15, 15, 0, 0" Height="100" VerticalAlignment="Bottom" Background="#FFC3B1FD">
                     <Grid>
                         <Button BorderThickness="0" Name="Contacts" Cursor="Hand" Margin="12,10,0,0" Click="Navigate_Click" Width="18" Padding="0,0,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Center">
-                            <Button.Background>
-                                <ImageBrush>
-                                    <ImageBrush.ImageSource>
-                                        <BitmapImage UriSource="/Assets/Icone_v2/contactsNavigate.png" DecodePixelWidth="70" DecodePixelHeight="70"/>
-                                    </ImageBrush.ImageSource>
-                                </ImageBrush>
-                            </Button.Background>
+                            <Button.Content>
+                                <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
+                                    <Border.Background>
+                                        <ImageBrush>
+                                            <ImageBrush.ImageSource>
+                                                <BitmapImage UriSource="/Assets/Icone_v2/contactsNavigate.png" DecodePixelWidth="70" DecodePixelHeight="70"/>
+                                            </ImageBrush.ImageSource>
+                                        </ImageBrush>
+                                    </Border.Background>
+                                </Border>
+                            </Button.Content>
+
                         </Button>
-                        <Button BorderThickness="0" Name="Phone" Margin="70,10,157,0" Click="Navigate_Click" Width="18" Padding="0,0,0,0" Height="18" VerticalAlignment="Top">
-                            <Button.Background>
-                                <ImageBrush>
-                                    <ImageBrush.ImageSource>
-                                        <BitmapImage UriSource="/Assets/Icone_v2/phoneNavigate.png" DecodePixelWidth="80" DecodePixelHeight="80"/>
-                                    </ImageBrush.ImageSource>
-                                </ImageBrush>
-                            </Button.Background>
+                        <Button Background="Transparent" BorderThickness="0" Name="Phone" Margin="70,10,157,0" Click="Navigate_Click"  Padding="0,0,0,0" Height="18" VerticalAlignment="Top">
+                            <Button.Content>
+                                <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
+                                    <Border.Background>
+                                        <ImageBrush>
+                                            <ImageBrush.ImageSource>
+                                                <BitmapImage UriSource="/Assets/Icone_v2/phoneNavigate.png" DecodePixelWidth="80" DecodePixelHeight="80"/>
+                                            </ImageBrush.ImageSource>
+                                        </ImageBrush>
+                                    </Border.Background>
+                                </Border>
+                            </Button.Content>
                         </Button>
                         <Button BorderThickness="0" Name="History"  VerticalAlignment="Top" Margin="166,10,61,0" Click="Navigate_Click"  Width="18" Padding="0,0,0,0" Height="18">
-                            <Button.Background>
-                                <ImageBrush>
-                                    <ImageBrush.ImageSource>
-                                        <BitmapImage UriSource="/Assets/Icone_v2/historyNavigate.png" DecodePixelWidth="80" DecodePixelHeight="80"/>
-                                    </ImageBrush.ImageSource>
-                                </ImageBrush>
-                            </Button.Background>
+                            <Button.Content>
+                                <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
+                                    <Border.Background>
+                                        <ImageBrush>
+                                            <ImageBrush.ImageSource>
+                                                <BitmapImage UriSource="/Assets/Icone_v2/historyNavigate.png" DecodePixelWidth="80" DecodePixelHeight="80"/>
+                                            </ImageBrush.ImageSource>
+                                        </ImageBrush>
+                                    </Border.Background>
+                                </Border>
+                            </Button.Content>
                         </Button>
                         <Button BorderThickness="0" Name="Fax" Cursor="Hand" VerticalAlignment="Top" Margin="19,54,208,0" Click="Navigate_Click"  Width="18"  Padding="0,0,0,0" Height="18">
-                            <Button.Background>
-                                <ImageBrush>
-                                    <ImageBrush.ImageSource>
-                                        <BitmapImage UriSource="/Assets/Icone_v2/faxNavigate.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
-                                    </ImageBrush.ImageSource>
-                                </ImageBrush>
-                            </Button.Background>
+                            <Button.Content>
+                                <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
+                                    <Border.Background>
+                                        <ImageBrush>
+                                            <ImageBrush.ImageSource>
+                                                <BitmapImage UriSource="/Assets/Icone_v2/faxNavigate.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
+                                            </ImageBrush.ImageSource>
+                                        </ImageBrush>
+                                    </Border.Background>
+                                </Border>
+                            </Button.Content>
                         </Button>
                         <Button BorderThickness="0" Cursor="Hand" x:Name="MenuMore" Click="Menu_Click"  Background="Transparent" Width="18"  Padding="0,0,0,0" Height="18" VerticalAlignment="Top" Margin="207,10,20,0">
                             <Button.Content>
@@ -108,22 +149,43 @@
                                         <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" VerticalAlignment="Bottom"/>
                                     </Grid>
                                     <Grid Visibility="Collapsed" x:Name="Cross">
-                                        <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" RenderTransformOrigin="0.5,0.5"/>
+                                        <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" RenderTransformOrigin="0.5,0.5">
+                                            <Rectangle.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-45"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Rectangle.RenderTransform>
+                                        </Rectangle>
 
-                                        <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" RenderTransformOrigin="0.5,0.5"/>
-
+                                        <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" RenderTransformOrigin="0.5,0.5">
+                                            <Rectangle.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="45"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Rectangle.RenderTransform>
+                                        </Rectangle>
                                     </Grid>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
                         <Button BorderThickness="0" Name="HotKeys" Cursor="Hand" VerticalAlignment="Top" Margin="70,54,157,0" Click="Navigate_Click"  Width="18" Padding="0,0,0,0" Height="18">
-                            <Button.Background>
-                                <ImageBrush>
-                                    <ImageBrush.ImageSource>
-                                        <BitmapImage UriSource="/Assets/Icone_v2/Keyboard.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
-                                    </ImageBrush.ImageSource>
-                                </ImageBrush>
-                            </Button.Background>
+                            <Button.Content>
+                                <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
+                                    <Border.Background>
+                                        <ImageBrush>
+                                            <ImageBrush.ImageSource>
+                                                <BitmapImage UriSource="/Assets/Icone_v2/Keyboard.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
+                                            </ImageBrush.ImageSource>
+                                        </ImageBrush>
+                                    </Border.Background>
+                                </Border>
+                            </Button.Content>
                         </Button>
                         <TextBlock Text="HotKeys" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="57.5,75,0,0"/>
                         <TextBlock Text="Clients" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="111,30,0,0"/>

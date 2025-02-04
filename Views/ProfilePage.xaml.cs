@@ -19,14 +19,6 @@ using VoiceX.DAL.Context;
 using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
-using Windows.ApplicationModel.AppService;
-using Windows.ApplicationModel.Core;
-using Windows.Foundation.Collections;
-using Windows.Networking.PushNotifications;
-using Windows.Storage;
-using Windows.UI.Core;
-using Windows.UI.WindowManagement;
-using Windows.UI.Xaml.Media.Animation;
 
 namespace VoiceX.Views
 {
@@ -36,11 +28,9 @@ namespace VoiceX.Views
     public partial class ProfilePage : Grid
     {
         public static List<Regex_note> regexNotes;
-        public static AppWindow appWindowCall;
         readonly WebService webService;
         readonly DispatcherTimer timer;
         readonly AddDbContext addDbContext;
-        readonly ApplicationDataContainer localSettings;
         public static Get_pauses getPauses;
         readonly ErrorService errorService;
         public ProfilePage()
@@ -57,7 +47,6 @@ namespace VoiceX.Views
             };
             timer.Tick += Timer_Tick;
             timer.Start();
-            localSettings = ApplicationData.Current.LocalSettings;
             regexNotes = new List<Regex_note>();
             errorService = new ErrorService(ControlMainGrid);
             this.SizeChanged += ControlPage_SizeChanged;
@@ -74,10 +63,10 @@ namespace VoiceX.Views
             try
             {
                 //User RegEx
-                if (ApplicationData.Current.LocalSettings.Values["regexs"] != null)
-                {
-                    regexNotes = JsonConvert.DeserializeObject<List<Regex_note>>(ApplicationData.Current.LocalSettings.Values["regexs"].ToString());
-                }
+                //if (ApplicationData.Current.LocalSettings.Values["regexs"] != null)
+                //{
+                //    regexNotes = JsonConvert.DeserializeObject<List<Regex_note>>(ApplicationData.Current.LocalSettings.Values["regexs"].ToString());
+                //}
             }
             catch
             {
@@ -102,42 +91,42 @@ namespace VoiceX.Views
             //}
             //general setting content
             //ContentControl.Content = new GeneralSettingPage();
-            if (ApplicationData.Current.LocalSettings.Values.Keys.Contains("MyComputer"))
-            {
-                if (!String.IsNullOrEmpty(ApplicationData.Current.LocalSettings.Values["MyComputer"].ToString()))
-                {
-                    //if my computer true app work only one hour if it is not used
-                    App.MyComputer = ApplicationData.Current.LocalSettings.Values["MyComputer"].ToString() == "On";
-                }
-                else
-                {
-                    App.MyComputer = false;
-                }
-            }
-            else
-            {
-                App.MyComputer = false;
-            }
-            if (ApplicationData.Current.LocalSettings.Values.Keys.Contains("MicrophoneDevice"))
-            {
-                //foreach (var device in CoreService.Instance.Core?.ExtendedAudioDevices)
-                //{
-                //    if (device.Id == ApplicationData.Current.LocalSettings.Values["MicrophoneDevice"].ToString())
-                //    {
-                //        CoreService.Instance.Core.DefaultInputAudioDevice = device;
-                //    }
-                //}
-            }
-            if (ApplicationData.Current.LocalSettings.Values.Keys.Contains("AudioDevice"))
-            {
-                //foreach (var device in CoreService.Instance.Core?.ExtendedAudioDevices)
-                //{
-                //    if (device.Id == ApplicationData.Current.LocalSettings.Values["AudioDevice"].ToString())
-                //    {
-                //        CoreService.Instance.Core.DefaultOutputAudioDevice = device;
-                //    }
-                //}
-            }
+            //if (ApplicationData.Current.LocalSettings.Values.Keys.Contains("MyComputer"))
+            //{
+            //    if (!String.IsNullOrEmpty(ApplicationData.Current.LocalSettings.Values["MyComputer"].ToString()))
+            //    {
+            //        //if my computer true app work only one hour if it is not used
+            //        App.MyComputer = ApplicationData.Current.LocalSettings.Values["MyComputer"].ToString() == "On";
+            //    }
+            //    else
+            //    {
+            //        App.MyComputer = false;
+            //    }
+            //}
+            //else
+            //{
+            //    App.MyComputer = false;
+            //}
+            //if (ApplicationData.Current.LocalSettings.Values.Keys.Contains("MicrophoneDevice"))
+            //{
+            //    //foreach (var device in CoreService.Instance.Core?.ExtendedAudioDevices)
+            //    //{
+            //    //    if (device.Id == ApplicationData.Current.LocalSettings.Values["MicrophoneDevice"].ToString())
+            //    //    {
+            //    //        CoreService.Instance.Core.DefaultInputAudioDevice = device;
+            //    //    }
+            //    //}
+            //}
+            //if (ApplicationData.Current.LocalSettings.Values.Keys.Contains("AudioDevice"))
+            //{
+            //    //foreach (var device in CoreService.Instance.Core?.ExtendedAudioDevices)
+            //    //{
+            //    //    if (device.Id == ApplicationData.Current.LocalSettings.Values["AudioDevice"].ToString())
+            //    //    {
+            //    //        CoreService.Instance.Core.DefaultOutputAudioDevice = device;
+            //    //    }
+            //    //}
+            //}
         }
         //HotKey, Fax, Systray receve
         
@@ -191,25 +180,34 @@ namespace VoiceX.Views
 
             if (filter.Name == "General")
             {
-                GeneralCheck.Background = blueLine;
-                C2CCheck.Background = whiteLine;
-                AdditionChek.Background = whiteLine;
+                if (GeneralCheck != null)
+                {
+                    GeneralCheck.Background = blueLine;
+                    C2CCheck.Background = whiteLine;
+                    AdditionChek.Background = whiteLine;
+                }
 
                 //ContentControl.Navigate(typeof(GeneralSettingPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
             }
             else if (filter.Name == "C2C")
             {
                 //var NTrasform = ContentControl.Content.ToString() == "VoiceX.Views.ControlPages.GeneralSettingPage" ? SlideNavigationTransitionEffect.FromRight : SlideNavigationTransitionEffect.FromLeft;
-                GeneralCheck.Background = whiteLine;
-                C2CCheck.Background = blueLine;
-                AdditionChek.Background = whiteLine;
+                if (C2CCheck != null)
+                {
+                    GeneralCheck.Background = whiteLine;
+                    C2CCheck.Background = blueLine;
+                    AdditionChek.Background = whiteLine;
+                }
                 //ContentControl.Navigate(typeof(ClickToCallPage), "", new SlideNavigationTransitionInfo() { Effect = NTrasform });
             }
             else if (filter.Name == "Addition")
             {
-                GeneralCheck.Background = whiteLine;
-                C2CCheck.Background = whiteLine;
-                AdditionChek.Background = blueLine;
+                if (AdditionChek != null)
+                {
+                    GeneralCheck.Background = whiteLine;
+                    C2CCheck.Background = whiteLine;
+                    AdditionChek.Background = blueLine;
+                }
                 //ContentControl.Navigate(typeof(AdditionPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
             }
         }
