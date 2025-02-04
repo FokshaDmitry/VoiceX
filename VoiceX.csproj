@@ -9,9 +9,217 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Icone_v2\Arrow.png" />
+    <None Remove="Assets\Icone_v2\BackgroundTopElement.png" />
+    <None Remove="Assets\Icone_v2\Backspace.png" />
+    <None Remove="Assets\Icone_v2\Box.png" />
+    <None Remove="Assets\Icone_v2\calendar.png" />
+    <None Remove="Assets\Icone_v2\carbon_order-details.png" />
+    <None Remove="Assets\Icone_v2\ClockCount.png" />
+    <None Remove="Assets\Icone_v2\Cloud.png" />
+    <None Remove="Assets\Icone_v2\Coffee.png" />
+    <None Remove="Assets\Icone_v2\ContactInfo.png" />
+    <None Remove="Assets\Icone_v2\ContactMessage.png" />
+    <None Remove="Assets\Icone_v2\ContactPhone.png" />
+    <None Remove="Assets\Icone_v2\contactsNavigate.png" />
+    <None Remove="Assets\Icone_v2\Copy.png" />
+    <None Remove="Assets\Icone_v2\Devise.png" />
+    <None Remove="Assets\Icone_v2\Doc.png" />
+    <None Remove="Assets\Icone_v2\Error.png" />
+    <None Remove="Assets\Icone_v2\exitApp.png" />
+    <None Remove="Assets\Icone_v2\faxNavigate.png" />
+    <None Remove="Assets\Icone_v2\FileIcone.png" />
+    <None Remove="Assets\Icone_v2\FileText.png" />
+    <None Remove="Assets\Icone_v2\Folder.png" />
+    <None Remove="Assets\Icone_v2\GreyUser.png" />
+    <None Remove="Assets\Icone_v2\historyNavigate.png" />
+    <None Remove="Assets\Icone_v2\homeNavigate.png" />
+    <None Remove="Assets\Icone_v2\illustration.png" />
+    <None Remove="Assets\Icone_v2\Key.png" />
+    <None Remove="Assets\Icone_v2\Keyboard.png" />
+    <None Remove="Assets\Icone_v2\LinePhone.png" />
+    <None Remove="Assets\Icone_v2\ListChek.png" />
+    <None Remove="Assets\Icone_v2\LodingIcone.gif" />
+    <None Remove="Assets\Icone_v2\microphone.png" />
+    <None Remove="Assets\Icone_v2\phoneNavigate.png" />
+    <None Remove="Assets\Icone_v2\refresh.png" />
+    <None Remove="Assets\Icone_v2\refreshblue.png" />
+    <None Remove="Assets\Icone_v2\Reload.png" />
+    <None Remove="Assets\Icone_v2\SmartPhone.png" />
+    <None Remove="Assets\Icone_v2\SpeakerHigh.png" />
+    <None Remove="Assets\Icone_v2\Success.png" />
+    <None Remove="Assets\Icone_v2\TopLogo.png" />
+    <None Remove="Assets\Icone_v2\TransferCall.png" />
+    <None Remove="Assets\Icone_v2\trash.png" />
+    <None Remove="Assets\Icone_v2\UserTree.png" />
+    <None Remove="Assets\Icone_v2\Warning.png" />
+    <None Remove="Assets\Icone_v2\x.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Icone_v2\Arrow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\BackgroundTopElement.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Backspace.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Box.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\calendar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\carbon_order-details.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\ClockCount.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Cloud.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Coffee.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\ContactInfo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\ContactMessage.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\ContactPhone.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\contactsNavigate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Copy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Devise.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Doc.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Error.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\exitApp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="9.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="pjsip-pjsua2-cs" Version="2.10.1" />
     <PackageReference Include="Uno.UI" Version="5.6.33" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Icone_v2\faxNavigate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\FileIcone.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\FileText.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Folder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\GreyUser.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\historyNavigate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\homeNavigate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\illustration.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Key.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Keyboard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\LinePhone.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\ListChek.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\LodingIcone.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\microphone.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\phoneNavigate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\refresh.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\refreshblue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Reload.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\SmartPhone.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\SpeakerHigh.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Success.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\TopLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\TransferCall.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\trash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\UserTree.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Warning.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\Fonts\Inter-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Fonts\Jost-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Fonts\Montserrat-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Fonts\NunitoSans_10pt-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="default-windowsrsa.p12">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

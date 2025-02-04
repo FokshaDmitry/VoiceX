@@ -1,17 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
+using System.Text;
+using System.Security.Cryptography.X509Certificates;
 using VoiceX.Models;
-using Windows.Security.Cryptography.Certificates;
-using Windows.Storage.Streams;
-using Windows.Web.Http;
-using Windows.Web.Http.Filters;
-using Windows.Web.Http.Headers;
 
 namespace VoiceX.Services
 {
@@ -22,6 +15,7 @@ namespace VoiceX.Services
         string userToken;
         response_data responseData;
         user_dbinfo user_dbinfo;
+        CertificateService certificateService;
         public WebService(string UserToken)
         {
             account = new Account_data();
@@ -31,6 +25,7 @@ namespace VoiceX.Services
             responseData.data = new List<user_info>();
             user_dbinfo = new user_dbinfo();
             user_dbinfo.data = new data(); 
+            certificateService = new CertificateService();
         }
         public async Task<string> PostToFax(string user_id, string message, string[] phones, byte[] fax_file, string pbxCode)
         {
@@ -44,7 +39,7 @@ namespace VoiceX.Services
             };
             await content.CopyToAsync(ms);
             HttpClientHandler httpClientHandler = new HttpClientHandler();
-            System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient(httpClientHandler);
+            HttpClient httpClient = new HttpClient(httpClientHandler);
             string raw = "";
             bool isRetry = false;
         retry:;
@@ -82,15 +77,19 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("{"+$"\"auth_code\": \"{pbxCode}\",\"uuid_device\": \"{Guid.NewGuid()}\",\"device_os\": \"{os}\""+"}", UnicodeEncoding.Utf8);
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "default-windowsrsa" });
-                var clientCertificate = certificate.Single();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("default-windowsrsa");
+                if (clientCertificate == null)
                 {
-                    var response = await httpClient.PostAsync(new Uri($"https://appauth.voicex.biz/{pbxCode.Substring(0, 3)}/stats/api_v2/app/auth.php"), content);
+                    certificate.Error = "Certificate don't found";
+                    return certificate;
+                }
+                var content = new StringContent("{" + $"\"auth_code\": \"{pbxCode}\",\"uuid_device\": \"{Guid.NewGuid()}\",\"device_os\": \"{os}\"" + "}", Encoding.UTF8, "application/json");
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                var handler = new HttpClientHandler();
+                handler.ClientCertificates.Add(clientCertificate);
+                using (var httpClient = new HttpClient(handler))
+                {
+                    var response = await httpClient.PutAsync(new Uri($"https://appauth.voicex.biz/{pbxCode.Substring(0, 3)}/stats/api_v2/app/auth.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                 }
             }
@@ -103,7 +102,7 @@ namespace VoiceX.Services
             {
                 try
                 {
-                    certificate = JsonConvert.DeserializeObject<Get_certificate>(responseBody);
+                    certificate = JsonConvert.DeserializeObject<Get_certificate>(responseBody)!;
                 }
                 catch
                 {
@@ -140,18 +139,18 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("{" + $"\"user_id\":\"{userID}\",\"phone\":\"{phone}\", \"company_id\":\"{companyID}\"" + "}", UnicodeEncoding.Utf8);
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                var clientCertificate = certificate.First();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                {
-                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://pbx{pbxCode.TrimStart('0')}.x-cloud.info/stats/api/CrossPlatform/click2call/call.php"), content);
-                    responseBody = await response.Content.ReadAsStringAsync();
-                }
+                //var content = new HttpStringContent("{" + $"\"user_id\":\"{userID}\",\"phone\":\"{phone}\", \"company_id\":\"{companyID}\"" + "}", UnicodeEncoding.Utf8);
+                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                //var clientCertificate = certificate.First();
+                //var filter = new HttpBaseProtocolFilter();
+                //filter.ClientCertificate = clientCertificate;
+                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                //{
+                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                //    var response = await httpClient.PostAsync(new Uri($"https://pbx{pbxCode.TrimStart('0')}.x-cloud.info/stats/api/CrossPlatform/click2call/call.php"), content);
+                //    responseBody = await response.Content.ReadAsStringAsync();
+                //}
             }
             catch (Exception ex)
             {
@@ -192,18 +191,18 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("{" + $"\"sip_account\":\"{sip_username}\",\"companyID\":\"{companyID}\"" + "}", UnicodeEncoding.Utf8);
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                var clientCertificate = certificate.First();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                {
-                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_redirect_list.php"), content);
-                    responseBody = await response.Content.ReadAsStringAsync();
-                }
+                //var content = new HttpStringContent("{" + $"\"sip_account\":\"{sip_username}\",\"companyID\":\"{companyID}\"" + "}", UnicodeEncoding.Utf8);
+                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                //var clientCertificate = certificate.First();
+                //var filter = new HttpBaseProtocolFilter();
+                //filter.ClientCertificate = clientCertificate;
+                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                //{
+                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_redirect_list.php"), content);
+                //    responseBody = await response.Content.ReadAsStringAsync();
+                //}
             }
             catch (Exception ex)
             {
@@ -245,18 +244,18 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("{" + $"\"call_type\":\"{callType}\"" + "}", UnicodeEncoding.Utf8);
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                var clientCertificate = certificate.First();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                {
-                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/change_call_type.php"), content);
-                    responseBody = await response.Content.ReadAsStringAsync();
-                }
+                //var content = new HttpStringContent("{" + $"\"call_type\":\"{callType}\"" + "}", UnicodeEncoding.Utf8);
+                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                //var clientCertificate = certificate.First();
+                //var filter = new HttpBaseProtocolFilter();
+                //filter.ClientCertificate = clientCertificate;
+                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                //{
+                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/change_call_type.php"), content);
+                //    responseBody = await response.Content.ReadAsStringAsync();
+                //}
                 return JsonConvert.DeserializeObject<System.Net.HttpStatusCode>(JObject.Parse(responseBody)["responseCode"].ToString());
             }
             catch
@@ -270,18 +269,18 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("{" + $"\"account\":\"{SipAccount}\", \"caller_account\":\"{CallerAccount}\"" + "}", UnicodeEncoding.Utf8);
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                var clientCertificate = certificate.First();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                {
-                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_statuses.php"), content);
-                    responseBody = await response.Content.ReadAsStringAsync();
-                }
+                //var content = new HttpStringContent("{" + $"\"account\":\"{SipAccount}\", \"caller_account\":\"{CallerAccount}\"" + "}", UnicodeEncoding.Utf8);
+                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                //var clientCertificate = certificate.First();
+                //var filter = new HttpBaseProtocolFilter();
+                //filter.ClientCertificate = clientCertificate;
+                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                //{
+                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_statuses.php"), content);
+                //    responseBody = await response.Content.ReadAsStringAsync();
+                //}
             }
             catch
             {
@@ -293,18 +292,18 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("", UnicodeEncoding.Utf8);
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                var clientCertificate = certificate.First();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                {
-                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/logout.php"), content);
-                    responseBody = await response.Content.ReadAsStringAsync();
-                }
+                //var content = new HttpStringContent("", UnicodeEncoding.Utf8);
+                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                //var clientCertificate = certificate.First();
+                //var filter = new HttpBaseProtocolFilter();
+                //filter.ClientCertificate = clientCertificate;
+                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                //{
+                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/logout.php"), content);
+                //    responseBody = await response.Content.ReadAsStringAsync();
+                //}
             }
             catch
             {
@@ -317,16 +316,21 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("");
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                var clientCertificate = certificate.First();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("app-cert");
+                if (clientCertificate == null)
                 {
-                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_account_settings.php"), content);
+                    account.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                    account.ResponseMessage = "Certificate don't found";
+                    return account;
+                }
+                var content = new StringContent("", Encoding.UTF8, "application/json");
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                var handler = new HttpClientHandler();
+                handler.ClientCertificates.Add(clientCertificate);
+                using (var httpClient = new HttpClient(handler))
+                {
+                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
+                    var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_account_settings.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                 }
             }
@@ -369,18 +373,18 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("{" + $"\"search_string\":\"{searchText}\"" + "}", UnicodeEncoding.Utf8);
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                var clientCertificate = certificate.First();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                {
-                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/phonebook/search_contacts.php"), content);
-                    responseBody = await response.Content.ReadAsStringAsync();
-                }
+                //var content = new HttpStringContent("{" + $"\"search_string\":\"{searchText}\"" + "}", UnicodeEncoding.Utf8);
+                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                //var clientCertificate = certificate.First();
+                //var filter = new HttpBaseProtocolFilter();
+                //filter.ClientCertificate = clientCertificate;
+                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                //{
+                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/phonebook/search_contacts.php"), content);
+                //    responseBody = await response.Content.ReadAsStringAsync();
+                //}
             }
             catch (Exception ex)
             {
@@ -417,18 +421,18 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("{" + $"\"get_first\":\"{countNotes}\"" + "}", UnicodeEncoding.Utf8);
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                var clientCertificate = certificate.First();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                {
-                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/phonebook/search_contacts.php"), content);
-                    responseBody = await response.Content.ReadAsStringAsync();
-                }
+                //var content = new HttpStringContent("{" + $"\"get_first\":\"{countNotes}\"" + "}", UnicodeEncoding.Utf8);
+                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                //var clientCertificate = certificate.First();
+                //var filter = new HttpBaseProtocolFilter();
+                //filter.ClientCertificate = clientCertificate;
+                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                //{
+                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/phonebook/search_contacts.php"), content);
+                //    responseBody = await response.Content.ReadAsStringAsync();
+                //}
             }
             catch (Exception ex)
             {
@@ -465,18 +469,18 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("{" + $"\"db_id\":\"{idDB}\"" + "}", UnicodeEncoding.Utf8);
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                var clientCertificate = certificate.First();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                {
-                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/phonebook/get_contact.php"), content);
-                    responseBody = await response.Content.ReadAsStringAsync();
-                }
+                //var content = new HttpStringContent("{" + $"\"db_id\":\"{idDB}\"" + "}", UnicodeEncoding.Utf8);
+                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                //var clientCertificate = certificate.First();
+                //var filter = new HttpBaseProtocolFilter();
+                //filter.ClientCertificate = clientCertificate;
+                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                //{
+                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/phonebook/get_contact.php"), content);
+                //    responseBody = await response.Content.ReadAsStringAsync();
+                //}
             }
             catch (Exception ex)
             {
@@ -538,18 +542,18 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("{" + $"\"account\":\"{sipUsername}\"" + "}", UnicodeEncoding.Utf8);
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                var clientCertificate = certificate.First();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                {
-                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/pauses/get_pauses.php"), content);
-                    responseBody = await response.Content.ReadAsStringAsync();
-                }
+                //var content = new HttpStringContent("{" + $"\"account\":\"{sipUsername}\"" + "}", UnicodeEncoding.Utf8);
+                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                //var clientCertificate = certificate.First();
+                //var filter = new HttpBaseProtocolFilter();
+                //filter.ClientCertificate = clientCertificate;
+                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                //{
+                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/pauses/get_pauses.php"), content);
+                //    responseBody = await response.Content.ReadAsStringAsync();
+                //}
             }
             catch (Exception ex)
             {
@@ -608,18 +612,18 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                var content = new HttpStringContent("{" + $"\"account\":\"{sipUsername}\", \"pause_id\": \"{PauseId}\"" + "}", UnicodeEncoding.Utf8);
-                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                var clientCertificate = certificate.First();
-                var filter = new HttpBaseProtocolFilter();
-                filter.ClientCertificate = clientCertificate;
-                using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                {
-                    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/pauses/set_pause.php"), content);
-                    responseBody = await response.Content.ReadAsStringAsync();
-                }
+                //var content = new HttpStringContent("{" + $"\"account\":\"{sipUsername}\", \"pause_id\": \"{PauseId}\"" + "}", UnicodeEncoding.Utf8);
+                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+                //var clientCertificate = certificate.First();
+                //var filter = new HttpBaseProtocolFilter();
+                //filter.ClientCertificate = clientCertificate;
+                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+                //{
+                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/pauses/set_pause.php"), content);
+                //    responseBody = await response.Content.ReadAsStringAsync();
+                //}
             }
             catch (Exception ex)
             {

@@ -1,7 +1,9 @@
 ﻿using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Windows;
 using VoiceX.Models;
+using VoiceX.Services;
 
 namespace VoiceX
 {

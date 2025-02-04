@@ -21,17 +21,19 @@ using Windows.Storage.Streams;
 using Windows.Storage;
 using Windows.ApplicationModel;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace VoiceX.Views
 {
     /// <summary>
     /// Interaction logic for RegistrationPage.xaml
     /// </summary>
-    public partial class RegistrationPage : Window
+    public partial class RegistrationPage : Grid
     {
         WebService webService;
-        StorageFile certificateFile;
+        CertificateService certificateService;
         readonly ErrorService errorService;
+        LocalStoreService localStoreService;
         public RegistrationPage()
         {
             InitializeComponent();
@@ -39,6 +41,8 @@ namespace VoiceX.Views
             App.AccountData = new Models.Account_data();
             LoadIcone.Visibility = Visibility.Collapsed;
             errorService = new ErrorService(MainGrid);
+            certificateService = new CertificateService();
+            localStoreService = new LocalStoreService();
         }
         private async void Button_Send(object sender, RoutedEventArgs e)
         {
@@ -66,12 +70,12 @@ namespace VoiceX.Views
             LoadIcone.Visibility = Visibility.Visible;
             try
             {
-                // first we need get default certificate in Assets folder
-                certificateFile = await Package.Current.InstalledLocation.GetFileAsync(@"default-windowsrsa.p12");
-                IBuffer buffer = await FileIO.ReadBufferAsync(certificateFile);
-                string certData = CryptographicBuffer.EncodeToBase64String(buffer);
                 // inport selfsign
-                await CertificateEnrollmentManager.UserCertificateEnrollmentManager.ImportPfxDataAsync(certData, "r7Z33th35XTCfym6", ExportOption.NotExportable, KeyProtectionLevel.NoConsent, InstallOptions.None, "default-windowsrsa");
+                //await CertificateEnrollmentManager.UserCertificateEnrollmentManager.ImportPfxDataAsync(certData, "r7Z33th35XTCfym6", ExportOption.NotExportable, KeyProtectionLevel.NoConsent, InstallOptions.None, "default-windowsrsa");
+                if (!certificateService.CheckCertificate("default-windowsrsa"))
+                {
+                    certificateService.SaveCertificate(Package.Current.InstalledPath + "\\default-windowsrsa.p12", "r7Z33th35XTCfym6", "default-windowsrsa");
+                }
                 var cert = await webService.GetCertificateAsync(pbxCode, "windows");
                 if (String.IsNullOrEmpty(cert.Error))
                 {
@@ -79,17 +83,14 @@ namespace VoiceX.Views
                     {
                         // if we have certificate 
                         //if we have certificate in certificate store and we have certificate hash
-                        if (CertificateStores.FindAllAsync().GetAwaiter().GetResult().FirstOrDefault(c => c.FriendlyName == "app-cert") == null)
+                        if (!certificateService.CheckCertificate("app-cert"))
                         {
-                            // Get cert
-                            await CertificateEnrollmentManager.UserCertificateEnrollmentManager.ImportPfxDataAsync(cert.P12, "r7Z33th35XTCfym6", ExportOption.NotExportable, KeyProtectionLevel.NoConsent, InstallOptions.None, "app-cert");
+                            certificateService.SaveCertificate(cert.P12l, cert.Key, "app-cert", "r7Z33th35XTCfym6");
                         }
                         App.userToken = cert.App_token;
                         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-                        // Save user token
-                        localSettings.Values["pbxCode"] = pbxCode.Substring(0, 3);
-                        localSettings.Values["token"] = cert.App_token;
-                        // Get user data
+                        await localStoreService.SaveDataAsync("pbxCode", pbxCode.Substring(0, 3));
+                        await localStoreService.SaveDataAsync("token", cert.App_token);
                         webService = new WebService(App.userToken);
                         App.AccountData = await webService.GetAccountSettings(pbxCode.Substring(0, 3));
                     }
@@ -134,17 +135,17 @@ namespace VoiceX.Views
                 LoadIcone.Visibility = Visibility.Collapsed;
             }
         }
-        private void Select_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void Select_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var chek = (CheckBox)sender;
-            if ((bool)chek.IsChecked)
+            if ((bool)chek.IsChecked!)
             {
-                ApplicationData.Current.LocalSettings.Values["MyComputer"] = "On";
+                await localStoreService.SaveDataAsync("MyComputer", "On");
                 App.MyComputer = true;
             }
             else
             {
-                ApplicationData.Current.LocalSettings.Values["MyComputer"] = "Off";
+                await localStoreService.SaveDataAsync("MyComputer", "Off");
                 App.MyComputer = false;
             }
         }
@@ -251,6 +252,37 @@ namespace VoiceX.Views
                         break;
                 }
             }
+        }
+        public static void SaveCertificate(string path, string password)
+        {
+            try
+            {
+                // Загружаем сертификат из файла
+                X509Certificate2 cert = new X509Certificate2(path, password, X509KeyStorageFlags.PersistKeySet);
+
+                // Открываем хранилище и добавляем сертификат
+                using (X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser))
+                {
+                    store.Open(OpenFlags.ReadWrite);
+                    store.Add(cert);
+                    Debug.WriteLine("Сертификат успешно добавлен в хранилище.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка при сохранении сертификата: {ex.Message}");
+            }
+        }
+        public static string EncodeToBase64String(IBuffer buffer)
+        {
+            byte[] data;
+            using (var reader = DataReader.FromBuffer(buffer))
+            {
+                data = new byte[buffer.Length];
+                reader.ReadBytes(data);
+            }
+
+            return Convert.ToBase64String(data);
         }
     }
 }
