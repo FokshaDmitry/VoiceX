@@ -27,6 +27,7 @@ using Microsoft.WindowsAzure.Messaging;
 using System.Text;
 using System.ServiceModel.Channels;
 using VoiceX.Views.ClientPages;
+using VoiceX.Views.ClientCardPages;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -237,10 +238,10 @@ namespace VoiceX.Views.ControlPages
                         CoreApplication.Exit();
                         break;
                     case "dialpad":
-                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, agileCallback: () => _ = App.OpenWindow(typeof(DialpadPage), ""));
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, agileCallback: () => _ = Frame.Navigate(typeof(DialpadPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom }));
                         break;
                     case "clients":
-                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => _ = App.OpenWindow(typeof(ClientsPage), ""));
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => _ = Frame.Navigate(typeof(ClientsPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom }));
                         break;
                     case "path": // sent file
                         if (!String.IsNullOrEmpty(args.Request.Message.FirstOrDefault().Value.ToString()))
@@ -312,16 +313,16 @@ namespace VoiceX.Views.ControlPages
                     await App.OpenWindow(typeof(ClientsPage), "");
                     break;
                 case "Phone":
-                    await App.OpenWindow(typeof(DialpadPage), "");
+                    Frame.Navigate(typeof(DialpadPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
                 case "History":
-                    await App.OpenWindow(typeof(HistoryPage), "");
+                    Frame.Navigate(typeof(HistoryPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom } );
                     break;
                 case "Fax":
-                    await App.OpenWindow(typeof(FaxPage), "");
+                    Frame.Navigate(typeof(FaxPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
                 case "HotKeys":
-                    await App.OpenWindow(typeof(HotKeyPage), "");
+                    Frame.Navigate(typeof(HotKeyPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
             }
         }

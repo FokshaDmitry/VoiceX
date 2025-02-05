@@ -31,6 +31,8 @@ using Windows.UI.Xaml.Hosting;
 using Windows.UI.WindowManagement.Preview;
 using Windows.UI.Core.Preview;
 using System.Text;
+using VoiceX.Views.ClientPages;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace VoiceX
 {
@@ -52,6 +54,7 @@ namespace VoiceX
         public static string userToken;
         WebService webService;
         private bool firstWindow;
+        
         public App()
         {
             this.InitializeComponent();
@@ -229,9 +232,10 @@ namespace VoiceX
         }
         protected async override void OnFileActivated(FileActivatedEventArgs args)
         {
+            Frame rootFrame = (Frame)Window.Current.Content;
             if (!appWindows.Select(a => a.Title).Contains("Profile"))
             {
-                Frame rootFrame = (Frame)Window.Current.Content;
+                
                 if (rootFrame == null)
                 {
                     // Create a Frame to act as the navigation context and navigate to the first page
@@ -280,7 +284,7 @@ namespace VoiceX
             }
             if (!appWindows.Select(a => a.Title).Contains("Fax"))
             {
-                await OpenWindow(typeof(FaxPage), "");
+                rootFrame.Navigate(typeof(FaxPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
             }
         }
         // event, if app open for windows notification

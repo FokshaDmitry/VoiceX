@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Windows.UI.Core;
 using VoiceX.Views.ClientPages;
+using Windows.UI.Xaml.Media.Animation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -145,16 +146,16 @@ namespace VoiceX.Views
                     await App.OpenWindow(typeof(ClientsPage), "").ConfigureAwait(true);
                     break;
                 case "Phone":
-                    await App.OpenWindow(typeof(DialpadPage), "").ConfigureAwait(true);
+                    Frame.Navigate(typeof(DialpadPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
                 case "History":
-                    await App.OpenWindow(typeof(HistoryPage), "").ConfigureAwait(true);
+                    Frame.Navigate(typeof(HistoryPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
                 case "Fax":
-                    await App.OpenWindow(typeof(FaxPage), "").ConfigureAwait(true);
+                    Frame.Navigate(typeof(FaxPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
                 case "Control":
-                    await App.OpenWindow(typeof(ProfilePage), "").ConfigureAwait(true);
+                    Frame.Navigate(typeof(ProfilePage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
             }
         }

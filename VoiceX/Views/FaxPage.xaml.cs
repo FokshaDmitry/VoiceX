@@ -18,6 +18,7 @@ using VoiceX.Models;
 using VoiceX.Views.PhonePages;
 using VoiceX.Views.ControlPages;
 using VoiceX.Views.ClientPages;
+using Windows.UI.Xaml.Media.Animation;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace VoiceX.Views
@@ -218,16 +219,16 @@ namespace VoiceX.Views
                     await App.OpenWindow(typeof(ClientsPage), "");
                     break;
                 case "Phone":
-                    await App.OpenWindow(typeof(DialpadPage), "");
+                    Frame.Navigate(typeof(DialpadPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
                 case "History":
-                    await App.OpenWindow(typeof(HistoryPage), "");
+                    Frame.Navigate(typeof(HistoryPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
                 case "Control":
-                    await App.OpenWindow(typeof(ProfilePage), "");
+                    Frame.Navigate(typeof(ProfilePage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
                 case "HotKeys":
-                    await App.OpenWindow(typeof(HotKeyPage), "");
+                    Frame.Navigate(typeof(HotKeyPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
             }
         }

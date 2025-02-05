@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
@@ -45,26 +43,26 @@ namespace VoiceX.Views.ClientPages
         }
         
         #region Navigate
-        private async void Navigate_Click(object sender, RoutedEventArgs e)
+        private void Navigate_Click(object sender, RoutedEventArgs e)
         {
             App.timeOut = DateTime.Now;
             var Navigate = (Button)sender;
             switch (Navigate.Name)
             {
                 case "Control":
-                    await App.OpenWindow(typeof(ProfilePage), "");
-                    break;
+                    Frame.Navigate(typeof(ProfilePage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
+                    break; 
                 case "Phone":
-                    await App.OpenWindow(typeof(DialpadPage), "");
+                    Frame.Navigate(typeof(DialpadPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
                 case "History":
-                    await App.OpenWindow(typeof(HistoryPage), "");
+                    Frame.Navigate(typeof(HistoryPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
                 case "Fax":
-                    await App.OpenWindow(typeof(FaxPage), "");
+                    Frame.Navigate(typeof(FaxPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
                 case "HotKeys":
-                    await App.OpenWindow(typeof(HotKeyPage), "");
+                    Frame.Navigate(typeof(HotKeyPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
                     break;
             }
         }
