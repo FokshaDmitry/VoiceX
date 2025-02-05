@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace VoiceX.Services
 {
@@ -29,6 +30,17 @@ namespace VoiceX.Services
                 {
                     return await reader.ReadToEndAsync();
                 }
+            }
+        }
+        public void ClearIsolatedStorage()
+        {
+            try
+            {
+                IsolatedStorageFile.Remove(IsolatedStorageScope.User); 
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Clining error: {ex.Message}");
             }
         }
     }

@@ -34,10 +34,14 @@ namespace VoiceX.Views
         CertificateService certificateService;
         readonly ErrorService errorService;
         LocalStoreService localStoreService;
-        public RegistrationPage()
+        MainWindow window;
+        ProfilePage profilePage;
+        public RegistrationPage(MainWindow mainWindow)
         {
             InitializeComponent();
-            webService = new WebService("");
+            webService = new WebService();
+            window = mainWindow;
+            profilePage = new ProfilePage(mainWindow);
             App.AccountData = new Models.Account_data();
             LoadIcone.Visibility = Visibility.Collapsed;
             errorService = new ErrorService(MainGrid);
@@ -71,7 +75,6 @@ namespace VoiceX.Views
             try
             {
                 // inport selfsign
-                //await CertificateEnrollmentManager.UserCertificateEnrollmentManager.ImportPfxDataAsync(certData, "r7Z33th35XTCfym6", ExportOption.NotExportable, KeyProtectionLevel.NoConsent, InstallOptions.None, "default-windowsrsa");
                 if (!certificateService.CheckCertificate("default-windowsrsa"))
                 {
                     certificateService.SaveCertificate(Package.Current.InstalledPath + "\\default-windowsrsa.p12", "r7Z33th35XTCfym6", "default-windowsrsa");
@@ -91,8 +94,8 @@ namespace VoiceX.Views
                         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
                         await localStoreService.SaveDataAsync("pbxCode", pbxCode.Substring(0, 3));
                         await localStoreService.SaveDataAsync("token", cert.App_token);
-                        webService = new WebService(App.userToken);
-                        App.AccountData = await webService.GetAccountSettings(pbxCode.Substring(0, 3));
+                        webService = new WebService();
+                        App.AccountData = await webService.GetAccountSettings(pbxCode.Substring(0, 3), App.userToken);
                     }
                     catch (Exception ex)
                     {
@@ -115,13 +118,13 @@ namespace VoiceX.Views
                 LoadIcone.Visibility = Visibility.Collapsed;
                 return;
             }
-            //App.accountData = await webService.RegistrationAccount(pbxCode, App.userToken);
             if (App.AccountData.ResponseCode == HttpStatusCode.OK)
             {
                 try
                 {
                     App.UserPbx = $"{pbxCode.Substring(0, 3)}";
-                    ApplicationData.Current.LocalSettings.Values["AppState"] = "Open";
+                    LoadIcone.Visibility = Visibility.Collapsed;
+                    window.MainPage.Content = profilePage; 
                 }
                 catch (Exception ex)
                 {

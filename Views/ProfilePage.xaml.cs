@@ -19,6 +19,8 @@ using VoiceX.DAL.Context;
 using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
+using VoiceX.Views.ControlPages;
+using VoiceX.Views.PhonePages;
 
 namespace VoiceX.Views
 {
@@ -29,27 +31,23 @@ namespace VoiceX.Views
     {
         public static List<Regex_note> regexNotes;
         readonly WebService webService;
-        readonly DispatcherTimer timer;
         readonly AddDbContext addDbContext;
         public static Get_pauses getPauses;
-        readonly ErrorService errorService;
-        public ProfilePage()
+        //readonly ErrorService errorService;
+        GeneralSettingPage generalSettingPage;
+        MainWindow window;
+        public CoreService Core { get; } = CoreService.Instance;
+        DialpadPage dialpadPage;
+        public ProfilePage(MainWindow mainWindow)
         {
             this.InitializeComponent();
-
-            webService = new WebService(App.userToken);
-            //Context
+            window = mainWindow;
+            webService = new WebService();
             addDbContext = new AddDbContext();
-            //Active session
-            timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromMinutes(1)
-            };
-            timer.Tick += Timer_Tick;
-            timer.Start();
+            generalSettingPage = new GeneralSettingPage(mainWindow);
             regexNotes = new List<Regex_note>();
-            errorService = new ErrorService(ControlMainGrid);
-            this.SizeChanged += ControlPage_SizeChanged;
+            dialpadPage = new DialpadPage();
+            //errorService = new ErrorService();
         }
 
         private void ControlPage_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -59,7 +57,13 @@ namespace VoiceX.Views
         }
         private async void ControlPage_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            var account = App.AccountData.Data.Sip_Settings;
+            CoreService.Instance.Login(account.Sip_username, account.Sip_server, account.Sip_proxy, account.Sip_secret, 0);
+            this.SizeChanged += ControlPage_SizeChanged;
+            General.Checked += Filter_Checked;
+            Addition.Checked += Filter_Checked;
+            C2C.Checked += Filter_Checked;
+            ContentControl.Children.Add(generalSettingPage);
             try
             {
                 //User RegEx
@@ -128,45 +132,29 @@ namespace VoiceX.Views
             //    //}
             //}
         }
-        //HotKey, Fax, Systray receve
         
-        //Timer out off app. Defolt one hour
-        private async void Timer_Tick(object sender, object e)
-        {
-            //TimeSpan difference = DateTime.Now - App.timeOut;
-            //if (difference.TotalHours > 1 && !App.MyComputer)
-            //{
-            //    localSettings.Values.Clear();
-            //    CoreService.Instance.LogOut();
-            //    timer.Stop();
-            //    await addDbContext.DropDatabaseAsync();
-            //    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            //    {
-            //        rootFrame.Navigate(typeof(RegistrationPage), null, null);
-            //    });
-            //}
-        }
         #region Navigete Button
-        private async void Navigate_Click(object sender, RoutedEventArgs e)
+        private void Navigate_Click(object sender, RoutedEventArgs e)
         {
             //App.timeOut = DateTime.Now;
             var Navigate = (Button)sender;
             switch (Navigate.Name)
             {
                 case "Contacts":
-                    //await App.OpenWindow(typeof(ClientsPage), "");
+                    
                     break;
                 case "Phone":
-                    //Frame.Navigate(typeof(DialpadPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
+                    ControlMainPage.Children.Clear();
+                    ControlMainPage.Children.Add(dialpadPage);
                     break;
                 case "History":
-                    //Frame.Navigate(typeof(HistoryPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
+
                     break;
                 case "Fax":
-                    //Frame.Navigate(typeof(FaxPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
+                    
                     break;
                 case "HotKeys":
-                    //Frame.Navigate(typeof(HotKeyPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromBottom });
+                    
                     break;
             }
         }
@@ -186,7 +174,8 @@ namespace VoiceX.Views
                     C2CCheck.Background = whiteLine;
                     AdditionChek.Background = whiteLine;
                 }
-
+                ContentControl.Children.Clear();
+                ContentControl.Children.Add(generalSettingPage);
                 //ContentControl.Navigate(typeof(GeneralSettingPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
             }
             else if (filter.Name == "C2C")
@@ -268,7 +257,7 @@ namespace VoiceX.Views
                 }
                 else
                 {
-                    errorService.ShowWarning(getPauses.ResponseMessage);
+                    //errorService.ShowWarning(getPauses.ResponseMessage);
                 }
             }
             else
@@ -310,7 +299,7 @@ namespace VoiceX.Views
                         }
                         else
                         {
-                            errorService.ShowWarning(result.ResponseMessage);
+                            //errorService.ShowWarning(result.ResponseMessage);
                             PauseList.SelectedIndex = -1;
                         }
                     }

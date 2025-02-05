@@ -8,73 +8,59 @@ namespace VoiceX.Services
 {
     public class CoreService : Account
     {
-        public static Endpoint ep;
-        public PjsipLogger writer;
+        public static PjsipLogger writer;
         private static MyCall activeCall;
-        public CoreService()
+        private static readonly CoreService instance = new CoreService();
+        private Endpoint core;
+        public static CoreService Instance
         {
-            ep = new Endpoint();
-            writer = new PjsipLogger();
-        }
-
-        public void Login()
-        {
-            try
+            get
             {
-                ep.libCreate();
-                // Init library
-                EpConfig epConfig = new EpConfig();
-                epConfig.logConfig.level = 6;
-                epConfig.logConfig.writer = writer;
-                epConfig.uaConfig.stunServer.Add("ice.x-cloud.info:3478"); // STUN-сервер
-                epConfig.uaConfig.natTypeInSdp = 1;
-                ep.libInit(epConfig);
 
-                // Create transport
-                TransportConfig tcfg = new TransportConfig();
-                tcfg.port = 5060;
-                var tcpTransportId = ep.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, tcfg);
-
-                // Start library
-                ep.libStart();
-                Console.WriteLine("*** PJSUA2 STARTED ***");
-
-                // Add account
-                AccountConfig accCfg = new AccountConfig();
-                accCfg.idUri = "sip:1201@pbx51.x-cloud.info";
-                accCfg.regConfig.registrarUri = "sip:rsip.x-cloud.info";
-                accCfg.regConfig.registerOnAdd = true;
-                accCfg.sipConfig.transportId = tcpTransportId;
-                accCfg.presConfig.publishEnabled = true;
-                accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", "1201", 0, "1201!shahar!481!51dfgthjk#mobile"));
-                this.create(accCfg);
-                //setRegistration(true);
-                Console.WriteLine("*** DESTROYING PJSUA2 ***");
-                Thread.Sleep(10000);
-                /* Explicitly delete the account.
-                 * This is to avoid GC to delete the endpoint first before deleting
-                 * the account.
-                 */
-                
-
-                // Explicitly destroy and delete endpoint
-               
-                AccountInfo accInfo = getInfo();
-                do
+                return instance;
+            }
+        }
+        public Endpoint Core 
+        {   get 
+            {
+                if (core == null)
                 {
+                    core = new Endpoint();
+                    writer = new PjsipLogger();
+                    core.libCreate();
+                    // Init library
+                    EpConfig epConfig = new EpConfig();
+                    epConfig.logConfig.level = 6;
+                    epConfig.logConfig.writer = writer;
+                    epConfig.uaConfig.stunServer.Add("ice.x-cloud.info:3478"); // STUN-сервер
+                    epConfig.uaConfig.natTypeInSdp = 1;
 
-                    Debug.WriteLine($"[SIP] Регистрация: {(accInfo.regIsActive ? "Активна" : "ОТСУТСТВУЕТ")}");
-                    Thread.Sleep(1000);
-                } while (!accInfo.regIsActive);
-                //Dispose();
-                //ep.libDestroy();
-                //EnsureRegistration();
-            }
-            catch (Exception err)
-            {
-                Console.WriteLine("Exception: " + err.Message);
-            }
+                    core.libInit(epConfig);
+
+                    // Create transport
+                    TransportConfig tcfg = new TransportConfig();
+                    tcfg.port = 5060;
+                    core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, tcfg);
+
+                    // Start library
+                    core.libStart();
+                }
+                return core; 
+            } 
         }
+        public void Login(string username, string domain, string proxy, string password, int transport)
+        {
+            AccountConfig accCfg = new AccountConfig();
+            accCfg.idUri = $"sip:{username}@{domain}";
+            accCfg.regConfig.registrarUri = $"sip:{proxy}";
+            accCfg.regConfig.registerOnAdd = true;
+            accCfg.sipConfig.transportId = 0;
+            accCfg.presConfig.publishEnabled = true; 
+            accCfg.regConfig.timeoutSec = 60;
+            accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
+            create(accCfg);
+        }
+
         public void EnsureRegistration()
         {
             if (this == null) return;
@@ -217,8 +203,8 @@ namespace VoiceX.Services
                     }
 
                     // Получаем локальные аудиоустройства
-                    AudioMedia speaker = CoreService.ep.audDevManager().getPlaybackDevMedia();
-                    AudioMedia microphone = CoreService.ep.audDevManager().getCaptureDevMedia();
+                    AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
+                    AudioMedia microphone = CoreService.Instance.Core.audDevManager().getCaptureDevMedia();
 
                     if (speaker == null || microphone == null)
                     {
@@ -243,8 +229,8 @@ namespace VoiceX.Services
         {
             try
             {
-                AudioMedia mic = CoreService.ep.audDevManager().getCaptureDevMedia();
-                AudioMedia speaker = CoreService.ep.audDevManager().getPlaybackDevMedia();
+                AudioMedia mic = CoreService.Instance.Core.audDevManager().getCaptureDevMedia();
+                AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
 
                 if (mic == null || speaker == null)
                 {

@@ -12,15 +12,13 @@ namespace VoiceX.Services
     {
         private Account_data account;
         Get_certificate certificate;
-        string userToken;
         response_data responseData;
         user_dbinfo user_dbinfo;
         CertificateService certificateService;
-        public WebService(string UserToken)
+        public WebService()
         {
             account = new Account_data();
             certificate = new Get_certificate();
-            userToken = UserToken;
             responseData = new response_data();
             responseData.data = new List<user_info>();
             user_dbinfo = new user_dbinfo();
@@ -239,23 +237,26 @@ namespace VoiceX.Services
             
             return contacts;
         }
-        public async Task<System.Net.HttpStatusCode> ChangeCallType(string callType, string pbxCode)
+        public async Task<System.Net.HttpStatusCode> ChangeCallType(string callType, string pbxCode, string userToken)
         {
             string responseBody = "";
             try
             {
-                //var content = new HttpStringContent("{" + $"\"call_type\":\"{callType}\"" + "}", UnicodeEncoding.Utf8);
-                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                //var clientCertificate = certificate.First();
-                //var filter = new HttpBaseProtocolFilter();
-                //filter.ClientCertificate = clientCertificate;
-                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                //{
-                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/change_call_type.php"), content);
-                //    responseBody = await response.Content.ReadAsStringAsync();
-                //}
+                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("default-windowsrsa");
+                if (clientCertificate == null)
+                {
+                    return System.Net.HttpStatusCode.NotFound;
+                }
+                var content = new StringContent("{" + $"\"call_type\":\"{callType}\"" + "}", Encoding.UTF8, "application/json");
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                var handler = new HttpClientHandler();
+                handler.ClientCertificates.Add(clientCertificate);
+                using (var httpClient = new HttpClient(handler))
+                {
+                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
+                    var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/change_call_type.php"), content);
+                    responseBody = await response.Content.ReadAsStringAsync();
+                }
                 return JsonConvert.DeserializeObject<System.Net.HttpStatusCode>(JObject.Parse(responseBody)["responseCode"].ToString());
             }
             catch
@@ -310,7 +311,7 @@ namespace VoiceX.Services
                 return;
             }
         }
-        public async Task<Account_data> GetAccountSettings(string pbxCode)
+        public async Task<Account_data> GetAccountSettings(string pbxCode, string userToken)
         {
             #region GET
             string responseBody = "";
