@@ -52,6 +52,7 @@
     <None Remove="Assets\Icone_v2\TopLogo.png" />
     <None Remove="Assets\Icone_v2\TransferCall.png" />
     <None Remove="Assets\Icone_v2\trash.png" />
+    <None Remove="Assets\Icone_v2\User-48.png" />
     <None Remove="Assets\Icone_v2\UserTree.png" />
     <None Remove="Assets\Icone_v2\Warning.png" />
     <None Remove="Assets\Icone_v2\x.png" />
@@ -198,6 +199,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\trash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\User-48.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\UserTree.png">

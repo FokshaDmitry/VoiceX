@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Security.Cryptography.X509Certificates;
 using VoiceX.Models;
+using Microsoft.VisualBasic;
 
 namespace VoiceX.Services
 {
@@ -156,7 +157,7 @@ namespace VoiceX.Services
             }
             return responseBody;
         }
-        public async Task<contacts_list> GetcontactsList(string sip_username, string companyID, string pbxCode)
+        public async Task<contacts_list> GetcontactsList(string sip_username, string companyID, string pbxCode, string userToken)
         {
             contacts_list contacts = new contacts_list
             {
@@ -189,18 +190,23 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                //var content = new HttpStringContent("{" + $"\"sip_account\":\"{sip_username}\",\"companyID\":\"{companyID}\"" + "}", UnicodeEncoding.Utf8);
-                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                //var clientCertificate = certificate.First();
-                //var filter = new HttpBaseProtocolFilter();
-                //filter.ClientCertificate = clientCertificate;
-                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                //{
-                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_redirect_list.php"), content);
-                //    responseBody = await response.Content.ReadAsStringAsync();
-                //}
+                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("default-windowsrsa");
+                if (clientCertificate == null)
+                {
+                    contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
+                    contacts.ResponseMessage = "Certificate don't found";
+                    return contacts;
+                }
+                var content = new StringContent("{" + $"\"sip_account\":\"{sip_username}\",\"companyID\":\"{companyID}\"" + "}", Encoding.UTF8, "application/json");
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                var handler = new HttpClientHandler();
+                handler.ClientCertificates.Add(clientCertificate);
+                using (var httpClient = new HttpClient(handler))
+                {
+                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
+                    var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_redirect_list.php"), content);
+                    responseBody = await response.Content.ReadAsStringAsync();
+                }
             }
             catch (Exception ex)
             {

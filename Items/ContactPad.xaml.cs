@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using VoiceX.Views;
 using VoiceX.Views.PhonePages;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -20,7 +21,7 @@ namespace VoiceX.Items
             this.UserPhone = UserPhone;
             this.userName.Text = UserName;
             this.userPhone.Text = UserPhone;
-            if (DialpadPage.CallAdtess.Contains(UserPhone))
+            if (ProfilePage.CallAdtess.Contains(UserPhone))
             {
                 Select.IsChecked = true;
             }
@@ -43,20 +44,20 @@ namespace VoiceX.Items
         {
             if (Select.IsChecked.Value)
             {
-                if (DialpadPage.SelectContacts.Contains(UserPhone))
+                if (ProfilePage.SelectContacts.Contains(UserPhone))
                 {
-                    DialpadPage.SelectContacts.Remove(UserPhone);
+                    ProfilePage.SelectContacts.Remove(UserPhone);
                 }
                 else
                 {
-                    DialpadPage.SelectContacts.Add(UserPhone);
+                    ProfilePage.SelectContacts.Add(UserPhone);
                 }
             }
             else
             {
-                if (DialpadPage.SelectContacts.Contains(UserPhone))
+                if (ProfilePage.SelectContacts.Contains(UserPhone))
                 {
-                    DialpadPage.SelectContacts.Remove(UserPhone);
+                    ProfilePage.SelectContacts.Remove(UserPhone);
                 }
             }
         }

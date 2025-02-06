@@ -9,8 +9,8 @@ namespace VoiceX.Items
     {
         public HeadingContactList(string heanding)
         {
-            //InitializeComponent();
-            //Heanding.Text = heanding;
+            InitializeComponent();
+            Heanding.Text = heanding;
         }
     }
 }

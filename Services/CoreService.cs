@@ -9,7 +9,7 @@ namespace VoiceX.Services
     public class CoreService : Account
     {
         public static PjsipLogger writer;
-        private static MyCall activeCall;
+        public static MyCall activeCall;
         private static readonly CoreService instance = new CoreService();
         private Endpoint core;
         public static CoreService Instance
@@ -94,40 +94,38 @@ namespace VoiceX.Services
                 Debug.WriteLine($"[SIP] Ошибка в EnsureRegistration: {ex.Message}");
             }
         }
-        public void MakeCall()
+        public MyCall MakeCall(string phone, string pbx)
         {
             if (this == null)
             {
                 Debug.WriteLine("Ошибка: SIP-аккаунт не зарегистрирован!");
-                return;
+                return null;
             }
 
             // Закрываем предыдущий вызов перед созданием нового
-            if (activeCall != null)
+            if (activeCall == null)
             {
-                Debug.WriteLine("Завершаем предыдущий вызов.");
-                activeCall.hangup(new CallOpParam());
-                activeCall.Dispose();
-                activeCall = null;
-            }
+                string sipUri = $"sip:{phone}@{pbx}";
 
+                try
+                {
+                    activeCall = new MyCall(this);
+                    CallOpParam prm = new CallOpParam(true);
+                    prm.opt.audioCount = 1;
+                    prm.opt.videoCount = 0;
+
+                    activeCall.makeCall(sipUri, prm);
+                    return activeCall;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Ошибка при вызове: {ex.Message}");
+                    return null;
+                }
+            }
+            return null;
             // Создаём новый вызов
-            string sipUri = $"sip:1214@pbx51.x-cloud.info;transport=tcp";
-            Debug.WriteLine($"Попытка вызова через TCP: {sipUri}");
-
-            try
-            {
-                activeCall = new MyCall(this);
-                CallOpParam prm = new CallOpParam(true);
-                prm.opt.audioCount = 1;
-                prm.opt.videoCount = 0;
-
-                //activeCall.makeCall(sipUri, prm);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Ошибка при вызове: {ex.Message}");
-            }
+            
         }
         public override void onIncomingCall(OnIncomingCallParam prm)
         {
@@ -170,17 +168,31 @@ namespace VoiceX.Services
         {
             CallInfo ci = getInfo();
             Debug.WriteLine($"[CALL] Статус: {ci.stateText}, Причина: {ci.lastReason}");
-
-            if (ci.state == pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)
+            switch (ci.state)
             {
-                Debug.WriteLine("[CALL] Вызов подключён, пробуем настроить аудио...");
-                SetupAudio();
-            }
-
-            if (ci.state == pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)
-            {
-                Debug.WriteLine($"[CALL] Вызов завершён: {ci.lastReason}");
-                try { this.Dispose(); } catch { }
+                case pjsip_inv_state.PJSIP_INV_STATE_NULL:
+                    break;
+                case pjsip_inv_state.PJSIP_INV_STATE_CALLING:
+                    break;
+                case pjsip_inv_state.PJSIP_INV_STATE_INCOMING:
+                    break;
+                case pjsip_inv_state.PJSIP_INV_STATE_EARLY:
+                    break;
+                case pjsip_inv_state.PJSIP_INV_STATE_CONNECTING:
+                    break;
+                case pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED:
+                    Debug.WriteLine("[CALL] Вызов подключён, пробуем настроить аудио...");
+                    SetupAudio();
+                    break;
+                case pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED:
+                    Debug.WriteLine($"[CALL] Вызов завершён: {ci.lastReason}");
+                    try {
+                        DisableMicrophone();
+                        this.Dispose(); 
+                    } catch { }
+                    break;
+                default:
+                    break;
             }
 
         }
@@ -224,7 +236,32 @@ namespace VoiceX.Services
                 }
             }
         }
+        public void DisableMicrophone()
+        {
+            try
+            {
+                AudioMedia mic = CoreService.Instance.Core.audDevManager().getCaptureDevMedia();
+                AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
 
+                if (mic != null)
+                {
+                    Debug.WriteLine("[CALL] Отключаем передачу звука с микрофона...");
+                    mic.stopTransmit(mic);
+                }
+                if (speaker != null)
+                {
+                    Debug.WriteLine("[CALL] Отключаем передачу звука с микрофона...");
+                    speaker.stopTransmit(speaker);
+                }
+                Debug.WriteLine("[CALL] Отключаем микрофон полностью...");
+                CoreService.Instance.Core.audDevManager().setCaptureDev(-1);
+                CoreService.Instance.Core.audDevManager().setPlaybackDev(-1); 
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CALL] Ошибка при отключении микрофона: {ex.Message}");
+            }
+        }
         private void SetupAudio()
         {
             try
