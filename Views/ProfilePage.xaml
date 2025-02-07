@@ -11,7 +11,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border  Background="Transparent" CornerRadius="10">
+                        <Border Cursor="Hand" Background="Transparent" CornerRadius="10">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -29,6 +29,13 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Storyboard x:Key="SlideUpAnimation">
+            <DoubleAnimation Storyboard.TargetName="SlideTransform"
+                         Storyboard.TargetProperty="Y"
+                         From="400" To="0"
+                         Duration="0:0:0.5"
+                         DecelerationRatio="0.5"/>
+        </Storyboard>
     </Grid.Resources>
     <Grid x:Name="ControlMainPage" Height="420" Width="245" Background="White">
         <Grid Margin="0,45,0,0" Cursor="Hand">
@@ -66,6 +73,12 @@
         </Grid>
         
     </Grid>
+
+    <Frame NavigationUIVisibility="Hidden"  x:Name="MainFrame">
+        <Frame.RenderTransform>
+            <TranslateTransform x:Name="SlideTransform"/>
+        </Frame.RenderTransform>
+    </Frame>
     <Grid x:Name="Menu" VerticalAlignment="Bottom" Margin="0,0,0,-50">
         <Border CornerRadius="15, 15, 0, 0" Height="100" VerticalAlignment="Bottom" Background="#FFC3B1FD">
             <Grid>

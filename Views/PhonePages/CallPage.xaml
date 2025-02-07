@@ -1,0 +1,46 @@
+﻿<Page
+    x:Class="VoiceX.Views.PhonePages.CallPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VoiceX.Views.PhonePages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="#FFFDFEFF" x:Name="IncomeCallPage" Loaded="IncomeCallPage_Loaded" Margin="0, 50, 0, 0">
+    <Grid x:Name="IncomeCall"  Background="White">
+        <TextBlock HorizontalAlignment="Center" Text="Incoming call" VerticalAlignment="Top" Margin="0,10,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="12" Foreground="#FF898989"/>
+        <TextBlock x:Name="UserNameText" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Foreground="#FF252422" FontWeight="Normal"/>
+        <TextBlock x:Name="PhoneText" HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,55,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="14" Foreground="#FF252422" FontWeight="Normal"/>
+        <Border CornerRadius="50" Width="59" Height="59" Background="#FFFDF2F3" HorizontalAlignment="Center" Margin="0,226,112,0" VerticalAlignment="Top">
+            <Border Background="#FFFDD8D9" CornerRadius="50" Width="48" Height="48">
+                <Button BorderThickness="0" Background="Transparent" Cursor="Hand" Click="EndCall_Click"  VerticalAlignment="Center" Width="35" Height="35" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" HorizontalAlignment="Center">
+                    <Button.Content>
+                        <Border CornerRadius="50" Background="#FFF31E38" Width="35" Height="35">
+                            <Image Width="22" Height="22" RenderTransformOrigin="0.5,0.5">
+                                
+                                <Image.Source>
+                                    <BitmapImage UriSource="/Assets/Icone_v2/phoneNavigate.png" DecodePixelWidth="80" DecodePixelHeight="80"/>
+                                </Image.Source>
+                            </Image>
+                        </Border>
+                    </Button.Content>
+                </Button>
+            </Border>
+        </Border>
+        <Border CornerRadius="50" Width="102" Height="102" Background="#FFF2FEF5" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="114,200,0,0">
+            <Border CornerRadius="50" Width="83" Height="83" Background="#FFCBFDD7">
+                <Button Cursor="Hand" BorderThickness="0" Background="Transparent" Name="Accept" Click="Accept_Click"  VerticalAlignment="Center" Width="62" Height="62"  FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" HorizontalAlignment="Center" Grid.Row="1">
+                    <Button.Content>
+                        <Border CornerRadius="50" Background="#FF06D665" Width="62" Height="62">
+                            <Image Width="29" Height="29">
+                                <Image.Source>
+                                    <BitmapImage UriSource="/Assets/Icone_v2/phoneNavigate.png" DecodePixelWidth="90" DecodePixelHeight="90"/>
+                                </Image.Source>
+                            </Image>
+                        </Border>
+                    </Button.Content>
+                </Button>
+            </Border>
+        </Border>
+    </Grid>
+</Page>

@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -39,7 +40,6 @@ namespace VoiceX.Views
         //readonly ErrorService errorService;
         GeneralSettingPage generalSettingPage;
         MainWindow window;
-        public static MyCall currentCall { get; set; }
         public static List<string> SelectContacts { get; set; }
         public CoreService Core { get; } = CoreService.Instance;
         public static List<string> CallAdtess { get; set; }
@@ -49,6 +49,10 @@ namespace VoiceX.Views
         public static bool TerminateAllCalls { get; set; }
         public static List<string> AutoAnswerNumbers { get; set; }
         DialpadCallPage dialpadCallPage;
+        ActivCallPage activCallPage;
+        CallPage callPage;
+
+        Storyboard slide;
         public ProfilePage(MainWindow mainWindow)
         {
             this.InitializeComponent();
@@ -62,11 +66,31 @@ namespace VoiceX.Views
             TerminateAllCalls = false;
             if (AutoAnswerNumbers == null) AutoAnswerNumbers = new List<string>();
             dialpadCallPage = new DialpadCallPage(this);
+            activCallPage = new ActivCallPage(this, dialpadCallPage);
+            callPage = new CallPage(this, dialpadCallPage, activCallPage);
+            CoreService.Instance.IncomingCallEvent += Instance_IncomingCallEvent;
             contacts = new contacts_list
             {
                 contacts = new List<Models.Contact>()
             };
+            slide = (Storyboard)FindResource("SlideUpAnimation");
             //errorService = new ErrorService();
+        }
+
+        private async void Instance_IncomingCallEvent()
+        {
+            if (CoreService.activeCall != null)
+            {
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    window.Show();
+                    window.WindowState = WindowState.Normal;
+                    window.Activate();
+                    MainFrame.Navigate(callPage);
+                    slide.Begin();
+                    
+                });
+            }
         }
 
         private void ControlPage_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -110,11 +134,18 @@ namespace VoiceX.Views
                     
                     break;
                 case "Phone":
-                    ControlMainPage.Children.Clear();
-                    ControlMainPage.Children.Add(dialpadCallPage);
+                    MainFrame.Navigate(dialpadCallPage);
+                    slide.Begin();
                     break;
                 case "History":
-
+                    if (MainFrame.CanGoBack)
+                    {
+                        while (MainFrame.CanGoBack)
+                        {
+                            MainFrame.RemoveBackEntry();
+                        }
+                    }
+                    MainFrame.Content = null;
                     break;
                 case "Fax":
                     
@@ -412,7 +443,7 @@ namespace VoiceX.Views
             else
             {
 
-                if (currentCall != null)
+                if (CoreService.activeCall != null)
                 {
                     foreach (var contact in SelectContacts)
                     {
@@ -440,7 +471,7 @@ namespace VoiceX.Views
             else
             {
 
-                if (currentCall != null)
+                if (CoreService.activeCall != null)
                 {
                     if (TitleNumpad.Text == "Forwarding")
                     {
@@ -469,7 +500,7 @@ namespace VoiceX.Views
 
         private void NumDTMF_Click(object sender, RoutedEventArgs e)
         {
-            if (currentCall != null)
+            if (CoreService.activeCall != null)
             {
                 var button = (Button)sender;
                 DTMFFild.Text += button.Content;

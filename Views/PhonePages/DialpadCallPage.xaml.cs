@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
@@ -18,14 +19,14 @@ namespace VoiceX.Views.PhonePages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class DialpadCallPage : Grid
+    public sealed partial class DialpadCallPage : Page
     {
 
         contacts_list contacts;
         readonly WebService webService;
         private ProfilePage phonePage;
         ActivCallPage activCallPage;
-
+        Storyboard slide;
         public DialpadCallPage(ProfilePage profilePage)
         {
             this.InitializeComponent();
@@ -35,29 +36,30 @@ namespace VoiceX.Views.PhonePages
             contacts.contacts = new List<Models.Contact>();
             phonePage = profilePage;
             activCallPage = new ActivCallPage(profilePage, this);
+            slide = (Storyboard)profilePage.FindResource("SlideUpAnimation");
         }
         private async void DialpadCallPage_Loaded(object sender, RoutedEventArgs e)
         {
             contacts = await webService.GetcontactsList(App.AccountData.Data.Sip_Settings.Sip_username, App.AccountData.Data.User_Data.CompanyID, App.UserPbx, App.userToken);
         }
 
-        private async void CallButton_Click(object sender, RoutedEventArgs e)
+        private void CallButton_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrEmpty(NumberFild.Text))
             {
                 return;
             }
-            await CallNumber(NumberFild.Text);
+            CallNumber(NumberFild.Text);
         }
-        private async Task CallNumber(string phone)
+        private void CallNumber(string phone)
         {
             if (CoreService.activeCall == null)
             {
                 try
                 {
                     CoreService.Instance.MakeCall(phone, App.AccountData.Data.Sip_Settings.Sip_server);
-                    phonePage.ControlMainPage.Children.Clear();
-                    phonePage.ControlMainPage.Children.Add(activCallPage);
+                    phonePage.MainFrame.Navigate(activCallPage);
+                    slide.Begin();
                 }
                 catch
                 {
@@ -100,12 +102,12 @@ namespace VoiceX.Views.PhonePages
 
         }
 
-        private async void ContactList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ContactList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallItem callItem = (CallItem)ContactList.SelectedItem;
             if (callItem != null)
             {
-                await CallNumber(callItem.UserPhone);
+                CallNumber(callItem.UserPhone);
             }
         }
 
@@ -115,7 +117,7 @@ namespace VoiceX.Views.PhonePages
             NumberFild.Text += b.Content;
         }
 
-        private async void NumberFild_KeyDown(object sender, KeyEventArgs e)
+        private void NumberFild_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
@@ -123,7 +125,7 @@ namespace VoiceX.Views.PhonePages
                 {
                     return;
                 }
-                await CallNumber(NumberFild.Text);
+                CallNumber(NumberFild.Text);
             }
         }
         private void Backspace_Click(object sender, RoutedEventArgs e)

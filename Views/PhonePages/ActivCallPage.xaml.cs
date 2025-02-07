@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using pj;
 using Windows.UI.Core;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Animation;
+using VoiceX.Models;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -21,7 +23,7 @@ namespace VoiceX.Views.PhonePages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class ActivCallPage : Grid
+    public sealed partial class ActivCallPage : Page
     {
         private DateTime startCall;
         bool timeFlag;
@@ -30,6 +32,9 @@ namespace VoiceX.Views.PhonePages
         LocalStoreService localStoreService;
         DialpadCallPage dialpadCallPage;
         bool pause;
+        Storyboard slide;
+        bool Microphone;
+        bool Audio;
         public ActivCallPage(ProfilePage profilePage, DialpadCallPage dialpadCallPage)
         {
             this.InitializeComponent();
@@ -39,7 +44,11 @@ namespace VoiceX.Views.PhonePages
             phonePage = profilePage;
             localStoreService = new LocalStoreService();
             this.dialpadCallPage = dialpadCallPage;
+            slide = (Storyboard)profilePage.FindResource("SlideUpAnimation");
+            Microphone = true;
+            Audio = true;
         }
+
         private async void EnalebleCalling(object sender)
         {
             await Dispatcher.InvokeAsync(() =>
@@ -48,37 +57,51 @@ namespace VoiceX.Views.PhonePages
                 {
                     if (CoreService.activeCall != null)
                     {
-                        var info = CoreService.activeCall.getInfo();
-                        if (timeFlag)
+                        CallInfo info = new CallInfo();
+                        try
                         {
-                            startCall = DateTime.Now;
-                            timeFlag = false;
-                            if (ProfilePage.AutoAnswerNumbers.Contains(CutNumber(info.remoteContact)))
+                           info = CoreService.activeCall.getInfo();
+                        }
+                        catch
+                        {
+
+                        }
+                        if (info != null)
+                        {
+                            if (timeFlag)
                             {
-                                AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 112, 80, 204));
-                                AutoAnswerImage.Source = new BitmapImage(new Uri("/Assets/Icone_v2/refreshblue.png"));
+                                startCall = DateTime.Now;
+                                timeFlag = false;
+                                if (ProfilePage.AutoAnswerNumbers.Contains(CutNumber(info.remoteContact)))
+                                {
+                                    AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 112, 80, 204));
+                                    AutoAnswerImage.Source = new BitmapImage(new Uri("/Assets/Icone_v2/refreshblue.png"));
+                                }
+                                else
+                                {
+                                    AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
+                                    AutoAnswerImage.Source = new BitmapImage(new Uri("/Assets/Icone_v2/refresh.png"));
+                                }
                             }
-                            else
-                            {
-                                AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
-                                AutoAnswerImage.Source = new BitmapImage(new Uri("/Assets/Icone_v2/refresh.png"));
-                            }
+                            PhoneText.Text = CutNumber(info.remoteContact);
+                            UserNameText.Text = CutNumber(info.remoteContact);
                         }
                         Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");
                         StatusCurrentCall.Text = ProfilePage.StatusCall.ToString().ToUpper() + " " + "CALL";
                         AddCall.IsEnabled = ProfilePage.StatusCall != Enums.StatusCall.Incoming;
-                        //CloseMicrophone.Visibility = CoreService.Instance.Core.MicEnabled ? Visibility.Collapsed : Visibility.Visible;
-                        //CloseSound.Visibility = DialpadPage.currentCall.SpeakerMuted ? Visibility.Visible : Visibility.Collapsed;
+                        CloseMicrophone.Visibility = Microphone ? Visibility.Collapsed : Visibility.Visible;
+                        CloseSound.Visibility = Audio ? Visibility.Collapsed : Visibility.Visible;
                         TransferCall.IsEnabled = true;
-                        PhoneText.Text = CutNumber(info.remoteContact);
-                        UserNameText.Text = CutNumber(info.remoteContact);
                     }
                     else if (CoreService.activeCall == null)
                     {
                         Time.Text = "00:00";
                         timeFlag = true;
-                        phonePage.ControlMainPage.Children.Clear();
-                        phonePage.ControlMainPage.Children.Add(dialpadCallPage);
+                        if (phonePage.MainFrame.Content.ToString() != "VoiceX.Views.PhonePages.DialpadCallPage")
+                        {
+                            phonePage.MainFrame.Navigate(dialpadCallPage);
+                            slide.Begin();
+                        }
                         if (timer != null)
                         {
                             timer.Dispose();
@@ -115,7 +138,7 @@ namespace VoiceX.Views.PhonePages
                 return "NOT FORMAT SIP URI";
             }
         }
-        private async void Profile_Click(object sender, RoutedEventArgs e)
+        private void Profile_Click(object sender, RoutedEventArgs e)
         {
             
         }
@@ -129,11 +152,12 @@ namespace VoiceX.Views.PhonePages
                 if (CoreService.activeCall != null)
                 {
                     CoreService.activeCall.hangup(new CallOpParam());
+                    CoreService.activeCall.StopRingTone();
                     CoreService.activeCall.DisableMicrophone();
                     CoreService.activeCall.Dispose();
                     CoreService.activeCall = null;
-                    phonePage.ControlMainPage.Children.Clear();
-                    phonePage.ControlMainPage.Children.Add(dialpadCallPage);
+                    phonePage.MainFrame.Navigate(dialpadCallPage);
+                    slide.Begin();
                 }
                 try
                 {
@@ -151,25 +175,28 @@ namespace VoiceX.Views.PhonePages
             else if (CoreService.activeCall != null)
             {
                 CoreService.activeCall.hangup(new CallOpParam());
+                CoreService.activeCall.StopRingTone();
                 CoreService.activeCall.DisableMicrophone();
                 CoreService.activeCall.Dispose();
                 CoreService.activeCall = null;
-                phonePage.ControlMainPage.Children.Clear();
-                phonePage.ControlMainPage.Children.Add(dialpadCallPage);
+                phonePage.MainFrame.Navigate(dialpadCallPage);
+                slide.Begin();
 
             }
             else
             {
-                phonePage.ControlMainPage.Children.Clear();
-                phonePage.ControlMainPage.Children.Add(dialpadCallPage);
+                phonePage.MainFrame.Navigate(dialpadCallPage);
+                slide.Begin();
             }
         }
         private void Sound_Click(object sender, RoutedEventArgs e)
         {
             if (!pause)
             {
-                
-
+                if (CoreService.activeCall != null)
+                {
+                    Audio = CoreService.activeCall.MuteSpeaker(!Audio);
+                }
             }
         }
 
@@ -177,7 +204,10 @@ namespace VoiceX.Views.PhonePages
         {
             if (!pause)
             {
-
+                if (CoreService.activeCall != null)
+                {
+                    Microphone = CoreService.activeCall.MuteMicrophone(!Microphone);
+                }
             }
         }
         private void PauseButton_Click(object sender, RoutedEventArgs e)
@@ -186,25 +216,26 @@ namespace VoiceX.Views.PhonePages
             {
                 return;
             }
-            if (ProfilePage.currentCall != null)
+            if (CoreService.activeCall != null)
             {
                 try
                 {
                     if (pause)
                     {
-                        
                         pause = false;
+                        CoreService.activeCall.StopRingTone();
+                        CoreService.activeCall.MuteMicrophone(true);
+                        CoreService.activeCall.MuteSpeaker(true);
                         Pause.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 221, 219, 255));
-                        PauseRect.Stroke = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
-                        PauseRect1.Stroke = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
                     }
                     else
                     {
                         
-                        pause = true;
+                        pause = true; 
+                        CoreService.activeCall.MuteMicrophone(false);
+                        CoreService.activeCall.MuteSpeaker(false);
+                        CoreService.activeCall.PlayHoldMusic();
                         Pause.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 240, 186, 105));
-                        PauseRect.Stroke = new SolidColorBrush(Color.FromArgb(255, 240, 186, 105));
-                        PauseRect1.Stroke = new SolidColorBrush(Color.FromArgb(255, 240, 186, 105));
                     }
                 }
                 catch (Exception ex)
@@ -238,7 +269,7 @@ namespace VoiceX.Views.PhonePages
         }
         private async void AutoAnswer_Click(object sender, RoutedEventArgs e)
         {
-            if (ProfilePage.currentCall != null)
+            if (CoreService.activeCall != null)
             {
                 if (!ProfilePage.AutoAnswerNumbers.Contains("tmpPhone"))
                 {
