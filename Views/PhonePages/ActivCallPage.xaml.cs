@@ -11,7 +11,6 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using pj;
-using Windows.UI.Core;
 using System.Text.RegularExpressions;
 using System.Windows.Media.Animation;
 using VoiceX.Models;
@@ -57,6 +56,15 @@ namespace VoiceX.Views.PhonePages
                 {
                     if (CoreService.activeCall != null)
                     {
+
+                        if (CoreService.activeCall.CallAdtess.Count != 0)
+                        {
+                            Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");
+                            StatusCurrentCall.Text = ProfilePage.StatusCall.ToString().ToUpper() + " " + "CALL";
+                            PhoneText.Text = CoreService.activeCall.CallAdtess.Aggregate((current, next) => CutNumber(current) + ", " + CutNumber(next)).TrimEnd(' ', ',');
+                            TransferCall.IsEnabled = false;
+                            Pause.IsEnabled = false;
+                        }
                         CallInfo info = new CallInfo();
                         try
                         {
@@ -72,15 +80,15 @@ namespace VoiceX.Views.PhonePages
                             {
                                 startCall = DateTime.Now;
                                 timeFlag = false;
-                                if (ProfilePage.AutoAnswerNumbers.Contains(CutNumber(info.remoteContact)))
+                                if (ProfilePage.AutoAnswerNumbers!.Contains(info.remoteContact))
                                 {
                                     AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 112, 80, 204));
-                                    AutoAnswerImage.Source = new BitmapImage(new Uri("/Assets/Icone_v2/refreshblue.png"));
+                                    AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refreshblue.png"));
                                 }
                                 else
                                 {
                                     AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
-                                    AutoAnswerImage.Source = new BitmapImage(new Uri("/Assets/Icone_v2/refresh.png"));
+                                    AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refresh.png"));
                                 }
                             }
                             PhoneText.Text = CutNumber(info.remoteContact);
@@ -107,14 +115,6 @@ namespace VoiceX.Views.PhonePages
                             timer.Dispose();
                             timer = null;
                         }
-                    }
-                    if (ProfilePage.CallAdtess.Count != 0)
-                    {
-                        Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");
-                        StatusCurrentCall.Text = ProfilePage.StatusCall.ToString().ToUpper() + " " + "CALL";
-                        PhoneText.Text = ProfilePage.CallAdtess.Aggregate((current, next) => current + ", " + next).TrimEnd(' ', ',');
-                        TransferCall.IsEnabled = false;
-                        Pause.IsEnabled = false;
                     }
                 }
                 catch
@@ -145,43 +145,44 @@ namespace VoiceX.Views.PhonePages
 
         private void EndCall_Click(object sender, RoutedEventArgs e)
         {
-            if (ProfilePage.CallAdtess.Count != 0)
+            if(CoreService.activeCall != null)
             {
-                
-                ProfilePage.TerminateAllCalls = true;
-                if (CoreService.activeCall != null)
+                if (CoreService.activeCall?.CallAdtess.Count != 0)
                 {
-                    CoreService.activeCall.hangup(new CallOpParam());
-                    CoreService.activeCall.StopRingTone();
-                    CoreService.activeCall.DisableMicrophone();
-                    CoreService.activeCall.Dispose();
+
+                    ProfilePage.TerminateAllCalls = true;
+                    CoreService.activeCall?.hangup(new CallOpParam());
+                    CoreService.activeCall?.StopRingTone();
+                    CoreService.activeCall?.DisableMicrophone();
+                    CoreService.activeCall?.Dispose();
                     CoreService.activeCall = null;
                     phonePage.MainFrame.Navigate(dialpadCallPage);
                     slide.Begin();
-                }
-                try
-                {
-                    if(timer != null)
+                    try
                     {
-                        timer.Dispose();
+                        if (timer != null)
+                        {
+                            timer.Dispose();
+                            timer = null;
+                        }
+                    }
+                    catch
+                    {
                         timer = null;
                     }
                 }
-                catch
+                else
                 {
-                    timer = null;
-                }
-            }
-            else if (CoreService.activeCall != null)
-            {
-                CoreService.activeCall.hangup(new CallOpParam());
-                CoreService.activeCall.StopRingTone();
-                CoreService.activeCall.DisableMicrophone();
-                CoreService.activeCall.Dispose();
-                CoreService.activeCall = null;
-                phonePage.MainFrame.Navigate(dialpadCallPage);
-                slide.Begin();
+                    
+                    CoreService.activeCall?.hangup(new CallOpParam());
+                    CoreService.activeCall?.StopRingTone();
+                    CoreService.activeCall?.DisableMicrophone();
+                    CoreService.activeCall?.Dispose();
+                    CoreService.activeCall = null;
+                    phonePage.MainFrame.Navigate(dialpadCallPage);
+                    slide.Begin();
 
+                }
             }
             else
             {
@@ -212,12 +213,12 @@ namespace VoiceX.Views.PhonePages
         }
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ProfilePage.CallAdtess.Count() != 0)
-            {
-                return;
-            }
             if (CoreService.activeCall != null)
             {
+                if (CoreService.activeCall.CallAdtess?.Count() != 0)
+                {
+                    return;
+                }
                 try
                 {
                     if (pause)
@@ -271,19 +272,27 @@ namespace VoiceX.Views.PhonePages
         {
             if (CoreService.activeCall != null)
             {
-                if (!ProfilePage.AutoAnswerNumbers.Contains("tmpPhone"))
+                try
                 {
-                    ProfilePage.AutoAnswerNumbers.Add("tmpPhone");
-                    AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 112, 80, 204));
-                    AutoAnswerImage.Source = new BitmapImage(new Uri("/Assets/Icone_v2/refreshblue.png"));
-                    await UpdateAutoAncwerCallList();
+                    var uri = CoreService.activeCall.getInfo().remoteContact;
+                    if (!ProfilePage.AutoAnswerNumbers!.Contains(uri))
+                    {
+                        ProfilePage.AutoAnswerNumbers.Add(uri);
+                        AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 112, 80, 204));
+                        AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refreshblue.png"));
+                        await UpdateAutoAncwerCallList();
+                    }
+                    else
+                    {
+                        ProfilePage.AutoAnswerNumbers.Remove(uri);
+                        AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
+                        AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refresh.png"));
+                        await UpdateAutoAncwerCallList();
+                    }
                 }
-                else
+                catch (Exception ex) 
                 {
-                    ProfilePage.AutoAnswerNumbers.Remove("tmpPhone");
-                    AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
-                    AutoAnswerImage.Source = new BitmapImage(new Uri("/Assets/Icone_v2/refresh.png"));
-                    await UpdateAutoAncwerCallList();
+                    Debug.WriteLine(ex.ToString());
                 }
             }
         }

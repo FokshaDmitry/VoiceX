@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Windows.ApplicationModel.DataTransfer;
 
 namespace VoiceX.Services
 {
@@ -83,7 +82,7 @@ namespace VoiceX.Services
             Continue.Margin = new Thickness(0, 154, 0, 0);
             Continue.VerticalAlignment = VerticalAlignment.Top;
             Continue.HorizontalAlignment = HorizontalAlignment.Center;
-            Continue.FontFamily = new FontFamily("/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
+            Continue.FontFamily = new FontFamily("pack://application:,,,/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
             Continue.FontSize = 18;
             Continue.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
             Continue.Content = "Continue";
@@ -100,7 +99,7 @@ namespace VoiceX.Services
             Cansel.VerticalAlignment = VerticalAlignment.Top;
             Cansel.HorizontalAlignment = HorizontalAlignment.Center;
             Cansel.FontSize = 18;
-            Cansel.FontFamily = new FontFamily("/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
+            Cansel.FontFamily = new FontFamily("pack://application:,,,/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
             Cansel.Content = "Cansel";
             Cansel.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
             Cansel.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 138, 99, 251));
@@ -110,23 +109,22 @@ namespace VoiceX.Services
             //Cansel.Cursor = new System.Windows.Input.Cursor("Arrow");
             Cansel.Click += Cansel_Click; ;
 
-            //copyImage.Source = new BitmapImage(new Uri("/Assets/Icone_v2/Copy.png"));
+            copyImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/Copy.png"));
 
             //closeFrame.Padding = new Thickness(-1, 0, 0, 0);
 
             closePlan1.Background = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
             closePlan1.Height = 1;
             closePlan1.Width = 9.4;
-            //closePlan1.Co = new CornerRadius(0.5);
             closePlan1.RenderTransformOrigin = new Point(0.5, 0.5);
-            //closePlan1.RenderTransform = //new Transform() {  } //CompositeTransform() { Rotation = -45 };
+            //closePlan1.RenderTransform =;
 
             closePlan2.Background = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
             closePlan2.Height = 1;
             closePlan2.Width = 9.4;
             //closePlan2.CornerRadius = new CornerRadius(0.5);
             closePlan2.RenderTransformOrigin = new Point(0.5, 0.5);
-            //closePlan2.RenderTransform = new CompositeTransform() { Rotation = 45 };
+            
 
             close.Content = closeFrame;
             copy.Content = copyImage;
@@ -173,7 +171,7 @@ namespace VoiceX.Services
         public void ShowSuccess()
         {
             StatusError.Margin = new Thickness(0, 86, 0, 0);
-            StatusError.FontFamily = new FontFamily("/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
+            StatusError.FontFamily = new FontFamily("pack://application:,,,/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
             StatusError.Text = "Successfully completed";
             window.Children.Add(ErrorIcone);
             window.Children.Add(StatusError);
@@ -194,13 +192,13 @@ namespace VoiceX.Services
                 ToolTipService.SetToolTip(errorMessageBlock, errorMessage);
 
                 StatusError.Margin = new Thickness(0, 80, 0, 0);
-                StatusError.FontFamily = new FontFamily("/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
+                StatusError.FontFamily = new FontFamily("pack://application:,,,/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
                 StatusError.Text = "Attention";
 
                 ErrorIcone.Height = 54;
                 ErrorIcone.Width = 54;
                 ErrorIcone.Margin = new Thickness(0, 18, 0, 0);
-                ErrorIcone.Source = new BitmapImage(new Uri("/Assets/Icone_v2/Error.png"));
+                ErrorIcone.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/Error.png"));
 
                 MainGrid.Children.Add(background);
             }
@@ -225,13 +223,13 @@ namespace VoiceX.Services
                 ToolTipService.SetToolTip(errorMessageBlock, warningMessage);
 
                 StatusError.Margin = new Thickness(0, 80, 0, 0);
-                StatusError.FontFamily = new FontFamily("/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
+                StatusError.FontFamily = new FontFamily("pack://application:,,,/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
                 StatusError.Text = "Attention";
 
                 ErrorIcone.Height = 90;
                 ErrorIcone.Width = 90;
                 ErrorIcone.Margin = new Thickness(0, 2, 0, 0);
-                ErrorIcone.Source = new BitmapImage(new Uri("/Assets/Icone_v2/Warning.png"));
+                ErrorIcone.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/Warning.png"));
 
                 MainGrid.Children.Add(background);
 
@@ -262,13 +260,13 @@ namespace VoiceX.Services
                 ToolTipService.SetToolTip(errorMessageBlock, warningMessage);
 
                 StatusError.Margin = new Thickness(0, 75, 0, 0);
-                StatusError.FontFamily = new FontFamily("/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
+                StatusError.FontFamily = new FontFamily("pack://application:,,,/Assets/Fonts/NunitoSans_10pt-Regular.ttf");
                 StatusError.Text = "Are you sure?";
 
                 ErrorIcone.Height = 90;
                 ErrorIcone.Width = 90;
                 ErrorIcone.Margin = new Thickness(0, 2, 0, 0);
-                ErrorIcone.Source = new BitmapImage(new Uri("/Assets/Icone_v2/Warning.png"));
+                ErrorIcone.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/Warning.png"));
 
                 close.Visibility = Visibility.Collapsed;
                 copy.Visibility = Visibility.Collapsed;

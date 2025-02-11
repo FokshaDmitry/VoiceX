@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace VoiceX.Services
 {
@@ -14,17 +15,18 @@ namespace VoiceX.Services
 
         AudioMediaPlayer? ringTonePlayer;
         private bool isOnHold;
+        public List<string> CallAdtess { get; set; }
 
         public CallService(Account acc, int call_id = -1) : base(acc, call_id)
         {
-
+            CallAdtess = new List<string>();
         }
         public void Accept()
         {
             if (CoreService.activeCall != null)
             {
                 CallOpParam answerPrm = new CallOpParam();
-                answerPrm.statusCode = pjsip_status_code.PJSIP_SC_ACCEPTED;
+                answerPrm.statusCode = pjsip_status_code.PJSIP_SC_OK;
                 CoreService.activeCall.answer(answerPrm);
             }
         }
@@ -39,7 +41,6 @@ namespace VoiceX.Services
                 case pjsip_inv_state.PJSIP_INV_STATE_CALLING:
                     break;
                 case pjsip_inv_state.PJSIP_INV_STATE_INCOMING:
-                    PlayRingTone("Incoming");
                     break;
                 case pjsip_inv_state.PJSIP_INV_STATE_EARLY:
                     Debug.WriteLine("[CALL] Абонент звонит, проигрываем гудок...");
@@ -50,19 +51,28 @@ namespace VoiceX.Services
                 case pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED:
                     Debug.WriteLine("[CALL] Абонент ответил, отключаем гудок...");
                     StopRingTone();
+                    //SetupAudio();
                     break;
                 case pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED:
                     Debug.WriteLine($"[CALL] Вызов завершён: {ci.lastReason}");
                     try
                     {
                         StopRingTone();
-                        DisableMicrophone();
                         if (CoreService.activeCall != null)
                         {
-                            CoreService.activeCall.Dispose();
-                            CoreService.activeCall = null;
+                            var info = CoreService.activeCall.getInfo();
+                            if (CallAdtess != null && CallAdtess.Count() != 0)
+                            {
+                                CallAdtess.Remove(info.localUri);
+                            }
+                            if (CallAdtess != null && CallAdtess.Count() == 0)
+                            {
+                                CoreService.activeCall?.Dispose();
+                                CoreService.activeCall = null;
+                                DisableMicrophone();
+                            }
                         }
-                        this.Dispose();
+                        this?.Dispose();
                     }
                     catch { }
                     break;
@@ -75,39 +85,21 @@ namespace VoiceX.Services
         public override void onCallMediaState(OnCallMediaStateParam prm)
         {
             CallInfo ci = getInfo();
-            if (ci.media.Count > 0 && ci.media[0].type == pjmedia_type.PJMEDIA_TYPE_AUDIO)
+            for (int i = 0; i < ci.media.Count(); i++)
             {
-                Debug.WriteLine("[CALL] Аудио обнаружено, настраиваем вход и выход...");
-
-                try
+                if (ci.media[i].type == pjmedia_type.PJMEDIA_TYPE_AUDIO)
                 {
-                    // Получаем удалённый аудиопоток (голос собеседника)
-                    AudioMedia remoteAudio = getAudioMedia(0);
-                    if (remoteAudio == null)
+                    try
                     {
-                        Debug.WriteLine("[CALL] Ошибка: `remoteAudio` == null!");
-                        return;
+                        AudioMedia aud_med = CoreService.activeCall!.getAudioMedia(i);
+                        
+                        AudDevManager mgr = CoreService.Instance.Core.audDevManager();
+                        Debug.WriteLine($"[CALL] Включаем аудио... ");
+                        aud_med.startTransmit(mgr.getPlaybackDevMedia());
+                        Debug.WriteLine("[CALL] Включаем микрофон...");
+                        mgr.getCaptureDevMedia().startTransmit(aud_med);
                     }
-
-                    // Получаем локальные аудиоустройства
-                    AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
-                    AudioMedia microphone = CoreService.Instance.Core.audDevManager().getCaptureDevMedia();
-
-                    if (speaker == null || microphone == null)
-                    {
-                        Debug.WriteLine("[CALL] Ошибка: Аудиоустройства не найдены!");
-                        return;
-                    }
-
-                    // Подключаем микрофон и динамик
-                    remoteAudio.startTransmit(speaker);   // Воспроизведение звука в динамики
-                    microphone.startTransmit(remoteAudio); // Передача звука в вызов
-
-                    Debug.WriteLine("[CALL] Аудио подключено!");
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"[CALL] Ошибка при подключении аудио: {ex.Message}");
+                    catch { }
                 }
             }
         }
@@ -237,7 +229,7 @@ namespace VoiceX.Services
                 Debug.WriteLine($"[CALL] Ошибка при запуске музыки ожидания: {ex.Message}");
             }
         }
-        private void PlayRingTone(string state)
+        public void PlayRingTone(string state)
         {
             try
             {
@@ -272,7 +264,115 @@ namespace VoiceX.Services
                 Debug.WriteLine($"[CALL] Ошибка при запуске гудка: {ex.Message}");
             }
         }
+        public void AddParticipant(string phone, string server)
+        {
+            try
+            {
+                string participantUri = $"sip:{phone}@{server}";
+                Debug.WriteLine($"[CALL] Звоним новому участнику: {participantUri}...");
 
+                CallService newCall = new CallService(CoreService.Instance); // Создаём новый вызов
+                CallOpParam callParam = new CallOpParam();
+                newCall.makeCall(participantUri, callParam);
+
+                Debug.WriteLine($"[CALL] Ожидаем соединение с {participantUri}...");
+                // Ожидаем подключения нового участника
+                Task.Run(async () =>
+                {
+                    while (true)
+                    {
+                        await Task.Delay(1000);
+                        await Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+                        {
+                            CallInfo newCallInfo = newCall.getInfo();
+
+                            if (newCallInfo.state == pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)
+                            {
+                                Debug.WriteLine($"[CALL] Новый участник {participantUri} подключен. Добавляем в конференцию...");
+                                MergeCalls(this, newCall);
+                                CallAdtess?.Add(participantUri);
+                                return;
+                            }
+                        });
+                        
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CALL] Ошибка при добавлении участника: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Объединить два вызова в конференцию
+        /// </summary>
+        private void MergeCalls(CallService call1, CallService call2)
+        {
+            try
+            {
+                //Endpoint ep = CoreService.Instance.Core;
+
+                AudioMedia call1Audio = call1.getAudioMedia(0);
+                AudioMedia call2Audio = call2.getAudioMedia(0);
+
+                if (call1Audio != null && call2Audio != null)
+                {
+                    // Создаём аудиомост между звонками
+                    call1Audio.startTransmit(call2Audio);
+                    call2Audio.startTransmit(call1Audio);
+
+                    Debug.WriteLine("[CALL] Вызовы успешно объединены в конференцию.");
+                }
+                else
+                {
+                    Debug.WriteLine("[CALL] Ошибка: один из вызовов не имеет аудиопотока.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CALL] Ошибка при объединении звонков: {ex.Message}");
+            }
+        }
+        public void TransferCall(string phone, string server)
+        {
+            try
+            {
+                string targetUri = $"sip:{phone}@{server}";
+                Debug.WriteLine($"[CALL] Переводим вызов на {targetUri}...");
+
+                CallOpParam param = new CallOpParam();
+                xfer(targetUri, param); // Переводим вызов
+
+                Debug.WriteLine("[CALL] Вызов успешно переведён.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CALL] Ошибка при переводе вызова: {ex.Message}");
+            }
+        }
+        private void SetupAudio()
+        {
+            try
+            {
+                AudioMedia remoteAudio = getAudioMedia(0);
+                AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
+
+                if (remoteAudio != null && speaker != null)
+                {
+                    remoteAudio.startTransmit(speaker);
+                    Debug.WriteLine("[CALL] Аудиопоток собеседника передаётся в динамики.");
+                }
+                else
+                {
+                    Debug.WriteLine("[CALL] Ошибка: Не удалось получить аудиопотоки.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CALL] Ошибка при настройке аудио: {ex.Message}");
+            }
+        }
         public void StopRingTone()
         {
             try

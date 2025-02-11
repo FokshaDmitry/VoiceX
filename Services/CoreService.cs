@@ -1,9 +1,6 @@
 ﻿
 using pj;
 using System.Diagnostics;
-using System.IO;
-using System.Security.Principal;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VoiceX.Services
 {
@@ -37,12 +34,16 @@ namespace VoiceX.Services
                     epConfig.logConfig.writer = writer;
                     epConfig.uaConfig.stunServer.Add("ice.x-cloud.info:3478"); 
                     epConfig.uaConfig.natTypeInSdp = 1;
+                    epConfig.uaConfig.maxCalls = 15;
+
+                    
 
                     core.libInit(epConfig);
 
                     // Create transport
                     TransportConfig tcfg = new TransportConfig();
                     tcfg.port = 5060;
+                    
                     core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, tcfg);
 
                     // Start library
@@ -114,8 +115,6 @@ namespace VoiceX.Services
                 {
                     activeCall = new CallService(this);
                     CallOpParam prm = new CallOpParam(true);
-                    prm.opt.audioCount = 1;
-                    prm.opt.videoCount = 0;
 
                     activeCall.makeCall(sipUri, prm);
                     return activeCall;
@@ -137,6 +136,7 @@ namespace VoiceX.Services
             {
                 if (activeCall == null)
                 {
+                    
                     activeCall = new CallService(this, prm.callId);
                     IncomingCallEvent?.Invoke();
                 }

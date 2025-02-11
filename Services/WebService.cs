@@ -190,7 +190,7 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("default-windowsrsa");
+                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("app-cert");
                 if (clientCertificate == null)
                 {
                     contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;

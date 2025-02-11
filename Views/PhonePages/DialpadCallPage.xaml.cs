@@ -73,34 +73,6 @@ namespace VoiceX.Views.PhonePages
                 NumberFild.Text = "";
             }
         }
-        private void NumberFild_TextChanging(TextBox sender, TextChangedEventArgs args)
-        {
-            try
-            {
-                if (String.IsNullOrEmpty(NumberFild.Text))
-                {
-                    Backspace.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    Backspace.Visibility = Visibility.Visible; ;
-                }
-                if (contacts.contacts.Count > 0)
-                {
-                    ContactList.Items.Clear();
-                    var contact = contacts.contacts.Where(c => c.Telephone.Contains(NumberFild.Text)).FirstOrDefault();
-                    if (contact != null && !String.IsNullOrEmpty(NumberFild.Text))
-                    {
-                        //ContactList.Items.Add(new CallItem(contact.Name, contact.Telephone));
-                    }
-                }
-            }
-            catch
-            {
-                return;
-            }
-
-        }
 
         private void ContactList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -133,6 +105,34 @@ namespace VoiceX.Views.PhonePages
             if (!String.IsNullOrEmpty(NumberFild.Text))
             {
                 NumberFild.Text = NumberFild.Text.Substring(0, NumberFild.Text.Length - 1);
+            }
+        }
+
+        private void NumberFild_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(NumberFild.Text))
+                {
+                    Backspace.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    Backspace.Visibility = Visibility.Visible; 
+                }
+                if (contacts.contacts.Count > 0)
+                {
+                    ContactList.Items.Clear();
+                    var contact = contacts.contacts.Where(c => c.Telephone.Contains(NumberFild.Text)).FirstOrDefault();
+                    if (contact != null && !String.IsNullOrEmpty(NumberFild.Text))
+                    {
+                        ContactList.Items.Add(new CallItem(contact.Name, contact.Telephone));
+                    }
+                }
+            }
+            catch
+            {
+                return;
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using VoiceX.Services;
 using VoiceX.Views;
 using VoiceX.Views.PhonePages;
 
@@ -21,7 +22,7 @@ namespace VoiceX.Items
             this.UserPhone = UserPhone;
             this.userName.Text = UserName;
             this.userPhone.Text = UserPhone;
-            if (ProfilePage.CallAdtess.Contains(UserPhone))
+            if (CoreService.activeCall!.CallAdtess.Contains(UserPhone))
             {
                 Select.IsChecked = true;
             }
@@ -42,9 +43,9 @@ namespace VoiceX.Items
         }
         private void Select_Click(object sender, RoutedEventArgs e)
         {
-            if (Select.IsChecked.Value)
+            if (Select.IsChecked!.Value)
             {
-                if (ProfilePage.SelectContacts.Contains(UserPhone))
+                if (ProfilePage.SelectContacts!.Contains(UserPhone))
                 {
                     ProfilePage.SelectContacts.Remove(UserPhone);
                 }
@@ -55,7 +56,7 @@ namespace VoiceX.Items
             }
             else
             {
-                if (ProfilePage.SelectContacts.Contains(UserPhone))
+                if (ProfilePage.SelectContacts!.Contains(UserPhone))
                 {
                     ProfilePage.SelectContacts.Remove(UserPhone);
                 }
@@ -64,7 +65,10 @@ namespace VoiceX.Items
 
         private void Transfer_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (CoreService.activeCall != null)
+            {
+                CoreService.activeCall.AddParticipant(UserPhone, App.AccountData.Data.Sip_Settings.Sip_server);
+            }
         }
     }
 }

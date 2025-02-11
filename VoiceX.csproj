@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Fonts\Inter-Regular.ttf" />
+    <None Remove="Assets\Fonts\Jost-Regular.ttf" />
+    <None Remove="Assets\Fonts\Montserrat-Regular.ttf" />
+    <None Remove="Assets\Fonts\NunitoSans_10pt-Regular.ttf" />
     <None Remove="Assets\Icone_v2\Arrow.png" />
     <None Remove="Assets\Icone_v2\BackgroundTopElement.png" />
     <None Remove="Assets\Icone_v2\Backspace.png" />
@@ -66,6 +70,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Fonts\Inter-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Fonts\Jost-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Fonts\Montserrat-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Fonts\NunitoSans_10pt-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Icone_v2\Arrow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -227,18 +243,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Assets\Fonts\Inter-Regular.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Fonts\Jost-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Fonts\Montserrat-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Fonts\NunitoSans_10pt-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Assets\Ring\hold.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

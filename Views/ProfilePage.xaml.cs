@@ -1,28 +1,18 @@
 ﻿using Newtonsoft.Json;
 using pj;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
 using VoiceX.Enums;
 using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
+using VoiceX.Views.ClientPages;
 using VoiceX.Views.ControlPages;
 using VoiceX.Views.PhonePages;
 
@@ -33,25 +23,25 @@ namespace VoiceX.Views
     /// </summary>
     public partial class ProfilePage : Grid
     {
-        public static List<Regex_note> regexNotes;
+        public static List<Regex_note>? regexNotes;
         readonly WebService webService;
         readonly AddDbContext addDbContext;
-        public static Get_pauses getPauses;
-        //readonly ErrorService errorService;
+        public static Get_pauses? getPauses;
+        readonly ErrorService errorService;
         GeneralSettingPage generalSettingPage;
         MainWindow window;
-        public static List<string> SelectContacts { get; set; }
+        public static List<string>? SelectContacts { get; set; }
         public CoreService Core { get; } = CoreService.Instance;
-        public static List<string> CallAdtess { get; set; }
         public static StatusCall StatusCall { get; set; }
         KeyPads keyPads;
         contacts_list contacts;
         public static bool TerminateAllCalls { get; set; }
-        public static List<string> AutoAnswerNumbers { get; set; }
+        public static List<string>? AutoAnswerNumbers { get; set; }
+        LocalStoreService localStoreService;
         DialpadCallPage dialpadCallPage;
         ActivCallPage activCallPage;
         CallPage callPage;
-
+        ClientsPage clientsPage;
         Storyboard slide;
         public ProfilePage(MainWindow mainWindow)
         {
@@ -61,20 +51,21 @@ namespace VoiceX.Views
             addDbContext = new AddDbContext();
             generalSettingPage = new GeneralSettingPage(mainWindow);
             regexNotes = new List<Regex_note>();
-            CallAdtess = new List<string>();
             SelectContacts = new List<string>();
             TerminateAllCalls = false;
             if (AutoAnswerNumbers == null) AutoAnswerNumbers = new List<string>();
             dialpadCallPage = new DialpadCallPage(this);
             activCallPage = new ActivCallPage(this, dialpadCallPage);
             callPage = new CallPage(this, dialpadCallPage, activCallPage);
+            clientsPage = new ClientsPage();
             CoreService.Instance.IncomingCallEvent += Instance_IncomingCallEvent;
             contacts = new contacts_list
             {
                 contacts = new List<Models.Contact>()
             };
+            localStoreService = new LocalStoreService();
             slide = (Storyboard)FindResource("SlideUpAnimation");
-            //errorService = new ErrorService();
+            errorService = new ErrorService(ControlMainPage);
         }
 
         private async void Instance_IncomingCallEvent()
@@ -83,32 +74,43 @@ namespace VoiceX.Views
             {
                 await Dispatcher.InvokeAsync(() =>
                 {
-                    window.Show();
-                    window.WindowState = WindowState.Normal;
-                    window.Activate();
-                    MainFrame.Navigate(callPage);
-                    slide.Begin();
+                    var info = CoreService.activeCall.getInfo();
+                    if (AutoAnswerNumbers!.Contains(info.remoteContact))
+                    {
+                        Thread.Sleep(3000);
+                        CoreService.activeCall.Accept();
+                        MainFrame.Navigate(activCallPage);
+                        slide.Begin();
+                    }
+                    else
+                    {
+
+                        CoreService.activeCall?.PlayRingTone("Incoming");
+                        window.Show();
+                        window.WindowState = WindowState.Normal;
+                        window.Activate();
+                        MainFrame.Navigate(callPage);
+                        slide.Begin();
+                    }
                     
                 });
             }
-        }
-
-        private void ControlPage_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-
-
         }
         private async void ControlPage_Loaded(object sender, RoutedEventArgs e)
         {
             var account = App.AccountData.Data.Sip_Settings;
             CoreService.Instance.Login(account.Sip_username, account.Sip_server, account.Sip_proxy, account.Sip_secret, 0);
-            this.SizeChanged += ControlPage_SizeChanged;
             General.Checked += Filter_Checked;
             Addition.Checked += Filter_Checked;
             C2C.Checked += Filter_Checked;
             ContentControl.Children.Add(generalSettingPage);
 
             contacts = await webService.GetcontactsList(App.AccountData.Data.Sip_Settings.Sip_username, App.AccountData.Data.User_Data.CompanyID, App.UserPbx, App.userToken);
+            var AAlist = await localStoreService.LoadDataAsync("AACallList");
+            if (AAlist != null)
+            {
+                AutoAnswerNumbers = JsonConvert.DeserializeObject<List<string>>(AAlist);
+            }
             try
             {
                 //User RegEx
@@ -130,14 +132,7 @@ namespace VoiceX.Views
             var Navigate = (Button)sender;
             switch (Navigate.Name)
             {
-                case "Contacts":
-                    
-                    break;
-                case "Phone":
-                    MainFrame.Navigate(dialpadCallPage);
-                    slide.Begin();
-                    break;
-                case "History":
+                case "Profile":
                     if (MainFrame.CanGoBack)
                     {
                         while (MainFrame.CanGoBack)
@@ -146,6 +141,17 @@ namespace VoiceX.Views
                         }
                     }
                     MainFrame.Content = null;
+                    break;
+                case "Contacts":
+                    MainFrame.Navigate(clientsPage);
+                    slide.Begin();
+                    break;
+                case "Phone":
+                    MainFrame.Navigate(dialpadCallPage);
+                    slide.Begin();
+                    break;
+                case "History":
+                    
                     break;
                 case "Fax":
                     
@@ -173,18 +179,15 @@ namespace VoiceX.Views
                 }
                 ContentControl.Children.Clear();
                 ContentControl.Children.Add(generalSettingPage);
-                //ContentControl.Navigate(typeof(GeneralSettingPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
             }
             else if (filter.Name == "C2C")
             {
-                //var NTrasform = ContentControl.Content.ToString() == "VoiceX.Views.ControlPages.GeneralSettingPage" ? SlideNavigationTransitionEffect.FromRight : SlideNavigationTransitionEffect.FromLeft;
                 if (C2CCheck != null)
                 {
                     GeneralCheck.Background = whiteLine;
                     C2CCheck.Background = blueLine;
                     AdditionChek.Background = whiteLine;
                 }
-                //ContentControl.Navigate(typeof(ClickToCallPage), "", new SlideNavigationTransitionInfo() { Effect = NTrasform });
             }
             else if (filter.Name == "Addition")
             {
@@ -194,7 +197,6 @@ namespace VoiceX.Views
                     C2CCheck.Background = whiteLine;
                     AdditionChek.Background = blueLine;
                 }
-                //ContentControl.Navigate(typeof(AdditionPage), "", new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
             }
         }
         private void Navigate_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
@@ -223,11 +225,6 @@ namespace VoiceX.Views
                 Cross.Visibility = Visibility.Collapsed;
             }
         }
-        private void ControlPage_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            //App.timeOut = DateTime.Now;
-        }
-
         private async void Pauses_Click(object sender, RoutedEventArgs e)
         {
             PauseList.Items.Clear();
@@ -249,7 +246,7 @@ namespace VoiceX.Views
                 }
                 else
                 {
-                    //errorService.ShowWarning(getPauses.ResponseMessage);
+                    errorService.ShowWarning(getPauses.ResponseMessage);
                 }
             }
             else
@@ -291,7 +288,7 @@ namespace VoiceX.Views
                         }
                         else
                         {
-                            //errorService.ShowWarning(result.ResponseMessage);
+                            errorService.ShowWarning(result.ResponseMessage);
                             PauseList.SelectedIndex = -1;
                         }
                     }
@@ -420,7 +417,7 @@ namespace VoiceX.Views
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            SelectContacts.Clear();
+            SelectContacts?.Clear();
             KeypadFild.Text = "";
             DTMFFild.Text = "";
             NumpadFild.Visibility = Visibility.Collapsed;
@@ -436,7 +433,7 @@ namespace VoiceX.Views
 
         private void AddContacts_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectContacts.Count == 0)
+            if (SelectContacts!.Count == 0)
             {
                 return;
             }
@@ -447,13 +444,13 @@ namespace VoiceX.Views
                 {
                     foreach (var contact in SelectContacts)
                     {
-                        if (CallAdtess.Count == 0)
+                        if (CoreService.activeCall.CallAdtess.Count == 0)
                         {
 
                         }
-                        if (!CallAdtess.Contains(contact))
+                        if (CoreService.activeCall.CallAdtess.Contains(contact))
                         {
-                            CallAdtess.Add(contact);
+                            CoreService.activeCall.CallAdtess.Add(contact);
                         }
                     }
                 }
@@ -475,20 +472,20 @@ namespace VoiceX.Views
                 {
                     if (TitleNumpad.Text == "Forwarding")
                     {
-
+                        CoreService.activeCall.TransferCall(KeypadFild.Text, App.AccountData.Data.Sip_Settings.Sip_server);
                         NumpadFild.Visibility = Visibility.Collapsed;
                         return;
                     }
                     else
                     {
-                        if (CallAdtess.Count == 0)
+                        var uri = $"sip:{KeypadFild.Text}@{App.AccountData.Data.Sip_Settings.Sip_server}";
+                        if (CoreService.activeCall.CallAdtess?.Count == 0)
                         {
-
-
+                            CoreService.activeCall.AddParticipant(KeypadFild.Text, App.AccountData.Data.Sip_Settings.Sip_server);
                         }
-                        if (!CallAdtess.Contains(KeypadFild.Text))
+                        if (CoreService.activeCall.CallAdtess!.Contains(uri))
                         {
-                            CallAdtess.Add(KeypadFild.Text);
+                            CoreService.activeCall.CallAdtess.Add(uri);
 
                         }
                     }
@@ -517,13 +514,17 @@ namespace VoiceX.Views
 
         private void DTMFFild_TextChanging(TextBox sender, TextChangedEventArgs args)
         {
-            if (String.IsNullOrEmpty(sender.Text))
+            if (CoreService.activeCall != null)
             {
-                Backspace.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                Backspace.Visibility = Visibility.Visible; ;
+                if (String.IsNullOrEmpty(sender.Text))
+                {
+                    Backspace.Visibility = Visibility.Collapsed;
+                    CoreService.activeCall.dialDtmf(sender.Text);
+                }
+                else
+                {
+                    Backspace.Visibility = Visibility.Visible; ;
+                }
             }
         }
 
@@ -536,13 +537,16 @@ namespace VoiceX.Views
         }
         private void KeypadFild_TextChanging(TextBox sender, TextChangedEventArgs args)
         {
-            if (String.IsNullOrEmpty(sender.Text))
+            if (CoreService.activeCall != null)
             {
-                BackspaceNum.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                BackspaceNum.Visibility = Visibility.Visible; ;
+                if (String.IsNullOrEmpty(sender.Text))
+                {
+                    BackspaceNum.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    BackspaceNum.Visibility = Visibility.Visible; ;
+                }
             }
         }
     }

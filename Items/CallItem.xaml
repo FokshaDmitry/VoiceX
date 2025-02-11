@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="White" Padding="0,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+    Background="White" Padding="0,0,0,0" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White">
         <TextBlock FontFamily="/Assets/Fonts/Inter-Regular.ttf#Inter" x:Name="ContactName"  HorizontalAlignment="Center" VerticalAlignment="Center" FlowDirection="LeftToRight"  Foreground="#FF252422" FontSize="14"/>

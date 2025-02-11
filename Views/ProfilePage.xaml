@@ -69,9 +69,9 @@
 
                 </Grid>
             </Grid>
-            
+
         </Grid>
-        
+
     </Grid>
 
     <Frame NavigationUIVisibility="Hidden"  x:Name="MainFrame">
@@ -185,15 +185,29 @@
                 <TextBlock Text="HotKeys" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="57.5,75,0,0"/>
                 <TextBlock Text="Clients" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="111,30,0,0"/>
                 <TextBlock Text="Dialpad" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="60,30,0,0"/>
+                <TextBlock Text="Profile" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="12,30,0,0"/>
                 <TextBlock Text="History" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="0,30,51,0"/>
                 <TextBlock Text="Fax" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="20,75,0,0"/>
                 <TextBlock Text="More" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="0,30,15,0" Grid.ColumnSpan="2"/>
             </Grid>
 
         </Border>
-        <Border BorderThickness="2" BorderBrush="White" CornerRadius="22" Background="#FFC3B1FD" Width="45" Height="45" VerticalAlignment="Top" Margin="10,-13,0,10" HorizontalAlignment="Left" RenderTransformOrigin="1,0" >
+        <Button Background="Transparent" BorderThickness="0" Name="Profile" Margin="19,10,157,0" Click="Navigate_Click"  Padding="0,0,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Button.Content>
+                <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
+                    <Border.Background>
+                        <ImageBrush>
+                            <ImageBrush.ImageSource>
+                                <BitmapImage UriSource="/Assets/Icone_v2/homeNavigate.png" DecodePixelWidth="80" DecodePixelHeight="80"/>
+                            </ImageBrush.ImageSource>
+                        </ImageBrush>
+                    </Border.Background>
+                </Border>
+            </Button.Content>
+        </Button>
+        <!--<Border BorderThickness="2" BorderBrush="White" CornerRadius="22" Background="#FFC3B1FD" Width="45" Height="45" VerticalAlignment="Top" Margin="10,-13,0,10" HorizontalAlignment="Left" RenderTransformOrigin="1,0" >
             <Image Source="/Assets/Icone_v2/homeNavigate.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Border>
+        </Border>-->
     </Grid>
     <Grid Cursor="Hand"  VerticalAlignment="Top" Height="45" >
         <Grid.Background>
@@ -247,7 +261,9 @@
             </Button>
             <TextBlock Text="Pauses" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0" FontSize="20" FontFamily="Nunito Sans 10pt Normal"/>
             <Button Cursor="Hand"   Content="Save" x:Name="Save" Click="Save_Click" VerticalAlignment="Bottom" Margin="0,0,10,15" Background="#FF8A63FB" Width="148" Height="32" FontSize="18" FontFamily="Jost" Foreground="#E4FFFFFF" Padding="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
-            <ListBox BorderThickness="0" SelectionChanged="PauseList_SelectionChanged" x:Name="PauseList" Height="137" Margin="0,0,0,8" Width="187" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+            <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" SelectionChanged="PauseList_SelectionChanged" x:Name="PauseList" Height="137" Margin="0,0,0,8" Width="187" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+
+            </ListBox>
         </Grid>
     </Grid>
     <Grid Visibility="Collapsed" x:Name="NumpadFild" Background="#CC202244" Margin="-6,0,-6,0">
@@ -314,6 +330,19 @@
                         </Button>
                     </Grid>
                     <Grid  Width="146" Margin="0,35,0,0">
+                        <Grid.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Cursor="Hand" Background="#FFF4F4FF" CornerRadius="50">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Grid.Resources>
                         <Button BorderThickness="0" Cursor="Hand" Name="Num" Click="Num_Click" Content="1" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" Grid.RowSpan="2" HorizontalAlignment="Left"/>
                         <Button BorderThickness="0" Cursor="Hand" Click="Num_Click" Content="2" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" HorizontalAlignment="Center" Grid.RowSpan="2"/>
                         <Button BorderThickness="0" Cursor="Hand" Click="Num_Click" Content="3" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" HorizontalAlignment="Right" Grid.RowSpan="2"/>
@@ -364,7 +393,9 @@
                             </Border>
                         </Button.Content>
                     </Button>
-                    <ListBox BorderThickness="0" Width="172" x:Name="ContactsList" MaxWidth="500" Margin="0,40,0,50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Padding="0,0,10,0"/>
+                    <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" Width="172" x:Name="ContactsList" MaxWidth="500" Margin="0,40,0,50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Padding="0,0,10,0">
+
+                    </ListBox>
                 </Grid>
             </Grid>
         </Border>
@@ -417,10 +448,23 @@
                         </Button>
                     </Grid>
                     <Grid  Width="146" Margin="0,35,0,0">
+                        <Grid.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Cursor="Hand" Background="#FFF4F4FF" CornerRadius="50">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Grid.Resources>
                         <Button Cursor="Hand" Name="NumDTMF" Click="NumDTMF_Click"  Content="1" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" Grid.RowSpan="2" HorizontalAlignment="Left"/>
                         <Button Cursor="Hand" Click="NumDTMF_Click" Content="2" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" HorizontalAlignment="Center" Grid.RowSpan="2"/>
                         <Button Cursor="Hand" Click="NumDTMF_Click" Content="3" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" HorizontalAlignment="Right" Grid.RowSpan="2"/>
-                        <Button Cursor="Hand" Click="NumDTMF_Click" Content="4" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" Margin="0,48,0,0" Grid.Row="1" HorizontalAlignment="Left"/>
+                        <Button Cursor="Hand" Click="NumDTMF_Click" Content="4" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" Margin="0,48,110,0" HorizontalAlignment="Right"/>
                         <Button Cursor="Hand" Click="NumDTMF_Click" Content="5" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" Margin="0,48,0,0" HorizontalAlignment="Center" Grid.Row="1"/>
                         <Button Cursor="Hand" Click="NumDTMF_Click" Content="6" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" Margin="0,48,0,0" HorizontalAlignment="Right" Grid.Row="1"/>
                         <Button Cursor="Hand" Click="NumDTMF_Click" Content="7" VerticalAlignment="Top" Width="36" Height="36" Background="#FFF4F4FF" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" Margin="0,96,0,0" Grid.Row="1" HorizontalAlignment="Left"/>
