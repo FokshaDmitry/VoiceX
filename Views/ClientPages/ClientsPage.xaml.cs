@@ -18,14 +18,12 @@ namespace VoiceX.Views.ClientPages
     {
         readonly WebService webService;
         public static List<Items.Contact> userContactsList;
-        public ErrorService errorService;
         OperatorsPage operatorsPage;
         public ClientsPage()
         {
             this.InitializeComponent();
             webService = new WebService();
             userContactsList = new List<Items.Contact>();
-            errorService = new ErrorService(MainGrid);
             operatorsPage = new OperatorsPage();
         }
         private void Filter_Checked(object sender, RoutedEventArgs e)
@@ -61,6 +59,7 @@ namespace VoiceX.Views.ClientPages
         {
             Clients.Checked += Filter_Checked;
             Operators.Checked += Filter_Checked;
+            PageContent.Navigate(operatorsPage);
         }
     }
 }

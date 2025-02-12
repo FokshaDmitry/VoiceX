@@ -1,0 +1,73 @@
+﻿<Page
+    x:Class="VoiceX.Views.HistoryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VoiceX.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="White" Name="historyPage" Loaded="HistoryPage_Loaded">
+    <Page.Resources>
+        <Style TargetType="RadioButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Grid x:Name="MainGrid" Width="245">
+        <Grid Margin="0,45,0,50" >
+            <Grid x:Name="PageContent">
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid VerticalAlignment="Top" MaxWidth="500" Height="45" Margin="10,0,10,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                    <Grid MaxWidth="500" Width="215" VerticalAlignment="Top" Margin="10,10,10,0" Height="25">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton Cursor="Hand" ToolTipService.ToolTip="All Calls" ToolTipService.Placement="Mouse" Grid.Column="0" MinWidth="20" IsChecked="True" GroupName="Filter" Name="AllCall" Checked="Filter_Checked" Background="Transparent" Height="25" HorizontalAlignment="Stretch" Padding="0,6,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                            <StackPanel HorizontalAlignment="Center" Width="24">
+                                <TextBlock x:Name="AllText" Text="All" FontFamily="Nunito Sans 10pt Normal" FontSize="14" Foreground="#FF252422" Margin="2,0,0,0"/>
+                                <Border CornerRadius="1" x:Name="CheckAll" Height="2" Background="#FF8A63FB" />
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Cursor="Hand" ToolTipService.ToolTip="Missed Calls" ToolTipService.Placement="Mouse" Grid.Column="3" MinWidth="40" Name="IgnoreCall" GroupName="Filter" Checked="Filter_Checked" Height="25" HorizontalAlignment="Stretch">
+                            <StackPanel Width="48">
+                                <TextBlock x:Name="MinusText" Text="Missed" FontFamily="Nunito Sans 10pt Normal" FontSize="14" Foreground="#FFA0A0A0" HorizontalAlignment="Center" Width="45"/>
+                                <Border CornerRadius="1" x:Name="ChekIgnore" Height="2" VerticalAlignment="Stretch" Background="#FFF5F6F7"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Cursor="Hand" ToolTipService.ToolTip="Outgoing Calls" ToolTipService.Placement="Mouse" Grid.Column="2" Name="OutCall" GroupName="Filter" Checked="Filter_Checked" Height="25"  HorizontalAlignment="Stretch">
+                            <StackPanel Width="72">
+                                <TextBlock x:Name="OutText" Text="Outgoing" FontFamily="Nunito Sans 10pt Normal" FontSize="14" Foreground="#FFA0A0A0" HorizontalAlignment="Center"/>
+                                <Border CornerRadius="1" x:Name="CheckOut" Height="2" Background="#FFF5F6F7"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Cursor="Hand" ToolTipService.ToolTip="Income Calls" ToolTipService.Placement="Mouse" Grid.Column="1" Name="InCall" GroupName="Filter" MinWidth="40" Checked="Filter_Checked" Height="25" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
+                            <StackPanel Width="72">
+                                <TextBlock x:Name="InText" Text="Incomind" FontFamily="Nunito Sans 10pt Normal" FontSize="14" Foreground="#FFA0A0A0" HorizontalAlignment="Center"/>
+                                <Border CornerRadius="1" x:Name="ChekIn" Height="2" Background="#FFF5F6F7"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </Grid>
+                    <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" MaxWidth="500" Margin="0,47,0,0" x:Name="HistoryList" Background="White" Padding="0,0,10,0" Grid.RowSpan="2"/>
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

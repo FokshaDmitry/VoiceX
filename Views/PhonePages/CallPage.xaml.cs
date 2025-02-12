@@ -35,7 +35,7 @@ namespace VoiceX.Views.PhonePages
                 var info = CoreService.activeCall.getInfo();
                 if (!String.IsNullOrEmpty(info.remoteUri))
                 {
-                    PhoneText.Text = CutNumber(info.remoteUri);
+                    PhoneText.Text = CutNumber(info.remoteContact);
                     UserNameText.Text = CutNumber(info.remoteUri);
                 }
                 else

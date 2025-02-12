@@ -49,7 +49,7 @@ namespace VoiceX.Items
             Img.Margin = new Thickness(0, 6, Img.Margin.Right, 0);
         }
 
-        private async void Call_Click(object sender, RoutedEventArgs e)
+        private void Call_Click(object sender, RoutedEventArgs e)
         {
             try
             {

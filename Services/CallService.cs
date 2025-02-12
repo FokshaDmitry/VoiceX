@@ -16,10 +16,13 @@ namespace VoiceX.Services
         AudioMediaPlayer? ringTonePlayer;
         private bool isOnHold;
         public List<string> CallAdtess { get; set; }
-
+        DateTime startTime;
+        public delegate void EndCall(string Name, string Phone, DateTime StartCall);
+        public event EndCall EndCallEvent;
         public CallService(Account acc, int call_id = -1) : base(acc, call_id)
         {
             CallAdtess = new List<string>();
+            startTime = new DateTime();
         }
         public void Accept()
         {
@@ -47,6 +50,7 @@ namespace VoiceX.Services
                     PlayRingTone("Outcmoing");
                     break;
                 case pjsip_inv_state.PJSIP_INV_STATE_CONNECTING:
+                    startTime = DateTime.Now;
                     break;
                 case pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED:
                     Debug.WriteLine("[CALL] Абонент ответил, отключаем гудок...");
@@ -67,6 +71,7 @@ namespace VoiceX.Services
                             }
                             if (CallAdtess != null && CallAdtess.Count() == 0)
                             {
+                                EndCallEvent.Invoke(info.remoteUri, info.remoteContact, startTime);
                                 CoreService.activeCall?.Dispose();
                                 CoreService.activeCall = null;
                                 DisableMicrophone();

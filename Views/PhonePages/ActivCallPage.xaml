@@ -63,10 +63,9 @@
             </Button>
             <Button Cursor="Hand" x:Name="AddCall" Click="AddCall_Click"  VerticalAlignment="Top" Width="38" Height="38" Background="Transparent" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="#FFDDDBFF" HorizontalAlignment="Right" Margin="0,0,5,0">
                 <Button.Content>
-                    <Grid>
-                        <Border Background="#FF898989" CornerRadius="0.5" Height="1" Width="17.5" />
-                        <Border Background="#FF898989" CornerRadius="0.5" Height="17.5" Width="1" />
-                    </Grid>
+                    <StackPanel>
+                        <Image Source="/Assets/Icone_v2/plus.png" Width="20" Height="20" />
+                    </StackPanel>
                 </Button.Content>
             </Button>
             <Button Cursor="Hand" Name="AutoAnswer" Click="AutoAnswer_Click"  VerticalAlignment="Top" Width="38" Height="38" Background="Transparent" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="#FFDDDBFF" HorizontalAlignment="Left" Margin="5,65,0,0">

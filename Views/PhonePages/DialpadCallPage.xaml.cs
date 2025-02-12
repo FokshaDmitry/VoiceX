@@ -24,19 +24,13 @@ namespace VoiceX.Views.PhonePages
 
         contacts_list contacts;
         readonly WebService webService;
-        private ProfilePage phonePage;
-        ActivCallPage activCallPage;
-        Storyboard slide;
-        public DialpadCallPage(ProfilePage profilePage)
+        public DialpadCallPage()
         {
             this.InitializeComponent();
             this.Loaded += DialpadCallPage_Loaded;
             webService = new WebService();
             contacts = new contacts_list();
             contacts.contacts = new List<Models.Contact>();
-            phonePage = profilePage;
-            activCallPage = new ActivCallPage(profilePage, this);
-            slide = (Storyboard)profilePage.FindResource("SlideUpAnimation");
         }
         private async void DialpadCallPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -58,8 +52,6 @@ namespace VoiceX.Views.PhonePages
                 try
                 {
                     CoreService.Instance.MakeCall(phone, App.AccountData.Data.Sip_Settings.Sip_server);
-                    phonePage.MainFrame.Navigate(activCallPage);
-                    slide.Begin();
                 }
                 catch
                 {

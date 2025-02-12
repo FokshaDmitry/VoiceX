@@ -2,12 +2,14 @@
 using pj;
 using System;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
+using VoiceX.DAL.Entity;
 using VoiceX.Enums;
 using VoiceX.Items;
 using VoiceX.Models;
@@ -27,8 +29,6 @@ namespace VoiceX.Views
         readonly WebService webService;
         readonly AddDbContext addDbContext;
         public static Get_pauses? getPauses;
-        readonly ErrorService errorService;
-        GeneralSettingPage generalSettingPage;
         MainWindow window;
         public static List<string>? SelectContacts { get; set; }
         public CoreService Core { get; } = CoreService.Instance;
@@ -38,11 +38,15 @@ namespace VoiceX.Views
         public static bool TerminateAllCalls { get; set; }
         public static List<string>? AutoAnswerNumbers { get; set; }
         LocalStoreService localStoreService;
+        GeneralSettingPage generalSettingPage;
         DialpadCallPage dialpadCallPage;
         ActivCallPage activCallPage;
         CallPage callPage;
         ClientsPage clientsPage;
+        HistoryPage historyPage;
+        ClickToCallPage clickToCallPage;
         Storyboard slide;
+        Storyboard slideLeft;
         public ProfilePage(MainWindow mainWindow)
         {
             this.InitializeComponent();
@@ -54,18 +58,27 @@ namespace VoiceX.Views
             SelectContacts = new List<string>();
             TerminateAllCalls = false;
             if (AutoAnswerNumbers == null) AutoAnswerNumbers = new List<string>();
-            dialpadCallPage = new DialpadCallPage(this);
-            activCallPage = new ActivCallPage(this, dialpadCallPage);
+            dialpadCallPage = new DialpadCallPage();
+            activCallPage = new ActivCallPage(this);
             callPage = new CallPage(this, dialpadCallPage, activCallPage);
             clientsPage = new ClientsPage();
-            CoreService.Instance.IncomingCallEvent += Instance_IncomingCallEvent;
+            historyPage = new HistoryPage();
+            clickToCallPage = new ClickToCallPage();
             contacts = new contacts_list
             {
                 contacts = new List<Models.Contact>()
             };
             localStoreService = new LocalStoreService();
             slide = (Storyboard)FindResource("SlideUpAnimation");
-            errorService = new ErrorService(ControlMainPage);
+            slideLeft = (Storyboard)FindResource("SlideLeftAnimation");
+        }
+
+        private void Instance_OutgoingCallEvent()
+        {
+            MainFrame.Navigate(activCallPage);
+            slide.Begin();
+            CoreService.activeCall!.EndCallEvent += ActiveCall_EndCallEvent;
+            StatusCall = StatusCall.Outgoing;
         }
 
         private async void Instance_IncomingCallEvent()
@@ -92,9 +105,37 @@ namespace VoiceX.Views
                         MainFrame.Navigate(callPage);
                         slide.Begin();
                     }
-                    
+                    StatusCall = StatusCall.Incoming;
+                    CoreService.activeCall!.EndCallEvent += ActiveCall_EndCallEvent;
                 });
             }
+        }
+
+        private async void ActiveCall_EndCallEvent(string Name, string Phone, DateTime StartCall)
+        {
+            await Dispatcher.InvokeAsync(async () => {
+                MainFrame.Navigate(dialpadCallPage);
+                slide.Begin();
+                await addDbContext.AddNoteAcync(new HistoryNotes() { Id = Guid.NewGuid(), Name = ExtractValue(Name), Phone = ExtractValue(Phone), StartDialog = StartCall, EndDialog = DateTime.Now, StatusCall = ProfilePage.StatusCall });
+            });
+        }
+        string ExtractValue(string input)
+        {
+            // Проверяем, есть ли содержимое в кавычках
+            Match match = Regex.Match(input, "\"([^\"]+)\"");
+            if (match.Success)
+            {
+                return match.Groups[1].Value; // Возвращаем текст между " "
+            }
+
+            // Если кавычек нет, ищем значение между sip: и @
+            match = Regex.Match(input, @"sip:([^@]+)@");
+            if (match.Success)
+            {
+                return match.Groups[1].Value; // Возвращаем текст между sip: и @
+            }
+
+            return string.Empty; // Если ничего не найдено, возвращаем пустую строку
         }
         private async void ControlPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -103,7 +144,9 @@ namespace VoiceX.Views
             General.Checked += Filter_Checked;
             Addition.Checked += Filter_Checked;
             C2C.Checked += Filter_Checked;
-            ContentControl.Children.Add(generalSettingPage);
+            ContentControl.Navigate(generalSettingPage);
+            CoreService.Instance.IncomingCallEvent += Instance_IncomingCallEvent;
+            CoreService.Instance.OutgoingCallEvent += Instance_OutgoingCallEvent;
 
             contacts = await webService.GetcontactsList(App.AccountData.Data.Sip_Settings.Sip_username, App.AccountData.Data.User_Data.CompanyID, App.UserPbx, App.userToken);
             var AAlist = await localStoreService.LoadDataAsync("AACallList");
@@ -151,7 +194,8 @@ namespace VoiceX.Views
                     slide.Begin();
                     break;
                 case "History":
-                    
+                    MainFrame.Navigate(historyPage);
+                    slide.Begin();
                     break;
                 case "Fax":
                     
@@ -177,8 +221,8 @@ namespace VoiceX.Views
                     C2CCheck.Background = whiteLine;
                     AdditionChek.Background = whiteLine;
                 }
-                ContentControl.Children.Clear();
-                ContentControl.Children.Add(generalSettingPage);
+                ContentControl.Navigate(generalSettingPage);
+                slideLeft.Begin();
             }
             else if (filter.Name == "C2C")
             {
@@ -188,6 +232,8 @@ namespace VoiceX.Views
                     C2CCheck.Background = blueLine;
                     AdditionChek.Background = whiteLine;
                 }
+                ContentControl.Navigate(clickToCallPage);
+                slideLeft.Begin();
             }
             else if (filter.Name == "Addition")
             {
@@ -198,17 +244,6 @@ namespace VoiceX.Views
                     AdditionChek.Background = blueLine;
                 }
             }
-        }
-        private void Navigate_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            var Img = (Button)sender;
-            Img.Margin = new Thickness(Img.Margin.Left, Img.Margin.Top - 1, 0, 0);
-        }
-
-        private void Navigate_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            var Img = (Button)sender;
-            Img.Margin = new Thickness(Img.Margin.Left, Img.Margin.Top + 1, 0, 0);
         }
         private void Menu_Click(object sender, RoutedEventArgs e)
         {
@@ -246,7 +281,7 @@ namespace VoiceX.Views
                 }
                 else
                 {
-                    errorService.ShowWarning(getPauses.ResponseMessage);
+                    //errorService.ShowWarning(getPauses.ResponseMessage);
                 }
             }
             else
@@ -288,7 +323,7 @@ namespace VoiceX.Views
                         }
                         else
                         {
-                            errorService.ShowWarning(result.ResponseMessage);
+                            //errorService.ShowWarning(result.ResponseMessage);
                             PauseList.SelectedIndex = -1;
                         }
                     }
@@ -548,6 +583,18 @@ namespace VoiceX.Views
                     BackspaceNum.Visibility = Visibility.Visible; ;
                 }
             }
+        }
+
+        private void Profile_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var Img = (Button)sender;
+            Img.Margin = new Thickness(Img.Margin.Left, Img.Margin.Top - 1, Img.Margin.Right, Img.Margin.Bottom);
+        }
+
+        private void Profile_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var Img = (Button)sender;
+            Img.Margin = new Thickness(Img.Margin.Left, Img.Margin.Top + 1, Img.Margin.Right, Img.Margin.Bottom);
         }
     }
 }

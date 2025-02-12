@@ -32,7 +32,6 @@ namespace VoiceX.Views
     {
         WebService webService;
         CertificateService certificateService;
-        readonly ErrorService errorService;
         LocalStoreService localStoreService;
         MainWindow window;
         ProfilePage profilePage;
@@ -44,7 +43,6 @@ namespace VoiceX.Views
             profilePage = new ProfilePage(mainWindow);
             App.AccountData = new Models.Account_data();
             LoadIcone.Visibility = Visibility.Collapsed;
-            errorService = new ErrorService(MainGrid);
             certificateService = new CertificateService();
             localStoreService = new LocalStoreService();
         }
@@ -58,17 +56,17 @@ namespace VoiceX.Views
             pbxCode.Replace(" ", "");
             if (String.IsNullOrEmpty(pbxCode))
             {
-                errorService.ShowWarning("Registration fild is empty");
+                //errorService.ShowWarning("Registration fild is empty");
                 return;
             }
             if (Regex.IsMatch(pbxCode, "[^0-9]"))
             {
-                errorService.ShowWarning("PBX code must contain only numbers");
+                //errorService.ShowWarning("PBX code must contain only numbers");
                 return;
             }
             if (pbxCode.Where(char.IsDigit).Count() != 6)
             {
-                errorService.ShowWarning("PBX code must contain six numbers");
+                //errorService.ShowWarning("PBX code must contain six numbers");
                 return;
             }
             LoadIcone.Visibility = Visibility.Visible;
@@ -99,14 +97,14 @@ namespace VoiceX.Views
                     }
                     catch (Exception ex)
                     {
-                        errorService.ShowError($"App wrong: Convert, Message: {ex.Message}");
+                        //errorService.ShowError($"App wrong: Convert, Message: {ex.Message}");
                         LoadIcone.Visibility = Visibility.Collapsed;
                         return;
                     }
                 }
                 else
                 {
-                    errorService.ShowError($"Token error: {cert.Error}");
+                    //errorService.ShowError($"Token error: {cert.Error}");
                     LoadIcone.Visibility = Visibility.Collapsed;
                     return;
                 }
@@ -114,7 +112,7 @@ namespace VoiceX.Views
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                errorService.ShowError($"Server wrong: {ex.Message}, Message: {App.AccountData.ResponseMessage}");
+                //errorService.ShowError($"Server wrong: {ex.Message}, Message: {App.AccountData.ResponseMessage}");
                 LoadIcone.Visibility = Visibility.Collapsed;
                 return;
             }
@@ -128,13 +126,13 @@ namespace VoiceX.Views
                 }
                 catch (Exception ex)
                 {
-                    errorService.ShowError($"App wrong: {ex.Message}, \n Message: {App.AccountData.ResponseMessage}");
+                    //errorService.ShowError($"App wrong: {ex.Message}, \n Message: {App.AccountData.ResponseMessage}");
                     LoadIcone.Visibility = Visibility.Collapsed;
                 }
             }
             else
             {
-                errorService.ShowError("Server wrong: " + App.AccountData.ResponseMessage + "Responce Code:" + App.AccountData.ResponseCode.ToString());
+                //errorService.ShowError("Server wrong: " + App.AccountData.ResponseMessage + "Responce Code:" + App.AccountData.ResponseCode.ToString());
                 LoadIcone.Visibility = Visibility.Collapsed;
             }
         }

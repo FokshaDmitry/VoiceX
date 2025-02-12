@@ -1,6 +1,8 @@
 ﻿
 using pj;
 using System.Diagnostics;
+using System.Xml.Linq;
+using Windows.UI;
 
 namespace VoiceX.Services
 {
@@ -10,8 +12,9 @@ namespace VoiceX.Services
         public static CallService? activeCall;
         private static readonly CoreService instance = new CoreService();
         private Endpoint? core;
-        public delegate void IncomingCall();
+        public delegate void IncomingCall(); 
         public event IncomingCall? IncomingCallEvent;
+        public event IncomingCall? OutgoingCallEvent;
         public static CoreService Instance
         {
             get
@@ -117,6 +120,7 @@ namespace VoiceX.Services
                     CallOpParam prm = new CallOpParam(true);
 
                     activeCall.makeCall(sipUri, prm);
+                    OutgoingCallEvent?.Invoke();
                     return activeCall;
                 }
                 catch (Exception ex)
@@ -129,6 +133,7 @@ namespace VoiceX.Services
             // Создаём новый вызов
             
         }
+        
         public override void onIncomingCall(OnIncomingCallParam prm)
         {
             Debug.WriteLine("[CALL] Входящий вызов...");

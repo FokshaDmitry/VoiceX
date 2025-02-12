@@ -18,7 +18,6 @@ namespace VoiceX.Views.ControlPages
     {
         private readonly AddDbContext addDbContext;
         readonly WebService webService;
-        readonly ErrorService errorService;
         LocalStoreService localStoreService;
         MainWindow window;
         private bool isRunning = true;
@@ -29,7 +28,6 @@ namespace VoiceX.Views.ControlPages
             this.Loaded += GeneralSettingPage_Loaded;
             webService = new WebService();
             addDbContext = new AddDbContext();
-            errorService = new ErrorService(MainGrid);
             localStoreService = new LocalStoreService();
         }
 

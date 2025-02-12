@@ -36,6 +36,13 @@
                          Duration="0:0:0.5"
                          DecelerationRatio="0.5"/>
         </Storyboard>
+        <Storyboard x:Key="SlideLeftAnimation">
+            <DoubleAnimation Storyboard.TargetName="SlideLeftTransform"
+                         Storyboard.TargetProperty="X"
+                         From="400" To="0"
+                         Duration="0:0:0.5"
+                         DecelerationRatio="0.9"/>
+        </Storyboard>
     </Grid.Resources>
     <Grid x:Name="ControlMainPage" Height="420" Width="245" Background="White">
         <Grid Margin="0,45,0,0" Cursor="Hand">
@@ -65,9 +72,11 @@
                         </StackPanel>
                     </RadioButton>
                 </Grid>
-                <Grid x:Name="ContentControl" HorizontalAlignment="Stretch" Cursor="Hand" VerticalAlignment="Stretch" Margin="0,35,0,0" MaxWidth="500" MinWidth="165"  >
-
-                </Grid>
+                <Frame NavigationUIVisibility="Hidden" x:Name="ContentControl" HorizontalAlignment="Stretch" Cursor="Hand" VerticalAlignment="Stretch" Margin="0,35,0,0" MaxWidth="500" MinWidth="165">
+                    <Frame.RenderTransform>
+                        <TranslateTransform x:Name="SlideLeftTransform"/>
+                    </Frame.RenderTransform>
+                </Frame>
             </Grid>
 
         </Grid>
@@ -82,7 +91,7 @@
     <Grid x:Name="Menu" VerticalAlignment="Bottom" Margin="0,0,0,-50">
         <Border CornerRadius="15, 15, 0, 0" Height="100" VerticalAlignment="Bottom" Background="#FFC3B1FD">
             <Grid>
-                <Button BorderThickness="0" Name="Contacts" Cursor="Hand" Margin="12,10,0,0" Click="Navigate_Click" Width="18" Padding="0,0,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <Button MouseEnter="Profile_MouseEnter" MouseLeave="Profile_MouseLeave" BorderThickness="0" Name="Contacts" Cursor="Hand" Margin="0,10,0,0" Click="Navigate_Click" Width="18" Padding="0,0,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Center">
                     <Button.Content>
                         <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
                             <Border.Background>
@@ -96,7 +105,7 @@
                     </Button.Content>
 
                 </Button>
-                <Button Background="Transparent" BorderThickness="0" Name="Phone" Margin="70,10,157,0" Click="Navigate_Click"  Padding="0,0,0,0" Height="18" VerticalAlignment="Top">
+                <Button MouseEnter="Profile_MouseEnter" MouseLeave="Profile_MouseLeave" Background="Transparent" BorderThickness="0" Name="Phone" Margin="65,10,0,0" Click="Navigate_Click"  Padding="0,0,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <Button.Content>
                         <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
                             <Border.Background>
@@ -109,7 +118,7 @@
                         </Border>
                     </Button.Content>
                 </Button>
-                <Button BorderThickness="0" Name="History"  VerticalAlignment="Top" Margin="166,10,61,0" Click="Navigate_Click"  Width="18" Padding="0,0,0,0" Height="18">
+                <Button MouseEnter="Profile_MouseEnter" MouseLeave="Profile_MouseLeave" BorderThickness="0" Name="History"  VerticalAlignment="Top" Margin="0,10,65,0" Click="Navigate_Click"  Width="18" Padding="0,0,0,0" Height="18" HorizontalAlignment="Right">
                     <Button.Content>
                         <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
                             <Border.Background>
@@ -122,7 +131,7 @@
                         </Border>
                     </Button.Content>
                 </Button>
-                <Button BorderThickness="0" Name="Fax" Cursor="Hand" VerticalAlignment="Top" Margin="19,54,208,0" Click="Navigate_Click"  Width="18"  Padding="0,0,0,0" Height="18">
+                <Button MouseEnter="Profile_MouseEnter" MouseLeave="Profile_MouseLeave" BorderThickness="0" Name="Fax" Cursor="Hand" VerticalAlignment="Top" Margin="20,54,0,0" Click="Navigate_Click"  Width="18"  Padding="0,0,0,0" Height="18" HorizontalAlignment="Left">
                     <Button.Content>
                         <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
                             <Border.Background>
@@ -135,7 +144,7 @@
                         </Border>
                     </Button.Content>
                 </Button>
-                <Button BorderThickness="0" Cursor="Hand" x:Name="MenuMore" Click="Menu_Click"  Background="Transparent" Width="18"  Padding="0,0,0,0" Height="18" VerticalAlignment="Top" Margin="207,10,20,0">
+                <Button MouseEnter="Profile_MouseEnter" MouseLeave="Profile_MouseLeave" BorderThickness="0" Cursor="Hand" x:Name="MenuMore" Click="Menu_Click"  Background="Transparent" Width="18"  Padding="0,0,0,0" Height="18" VerticalAlignment="Top" Margin="0,10,20,0" HorizontalAlignment="Right">
                     <Button.Content>
                         <StackPanel>
                             <Grid x:Name="Butter" Height="13">
@@ -169,7 +178,7 @@
                         </StackPanel>
                     </Button.Content>
                 </Button>
-                <Button BorderThickness="0" Name="HotKeys" Cursor="Hand" VerticalAlignment="Top" Margin="70,54,157,0" Click="Navigate_Click"  Width="18" Padding="0,0,0,0" Height="18">
+                <Button MouseEnter="Profile_MouseEnter" MouseLeave="Profile_MouseLeave" BorderThickness="0" Name="HotKeys" Cursor="Hand" VerticalAlignment="Top" Margin="65,54,0,0" Click="Navigate_Click"  Width="18" Padding="0,0,0,0" Height="18" HorizontalAlignment="Left">
                     <Button.Content>
                         <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
                             <Border.Background>
@@ -182,17 +191,17 @@
                         </Border>
                     </Button.Content>
                 </Button>
-                <TextBlock Text="HotKeys" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="57.5,75,0,0"/>
-                <TextBlock Text="Clients" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="111,30,0,0"/>
-                <TextBlock Text="Dialpad" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="60,30,0,0"/>
-                <TextBlock Text="Profile" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="12,30,0,0"/>
-                <TextBlock Text="History" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="0,30,51,0"/>
+                <TextBlock Text="HotKeys" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="53,75,0,0"/>
+                <TextBlock Text="Clients" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="0,30,0,0"/>
+                <TextBlock Text="Dialpad" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="55,30,0,0"/>
+                <TextBlock Text="Profile" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="13,30,0,0"/>
+                <TextBlock Text="History" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="0,30,55,0"/>
                 <TextBlock Text="Fax" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="20,75,0,0"/>
-                <TextBlock Text="More" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="0,30,15,0" Grid.ColumnSpan="2"/>
+                <TextBlock Text="More" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFFDFEFF" FontSize="12" Margin="0,30,14,0" Grid.ColumnSpan="2"/>
             </Grid>
 
         </Border>
-        <Button Background="Transparent" BorderThickness="0" Name="Profile" Margin="19,10,157,0" Click="Navigate_Click"  Padding="0,0,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <Button MouseEnter="Profile_MouseEnter" MouseLeave="Profile_MouseLeave" Background="Transparent" BorderThickness="0" Name="Profile" Margin="20,10,0,0" Click="Navigate_Click"  Padding="0,0,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Button.Content>
                 <Border Width="18" Height="18" BorderThickness="0" BorderBrush="Transparent">
                     <Border.Background>

@@ -14,6 +14,8 @@ using pj;
 using System.Text.RegularExpressions;
 using System.Windows.Media.Animation;
 using VoiceX.Models;
+using VoiceX.DAL.Context;
+using VoiceX.DAL.Entity;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -27,25 +29,23 @@ namespace VoiceX.Views.PhonePages
         private DateTime startCall;
         bool timeFlag;
         Timer timer;
-        ProfilePage phonePage;
         LocalStoreService localStoreService;
-        DialpadCallPage dialpadCallPage;
+        ProfilePage phonePage;
         bool pause;
-        Storyboard slide;
         bool Microphone;
         bool Audio;
-        public ActivCallPage(ProfilePage profilePage, DialpadCallPage dialpadCallPage)
+        AddDbContext dbContext;
+        public ActivCallPage(ProfilePage profilePage)
         {
             this.InitializeComponent();
             timeFlag = true;
             startCall = new DateTime();
             pause = false;
-            phonePage = profilePage;
             localStoreService = new LocalStoreService();
-            this.dialpadCallPage = dialpadCallPage;
-            slide = (Storyboard)profilePage.FindResource("SlideUpAnimation");
             Microphone = true;
             Audio = true;
+            dbContext = new AddDbContext();
+            phonePage = profilePage;
         }
 
         private async void EnalebleCalling(object sender)
@@ -92,7 +92,7 @@ namespace VoiceX.Views.PhonePages
                                 }
                             }
                             PhoneText.Text = CutNumber(info.remoteContact);
-                            UserNameText.Text = CutNumber(info.remoteContact);
+                            UserNameText.Text = CutNumber(info.remoteUri);
                         }
                         Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");
                         StatusCurrentCall.Text = ProfilePage.StatusCall.ToString().ToUpper() + " " + "CALL";
@@ -105,11 +105,7 @@ namespace VoiceX.Views.PhonePages
                     {
                         Time.Text = "00:00";
                         timeFlag = true;
-                        if (phonePage.MainFrame.Content.ToString() != "VoiceX.Views.PhonePages.DialpadCallPage")
-                        {
-                            phonePage.MainFrame.Navigate(dialpadCallPage);
-                            slide.Begin();
-                        }
+                        
                         if (timer != null)
                         {
                             timer.Dispose();
@@ -143,21 +139,16 @@ namespace VoiceX.Views.PhonePages
             
         }
 
-        private void EndCall_Click(object sender, RoutedEventArgs e)
+        private async void EndCall_Click(object sender, RoutedEventArgs e)
         {
             if(CoreService.activeCall != null)
             {
+                
                 if (CoreService.activeCall?.CallAdtess.Count != 0)
                 {
 
                     ProfilePage.TerminateAllCalls = true;
                     CoreService.activeCall?.hangup(new CallOpParam());
-                    CoreService.activeCall?.StopRingTone();
-                    CoreService.activeCall?.DisableMicrophone();
-                    CoreService.activeCall?.Dispose();
-                    CoreService.activeCall = null;
-                    phonePage.MainFrame.Navigate(dialpadCallPage);
-                    slide.Begin();
                     try
                     {
                         if (timer != null)
@@ -173,21 +164,8 @@ namespace VoiceX.Views.PhonePages
                 }
                 else
                 {
-                    
                     CoreService.activeCall?.hangup(new CallOpParam());
-                    CoreService.activeCall?.StopRingTone();
-                    CoreService.activeCall?.DisableMicrophone();
-                    CoreService.activeCall?.Dispose();
-                    CoreService.activeCall = null;
-                    phonePage.MainFrame.Navigate(dialpadCallPage);
-                    slide.Begin();
-
                 }
-            }
-            else
-            {
-                phonePage.MainFrame.Navigate(dialpadCallPage);
-                slide.Begin();
             }
         }
         private void Sound_Click(object sender, RoutedEventArgs e)

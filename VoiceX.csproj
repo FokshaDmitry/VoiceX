@@ -49,6 +49,7 @@
     <None Remove="Assets\Icone_v2\microphone.png" />
     <None Remove="Assets\Icone_v2\pause.png" />
     <None Remove="Assets\Icone_v2\phoneNavigate.png" />
+    <None Remove="Assets\Icone_v2\plus.png" />
     <None Remove="Assets\Icone_v2\refresh.png" />
     <None Remove="Assets\Icone_v2\refreshblue.png" />
     <None Remove="Assets\Icone_v2\Reload.png" />
@@ -196,6 +197,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\phoneNavigate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\plus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\refresh.png">

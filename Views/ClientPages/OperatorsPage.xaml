@@ -28,6 +28,6 @@
                 </Grid>
             </Grid>
         </Border>
-        <ListBox x:Name="ContactsList" BorderThickness="0" MaxWidth="500" Margin="15,29,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Padding="0,0,0,0"/>
+        <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" x:Name="ContactsList" BorderThickness="0" MaxWidth="500" Margin="15,29,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Padding="0,0,0,0"/>
     </Grid>
 </Page>
