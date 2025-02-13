@@ -5,6 +5,8 @@ using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
 using System.Linq;
+using VoiceX.DAL.Context;
+using Newtonsoft.Json;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -20,13 +22,15 @@ namespace VoiceX.Views.ControlPages
         private bool toggele;
         public RegExItem? SelectItem { get; set; }
         LocalStoreService storeService;
+        AddDbContext dbContext;
         public ClickToCallPage()
         {
             this.InitializeComponent();
-            MainTab = 1;
+            MainTab = 3;
             KeyLetter = "S";
             toggele = false;
             storeService = new LocalStoreService();
+            dbContext = new AddDbContext();
         }
         private async void ClickToCall_Loaded(object sender, RoutedEventArgs e)
         {
@@ -76,7 +80,7 @@ namespace VoiceX.Views.ControlPages
             RegExList.Items.Add(new RegExItem(this));
 
         }
-        public void UpdateRegExList()
+        public async Task UpdateRegExList()
         {
             ProfilePage.regexNotes?.Clear();
             foreach (RegExItem regExItem in RegExList.Items.Cast<RegExItem>())
@@ -84,8 +88,10 @@ namespace VoiceX.Views.ControlPages
                 if (!String.IsNullOrEmpty(regExItem.SearchText))
                 {
                     ProfilePage.regexNotes?.Add(new Regex_note() { Check = regExItem.Check, Replace = regExItem.ReplaceText, Search = regExItem.SearchText });
+                    
                 }
             }
+            await storeService.SaveDataAsync("regexs", JsonConvert.SerializeObject(ProfilePage.regexNotes));
         }
 
         public void UpMainItem(RegExItem regExItem)
@@ -116,31 +122,21 @@ namespace VoiceX.Views.ControlPages
             // Insert it in new position
             RegExList.Items.Insert(newIndex, SelectItem);
         }
-        private void Remove_Click(object sender, RoutedEventArgs e)
+        private async void Remove_Click(object sender, RoutedEventArgs e)
         {
             if (RegExList.Items.Count > 1)
             {
                 if (SelectItem != null)
                 {
                     RegExList.Items.Remove(SelectItem);
-                    UpdateRegExList();
+                    await UpdateRegExList();
                 }
             }
         }
-        private void HotKeyBox_KeyDown(object sender, KeyEventArgs e)
+        private async void HotKeyBox_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
-                case Key.LeftAlt:
-                    HotKeyBox.Text = "ALT + ";
-                    MainTab = 1;
-                    toggele = true;
-                    break;
-                case Key.RightAlt:
-                    HotKeyBox.Text = "ALT + ";
-                    MainTab = 1;
-                    toggele = true;
-                    break;
                 case Key.LeftCtrl:
                     HotKeyBox.Text = "CTRL + ";
                     MainTab = 2;
@@ -167,6 +163,8 @@ namespace VoiceX.Views.ControlPages
                         HotKeyBox.Text += e.Key.ToString();
                         KeyLetter = e.Key.ToString();
                         toggele = false;
+                        await storeService.SaveDataAsync("mainkey", MainTab.ToString());
+                        await storeService.SaveDataAsync("key", KeyLetter);
                     }
                     else
                     {
@@ -179,23 +177,6 @@ namespace VoiceX.Views.ControlPages
         {
             switch (e.Key)
             {
-                case Key.LeftAlt:
-                    if (toggele)
-                    {
-                        HotKeyBox.Text = "ALT + (invalid)";
-                        MainTab = 0;
-                        toggele = false;
-                    }
-                    break;
-                case Key.RightAlt:
-                    if (toggele)
-                    {
-                        HotKeyBox.Text = "ALT + (invalid)";
-                        MainTab = 0;
-                        toggele = false;
-                    }
-                        
-                    break;
                 case Key.LeftCtrl:
                     if (toggele)
                     {
@@ -231,7 +212,7 @@ namespace VoiceX.Views.ControlPages
             }
             
         }
-        private void ServerButton_Click(object sender, RoutedEventArgs e)
+        private async void ServerButton_Click(object sender, RoutedEventArgs e)
         {
             List<RegExItem> regExItems = new List<RegExItem>();
             foreach (var RegEx in RegExList.Items)
@@ -255,7 +236,7 @@ namespace VoiceX.Views.ControlPages
 
 
             }
-            UpdateRegExList();
+            await UpdateRegExList();
         }
         public void AddEmpty(RegExItem regEx)
         {

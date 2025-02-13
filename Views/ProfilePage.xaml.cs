@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using pj;
 using System;
+using System.Diagnostics;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -17,22 +19,25 @@ using VoiceX.Services;
 using VoiceX.Views.ClientPages;
 using VoiceX.Views.ControlPages;
 using VoiceX.Views.PhonePages;
+using Windows.ApplicationModel.Core;
+using Windows.ApplicationModel.DataTransfer;
 
 namespace VoiceX.Views
 {
     /// <summary>
     /// Interaction logic for ProfilePage.xaml
     /// </summary>
-    public partial class ProfilePage : Grid
+    public partial class ProfilePage : Page
     {
         public static List<Regex_note>? regexNotes;
         readonly WebService webService;
         readonly AddDbContext addDbContext;
         public static Get_pauses? getPauses;
-        MainWindow window;
+        public static MainWindow window {  get; set; }
         public static List<string>? SelectContacts { get; set; }
         public CoreService Core { get; } = CoreService.Instance;
         public static StatusCall StatusCall { get; set; }
+        public static ClickToCallService clickToCallService { get; set; }
         KeyPads keyPads;
         contacts_list contacts;
         public static bool TerminateAllCalls { get; set; }
@@ -71,8 +76,25 @@ namespace VoiceX.Views
             localStoreService = new LocalStoreService();
             slide = (Storyboard)FindResource("SlideUpAnimation");
             slideLeft = (Storyboard)FindResource("SlideLeftAnimation");
+            clickToCallService = new ClickToCallService();
+            clickToCallService.HotkeyPressed += new ClickToCallService.HotkeyDelegate(Hotkeys_HotkeyPressed);
+            clickToCallService.ChangeKey();
         }
+        public  void Hotkeys_HotkeyPressed(string Phone)
+        {
 
+            if (!String.IsNullOrEmpty(Phone))
+            {
+                try
+                {
+                    Debug.WriteLine(Phone);
+                }
+                catch
+                {
+
+                }
+            }
+        }
         private void Instance_OutgoingCallEvent()
         {
             MainFrame.Navigate(activCallPage);
@@ -157,10 +179,11 @@ namespace VoiceX.Views
             try
             {
                 //User RegEx
-                //if (ApplicationData.Current.LocalSettings.Values["regexs"] != null)
-                //{
-                //    regexNotes = JsonConvert.DeserializeObject<List<Regex_note>>(ApplicationData.Current.LocalSettings.Values["regexs"].ToString());
-                //}
+                var regex = await localStoreService.LoadDataAsync("regexs");
+                if (regex != null)
+                {
+                    regexNotes = JsonConvert.DeserializeObject<List<Regex_note>>(regex);
+                }
             }
             catch
             {
@@ -584,7 +607,6 @@ namespace VoiceX.Views
                 }
             }
         }
-
         private void Profile_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             var Img = (Button)sender;

@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
+using VoiceX.Enums;
 using VoiceX.Models;
 using VoiceX.Services;
 using Windows.Security.Cryptography.Certificates;
@@ -62,7 +63,7 @@ namespace VoiceX.Views
             {
                 timer.Stop();
                 await addDbContext.DropDatabaseAsync();
-                this.MainPage.Content = registrationPage;
+                this.MainPage.Navigate(registrationPage);
             }
         }
         private void ExitApplication(object sender, RoutedEventArgs e)
@@ -122,6 +123,22 @@ namespace VoiceX.Views
             {
                 this.MainPage.Content = registrationPage;
             }
+        }
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            ErrorPlate.Visibility = Visibility.Collapsed;
+        }
+        private void Copy_Click(object sender, RoutedEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(ErrorMessage.Text))
+            {
+                System.Windows.Clipboard.SetText(ErrorMessage.Text);
+            }
+        }
+        public void ShowError(string message)
+        {
+            ErrorMessage.Text = message;
+            ErrorPlate.Visibility = Visibility.Visible;
         }
         public async void Exit_Click(object sender, RoutedEventArgs e)
         {

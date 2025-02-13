@@ -248,7 +248,7 @@ namespace VoiceX.Services
             string responseBody = "";
             try
             {
-                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("default-windowsrsa");
+                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("app-cert");
                 if (clientCertificate == null)
                 {
                     return System.Net.HttpStatusCode.NotFound;
@@ -260,7 +260,7 @@ namespace VoiceX.Services
                 using (var httpClient = new HttpClient(handler))
                 {
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/change_call_type.php"), content);
+                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/change_call_type.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                 }
                 return JsonConvert.DeserializeObject<System.Net.HttpStatusCode>(JObject.Parse(responseBody)["responseCode"].ToString());

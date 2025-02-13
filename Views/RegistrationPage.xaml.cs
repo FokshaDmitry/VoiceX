@@ -28,7 +28,7 @@ namespace VoiceX.Views
     /// <summary>
     /// Interaction logic for RegistrationPage.xaml
     /// </summary>
-    public partial class RegistrationPage : Grid
+    public partial class RegistrationPage : Page
     {
         WebService webService;
         CertificateService certificateService;
@@ -56,17 +56,17 @@ namespace VoiceX.Views
             pbxCode.Replace(" ", "");
             if (String.IsNullOrEmpty(pbxCode))
             {
-                //errorService.ShowWarning("Registration fild is empty");
+                window.ShowError("Registration fild is empty");
                 return;
             }
             if (Regex.IsMatch(pbxCode, "[^0-9]"))
             {
-                //errorService.ShowWarning("PBX code must contain only numbers");
+                window.ShowError("PBX code must contain only numbers");
                 return;
             }
             if (pbxCode.Where(char.IsDigit).Count() != 6)
             {
-                //errorService.ShowWarning("PBX code must contain six numbers");
+                window.ShowError("PBX code must contain six numbers");
                 return;
             }
             LoadIcone.Visibility = Visibility.Visible;
@@ -97,14 +97,14 @@ namespace VoiceX.Views
                     }
                     catch (Exception ex)
                     {
-                        //errorService.ShowError($"App wrong: Convert, Message: {ex.Message}");
+                        window.ShowError($"App wrong: Convert, Message: {ex.Message}");
                         LoadIcone.Visibility = Visibility.Collapsed;
                         return;
                     }
                 }
                 else
                 {
-                    //errorService.ShowError($"Token error: {cert.Error}");
+                    window.ShowError($"Token error: {cert.Error}");
                     LoadIcone.Visibility = Visibility.Collapsed;
                     return;
                 }
@@ -112,7 +112,7 @@ namespace VoiceX.Views
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                //errorService.ShowError($"Server wrong: {ex.Message}, Message: {App.AccountData.ResponseMessage}");
+                window.ShowError($"Server wrong: {ex.Message}, Message: {App.AccountData.ResponseMessage}");
                 LoadIcone.Visibility = Visibility.Collapsed;
                 return;
             }
@@ -122,17 +122,17 @@ namespace VoiceX.Views
                 {
                     App.UserPbx = $"{pbxCode.Substring(0, 3)}";
                     LoadIcone.Visibility = Visibility.Collapsed;
-                    window.MainPage.Content = profilePage; 
+                    window.MainPage.Navigate(profilePage); 
                 }
                 catch (Exception ex)
                 {
-                    //errorService.ShowError($"App wrong: {ex.Message}, \n Message: {App.AccountData.ResponseMessage}");
+                    window.ShowError($"App wrong: {ex.Message}, \n Message: {App.AccountData.ResponseMessage}");
                     LoadIcone.Visibility = Visibility.Collapsed;
                 }
             }
             else
             {
-                //errorService.ShowError("Server wrong: " + App.AccountData.ResponseMessage + "Responce Code:" + App.AccountData.ResponseCode.ToString());
+                window.ShowError("Server wrong: " + App.AccountData.ResponseMessage + "Responce Code:" + App.AccountData.ResponseCode.ToString());
                 LoadIcone.Visibility = Visibility.Collapsed;
             }
         }

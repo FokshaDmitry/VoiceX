@@ -63,8 +63,8 @@ namespace VoiceX.Views.ControlPages
                 SmartPhone.IsChecked = true;
             }
             _ = App.AccountData.Data.Is_mobile == 0 ? LopTop.IsChecked = true : SmartPhone.IsChecked = true;
-            LopTop.Checked += LopTop_Toggled;
-            SmartPhone.Checked += SmartPhone_Toggled;
+            LopTop.Click += LopTop_Toggled;
+            SmartPhone.Click += SmartPhone_Toggled;
             Exit.Click += window.Exit_Click;
             Online();
         }
@@ -89,6 +89,22 @@ namespace VoiceX.Views.ControlPages
                             {
                                 await Dispatcher.InvokeAsync(() =>
                                 {
+                                    try
+                                    {
+                                        if (SmartPhone.IsChecked == true)
+                                        {
+                                            var account = App.AccountData.Data.Sip_Settings;
+                                            var info = CoreService.Instance.getInfo();
+                                            if (info.regStatus != pjsip_status_code.PJSIP_SC_OK && info.regStatus != pjsip_status_code.PJSIP_SC_TRYING && info.regStatus != pjsip_status_code.PJSIP_SC_FORBIDDEN)
+                                            {
+                                                CoreService.Instance.setRegistration(true);
+                                            }
+                                        }
+                                    }
+                                    catch
+                                    {
+
+                                    }
                                     Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 200, 77, 77));
                                 });
                             }
@@ -138,13 +154,13 @@ namespace VoiceX.Views.ControlPages
         
         private async void SmartPhone_Toggled(object sender, RoutedEventArgs e)
         {
-
             var swich = (ToggleButton)sender;
             if ((bool)swich.IsChecked!)
             {
                 LoadIcone.Visibility = Visibility.Visible;
                 if (await webService.ChangeCallType("mobile", App.UserPbx, App.userToken) == System.Net.HttpStatusCode.OK)
                 {
+                    CoreService.Instance.setRegistration(true);
                     LopTop.IsChecked = false;
                 }
                 else
@@ -159,6 +175,7 @@ namespace VoiceX.Views.ControlPages
             else
             {
                 LopTop.IsChecked = true;
+                LopTop_Toggled(LopTop, new RoutedEventArgs());
             }
         }
 
@@ -170,6 +187,7 @@ namespace VoiceX.Views.ControlPages
                 LoadIcone.Visibility = Visibility.Visible;
                 if (await webService.ChangeCallType("fix", App.UserPbx, App.userToken) == System.Net.HttpStatusCode.OK)
                 {
+                    CoreService.Instance.setRegistration(false);
                     SmartPhone.IsChecked = false;
                 }
                 else
@@ -184,6 +202,7 @@ namespace VoiceX.Views.ControlPages
             else
             {
                 SmartPhone.IsChecked = true;
+                LopTop_Toggled(SmartPhone, new RoutedEventArgs());
             }
         }
 

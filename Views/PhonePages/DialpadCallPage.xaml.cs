@@ -53,14 +53,14 @@ namespace VoiceX.Views.PhonePages
                 {
                     CoreService.Instance.MakeCall(phone, App.AccountData.Data.Sip_Settings.Sip_server);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    //phonePage.errorService.ShowError("Microphone not found");
+                    //phonePage.ShowError("Microphone not found");
                     return;
                 }
-                foreach (var regex in ProfilePage.regexNotes.Where(r => r.Check))
+                foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
                 {
-                    phone = phone.Replace(regex.Search, regex.Replace);
+                    phone = phone.Replace(regex.Search!, regex.Replace);
                 }
                 NumberFild.Text = "";
             }

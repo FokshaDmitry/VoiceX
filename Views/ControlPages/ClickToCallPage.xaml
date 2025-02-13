@@ -7,6 +7,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="White" Name="ClickToCall" Loaded="ClickToCall_Loaded" MaxWidth="500">
+    <Page.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Cursor="Hand" Background="Transparent" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
     <Grid>
         <Grid VerticalAlignment="Top">
             <TextBlock Text="Dail Transform" x:Name="DailText" FontFamily="Nunito Sans 10pt Normal" Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,5,0,0" FontSize="16"/>
@@ -34,9 +47,16 @@
                     </Button.Content>
                 </Button>
                 <Button Cursor="Hand" Click="UpBotton_Click" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,1,35,0" RenderTransformOrigin="0.5,0.5">
-                    
                     <Button.Content>
-                        <Image>
+                        <Image RenderTransformOrigin="0.5,0.5">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-180"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
                             <Image.Source>
                                 <BitmapImage UriSource="/Assets/Icone_v2/Arrow.png" DecodePixelWidth="40" DecodePixelHeight="40"/>
                             </Image.Source>

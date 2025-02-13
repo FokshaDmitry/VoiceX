@@ -49,17 +49,17 @@ namespace VoiceX.Items
             clickToCallPage.SelectItem = this;
         }
 
-        private void Search_LosingFocus(object sender, RoutedEventArgs args)
+        private async void Search_LosingFocus(object sender, RoutedEventArgs args)
         {
             SearchText = Search.Text;
             ReplaceText = Replece.Text;
-            clickToCallPage.UpdateRegExList();
+            await clickToCallPage.UpdateRegExList();
         }
-        private void Replece_LosingFocus(object sender, RoutedEventArgs args)
+        private async void Replece_LosingFocus(object sender, RoutedEventArgs args)
         {
             SearchText = Search.Text;
             ReplaceText = Replece.Text;
-            clickToCallPage.UpdateRegExList();
+            await clickToCallPage.UpdateRegExList();
         }
 
         private void AddRegItem_Click(object sender, RoutedEventArgs e)
@@ -82,14 +82,14 @@ namespace VoiceX.Items
             }
         }
 
-        private void Flag_Click(object sender, RoutedEventArgs e)
+        private async void Flag_Click(object sender, RoutedEventArgs e)
         {
             if (!String.IsNullOrEmpty(Search.Text))
             {
                 Check = (bool)Flag.IsChecked!;
                 SearchText = Search.Text;
                 ReplaceText = Replece.Text;
-                clickToCallPage.UpdateRegExList();
+                await clickToCallPage.UpdateRegExList();
             }
             else
             {

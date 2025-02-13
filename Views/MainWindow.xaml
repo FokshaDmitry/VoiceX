@@ -10,16 +10,75 @@
         Closing="Window_Closing"
         Title="VoiceX" MinWidth="260" MinHeight="460" MaxHeight="460" MaxWidth="260" Background="#FFEBE2FF" Loaded="Window_Loaded">
     
-    <Page x:Name="MainPage">
-        <tb:TaskbarIcon x:Name="TrayIcon"
-                    IconSource="/Assets/Logo48.ico"
-                    ToolTipText="VoiceX" TrayMouseDoubleClick="TrayIcon_TrayMouseDoubleClick">
-            <tb:TaskbarIcon.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Open" Click="ShowWindow"/>
-                    <MenuItem Header="Exit" Click="ExitApplication"/>
-                </ContextMenu>
-            </tb:TaskbarIcon.ContextMenu>
-        </tb:TaskbarIcon>
+    <Page >
+
+        <Grid>
+            <tb:TaskbarIcon x:Name="TrayIcon"
+            IconSource="/Assets/Logo48.ico"
+            ToolTipText="VoiceX" TrayMouseDoubleClick="TrayIcon_TrayMouseDoubleClick">
+                <tb:TaskbarIcon.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Open" Click="ShowWindow"/>
+                        <MenuItem Header="Exit" Click="ExitApplication"/>
+                    </ContextMenu>
+                </tb:TaskbarIcon.ContextMenu>
+            </tb:TaskbarIcon>
+            <Frame NavigationUIVisibility="Hidden" x:Name="MainPage">
+                
+            </Frame>
+            <Grid Visibility="Collapsed" x:Name="ErrorPlate" Background="#CC202244" Margin="-5,0,-5,0" >
+                <Border CornerRadius="12" Background="White" Width="204" Height="150">
+                    <Grid>
+                        <Button Cursor="Hand" Click="Close_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,5,8,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                            <Button.Content>
+                                <Border Background="White" Width="16" Height="16">
+                                    <Grid Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                        <Rectangle RadiusX="0.5" RadiusY="0.5" Width="10.4" Height="1" Fill="#FF252422" RenderTransformOrigin="0.5,0.5">
+                                            <Rectangle.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="45"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Rectangle.RenderTransform>
+
+                                        </Rectangle>
+                                        <Rectangle RadiusX="0.5" RadiusY="0.5" Width="10.4" Height="1" Fill="#FF252422" RenderTransformOrigin="0.5,0.5">
+                                            <Rectangle.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-45"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Rectangle.RenderTransform>
+                                        </Rectangle>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <Button Cursor="Hand" x:Name="Copy" Click="Copy_Click"  Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,5,29,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                            <Button.Content>
+                                <Image Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Top" Width="14" Height="15">
+                                    <Image.Source>
+                                        <BitmapImage UriSource="/Assets/Icone_v2/copy.png" DecodePixelWidth="500" DecodePixelHeight="500"/>
+                                    </Image.Source>
+                                </Image>
+                            </Button.Content>
+                        </Button>
+                        <Image Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Top" Width="54" Margin="0,18,0,0">
+                            <Image.Source>
+                                <BitmapImage UriSource="/Assets/Icone_v2/Error.png" DecodePixelWidth="1000" DecodePixelHeight="1000"/>
+                            </Image.Source>
+                        </Image>
+                        <TextBox BorderThickness="0" FontSize="20" FontFamily="Nunito Sans 10pt Normal" Text="Attention" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,80,0,0"/>
+                        <TextBox TextWrapping="Wrap" BorderThickness="0" x:Name="ErrorMessage" Width="143" Height="30" FontSize="14" FontFamily="Nunito Sans 10pt Normal" Text="Attention" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,106,0,0" HorizontalContentAlignment="Center"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+        
     </Page>
+    
 </Window>

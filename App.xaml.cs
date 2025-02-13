@@ -1,5 +1,6 @@
 ﻿using pj;
 using System.Windows;
+using TTT.WindowsControls;
 using VoiceX.Models;
 using VoiceX.Services;
 using Windows.Security.Cryptography.Certificates;
@@ -29,6 +30,22 @@ namespace VoiceX
             timeOut = new DateTime();
             timeOut = DateTime.Now;
             core = CoreService.Instance.Core;
+        }
+
+        public static string TTTHotKey_HotkeyPressed()
+        {
+
+            string globalSelectedText;
+            try
+            {
+                globalSelectedText = ClipboardHelper.getGlobalSelectedText(); 
+            }
+            catch
+            {
+
+                return "";
+            }
+            return globalSelectedText;
         }
     }
 

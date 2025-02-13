@@ -148,6 +148,29 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="BusylightSDK">
+      <HintPath>..\..\VoiceX\SystrayComponent\embed\BusylightSDK.dll</HintPath>
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="TTT.Generic">
+      <HintPath>..\..\VoiceX\SystrayComponent\embed\TTT.Generic.dll</HintPath>
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <SpecificVersion>False</SpecificVersion>
+      <Aliases>global</Aliases>
+    </Reference>
+    <Reference Include="TTT.WindowsControls">
+      <HintPath>..\..\VoiceX\SystrayComponent\embed\TTT.WindowsControls.dll</HintPath>
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <SpecificVersion>False</SpecificVersion>
+      <Aliases>global</Aliases>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\Icone_v2\faxNavigate.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

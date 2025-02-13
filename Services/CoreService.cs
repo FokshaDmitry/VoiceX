@@ -57,15 +57,23 @@ namespace VoiceX.Services
         }
         public void Login(string username, string domain, string proxy, string password, int transport)
         {
-            AccountConfig accCfg = new AccountConfig();
-            accCfg.idUri = $"sip:{username}@{domain}";
-            accCfg.regConfig.registrarUri = $"sip:{proxy}";
-            accCfg.regConfig.registerOnAdd = true;
-            accCfg.sipConfig.transportId = 0;
-            accCfg.presConfig.publishEnabled = true; 
-            accCfg.regConfig.timeoutSec = 300;
-            accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
-            create(accCfg);
+            try
+            {
+
+                AccountConfig accCfg = new AccountConfig();
+                accCfg.idUri = $"sip:{username}@{domain}";
+                accCfg.regConfig.registrarUri = $"sip:{proxy}";
+                accCfg.regConfig.registerOnAdd = true;
+                accCfg.sipConfig.transportId = 0;
+                accCfg.presConfig.publishEnabled = true;
+                accCfg.regConfig.timeoutSec = 300;
+                accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
+                create(accCfg);
+            }
+            catch
+            {
+
+            }
         }
 
         public void EnsureRegistration()
