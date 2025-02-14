@@ -49,18 +49,18 @@ namespace VoiceX.Views.PhonePages
         {
             if (CoreService.activeCall == null)
             {
-                try
-                {
-                    CoreService.Instance.MakeCall(phone, App.AccountData.Data.Sip_Settings.Sip_server);
-                }
-                catch (Exception ex)
-                {
-                    //phonePage.ShowError("Microphone not found");
-                    return;
-                }
                 foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
                 {
                     phone = phone.Replace(regex.Search!, regex.Replace);
+                }
+                try
+                {
+                    CoreService.Instance.MakeCall(phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
+                }
+                catch
+                {
+                    ProfilePage.window.ShowError("Microphone not found");
+                    return;
                 }
                 NumberFild.Text = "";
             }

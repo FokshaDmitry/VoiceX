@@ -98,12 +98,19 @@ namespace VoiceX.Views
             foreach (var group in groupNote)
             {
                 HistoryList.Items.Add(new HeadingContactList(group.Key.ToString("d.M.yyyy")));
-                foreach (var Note in group.OrderByDescending(h => h.StartDialog))
+                foreach (var Note in group.OrderByDescending(h => h.EndDialog))
                 {
-                    var time = Note.EndDialog - Note.StartDialog;
-                    string textTime = time.Minutes == 0 ? $"({time.Seconds}s.)" : $"({time.Minutes}m. {time.Seconds}s.)";
-
-                    var note = new HistoryNote(Note.Name, Note.Phone, Note.StartDialog, textTime, Note.StatusCall);
+                    string textTime = "";
+                    if (Note.StartDialog != DateTime.MinValue)
+                    {
+                        var time = Note.EndDialog - Note.StartDialog;
+                        textTime = time.Minutes == 0 ? $"({time.Seconds}s.)" : $"({time.Minutes}m. {time.Seconds}s.)";
+                    }
+                    else
+                    {
+                        textTime = "(0s.)";
+                    }
+                    var note = new HistoryNote(Note.Name, Note.Phone, Note.EndDialog, textTime, Note.StatusCall);
                     HistoryList.Items.Add(note);
                     histories.Add(note);
                 }

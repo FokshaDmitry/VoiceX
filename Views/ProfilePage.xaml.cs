@@ -1,8 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using pj;
-using System;
-using System.Diagnostics;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -19,8 +15,6 @@ using VoiceX.Services;
 using VoiceX.Views.ClientPages;
 using VoiceX.Views.ControlPages;
 using VoiceX.Views.PhonePages;
-using Windows.ApplicationModel.Core;
-using Windows.ApplicationModel.DataTransfer;
 
 namespace VoiceX.Views
 {
@@ -33,11 +27,11 @@ namespace VoiceX.Views
         readonly WebService webService;
         readonly AddDbContext addDbContext;
         public static Get_pauses? getPauses;
-        public static MainWindow window {  get; set; }
+        public static MainWindow? window {  get; set; }
         public static List<string>? SelectContacts { get; set; }
         public CoreService Core { get; } = CoreService.Instance;
         public static StatusCall StatusCall { get; set; }
-        public static ClickToCallService clickToCallService { get; set; }
+        public static ClickToCallService? clickToCallService { get; set; }
         KeyPads keyPads;
         contacts_list contacts;
         public static bool TerminateAllCalls { get; set; }
@@ -77,8 +71,6 @@ namespace VoiceX.Views
             slide = (Storyboard)FindResource("SlideUpAnimation");
             slideLeft = (Storyboard)FindResource("SlideLeftAnimation");
             clickToCallService = new ClickToCallService();
-            clickToCallService.HotkeyPressed += new ClickToCallService.HotkeyDelegate(Hotkeys_HotkeyPressed);
-            clickToCallService.ChangeKey();
         }
         public  void Hotkeys_HotkeyPressed(string Phone)
         {
@@ -87,7 +79,22 @@ namespace VoiceX.Views
             {
                 try
                 {
-                    Debug.WriteLine(Phone);
+                    if (CoreService.activeCall == null)
+                    {
+                        foreach (var regex in regexNotes?.Where(r => r.Check)!)
+                        {
+                            Phone = Phone.Replace(regex.Search!, regex.Replace);
+                        }
+                        try
+                        {
+                            CoreService.Instance.MakeCall(Phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
+                        }
+                        catch
+                        {
+                            window?.ShowError("Microphone not found");
+                            return;
+                        }
+                    }
                 }
                 catch
                 {
@@ -97,6 +104,9 @@ namespace VoiceX.Views
         }
         private void Instance_OutgoingCallEvent()
         {
+            window?.Show();
+            window!.WindowState = WindowState.Normal;
+            window.Activate();
             MainFrame.Navigate(activCallPage);
             slide.Begin();
             CoreService.activeCall!.EndCallEvent += ActiveCall_EndCallEvent;
@@ -121,8 +131,8 @@ namespace VoiceX.Views
                     {
 
                         CoreService.activeCall?.PlayRingTone("Incoming");
-                        window.Show();
-                        window.WindowState = WindowState.Normal;
+                        window?.Show();
+                        window!.WindowState = WindowState.Normal;
                         window.Activate();
                         MainFrame.Navigate(callPage);
                         slide.Begin();
@@ -138,6 +148,10 @@ namespace VoiceX.Views
             await Dispatcher.InvokeAsync(async () => {
                 MainFrame.Navigate(dialpadCallPage);
                 slide.Begin();
+                if (StartCall == DateTime.MinValue)
+                {
+                    ProfilePage.StatusCall = StatusCall.Ignore;
+                }
                 await addDbContext.AddNoteAcync(new HistoryNotes() { Id = Guid.NewGuid(), Name = ExtractValue(Name), Phone = ExtractValue(Phone), StartDialog = StartCall, EndDialog = DateTime.Now, StatusCall = ProfilePage.StatusCall });
             });
         }
@@ -161,8 +175,8 @@ namespace VoiceX.Views
         }
         private async void ControlPage_Loaded(object sender, RoutedEventArgs e)
         {
-            var account = App.AccountData.Data.Sip_Settings;
-            CoreService.Instance.Login(account.Sip_username, account.Sip_server, account.Sip_proxy, account.Sip_secret, 0);
+            var account = App.AccountData?.Data.Sip_Settings;
+            CoreService.Instance.Login(account?.Sip_username!, account!.Sip_server, account.Sip_proxy, account.Sip_secret, 0);
             General.Checked += Filter_Checked;
             Addition.Checked += Filter_Checked;
             C2C.Checked += Filter_Checked;
@@ -170,7 +184,7 @@ namespace VoiceX.Views
             CoreService.Instance.IncomingCallEvent += Instance_IncomingCallEvent;
             CoreService.Instance.OutgoingCallEvent += Instance_OutgoingCallEvent;
 
-            contacts = await webService.GetcontactsList(App.AccountData.Data.Sip_Settings.Sip_username, App.AccountData.Data.User_Data.CompanyID, App.UserPbx, App.userToken);
+            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
             var AAlist = await localStoreService.LoadDataAsync("AACallList");
             if (AAlist != null)
             {
@@ -189,6 +203,9 @@ namespace VoiceX.Views
             {
                 regexNotes = new List<Regex_note>();
             }
+            clickToCallService!.HotkeyPressed += new ClickToCallService.HotkeyDelegate(Hotkeys_HotkeyPressed);
+            clickToCallPage.OnChangeKey += clickToCallService.ChangeKey;
+            clickToCallService.ChangeKey();
         }
         
         #region Navigete Button
@@ -293,7 +310,7 @@ namespace VoiceX.Views
                     ResponseData = new Status_pause()
                 };
                 getPauses.ResponseData.Pauses = new List<Pause>();
-                getPauses = await webService.GetPauses(App.AccountData.Data.Sip_Settings.Sip_username, App.UserPbx);
+                getPauses = await webService.GetPauses(App.AccountData!.Data.Sip_Settings.Sip_username, App.UserPbx!);
                 if (getPauses.ResponseCode == System.Net.HttpStatusCode.OK)
                 {
                     PauseList.Items.Add(new PauseItem(new Pause { Name = "Work", Id = 0 }, getPauses.ResponseData.Pause_active == 0));
@@ -337,12 +354,12 @@ namespace VoiceX.Views
                 if (pause != null)
                 {
                     int id = pause.pause.Id;
-                    if (getPauses.ResponseData.Pause_active != id)
+                    if (getPauses?.ResponseData.Pause_active != id)
                     {
-                        var result = await webService.SetPause(App.AccountData.Data.Sip_Settings.Sip_username, id, App.UserPbx);
+                        var result = await webService.SetPause(App.AccountData!.Data.Sip_Settings.Sip_username, id, App.UserPbx!);
                         if (result.ResponseCode == System.Net.HttpStatusCode.OK)
                         {
-                            getPauses.ResponseData.Pause_active = id;
+                            getPauses!.ResponseData.Pause_active = id;
                         }
                         else
                         {
@@ -530,13 +547,13 @@ namespace VoiceX.Views
                 {
                     if (TitleNumpad.Text == "Forwarding")
                     {
-                        CoreService.activeCall.TransferCall(KeypadFild.Text, App.AccountData.Data.Sip_Settings.Sip_server);
+                        CoreService.activeCall.TransferCall(KeypadFild.Text, App.AccountData!.Data.Sip_Settings.Sip_server);
                         NumpadFild.Visibility = Visibility.Collapsed;
                         return;
                     }
                     else
                     {
-                        var uri = $"sip:{KeypadFild.Text}@{App.AccountData.Data.Sip_Settings.Sip_server}";
+                        var uri = $"sip:{KeypadFild.Text}@{App.AccountData!.Data.Sip_Settings.Sip_server}";
                         if (CoreService.activeCall.CallAdtess?.Count == 0)
                         {
                             CoreService.activeCall.AddParticipant(KeypadFild.Text, App.AccountData.Data.Sip_Settings.Sip_server);

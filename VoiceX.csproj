@@ -7,6 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Logo48.ico</ApplicationIcon>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -148,12 +149,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="BusylightSDK">
-      <HintPath>..\..\VoiceX\SystrayComponent\embed\BusylightSDK.dll</HintPath>
-      <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="TTT.Generic">
       <HintPath>..\..\VoiceX\SystrayComponent\embed\TTT.Generic.dll</HintPath>
       <Private>True</Private>
@@ -280,6 +275,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="default-windowsrsa.p12">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Installer.iss">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="license_english.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="license_hebrew.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="license_russian.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

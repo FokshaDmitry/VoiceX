@@ -23,10 +23,12 @@ namespace VoiceX.Views.ControlPages
         public RegExItem? SelectItem { get; set; }
         LocalStoreService storeService;
         AddDbContext dbContext;
+        public delegate void ChangeKey();
+        public event ChangeKey OnChangeKey;
         public ClickToCallPage()
         {
             this.InitializeComponent();
-            MainTab = 3;
+            MainTab = 4;
             KeyLetter = "S";
             toggele = false;
             storeService = new LocalStoreService();
@@ -78,7 +80,6 @@ namespace VoiceX.Views.ControlPages
                 }
             }
             RegExList.Items.Add(new RegExItem(this));
-
         }
         public async Task UpdateRegExList()
         {
@@ -165,6 +166,7 @@ namespace VoiceX.Views.ControlPages
                         toggele = false;
                         await storeService.SaveDataAsync("mainkey", MainTab.ToString());
                         await storeService.SaveDataAsync("key", KeyLetter);
+                        OnChangeKey.Invoke();
                     }
                     else
                     {

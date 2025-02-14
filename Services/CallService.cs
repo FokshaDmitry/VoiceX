@@ -23,6 +23,7 @@ namespace VoiceX.Services
         {
             CallAdtess = new List<string>();
             startTime = new DateTime();
+            startTime = DateTime.MinValue;
         }
         public void Accept()
         {
@@ -40,6 +41,7 @@ namespace VoiceX.Services
             switch (ci.state)
             {
                 case pjsip_inv_state.PJSIP_INV_STATE_NULL:
+                    Debug.WriteLine("[CALL] Абонент NULL");
                     break;
                 case pjsip_inv_state.PJSIP_INV_STATE_CALLING:
                     break;

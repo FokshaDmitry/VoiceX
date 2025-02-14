@@ -7,6 +7,7 @@ using System.IO;
 using VoiceX.Enums;
 using Microsoft.Data.Sqlite;
 using Windows.ApplicationModel;
+using System.Diagnostics;
 
 namespace VoiceX.DAL.Context
 {
@@ -21,22 +22,37 @@ namespace VoiceX.DAL.Context
         public Delegate Uadete { get; set; }
         private async void InitializeDB()
         {
-            await ApplicationData.Current.LocalFolder.CreateFileAsync("HistoryDB.db", CreationCollisionOption.OpenIfExists);
-            string openPathDB = Path.Combine(Package.Current.InstalledPath + "\\HistoryDB.db");
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            string openPathDB = Path.Combine(path + "\\HistoryDB.db");
+            if (File.Exists(openPathDB))
+            {
+                return;
+            }
             using(SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
             {
-                await connection.OpenAsync();
-                string initCmd = "CREATE TABLE IF NOT EXISTS " +
-                    "History(Id TEXT PRIMARY KEY, " +
-                    "Name TEXT NOT NULL, " +
-                    "Phone TEXT NOT NULL, " +
-                    "StatusCall TEXT NOT NULL, " +
-                    "StartDialog TEXT NOT NULL, " +
-                    "EndDialog TEXT NOT NULL)";
-                SqliteCommand command = new SqliteCommand(initCmd, connection);
-                await command.ExecuteReaderAsync();
-                connection.Close();
-                connection.Dispose();
+                try
+                {
+                    await connection.OpenAsync();
+                    string initCmd = "CREATE TABLE IF NOT EXISTS " +
+                        "History(Id TEXT PRIMARY KEY, " +
+                        "Name TEXT NOT NULL, " +
+                        "Phone TEXT NOT NULL, " +
+                        "StatusCall TEXT NOT NULL, " +
+                        "StartDialog TEXT NOT NULL, " +
+                        "EndDialog TEXT NOT NULL)";
+                    SqliteCommand command = new SqliteCommand(initCmd, connection);
+                    await command.ExecuteReaderAsync();
+                    connection.Close();
+                    connection.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
             }
             using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
             {
@@ -78,7 +94,8 @@ namespace VoiceX.DAL.Context
         {
             if (logginNotes != null)
             {
-                string openPathDB = Path.Combine(ApplicationData.Current.LocalFolder.Path + "\\HistoryDB.db");
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+                string openPathDB = Path.Combine(path + "\\HistoryDB.db");
                 using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
                 {
                     await connection.OpenAsync().ConfigureAwait(true);
@@ -100,7 +117,8 @@ namespace VoiceX.DAL.Context
         {
             if (hotKeyUser != null)
             {
-                string openPathDB = Path.Combine(Package.Current.InstalledPath + "\\HistoryDB.db");
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+                string openPathDB = Path.Combine(path + "\\HistoryDB.db");
                 using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
                 {
                     await connection.OpenAsync().ConfigureAwait(true);
@@ -122,7 +140,8 @@ namespace VoiceX.DAL.Context
         {
             if (Id != null)
             {
-                string openPathDB = Path.Combine(Package.Current.InstalledPath + "\\HistoryDB.db");
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+                string openPathDB = Path.Combine(path + "\\HistoryDB.db");
                 using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
                 {
                     await connection.OpenAsync().ConfigureAwait(true);
@@ -142,7 +161,8 @@ namespace VoiceX.DAL.Context
         {
             if (!String.IsNullOrEmpty(b64P12))
             {
-                string openPathDB = Path.Combine(Package.Current.InstalledPath + "\\HistoryDB.db");
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+                string openPathDB = Path.Combine(path + "\\HistoryDB.db");
                 using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
                 {
                     await connection.OpenAsync();
@@ -163,7 +183,8 @@ namespace VoiceX.DAL.Context
         {
             if (historyNotes != null)
             {
-                string openPathDB = Path.Combine(Package.Current.InstalledPath + "\\HistoryDB.db");
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+                string openPathDB = Path.Combine(path + "\\HistoryDB.db");
                 using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
                 {
                     connection.Open();
@@ -189,7 +210,8 @@ namespace VoiceX.DAL.Context
         {
             if (historyNotes != null)
             {
-                string openPathDB = Path.Combine(Package.Current.InstalledPath + "\\HistoryDB.db");
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+                string openPathDB = Path.Combine(path + "\\HistoryDB.db");
                 using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
                 {
                     await connection.OpenAsync();
@@ -214,8 +236,9 @@ namespace VoiceX.DAL.Context
         }
         public List<HistoryNotes> GetNotes()
         {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
             List<HistoryNotes> historyNotes = new List<HistoryNotes>();
-            string openPathDB = Path.Combine(ApplicationData.Current.LocalFolder.Path + "\\HistoryDB.db");
+            string openPathDB = Path.Combine(path + "\\HistoryDB.db");
             try
             {
                 using(SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
@@ -240,8 +263,9 @@ namespace VoiceX.DAL.Context
         }
         public List<HistoryNotes> GetNotes(int NumberItems)
         {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
             List<HistoryNotes> historyNotes = new List<HistoryNotes>();
-            string openPathDB = Path.Combine(Package.Current.InstalledPath + "\\HistoryDB.db");
+            string openPathDB = Path.Combine(path + "\\HistoryDB.db");
             try
             {
                 using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
@@ -269,7 +293,8 @@ namespace VoiceX.DAL.Context
             List<HotKeyUser> hotKeyUsers = new List<HotKeyUser>();
             try
             {
-                string openPathDB = Path.Combine(Package.Current.InstalledPath + "\\HistoryDB.db");
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+                string openPathDB = Path.Combine(path + "\\HistoryDB.db");
                 using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
                 {
                     connection.Open();
@@ -292,7 +317,8 @@ namespace VoiceX.DAL.Context
         }
         public async Task DropDatabaseAsync()
         {
-            string openPathDB = Path.Combine(Package.Current.InstalledPath + "\\HistoryDB.db");
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+            string openPathDB = Path.Combine(path + "\\HistoryDB.db");
             using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
             {
                 await connection.OpenAsync().ConfigureAwait(true);

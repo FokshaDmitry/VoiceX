@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VoiceX.Services
@@ -62,7 +58,14 @@ namespace VoiceX.Services
             }
             else if (m.Msg == WM_HOTKEY)
             {
-                HotkeyPressed?.Invoke(App.TTTHotKey_HotkeyPressed());
+                try
+                {
+                    HotkeyPressed?.Invoke(App.TTTHotKey_HotkeyPressed());
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                }
             }
             else if (m.Msg == WM_DESTROY)
             {
@@ -81,10 +84,10 @@ namespace VoiceX.Services
             catch
             {
                 Key = "S";
-                MainKey = 2;
+                MainKey = 4;
             }
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(Keys));
-            Keys keys1 = (Keys)converter.ConvertFromString(Key);
+            Keys keys1 = (Keys)converter.ConvertFromString(Key)!;
             if (!String.IsNullOrEmpty(Key.ToString()) && MainKey > 0)
             {
                 RegisterCombo(RegistId, MainKey, keys1);

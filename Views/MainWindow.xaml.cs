@@ -1,23 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
-using VoiceX.Enums;
-using VoiceX.Models;
 using VoiceX.Services;
-using Windows.Security.Cryptography.Certificates;
 
 namespace VoiceX.Views
 {
@@ -50,6 +35,7 @@ namespace VoiceX.Views
             timer.Start();
             certificateService = new CertificateService();
         }
+
         private void ShowWindow(object sender, RoutedEventArgs e)
         {
             this.Show();
@@ -155,6 +141,13 @@ namespace VoiceX.Views
             {
 
             }
+        }
+        public void RestoreWindow()
+        {
+            this.Show();
+            this.WindowState = WindowState.Normal;
+            this.ShowInTaskbar = true;
+            this.Activate();
         }
     }
 }
