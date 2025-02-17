@@ -8,17 +8,19 @@
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         Closing="Window_Closing"
-        Title="VoiceX" MinWidth="260" MinHeight="460" MaxHeight="460" MaxWidth="260" Background="#FFEBE2FF" Loaded="Window_Loaded">
+        Title="VoiceX" MinWidth="260" Icon="/Assets/Icone_v2/icon16.ico" MinHeight="460" MaxHeight="460" MaxWidth="260" Background="#FFEBE2FF" Loaded="Window_Loaded">
     
     <Page >
 
         <Grid>
             <tb:TaskbarIcon x:Name="TrayIcon"
-            IconSource="/Assets/Logo48.ico"
+            IconSource="/Assets/icone_v2/icon24.ico"
             ToolTipText="VoiceX" TrayMouseDoubleClick="TrayIcon_TrayMouseDoubleClick">
                 <tb:TaskbarIcon.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Open" Click="ShowWindow"/>
+                        <MenuItem Name="Dialpad" Header="Dialpad" Click="Dialpad_Click"/>
+                        <MenuItem Name="Clients" Header="Clients" Click="Clients_Click"/>
                         <MenuItem Header="Exit" Click="ExitApplication"/>
                     </ContextMenu>
                 </tb:TaskbarIcon.ContextMenu>

@@ -46,6 +46,7 @@ namespace VoiceX.Views
         ClickToCallPage clickToCallPage;
         Storyboard slide;
         Storyboard slideLeft;
+        IncomingWindow incomingWindow;
         public ProfilePage(MainWindow mainWindow)
         {
             this.InitializeComponent();
@@ -71,6 +72,7 @@ namespace VoiceX.Views
             slide = (Storyboard)FindResource("SlideUpAnimation");
             slideLeft = (Storyboard)FindResource("SlideLeftAnimation");
             clickToCallService = new ClickToCallService();
+            incomingWindow = new IncomingWindow(mainWindow, this, activCallPage);
         }
         public  void Hotkeys_HotkeyPressed(string Phone)
         {
@@ -131,11 +133,20 @@ namespace VoiceX.Views
                     {
 
                         CoreService.activeCall?.PlayRingTone("Incoming");
-                        window?.Show();
-                        window!.WindowState = WindowState.Normal;
-                        window.Activate();
-                        MainFrame.Navigate(callPage);
-                        slide.Begin();
+                        var visible = window?.Visibility == Visibility.Visible;
+                        if (visible) 
+                        {
+                            window?.Show();
+                            window!.WindowState = WindowState.Normal;
+                            window.Activate();
+                            MainFrame.Navigate(callPage);
+                            slide.Begin();
+                            incomingWindow.ShowInBottomRight(ExtractValue(info.remoteContact), ExtractValue(info.remoteUri), !visible);
+                        }
+                        else
+                        {
+                            incomingWindow.ShowInBottomRight(ExtractValue(info.remoteContact), ExtractValue(info.remoteUri), !visible);
+                        }
                     }
                     StatusCall = StatusCall.Incoming;
                     CoreService.activeCall!.EndCallEvent += ActiveCall_EndCallEvent;
@@ -150,28 +161,34 @@ namespace VoiceX.Views
                 slide.Begin();
                 if (StartCall == DateTime.MinValue)
                 {
-                    ProfilePage.StatusCall = StatusCall.Ignore;
+                    if (ProfilePage.StatusCall == StatusCall.Incoming)
+                    {
+                        ProfilePage.StatusCall = StatusCall.IncomeIgnore;
+                    }
+                    else if (ProfilePage.StatusCall == StatusCall.Outgoing)
+                    {
+                        ProfilePage.StatusCall = StatusCall.Ignore;
+                    }
                 }
                 await addDbContext.AddNoteAcync(new HistoryNotes() { Id = Guid.NewGuid(), Name = ExtractValue(Name), Phone = ExtractValue(Phone), StartDialog = StartCall, EndDialog = DateTime.Now, StatusCall = ProfilePage.StatusCall });
+                incomingWindow.Hide();
             });
         }
-        string ExtractValue(string input)
+        public string ExtractValue(string input)
         {
-            // Проверяем, есть ли содержимое в кавычках
             Match match = Regex.Match(input, "\"([^\"]+)\"");
             if (match.Success)
             {
-                return match.Groups[1].Value; // Возвращаем текст между " "
+                return match.Groups[1].Value; 
             }
 
-            // Если кавычек нет, ищем значение между sip: и @
             match = Regex.Match(input, @"sip:([^@]+)@");
             if (match.Success)
             {
-                return match.Groups[1].Value; // Возвращаем текст между sip: и @
+                return match.Groups[1].Value; 
             }
 
-            return string.Empty; // Если ничего не найдено, возвращаем пустую строку
+            return string.Empty; 
         }
         private async void ControlPage_Loaded(object sender, RoutedEventArgs e)
         {

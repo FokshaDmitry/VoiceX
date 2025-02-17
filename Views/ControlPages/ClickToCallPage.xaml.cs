@@ -57,10 +57,6 @@ namespace VoiceX.Views.ControlPages
                     default:
                         break;
                 }
-                foreach (var note in ProfilePage.regexNotes)
-                {
-                    RegExList.Items.Insert(0, new RegExItem(this, note.Search, note.Replace, note.Check));
-                }
             }
             else
             {
@@ -77,6 +73,13 @@ namespace VoiceX.Views.ControlPages
                         break;
                     default:
                         break;
+                }
+            }
+            if (ProfilePage.regexNotes != null)
+            {
+                foreach (var note in ProfilePage.regexNotes)
+                {
+                    RegExList.Items.Insert(0, new RegExItem(this, note.Search!, note.Replace!, note.Check));
                 }
             }
             RegExList.Items.Add(new RegExItem(this));
@@ -109,18 +112,12 @@ namespace VoiceX.Views.ControlPages
         private void MoveItem(int direction)
         {
             int index = RegExList.Items.IndexOf(SelectItem);
-            // Calculate new index using move direction
             if (index == -1)
                 return;
             int newIndex = index + direction;
-
-            // Checking bounds of the range
             if (newIndex < 0 || newIndex >= RegExList.Items.Count)
-                return; // Index out of range - nothing to do
-
-            // Removing removable element
+                return; 
             RegExList.Items.Remove(SelectItem);
-            // Insert it in new position
             RegExList.Items.Insert(newIndex, SelectItem);
         }
         private async void Remove_Click(object sender, RoutedEventArgs e)

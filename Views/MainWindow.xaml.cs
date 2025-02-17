@@ -31,16 +31,14 @@ namespace VoiceX.Views
             {
                 Interval = TimeSpan.FromMinutes(1)
             };
-            timer.Tick += Timer_Tick;
+            timer.Tick += Timer_Tick!;
             timer.Start();
             certificateService = new CertificateService();
         }
 
         private void ShowWindow(object sender, RoutedEventArgs e)
         {
-            this.Show();
-            this.WindowState = WindowState.Normal;
-            this.Activate();
+            this.ShowInBottomRight();
         }
         private async void Timer_Tick(object sender, object e)
         {
@@ -60,9 +58,7 @@ namespace VoiceX.Views
 
         private void TrayIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            this.Show();
-            this.WindowState = WindowState.Normal;
-            this.Activate();
+            this.ShowInBottomRight();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -71,10 +67,35 @@ namespace VoiceX.Views
             this.Hide(); 
             this.ShowInTaskbar = false;
         }
+        public void ShowInBottomRight()
+        {
+            // Задаём позицию возле правого нижнего угла экрана:
+            double screenWidth = SystemParameters.PrimaryScreenWidth;
+            double screenHeight = SystemParameters.PrimaryScreenHeight;
 
+            // Считаем отступы, чтобы окно "отступало" на 10px от правого нижнего угла
+            double offsetX = 10;
+            double offsetY = 50; // немного побольше, чтобы не упиралось прямо в панель задач
+
+            this.Left = screenWidth - this.Width - offsetX;
+            this.Top = screenHeight - this.Height - offsetY;
+
+            this.Show();
+            this.WindowState = WindowState.Normal;
+            this.ShowInTaskbar = true;
+            this.Activate();
+        }
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            double screenWidth = SystemParameters.PrimaryScreenWidth;
+            double screenHeight = SystemParameters.PrimaryScreenHeight;
 
+            // Считаем отступы, чтобы окно "отступало" на 10px от правого нижнего угла
+            double offsetX = 10;
+            double offsetY = 50; // немного побольше, чтобы не упиралось прямо в панель задач
+
+            this.Left = screenWidth - this.Width - offsetX;
+            this.Top = screenHeight - this.Height - offsetY;
             var token = await localStoreService.LoadDataAsync("token");
             var pbx = await localStoreService.LoadDataAsync("pbxCode");
             if (!String.IsNullOrEmpty(token))
@@ -93,11 +114,13 @@ namespace VoiceX.Views
                         else
                         {
                             this.MainPage.Content = registrationPage;
+                            ShowError("Server error: Sip Data not found");
                         }
                     }
                     else
                     {
                         this.MainPage.Content = registrationPage;
+                        ShowError("App error: Certificate not found");
                     }
                 }
                 else
@@ -132,7 +155,7 @@ namespace VoiceX.Views
             {
                 localStoreService.ClearIsolatedStorage();
                 await addDbContext.DropDatabaseAsync();
-                await webService.LogOut(App.UserPbx);
+                await webService.LogOut(App.UserPbx!);
                 this.MainPage.Content = registrationPage;
                 //errorService.ShowWarningWithButton("You will not be able to undo this action!");
                 //errorService.Continue.Click += Continue_Click;
@@ -144,10 +167,17 @@ namespace VoiceX.Views
         }
         public void RestoreWindow()
         {
-            this.Show();
-            this.WindowState = WindowState.Normal;
-            this.ShowInTaskbar = true;
-            this.Activate();
+            this.ShowInBottomRight();
+        }
+
+        private void Dialpad_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Clients_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

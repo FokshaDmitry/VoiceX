@@ -1,14 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using VoiceX.Enums;
 using VoiceX.Services;
 using VoiceX.Views;
-using VoiceX.Views.ControlPages;
-using VoiceX.Views.PhonePages;
-using Windows.ApplicationModel.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -22,7 +16,6 @@ namespace VoiceX.Items
         public string userPhone;
         public StatusCall statusCall;
         public DateTime dateCall;
-        HistoryPage historyPage;
         public HistoryNote(string Name, string Phone, DateTime dateCall, string Time, StatusCall statusCall)
         {
             this.InitializeComponent();
@@ -46,6 +39,9 @@ namespace VoiceX.Items
                 case StatusCall.Ignore:
                     MissedCall.Visibility = Visibility.Visible;
                     break;
+                case StatusCall.IncomeIgnore:
+                    MissedInCall.Visibility = Visibility.Visible;
+                    break;
                 default:
                     break;
             }
@@ -53,11 +49,11 @@ namespace VoiceX.Items
 
         private void Call_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var regex in ProfilePage.regexNotes.Where(r => r.Check))
+            foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
             {
-                userPhone = userPhone.Replace(regex.Search, regex.Replace);
+                userPhone = userPhone.Replace(regex.Search!, regex.Replace);
             }
-            CoreService.Instance.MakeCall(userPhone, App.AccountData.Data.Sip_Settings.Sip_server);
+            CoreService.Instance.MakeCall(userPhone, App.AccountData!.Data.Sip_Settings.Sip_server);
         }
 
         private void Info_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)

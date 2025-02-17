@@ -59,7 +59,6 @@ namespace VoiceX.Services
         {
             try
             {
-
                 AccountConfig accCfg = new AccountConfig();
                 accCfg.idUri = $"sip:{username}@{domain}";
                 accCfg.regConfig.registrarUri = $"sip:{proxy}";
@@ -68,45 +67,11 @@ namespace VoiceX.Services
                 accCfg.presConfig.publishEnabled = true;
                 accCfg.regConfig.timeoutSec = 300;
                 accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
-                create(accCfg);
+                instance.create(accCfg);
             }
             catch
             {
 
-            }
-        }
-
-        public void EnsureRegistration()
-        {
-            if (this == null) return;
-
-            AccountInfo accInfo = getInfo();
-
-            if (accInfo.regIsActive)
-            {
-                Debug.WriteLine("[SIP] Регистрация уже активна, повторная регистрация не требуется.");
-                return;
-            }
-
-            try
-            {
-                Debug.WriteLine("[SIP] Начинаем повторную регистрацию...");
-                Task.Run(() =>
-                {
-                    try
-                    {
-                        setRegistration(true);
-                        Debug.WriteLine("[SIP] Регистрация выполнена успешно.");
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"[SIP] Ошибка при повторной регистрации: {ex.Message}");
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[SIP] Ошибка в EnsureRegistration: {ex.Message}");
             }
         }
         public CallService MakeCall(string phone, string pbx)
@@ -141,7 +106,6 @@ namespace VoiceX.Services
             // Создаём новый вызов
             
         }
-        
         public override void onIncomingCall(OnIncomingCallParam prm)
         {
             Debug.WriteLine("[CALL] Входящий вызов...");

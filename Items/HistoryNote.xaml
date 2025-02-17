@@ -95,6 +95,42 @@
                         </Border>
                     </Grid>
                 </Grid>
+                <Grid Visibility="Collapsed" x:Name="MissedInCall" RenderTransformOrigin="0.5,0.5">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-180"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Height="1" Width="6.5" CornerRadius="0.5" Background="#FFF31E38" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2.8,0,0,0"/>
+                        <Border Height="6.5" Width="1" CornerRadius="0.5" Background="#FFF31E38" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,3.5"/>
+                        <Border Height="7" Width="1" CornerRadius="0.5" Background="#FFF31E38" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="3.1,-4.2,0,0">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="50.501"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+
+                        </Border>
+                        <Border Height="4.5" Width="1" CornerRadius="0.5" Background="#FFF31E38" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="2,3,3.6,0">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="1.339"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+
+                        </Border>
+                    </Grid>
+                </Grid>
             </Grid>
             <Button BorderThickness="0" Cursor="Hand" Height="18" Width="18" HorizontalAlignment="Right" Margin="0,6,15,0" VerticalAlignment="Top" Padding="0,0,0,0">
                 <Button.Content>

@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Logo48.ico</ApplicationIcon>
+    <ApplicationIcon>256х256.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
@@ -16,6 +16,7 @@
     <None Remove="Assets\Fonts\Montserrat-Regular.ttf" />
     <None Remove="Assets\Fonts\NunitoSans_10pt-Regular.ttf" />
     <None Remove="Assets\Icone_v2\Arrow.png" />
+    <None Remove="Assets\Icone_v2\Avatar.png" />
     <None Remove="Assets\Icone_v2\BackgroundTopElement.png" />
     <None Remove="Assets\Icone_v2\Backspace.png" />
     <None Remove="Assets\Icone_v2\Box.png" />
@@ -40,6 +41,11 @@
     <None Remove="Assets\Icone_v2\GreyUser.png" />
     <None Remove="Assets\Icone_v2\historyNavigate.png" />
     <None Remove="Assets\Icone_v2\homeNavigate.png" />
+    <None Remove="Assets\Icone_v2\Icon-Phone.png" />
+    <None Remove="Assets\Icone_v2\Icon-PhoneSlash.png" />
+    <None Remove="Assets\Icone_v2\icon16.ico" />
+    <None Remove="Assets\Icone_v2\icon24.ico" />
+    <None Remove="Assets\Icone_v2\icon48.ico" />
     <None Remove="Assets\Icone_v2\illustration.png" />
     <None Remove="Assets\Icone_v2\Key.png" />
     <None Remove="Assets\Icone_v2\Keyboard.png" />
@@ -68,7 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Logo48.ico" />
+    <Content Include="256х256.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -82,6 +88,24 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Fonts\NunitoSans_10pt-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Avatar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Icon-Phone.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Icon-PhoneSlash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\icon16.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\icon24.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\icon48.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Arrow.png">

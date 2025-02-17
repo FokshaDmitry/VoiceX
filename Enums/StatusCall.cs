@@ -3,7 +3,8 @@
     public enum StatusCall {
         Outgoing,
         Incoming,
-        Ignore
+        Ignore,
+        IncomeIgnore
     }
    
 }

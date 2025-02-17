@@ -61,7 +61,7 @@ namespace VoiceX.Views.PhonePages
                         {
                             Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");
                             StatusCurrentCall.Text = ProfilePage.StatusCall.ToString().ToUpper() + " " + "CALL";
-                            PhoneText.Text = CoreService.activeCall.CallAdtess.Aggregate((current, next) => CutNumber(current) + ", " + CutNumber(next)).TrimEnd(' ', ',');
+                            PhoneText.Text = CoreService.activeCall.CallAdtess.Aggregate((current, next) => phonePage.ExtractValue(current) + ", " + phonePage.ExtractValue(next)).TrimEnd(' ', ',');
                             TransferCall.IsEnabled = false;
                             Pause.IsEnabled = false;
                         }
@@ -91,8 +91,8 @@ namespace VoiceX.Views.PhonePages
                                     AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refresh.png"));
                                 }
                             }
-                            PhoneText.Text = CutNumber(info.remoteContact);
-                            UserNameText.Text = CutNumber(info.remoteUri);
+                            PhoneText.Text = phonePage.ExtractValue(info.remoteUri );
+                            UserNameText.Text = phonePage.ExtractValue(info.remoteContact);
                         }
                         Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");
                         StatusCurrentCall.Text = ProfilePage.StatusCall.ToString().ToUpper() + " " + "CALL";
@@ -118,21 +118,6 @@ namespace VoiceX.Views.PhonePages
 
                 }
             });
-        }
-        private string CutNumber(string sipUri)
-        {
-            string pattern = @"sip:(.*?)@";
-            Match match = Regex.Match(sipUri, pattern);
-
-            if (match.Success)
-            {
-                string extractedNumber = match.Groups[1].Value;
-                return extractedNumber;
-            }
-            else
-            {
-                return "NOT FORMAT SIP URI";
-            }
         }
         private void Profile_Click(object sender, RoutedEventArgs e)
         {

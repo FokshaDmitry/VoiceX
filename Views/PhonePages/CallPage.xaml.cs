@@ -35,8 +35,8 @@ namespace VoiceX.Views.PhonePages
                 var info = CoreService.activeCall.getInfo();
                 if (!String.IsNullOrEmpty(info.remoteUri))
                 {
-                    PhoneText.Text = CutNumber(info.remoteContact);
-                    UserNameText.Text = CutNumber(info.remoteUri);
+                    PhoneText.Text = phonePage.ExtractValue(info.remoteContact);
+                    UserNameText.Text = phonePage.ExtractValue(info.remoteUri);
                 }
                 else
                 {
@@ -48,21 +48,6 @@ namespace VoiceX.Views.PhonePages
             {
                 phonePage.MainFrame.Navigate(phoneCallPage);
                 slide.Begin();
-            }
-        }
-        private string CutNumber(string sipUri)
-        {
-            string pattern = @"sip:(.*?)@";
-            Match match = Regex.Match(sipUri, pattern);
-
-            if (match.Success)
-            {
-                string extractedNumber = match.Groups[1].Value;
-                return extractedNumber;
-            }
-            else
-            {
-                return "NOT FORMAT SIP URI";
             }
         }
         private void EndCall_Click(object sender, RoutedEventArgs e)

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using VoiceX.DAL.Entity;
-using Windows.Storage;
+﻿using VoiceX.DAL.Entity;
 using System.IO;
 using VoiceX.Enums;
 using Microsoft.Data.Sqlite;
-using Windows.ApplicationModel;
 using System.Diagnostics;
 
 namespace VoiceX.DAL.Context
@@ -28,10 +23,6 @@ namespace VoiceX.DAL.Context
                 Directory.CreateDirectory(path);
             }
             string openPathDB = Path.Combine(path + "\\HistoryDB.db");
-            if (File.Exists(openPathDB))
-            {
-                return;
-            }
             using(SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
             {
                 try

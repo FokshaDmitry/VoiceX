@@ -33,9 +33,9 @@ namespace VoiceX.Views.ControlPages
 
         private async void GeneralSettingPage_Loaded(object sender, RoutedEventArgs e)
         {
-            AccountFild.Text = App.AccountData.Data.User_Data.Name;
-            phoneNumber.Text = App.AccountData.Data.Sip_Settings.Sip_username;
-            PbXText.Text = "PBX" + App.UserPbx.TrimStart('0');
+            AccountFild.Text = App.AccountData?.Data.User_Data.Name;
+            phoneNumber.Text = App.AccountData?.Data.Sip_Settings.Sip_username;
+            PbXText.Text = "PBX" + App.UserPbx?.TrimStart('0');
             var type = await localStoreService.LoadDataAsync("Trasnsport");
             if (!String.IsNullOrEmpty(type))
             {
@@ -54,7 +54,7 @@ namespace VoiceX.Views.ControlPages
                 await localStoreService.SaveDataAsync("Trasnsport", "Tcp");
                 Tcp.IsChecked = true;
             }
-            if (App.AccountData.Data.Is_mobile == 0)
+            if (App.AccountData?.Data.Is_mobile == 0)
             {
                 LopTop.IsChecked = true;
             }
@@ -62,7 +62,7 @@ namespace VoiceX.Views.ControlPages
             {
                 SmartPhone.IsChecked = true;
             }
-            _ = App.AccountData.Data.Is_mobile == 0 ? LopTop.IsChecked = true : SmartPhone.IsChecked = true;
+            _ = App.AccountData?.Data.Is_mobile == 0 ? LopTop.IsChecked = true : SmartPhone.IsChecked = true;
             LopTop.Click += LopTop_Toggled;
             SmartPhone.Click += SmartPhone_Toggled;
             Exit.Click += window.Exit_Click;
@@ -78,36 +78,36 @@ namespace VoiceX.Views.ControlPages
                     {
                         if (CoreService.Instance.getInfo() != null)
                         {
-                            if (CoreService.Instance.getInfo().regIsActive)
+                            await Dispatcher.InvokeAsync(() =>
                             {
-                                await Dispatcher.InvokeAsync(() =>
+                                try
                                 {
-                                    Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 76, 176, 78));
-                                });
-                            }
-                            else
-                            {
-                                await Dispatcher.InvokeAsync(() =>
-                                {
-                                    try
+                                    if (SmartPhone.IsChecked == true)
                                     {
-                                        if (SmartPhone.IsChecked == true)
+                                        var info = CoreService.Instance.getInfo();
+                                        if (info.regStatus == pjsip_status_code.PJSIP_SC_OK)
                                         {
-                                            var account = App.AccountData.Data.Sip_Settings;
-                                            var info = CoreService.Instance.getInfo();
-                                            if (info.regStatus != pjsip_status_code.PJSIP_SC_OK && info.regStatus != pjsip_status_code.PJSIP_SC_TRYING && info.regStatus != pjsip_status_code.PJSIP_SC_FORBIDDEN)
-                                            {
-                                                CoreService.Instance.setRegistration(true);
-                                            }
+                                            Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 76, 176, 78));
                                         }
+                                        else
+                                        {
+                                            if (info.regStatus != pjsip_status_code.PJSIP_SC_OK && info.regStatus != pjsip_status_code.PJSIP_SC_TRYING)
+                                            {
+                                                window.ShowError(info.regStatusText);
+                                                window.Show();
+                                                window.WindowState = WindowState.Normal;
+                                                window.Activate();
+                                            }
+                                            Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 200, 77, 77));
+                                        }
+                                        CoreService.Instance.setRegistration(true);
                                     }
-                                    catch
-                                    {
+                                }
+                                catch
+                                {
 
-                                    }
-                                    Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 200, 77, 77));
-                                });
-                            }
+                                }
+                            });
                         }
                         else
                         {
@@ -118,7 +118,7 @@ namespace VoiceX.Views.ControlPages
                     {
                         Debug.WriteLine($"[UI] Ошибка при обновлении: {ex.Message}");
                     }
-                    await Task.Delay(1000);
+                    await Task.Delay(10000);
                 }
             });
         }
@@ -158,7 +158,7 @@ namespace VoiceX.Views.ControlPages
             if ((bool)swich.IsChecked!)
             {
                 LoadIcone.Visibility = Visibility.Visible;
-                if (await webService.ChangeCallType("mobile", App.UserPbx, App.userToken) == System.Net.HttpStatusCode.OK)
+                if (await webService.ChangeCallType("mobile", App.UserPbx!, App.userToken!) == System.Net.HttpStatusCode.OK)
                 {
                     CoreService.Instance.setRegistration(true);
                     LopTop.IsChecked = false;
@@ -219,7 +219,7 @@ namespace VoiceX.Views.ControlPages
             {
                 localStoreService.ClearIsolatedStorage();
                 await addDbContext.DropDatabaseAsync();
-                await webService.LogOut(App.UserPbx);
+                await webService.LogOut(App.UserPbx!);
             }
             catch
             {

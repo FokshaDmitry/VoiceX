@@ -16,9 +16,6 @@ using VoiceX.Services;
 
 namespace VoiceX.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class HistoryPage : Page, IMoreItems  
     {
         readonly AddDbContext addDbContext;
@@ -205,7 +202,7 @@ namespace VoiceX.Views
                 ChekIn.Background = whiteLine;
                 CheckAll.Background = whiteLine;
                 ChekIgnore.Background = blueLine;
-                foreach (var group in histories.Where(h => h.statusCall == Enums.StatusCall.Ignore).GroupBy(h => h.dateCall.Date).OrderByDescending(h => h.Key))
+                foreach (var group in histories.Where(h => h.statusCall == Enums.StatusCall.Ignore || h.statusCall == Enums.StatusCall.IncomeIgnore).GroupBy(h => h.dateCall.Date).OrderByDescending(h => h.Key))
                 {
                     HistoryList.Items.Add(new HeadingContactList(group.Key.ToString("d.M.yyyy")));
                     foreach (var note in group.OrderByDescending(g => g.dateCall))

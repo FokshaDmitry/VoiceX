@@ -55,7 +55,7 @@ namespace VoiceX
             AccountData = new Account_data();
             UserPbx = "";
             userToken = "";
-            MyComputer = false;
+            MyComputer = true;
             timeOut = new DateTime();
             timeOut = DateTime.Now;
             core = CoreService.Instance.Core;
