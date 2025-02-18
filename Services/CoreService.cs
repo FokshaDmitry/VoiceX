@@ -33,22 +33,27 @@ namespace VoiceX.Services
                     core.libCreate();
                     // Init library
                     EpConfig epConfig = new EpConfig();
-                    epConfig.logConfig.level = 6;
+                    epConfig.logConfig.level = 5;
                     epConfig.logConfig.writer = writer;
-                    epConfig.uaConfig.stunServer.Add("ice.x-cloud.info:3478"); 
+                    epConfig.uaConfig.stunServer.Add("ice.x-cloud.info:3478");
                     epConfig.uaConfig.natTypeInSdp = 1;
                     epConfig.uaConfig.maxCalls = 15;
-
+                    epConfig.uaConfig.stunTryIpv6 = false;
                     
-
                     core.libInit(epConfig);
 
                     // Create transport
                     TransportConfig tcfg = new TransportConfig();
                     tcfg.port = 5060;
-                    
-                    core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, tcfg);
 
+                    try
+                    {
+                        core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, tcfg);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.Message);
+                    }
                     // Start library
                     core.libStart();
                 }
@@ -60,18 +65,48 @@ namespace VoiceX.Services
             try
             {
                 AccountConfig accCfg = new AccountConfig();
-                accCfg.idUri = $"sip:{username}@{domain}";
-                accCfg.regConfig.registrarUri = $"sip:{proxy}";
-                accCfg.regConfig.registerOnAdd = true;
                 accCfg.sipConfig.transportId = 0;
                 accCfg.presConfig.publishEnabled = true;
+                //REG
+                accCfg.idUri = $"sip:{username}@{domain};transport=tcp";
+                accCfg.regConfig.registrarUri = $"sip:{proxy}";
+                accCfg.regConfig.registerOnAdd = true;
                 accCfg.regConfig.timeoutSec = 300;
+                accCfg.regConfig.retryIntervalSec = 10;
+                //NAT
+                accCfg.natConfig.iceEnabled = true;
+                accCfg.natConfig.udpKaIntervalSec = 10;
+
+                //CREATE
                 accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
                 instance.create(accCfg);
+                setDefault();
             }
             catch
             {
 
+            }
+        }
+        public void Logout()
+        {
+            try
+            {
+                Debug.WriteLine("[SIP] Выход из аккаунта...");
+
+                // 1️⃣ Отключаем регистрацию
+                setRegistration(false);
+
+                // 2️⃣ Ждём немного, чтобы сервер обработал разлогин
+                System.Threading.Thread.Sleep(500);
+
+                // 3️⃣ Завершаем аккаунт
+                shutdown();
+
+                Debug.WriteLine("[SIP] Аккаунт успешно разлогинен.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SIP] Ошибка выхода из аккаунта: {ex.Message}");
             }
         }
         public CallService MakeCall(string phone, string pbx)

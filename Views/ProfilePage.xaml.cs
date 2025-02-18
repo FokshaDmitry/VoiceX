@@ -46,7 +46,7 @@ namespace VoiceX.Views
         ClickToCallPage clickToCallPage;
         Storyboard slide;
         Storyboard slideLeft;
-        IncomingWindow incomingWindow;
+        public IncomingWindow incomingWindow;
         public ProfilePage(MainWindow mainWindow)
         {
             this.InitializeComponent();
@@ -320,34 +320,23 @@ namespace VoiceX.Views
         private async void Pauses_Click(object sender, RoutedEventArgs e)
         {
             PauseList.Items.Clear();
-            if (getPauses == null)
+            getPauses = new Get_pauses
             {
-                getPauses = new Get_pauses
-                {
-                    ResponseData = new Status_pause()
-                };
-                getPauses.ResponseData.Pauses = new List<Pause>();
-                getPauses = await webService.GetPauses(App.AccountData!.Data.Sip_Settings.Sip_username, App.UserPbx!);
-                if (getPauses.ResponseCode == System.Net.HttpStatusCode.OK)
-                {
-                    PauseList.Items.Add(new PauseItem(new Pause { Name = "Work", Id = 0 }, getPauses.ResponseData.Pause_active == 0));
-                    foreach (var pause in getPauses.ResponseData.Pauses)
-                    {
-                        PauseList.Items.Add(new PauseItem(pause, pause.Id == getPauses.ResponseData.Pause_active));
-                    }
-                }
-                else
-                {
-                    //errorService.ShowWarning(getPauses.ResponseMessage);
-                }
-            }
-            else
+                ResponseData = new Status_pause()
+            };
+            getPauses.ResponseData.Pauses = new List<Pause>();
+            getPauses = await webService.GetPauses(App.AccountData!.Data.Sip_Settings.Sip_username, App.UserPbx!, App.userToken!);
+            if (getPauses.ResponseCode == System.Net.HttpStatusCode.OK)
             {
                 PauseList.Items.Add(new PauseItem(new Pause { Name = "Work", Id = 0 }, getPauses.ResponseData.Pause_active == 0));
                 foreach (var pause in getPauses.ResponseData.Pauses)
                 {
                     PauseList.Items.Add(new PauseItem(pause, pause.Id == getPauses.ResponseData.Pause_active));
                 }
+            }
+            else
+            {
+                window?.ShowError(getPauses.ResponseMessage);
             }
             PausesFild.Visibility = Visibility.Visible;
         }
@@ -373,14 +362,14 @@ namespace VoiceX.Views
                     int id = pause.pause.Id;
                     if (getPauses?.ResponseData.Pause_active != id)
                     {
-                        var result = await webService.SetPause(App.AccountData!.Data.Sip_Settings.Sip_username, id, App.UserPbx!);
+                        var result = await webService.SetPause(App.AccountData!.Data.Sip_Settings.Sip_username, id, App.UserPbx!, App.userToken!);
                         if (result.ResponseCode == System.Net.HttpStatusCode.OK)
                         {
                             getPauses!.ResponseData.Pause_active = id;
                         }
                         else
                         {
-                            //errorService.ShowWarning(result.ResponseMessage);
+                            window?.ShowError(result.ResponseMessage);
                             PauseList.SelectedIndex = -1;
                         }
                     }

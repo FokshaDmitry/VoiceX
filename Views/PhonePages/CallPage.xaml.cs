@@ -76,6 +76,7 @@ namespace VoiceX.Views.PhonePages
                 CoreService.activeCall.Accept();
                 phonePage.MainFrame.Navigate(activCallPage);
                 slide.Begin();
+                phonePage.incomingWindow.Hide();
             }
             else
             {

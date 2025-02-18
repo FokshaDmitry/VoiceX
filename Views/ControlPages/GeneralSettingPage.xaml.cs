@@ -21,6 +21,7 @@ namespace VoiceX.Views.ControlPages
         LocalStoreService localStoreService;
         MainWindow window;
         private bool isRunning = true;
+        int timeOut;
         public GeneralSettingPage(MainWindow window)
         {
             this.InitializeComponent();
@@ -29,6 +30,7 @@ namespace VoiceX.Views.ControlPages
             webService = new WebService();
             addDbContext = new AddDbContext();
             localStoreService = new LocalStoreService();
+            timeOut = 1000;
         }
 
         private async void GeneralSettingPage_Loaded(object sender, RoutedEventArgs e)
@@ -65,9 +67,16 @@ namespace VoiceX.Views.ControlPages
             _ = App.AccountData?.Data.Is_mobile == 0 ? LopTop.IsChecked = true : SmartPhone.IsChecked = true;
             LopTop.Click += LopTop_Toggled;
             SmartPhone.Click += SmartPhone_Toggled;
-            Exit.Click += window.Exit_Click;
+            Exit.Click += Exit_Click;
             Online();
         }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            isRunning = false;
+            window.Exit_Click(sender, e );
+        }
+
         public void Online()
         {
             Task.Run(async () =>
@@ -78,16 +87,24 @@ namespace VoiceX.Views.ControlPages
                     {
                         if (CoreService.Instance.getInfo() != null)
                         {
-                            await Dispatcher.InvokeAsync(() =>
+                            await Dispatcher.InvokeAsync(async () =>
                             {
                                 try
                                 {
                                     if (SmartPhone.IsChecked == true)
                                     {
                                         var info = CoreService.Instance.getInfo();
-                                        if (info.regStatus == pjsip_status_code.PJSIP_SC_OK)
+                                        if (info.regIsActive)
                                         {
                                             Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 76, 176, 78));
+                                            if (!info.onlineStatus)
+                                            {
+
+                                                PresenceStatus presenceStatus = new PresenceStatus();
+                                                presenceStatus.status = pjsua_buddy_status.PJSUA_BUDDY_STATUS_ONLINE;
+                                                CoreService.Instance.setOnlineStatus(presenceStatus);
+                                            }
+                                            timeOut = 1000;
                                         }
                                         else
                                         {
@@ -97,10 +114,14 @@ namespace VoiceX.Views.ControlPages
                                                 window.Show();
                                                 window.WindowState = WindowState.Normal;
                                                 window.Activate();
+                                                CoreService.Instance.setRegistration(true);
+                                                if (CoreService.Instance.getInfo().regStatus != pjsip_status_code.PJSIP_SC_OK)
+                                                {
+                                                    timeOut = 10000;
+                                                }
                                             }
                                             Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 200, 77, 77));
                                         }
-                                        CoreService.Instance.setRegistration(true);
                                     }
                                 }
                                 catch
@@ -118,7 +139,8 @@ namespace VoiceX.Views.ControlPages
                     {
                         Debug.WriteLine($"[UI] Ошибка при обновлении: {ex.Message}");
                     }
-                    await Task.Delay(10000);
+                    await Task.Delay(timeOut);
+
                 }
             });
         }
@@ -185,7 +207,7 @@ namespace VoiceX.Views.ControlPages
             if ((bool)swich.IsChecked!)
             {
                 LoadIcone.Visibility = Visibility.Visible;
-                if (await webService.ChangeCallType("fix", App.UserPbx, App.userToken) == System.Net.HttpStatusCode.OK)
+                if (await webService.ChangeCallType("fix", App.UserPbx!, App.userToken!) == System.Net.HttpStatusCode.OK)
                 {
                     CoreService.Instance.setRegistration(false);
                     SmartPhone.IsChecked = false;
@@ -213,19 +235,6 @@ namespace VoiceX.Views.ControlPages
 
         
 
-        private async void Continue_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                localStoreService.ClearIsolatedStorage();
-                await addDbContext.DropDatabaseAsync();
-                await webService.LogOut(App.UserPbx!);
-            }
-            catch
-            {
-
-            }
-        }
 
         private void Exit_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {

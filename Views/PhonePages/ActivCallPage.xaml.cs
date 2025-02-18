@@ -187,18 +187,14 @@ namespace VoiceX.Views.PhonePages
                     if (pause)
                     {
                         pause = false;
-                        CoreService.activeCall.StopRingTone();
-                        CoreService.activeCall.MuteMicrophone(true);
-                        CoreService.activeCall.MuteSpeaker(true);
+                        CoreService.activeCall.SetHold(false);
                         Pause.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 221, 219, 255));
                     }
                     else
                     {
                         
-                        pause = true; 
-                        CoreService.activeCall.MuteMicrophone(false);
-                        CoreService.activeCall.MuteSpeaker(false);
-                        CoreService.activeCall.PlayHoldMusic();
+                        pause = true;
+                        CoreService.activeCall.SetHold(true);
                         Pause.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 240, 186, 105));
                     }
                 }

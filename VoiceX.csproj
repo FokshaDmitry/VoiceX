@@ -289,9 +289,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Assets\Ring\hold.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Assets\Ring\iphone-11-pro.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

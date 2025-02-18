@@ -9,8 +9,21 @@
         ResizeMode="CanMinimize"
         Closing="Window_Closing"
         Title="VoiceX" MinWidth="260" Icon="/Assets/Icone_v2/icon16.ico" MinHeight="460" MaxHeight="460" MaxWidth="260" Background="#FFEBE2FF" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Cursor="Hand" Background="Transparent" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     
-    <Page >
+    <Page>
 
         <Grid>
             <tb:TaskbarIcon x:Name="TrayIcon"
@@ -76,6 +89,37 @@
                         </Image>
                         <TextBox BorderThickness="0" FontSize="20" FontFamily="Nunito Sans 10pt Normal" Text="Attention" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,80,0,0"/>
                         <TextBox TextWrapping="Wrap" BorderThickness="0" x:Name="ErrorMessage" Width="143" Height="30" FontSize="14" FontFamily="Nunito Sans 10pt Normal" Text="Attention" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,106,0,0" HorizontalContentAlignment="Center"/>
+                    </Grid>
+                </Border>
+            </Grid>
+            <Grid x:Name="PreAsk" Visibility="Collapsed" Background="#CC202244" Margin="-5,0,-5,0" >
+                <Border CornerRadius="12" Background="White" Width="204" Height="246">
+                    <Grid>
+                        <Image Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Top" Width="90" Margin="0,18,0,0">
+                            <Image.Source>
+                                <BitmapImage UriSource="/Assets/Icone_v2/Warning.png" DecodePixelWidth="1000" DecodePixelHeight="1000"/>
+                            </Image.Source>
+                        </Image>
+                        <TextBox BorderThickness="0" FontSize="20" FontFamily="Nunito Sans 10pt Normal" Text="Are you sure?" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,88,0,0"/>
+                        <TextBox TextWrapping="Wrap" BorderThickness="0" Width="143" Height="30" FontSize="14" FontFamily="Nunito Sans 10pt Normal" Text="You will not be able to undo this action!" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,114,0,0" HorizontalContentAlignment="Center"/>
+                        <Button Cursor="Hand" Click="Continue_Click" VerticalAlignment="Top" Width="143" Height="28" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" Margin="0,158,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                            <Button.Content>
+                                <Border Padding="0" BorderThickness="0" CornerRadius="15" Background="#FF8861F7">
+                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock Text="Continue" FontSize="18" Foreground="#FFF3F3F3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <Button Cursor="Hand" Click="Close_Click" VerticalAlignment="Top" Width="143" Height="28" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" Margin="0,198,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                            <Button.Content>
+                                <Border Padding="0" BorderThickness="1" CornerRadius="15" Background="#FFFDFEFF" BorderBrush="#FF8560F2">
+                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock Text="Cansel" FontSize="18" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
                     </Grid>
                 </Border>
             </Grid>

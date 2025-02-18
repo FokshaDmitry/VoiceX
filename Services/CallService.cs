@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VoiceX.Services
 {
@@ -215,26 +216,27 @@ namespace VoiceX.Services
                 return false;
             }
         }
-        public void PlayHoldMusic()
+        public void SetHold(bool hold)
         {
+
+            CallOpParam param = new CallOpParam(true);
+
             try
             {
-                var ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "hold.wav");
-                ringTonePlayer = new AudioMediaPlayer();
-                ringTonePlayer.createPlayer(ringtonePath); // Файл должен быть в корне проекта или указан полный путь
-                AudioMedia remoteAudio = getAudioMedia(0); // Аудио поток звонка
-
-                if (remoteAudio != null)
-                { // Отключаем микрофон
-
-                    Debug.WriteLine("[CALL] Включаем музыку для собеседника...");
-                    ringTonePlayer.startTransmit(remoteAudio); // Передаём музыку в звонок
+                if (hold)
+                {
+                    setHold(param);
+                }
+                else
+                {
+                    CallSetting opt = param.opt;
+                    opt.audioCount = 1;
+                    opt.videoCount = 0;
+                    opt.flag = ((int)pjsua_call_flag.PJSUA_CALL_UNHOLD);
+                    reinvite(param);
                 }
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[CALL] Ошибка при запуске музыки ожидания: {ex.Message}");
-            }
+            catch (Exception e) { }
         }
         public void PlayRingTone(string state)
         {

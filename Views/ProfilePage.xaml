@@ -12,7 +12,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Cursor="Hand" Background="Transparent" CornerRadius="10">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -144,7 +144,7 @@
                             </Border>
                         </Button.Content>
                     </Button>
-                    <Button MouseEnter="Profile_MouseEnter" MouseLeave="Profile_MouseLeave" BorderThickness="0" Cursor="Hand" x:Name="MenuMore" Click="Menu_Click"  Background="Transparent" Width="18"  Padding="0,0,0,0" Height="18" VerticalAlignment="Top" Margin="0,10,20,0" HorizontalAlignment="Right">
+                    <Button MouseEnter="Profile_MouseEnter" MouseLeave="Profile_MouseLeave" BorderThickness="0" Cursor="Hand" x:Name="MenuMore" Click="Menu_Click"  Background="Transparent" Width="18"  Padding="0,0,0,0" Height="18" VerticalAlignment="Top" Margin="0,11,20,0" HorizontalAlignment="Right">
                         <Button.Content>
                             <StackPanel>
                                 <Grid x:Name="Butter" Height="13">
@@ -152,7 +152,7 @@
                                     <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" HorizontalAlignment="Center"/>
                                     <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" VerticalAlignment="Bottom"/>
                                 </Grid>
-                                <Grid Visibility="Collapsed" x:Name="Cross">
+                                <Grid Margin="0,7,0,0" Visibility="Collapsed" x:Name="Cross">
                                     <Rectangle Fill="#FFF4F2FF" Width="15" Height="1.5" RenderTransformOrigin="0.5,0.5">
                                         <Rectangle.RenderTransform>
                                             <TransformGroup>
@@ -240,40 +240,50 @@
             </Button>
         </Grid>
         <Grid Visibility="Collapsed" x:Name="PausesFild" Background="#CC202244">
-            <Grid Background="White" Width="204" Height="246">
-                <Button Cursor="Hand" Name="Close" Click="Close_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,5,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
-                    <Button.Content>
-                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                            <Rectangle RadiusX="0.5" RadiusY="0.5" Width="9.4" Height="1" Fill="#FF252422" RenderTransformOrigin="0.5,0.5">
-                                <Rectangle.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform/>
-                                        <SkewTransform/>
-                                        <RotateTransform Angle="45"/>
-                                        <TranslateTransform/>
-                                    </TransformGroup>
-                                </Rectangle.RenderTransform>
-                            </Rectangle>
-                            <Rectangle RadiusX="0.5" RadiusY="0.5" Width="9.4" Height="1" Fill="#FF252422" RenderTransformOrigin="0.5,0.5">
-                                <Rectangle.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform/>
-                                        <SkewTransform/>
-                                        <RotateTransform Angle="-45"/>
-                                        <TranslateTransform/>
-                                    </TransformGroup>
-                                </Rectangle.RenderTransform>
-                            </Rectangle>
+            <Border CornerRadius="12" Background="White" Width="204" Height="246">
+                <Grid>
+                    <Button Cursor="Hand" Name="Close" Click="Close_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,5,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                        <Button.Content>
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                                <Rectangle RadiusX="0.5" RadiusY="0.5" Width="9.4" Height="1" Fill="#FF252422" RenderTransformOrigin="0.5,0.5">
+                                    <Rectangle.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform Angle="45"/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                                <Rectangle RadiusX="0.5" RadiusY="0.5" Width="9.4" Height="1" Fill="#FF252422" RenderTransformOrigin="0.5,0.5">
+                                    <Rectangle.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform Angle="-45"/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
 
-                        </Grid>
-                    </Button.Content>
-                </Button>
-                <TextBlock Text="Pauses" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0" FontSize="20" FontFamily="Nunito Sans 10pt Normal"/>
-                <Button Cursor="Hand"   Content="Save" x:Name="Save" Click="Save_Click" VerticalAlignment="Bottom" Margin="0,0,10,15" Background="#FF8A63FB" Width="148" Height="32" FontSize="18" FontFamily="Jost" Foreground="#E4FFFFFF" Padding="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" SelectionChanged="PauseList_SelectionChanged" x:Name="PauseList" Height="137" Margin="0,0,0,8" Width="187" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                    <TextBlock Text="Pauses" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0" FontSize="20" FontFamily="Nunito Sans 10pt Normal"/>
+                    <Button Cursor="Hand" x:Name="Save" Click="Save_Click" VerticalAlignment="Bottom" Margin="0,0,0,15" Background="#FF8A63FB" Width="148" Height="32" FontSize="18" FontFamily="Jost" Foreground="#E4FFFFFF" Padding="0,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Center" FontWeight="Bold">
+                        <Button.Content>
+                            <Border CornerRadius="15" Background="#FF8A63FB">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="Save" />
+                                </Grid>
+                            </Border>
+                        </Button.Content>
+                    </Button>
+                    <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" SelectionChanged="PauseList_SelectionChanged" x:Name="PauseList" Height="137" Margin="0,0,0,8" Width="187" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
 
-                </ListBox>
-            </Grid>
+                    </ListBox>
+                </Grid>
+            </Border>
         </Grid>
         <Grid Visibility="Collapsed" x:Name="NumpadFild" Background="#CC202244" Margin="-6,0,-6,0">
             <Border CornerRadius="12" Background="White" Width="204" Height="374">

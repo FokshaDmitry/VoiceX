@@ -136,6 +136,7 @@ namespace VoiceX.Views
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             ErrorPlate.Visibility = Visibility.Collapsed;
+            PreAsk.Visibility = Visibility.Collapsed;
         }
         private void Copy_Click(object sender, RoutedEventArgs e)
         {
@@ -149,16 +150,28 @@ namespace VoiceX.Views
             ErrorMessage.Text = message;
             ErrorPlate.Visibility = Visibility.Visible;
         }
-        public async void Exit_Click(object sender, RoutedEventArgs e)
+        public void Exit_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                PreAsk.Visibility = Visibility.Visible;
+            }
+            catch
+            {
+
+            }
+        }
+
+        private async void Continue_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                PreAsk.Visibility = Visibility.Hidden;
                 localStoreService.ClearIsolatedStorage();
                 await addDbContext.DropDatabaseAsync();
-                await webService.LogOut(App.UserPbx!);
+                await webService.LogOut(App.UserPbx!, App.userToken!);
                 this.MainPage.Content = registrationPage;
-                //errorService.ShowWarningWithButton("You will not be able to undo this action!");
-                //errorService.Continue.Click += Continue_Click;
+                CoreService.Instance.Logout();
             }
             catch
             {
