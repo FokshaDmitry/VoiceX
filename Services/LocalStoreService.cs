@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.IsolatedStorage;
+﻿using System.IO.IsolatedStorage;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 
 namespace VoiceX.Services
@@ -24,7 +19,7 @@ namespace VoiceX.Services
         {
             using (var isoStore = IsolatedStorageFile.GetUserStoreForAssembly())
             {
-                if (!isoStore.FileExists(key)) return null;
+                if (!isoStore.FileExists(key)) return null!;
 
                 using (var reader = new StreamReader(new IsolatedStorageFileStream(key, FileMode.Open, isoStore)))
                 {

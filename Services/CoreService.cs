@@ -1,6 +1,7 @@
 ﻿
 using pj;
 using System.Diagnostics;
+using System.Security.Principal;
 using System.Xml.Linq;
 using Windows.UI;
 
@@ -55,11 +56,21 @@ namespace VoiceX.Services
                         Debug.WriteLine(e.Message);
                     }
                     // Start library
+                    try
+                    {
+                        tcfg.port = 5061;
+                        core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS, tcfg);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.Message);
+                    }
                     core.libStart();
                 }
                 return core; 
             } 
         }
+       
         public void Login(string username, string domain, string proxy, string password, int transport)
         {
             try
@@ -68,19 +79,17 @@ namespace VoiceX.Services
                 accCfg.sipConfig.transportId = 0;
                 accCfg.presConfig.publishEnabled = true;
                 //REG
-                accCfg.idUri = $"sip:{username}@{domain};transport=tcp";
+                accCfg.idUri = $"sip:{username}@{domain}";
                 accCfg.regConfig.registrarUri = $"sip:{proxy}";
-                accCfg.regConfig.registerOnAdd = true;
-                accCfg.regConfig.timeoutSec = 300;
-                accCfg.regConfig.retryIntervalSec = 10;
+                accCfg.regConfig.timeoutSec = 180;
+                
                 //NAT
                 accCfg.natConfig.iceEnabled = true;
-                accCfg.natConfig.udpKaIntervalSec = 10;
-
+                
                 //CREATE
                 accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
-                instance.create(accCfg);
-                setDefault();
+                
+                instance.create(accCfg, true);
             }
             catch
             {
@@ -92,14 +101,9 @@ namespace VoiceX.Services
             try
             {
                 Debug.WriteLine("[SIP] Выход из аккаунта...");
-
-                // 1️⃣ Отключаем регистрацию
                 setRegistration(false);
 
-                // 2️⃣ Ждём немного, чтобы сервер обработал разлогин
-                System.Threading.Thread.Sleep(500);
-
-                // 3️⃣ Завершаем аккаунт
+                Thread.Sleep(500);
                 shutdown();
 
                 Debug.WriteLine("[SIP] Аккаунт успешно разлогинен.");
@@ -114,7 +118,7 @@ namespace VoiceX.Services
             if (this == null)
             {
                 Debug.WriteLine("Ошибка: SIP-аккаунт не зарегистрирован!");
-                return null;
+                return null!;
             }
 
             // Закрываем предыдущий вызов перед созданием нового
@@ -134,10 +138,10 @@ namespace VoiceX.Services
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Ошибка при вызове: {ex.Message}");
-                    return null;
+                    return null!;
                 }
             }
-            return null;
+            return null!;
             // Создаём новый вызов
             
         }
@@ -165,6 +169,16 @@ namespace VoiceX.Services
         public override void write(LogEntry entry)
         {
             Debug.WriteLine($"[{entry.level}] {entry.msg}");
+            if (entry.msg.Contains("EC suspended because of inactivity"))
+            {
+                if (CoreService.activeCall != null)
+                {
+                    if (!CoreService.activeCall.isMute)
+                    {
+                        CoreService.activeCall.hangup(new CallOpParam());
+                    }
+                }
+            }
         }
     }
 }

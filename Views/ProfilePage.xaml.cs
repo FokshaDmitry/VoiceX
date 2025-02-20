@@ -369,7 +369,7 @@ namespace VoiceX.Views
                         }
                         else
                         {
-                            window?.ShowError(result.ResponseMessage);
+                            window?.ShowError(result.ResponseCode.ToString());
                             PauseList.SelectedIndex = -1;
                         }
                     }

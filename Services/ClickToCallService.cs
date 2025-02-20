@@ -22,7 +22,7 @@ namespace VoiceX.Services
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
         private Int32 IDs = 0;
         public delegate void HotkeyDelegate(string ID);
-        public event HotkeyDelegate HotkeyPressed;
+        public event HotkeyDelegate? HotkeyPressed;
         public string Key = "";
         public int MainKey = 0;
         public int RegistId = 1001;
@@ -30,7 +30,7 @@ namespace VoiceX.Services
         public ClickToCallService()
         {
             this.CreateHandle(new CreateParams());
-            Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
+            Application.ApplicationExit += new EventHandler(Application_ApplicationExit!);
             storeService = new LocalStoreService();
         }
 

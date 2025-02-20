@@ -87,7 +87,7 @@ namespace VoiceX.Views.ControlPages
                     {
                         if (CoreService.Instance.getInfo() != null)
                         {
-                            await Dispatcher.InvokeAsync(async () =>
+                            await Dispatcher.InvokeAsync(() =>
                             {
                                 try
                                 {
@@ -210,6 +210,7 @@ namespace VoiceX.Views.ControlPages
                 if (await webService.ChangeCallType("fix", App.UserPbx!, App.userToken!) == System.Net.HttpStatusCode.OK)
                 {
                     CoreService.Instance.setRegistration(false);
+                    await Task.Delay(1000);
                     SmartPhone.IsChecked = false;
                 }
                 else
@@ -231,19 +232,6 @@ namespace VoiceX.Views.ControlPages
         private void Grid_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             App.timeOut = DateTime.Now;
-        }
-
-        
-
-
-        private void Exit_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            ExitIcone.Margin = new Thickness(28, 2, 9, 4);
-        }
-
-        private void Exit_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            ExitIcone.Margin = new Thickness(28, 2, 10, 4);
         }
     }
 }

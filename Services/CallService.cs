@@ -15,16 +15,17 @@ namespace VoiceX.Services
     {
 
         AudioMediaPlayer? ringTonePlayer;
-        private bool isOnHold;
+        public bool isMute;
         public List<string> CallAdtess { get; set; }
         DateTime startTime;
         public delegate void EndCall(string Name, string Phone, DateTime StartCall);
-        public event EndCall EndCallEvent;
+        public event EndCall? EndCallEvent;
         public CallService(Account acc, int call_id = -1) : base(acc, call_id)
         {
             CallAdtess = new List<string>();
             startTime = new DateTime();
             startTime = DateTime.MinValue;
+            isMute = false;
         }
         public void Accept()
         {
@@ -74,7 +75,7 @@ namespace VoiceX.Services
                             }
                             if (CallAdtess != null && CallAdtess.Count() == 0)
                             {
-                                EndCallEvent.Invoke(info.remoteUri, info.remoteContact, startTime);
+                                EndCallEvent?.Invoke(info.remoteUri, info.remoteContact, startTime);
                                 CoreService.activeCall?.Dispose();
                                 CoreService.activeCall = null;
                                 DisableMicrophone();
@@ -191,6 +192,7 @@ namespace VoiceX.Services
                             remoteAudio.stopTransmit(speaker);
                         }
                         CoreService.Instance.Core.audDevManager().setPlaybackDev(-1);
+                        isMute = true;
                         return false;
                     }
                     else
@@ -201,6 +203,7 @@ namespace VoiceX.Services
                         {
                             remoteAudio.startTransmit(speaker);
                         }
+                        isMute = false;
                         return true;
 
                     }
@@ -236,7 +239,7 @@ namespace VoiceX.Services
                     reinvite(param);
                 }
             }
-            catch (Exception e) { }
+            catch { }
         }
         public void PlayRingTone(string state)
         {

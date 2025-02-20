@@ -240,7 +240,7 @@ namespace VoiceX.DAL.Context
                     var reader = sqliteCommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        historyNotes.Add(new HistoryNotes { Id = Guid.Parse(reader.GetString(0)), Name = reader.GetString(1), Phone = reader.GetString(2), StatusCall = reader.GetString(3) == "Outgoing" ? StatusCall.Outgoing : reader.GetString(3) == "Incoming" ? StatusCall.Incoming : StatusCall.Ignore, StartDialog = DateTime.Parse(reader.GetString(4)), EndDialog = DateTime.Parse(reader.GetString(5)) });
+                        historyNotes.Add(new HistoryNotes { Id = Guid.Parse(reader.GetString(0)), Name = reader.GetString(1), Phone = reader.GetString(2), StatusCall = reader.GetString(3) == "Outgoing" ? StatusCall.Outgoing : reader.GetString(3) == "Incoming" ? StatusCall.Incoming : reader.GetString(3) == "Ignore" ? StatusCall.Ignore : StatusCall.IncomeIgnore, StartDialog = DateTime.Parse(reader.GetString(4)), EndDialog = DateTime.Parse(reader.GetString(5)) });
                     }
                     connection.Close();
                     connection.Dispose();
@@ -267,7 +267,7 @@ namespace VoiceX.DAL.Context
                     var reader = sqliteCommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        historyNotes.Add(new HistoryNotes { Id = Guid.Parse(reader.GetString(0)), Name = reader.GetString(1), Phone = reader.GetString(2), StatusCall = reader.GetString(3) == "Outgoing" ? StatusCall.Outgoing : reader.GetString(3) == "Incoming" ? StatusCall.Incoming : StatusCall.Ignore, StartDialog = DateTime.Parse(reader.GetString(4)), EndDialog = DateTime.Parse(reader.GetString(5)) });
+                        historyNotes.Add(new HistoryNotes { Id = Guid.Parse(reader.GetString(0)), Name = reader.GetString(1), Phone = reader.GetString(2), StatusCall = reader.GetString(3) == "Outgoing" ? StatusCall.Outgoing : reader.GetString(3) == "Incoming" ? StatusCall.Incoming : reader.GetString(3) == "Ignore" ? StatusCall.Ignore : StatusCall.IncomeIgnore, StartDialog = DateTime.Parse(reader.GetString(4)), EndDialog = DateTime.Parse(reader.GetString(5)) });
                     }
                     connection.Close();
                     connection.Dispose();

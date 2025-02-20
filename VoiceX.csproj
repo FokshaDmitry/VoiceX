@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>256х256.ico</ApplicationIcon>
+    <ApplicationIcon>Logo256.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
@@ -74,7 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="256х256.ico" />
+    <Content Include="Logo256.ico" />
   </ItemGroup>
 
   <ItemGroup>

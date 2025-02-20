@@ -58,7 +58,7 @@ namespace VoiceX.Services
                     goto retry;
                 }
             }
-            var result = JObject.Parse(raw)?["message"].ToString() + " " + JObject.Parse(raw)?["type"].ToString();
+            var result = JObject.Parse(raw)?["message"]?.ToString() + " " + JObject.Parse(raw)?["type"]?.ToString();
             return result;
         }
         public async Task<Get_certificate> GetCertificateAsync(string pbxCode, string os)
@@ -117,47 +117,47 @@ namespace VoiceX.Services
             return certificate;
         }
 
-        public async Task<string> ClickToCall(string phone, string companyID, string userID, string pbxCode)
-        {
-            if (String.IsNullOrEmpty(userID))
-            {
-                return "Empty User Id";
-            }
-            if (String.IsNullOrEmpty(companyID))
-            {
+        //public async Task<string> ClickToCall(string phone, string companyID, string userID, string pbxCode)
+        //{
+        //    if (String.IsNullOrEmpty(userID))
+        //    {
+        //        return "Empty User Id";
+        //    }
+        //    if (String.IsNullOrEmpty(companyID))
+        //    {
 
-                return "Company ID is 0";
-            }
-            if (String.IsNullOrEmpty(pbxCode))
-            {
-                return "PBX not exist";
-            }
-            if (pbxCode.Where(char.IsDigit).Count() != 3)
-            {
-                return "Wrong PBX";
-            }
-            string responseBody = "";
-            try
-            {
-                //var content = new HttpStringContent("{" + $"\"user_id\":\"{userID}\",\"phone\":\"{phone}\", \"company_id\":\"{companyID}\"" + "}", UnicodeEncoding.Utf8);
-                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                //var clientCertificate = certificate.First();
-                //var filter = new HttpBaseProtocolFilter();
-                //filter.ClientCertificate = clientCertificate;
-                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                //{
-                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                //    var response = await httpClient.PostAsync(new Uri($"https://pbx{pbxCode.TrimStart('0')}.x-cloud.info/stats/api/CrossPlatform/click2call/call.php"), content);
-                //    responseBody = await response.Content.ReadAsStringAsync();
-                //}
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-            return responseBody;
-        }
+        //        return "Company ID is 0";
+        //    }
+        //    if (String.IsNullOrEmpty(pbxCode))
+        //    {
+        //        return "PBX not exist";
+        //    }
+        //    if (pbxCode.Where(char.IsDigit).Count() != 3)
+        //    {
+        //        return "Wrong PBX";
+        //    }
+        //    string responseBody = "";
+        //    try
+        //    {
+        //        //var content = new HttpStringContent("{" + $"\"user_id\":\"{userID}\",\"phone\":\"{phone}\", \"company_id\":\"{companyID}\"" + "}", UnicodeEncoding.Utf8);
+        //        //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+        //        //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+        //        //var clientCertificate = certificate.First();
+        //        //var filter = new HttpBaseProtocolFilter();
+        //        //filter.ClientCertificate = clientCertificate;
+        //        //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+        //        //{
+        //        //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+        //        //    var response = await httpClient.PostAsync(new Uri($"https://pbx{pbxCode.TrimStart('0')}.x-cloud.info/stats/api/CrossPlatform/click2call/call.php"), content);
+        //        //    responseBody = await response.Content.ReadAsStringAsync();
+        //        //}
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ex.Message;
+        //    }
+        //    return responseBody;
+        //}
         public async Task<contacts_list> GetcontactsList(string sip_username, string companyID, string pbxCode, string userToken)
         {
             contacts_list contacts = new contacts_list
@@ -222,15 +222,15 @@ namespace VoiceX.Services
                     var contactsList = JObject.Parse(responseBody)?["data"];
                     if (contacts != null)
                     {
-                        contacts = JsonConvert.DeserializeObject<contacts_list>(responseBody);
+                        contacts = JsonConvert.DeserializeObject<contacts_list>(responseBody)!;
                         if (contacts.contacts != null)
                         {
-                            contacts.contacts = JsonConvert.DeserializeObject<List<Contact>>(contactsList.ToString());
+                            contacts.contacts = JsonConvert.DeserializeObject<List<Contact>>(contactsList?.ToString()!)!;
                         }
                         else
                         {
                             contacts.contacts = new List<Contact>();
-                            contacts.contacts = JsonConvert.DeserializeObject<List<Contact>>(contactsList.ToString());
+                            contacts.contacts = JsonConvert.DeserializeObject<List<Contact>>(contactsList!.ToString())!;
                         }
                     }
                 }
@@ -242,7 +242,7 @@ namespace VoiceX.Services
                 }
             }
             
-            return contacts;
+            return contacts!;
         }
         public async Task<System.Net.HttpStatusCode> ChangeCallType(string callType, string pbxCode, string userToken)
         {
@@ -264,7 +264,7 @@ namespace VoiceX.Services
                     var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/change_call_type.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                 }
-                return JsonConvert.DeserializeObject<System.Net.HttpStatusCode>(JObject.Parse(responseBody)["responseCode"].ToString());
+                return JsonConvert.DeserializeObject<System.Net.HttpStatusCode>(JObject.Parse(responseBody)["responseCode"]?.ToString()!);
             }
             catch
             {
@@ -272,29 +272,29 @@ namespace VoiceX.Services
             }
         }
         //Добавить
-        public async Task GetStatuses(string SipAccount, string CallerAccount, string pbxCode)
-        {
-            string responseBody = "";
-            try
-            {
-                //var content = new HttpStringContent("{" + $"\"account\":\"{SipAccount}\", \"caller_account\":\"{CallerAccount}\"" + "}", UnicodeEncoding.Utf8);
-                //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-                //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-                //var clientCertificate = certificate.First();
-                //var filter = new HttpBaseProtocolFilter();
-                //filter.ClientCertificate = clientCertificate;
-                //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-                //{
-                //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-                //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_statuses.php"), content);
-                //    responseBody = await response.Content.ReadAsStringAsync();
-                //}
-            }
-            catch
-            {
-                return;
-            }
-        }
+        //public async Task GetStatuses(string SipAccount, string CallerAccount, string pbxCode)
+        //{
+        //    string responseBody = "";
+        //    try
+        //    {
+        //        //var content = new HttpStringContent("{" + $"\"account\":\"{SipAccount}\", \"caller_account\":\"{CallerAccount}\"" + "}", UnicodeEncoding.Utf8);
+        //        //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+        //        //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
+        //        //var clientCertificate = certificate.First();
+        //        //var filter = new HttpBaseProtocolFilter();
+        //        //filter.ClientCertificate = clientCertificate;
+        //        //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
+        //        //{
+        //        //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
+        //        //    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_statuses.php"), content);
+        //        //    responseBody = await response.Content.ReadAsStringAsync();
+        //        //}
+        //    }
+        //    catch
+        //    {
+        //        return;
+        //    }
+        //}
         public async Task LogOut(string pbxCode, string userToken)
         {
             string responseBody = "";
@@ -353,16 +353,16 @@ namespace VoiceX.Services
             {
                 try
                 {
-                    account = JsonConvert.DeserializeObject<Account_data>(responseBody);
-                    var sipSettings = JObject.Parse(responseBody)?["data"]["sip_settings"];
-                    var usedData = JObject.Parse(responseBody)?["data"]["user_data"];
+                    account = JsonConvert.DeserializeObject<Account_data>(responseBody)!;
+                    var sipSettings = JObject.Parse(responseBody)?["data"]?["sip_settings"];
+                    var usedData = JObject.Parse(responseBody)?["data"]?["user_data"];
                     var appData = JObject.Parse(responseBody)?["data"];
-                    var ldapData = JObject.Parse(responseBody)?["data"]["ldap_settings"];
-                    account.Data = JsonConvert.DeserializeObject<Data>(appData?.ToString());
-                    account.Data.Sip_Settings = JsonConvert.DeserializeObject<Sip_settings>(sipSettings?.ToString());
+                    var ldapData = JObject.Parse(responseBody)?["data"]?["ldap_settings"];
+                    account.Data = JsonConvert.DeserializeObject<Data>(appData?.ToString()!)!;
+                    account.Data.Sip_Settings = JsonConvert.DeserializeObject<Sip_settings>(sipSettings?.ToString()!)!;
                     account.Data.Sip_Settings.Sip_secret = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(account.Data.Sip_Settings.Sip_secret));
                     account.Data.Sip_Settings.Sip_server = $"pbx{pbxCode.Substring(1, 2)}.x-cloud.info";
-                    account.Data.User_Data = JsonConvert.DeserializeObject<User_data>(usedData?.ToString());
+                    account.Data.User_Data = JsonConvert.DeserializeObject<User_data>(usedData?.ToString()!)!;
 
                 }
                 catch (Exception ex)
@@ -405,7 +405,7 @@ namespace VoiceX.Services
             {
                 try
                 {
-                    responseData = JsonConvert.DeserializeObject<response_data>(responseBody);
+                    responseData = JsonConvert.DeserializeObject<response_data>(responseBody)!;
                 }
                 catch (Exception ex)
                 {
@@ -453,11 +453,11 @@ namespace VoiceX.Services
             {
                 try
                 {
-                    responseData = JsonConvert.DeserializeObject<response_data>(responseBody);
+                    responseData = JsonConvert.DeserializeObject<response_data>(responseBody)!;
                 }
                 catch (Exception ex)
                 {
-                    responseData.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                    responseData!.ResponseCode = System.Net.HttpStatusCode.BadRequest;
                     responseData.ResponseMessage = ex.Message;
                     return responseData;
                 }
@@ -469,7 +469,7 @@ namespace VoiceX.Services
                 responseData.ResponseMessage = "Response is empty";
                 return responseData;
             }
-            return responseData;
+            return responseData!;
         }
         public async Task<user_dbinfo> GetClient(string idDB, string pbxCode)
         {
@@ -501,7 +501,7 @@ namespace VoiceX.Services
             {
                 try
                 {
-                    user_dbinfo = JsonConvert.DeserializeObject<user_dbinfo>(responseBody);
+                    user_dbinfo = JsonConvert.DeserializeObject<user_dbinfo>(responseBody)!;
                 }
                 catch (Exception ex)
                 {
@@ -639,7 +639,7 @@ namespace VoiceX.Services
                 using (var httpClient = new HttpClient(handler))
                 {
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/pauses/set_pause.php"), content);
+                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/pauses/set_pause.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                 }
             }
@@ -653,7 +653,7 @@ namespace VoiceX.Services
             {
                 try
                 {
-                    responceModel.ResponseCode = JsonConvert.DeserializeObject<System.Net.HttpStatusCode>(JObject.Parse(responseBody)?["responseCode"].ToString());
+                    responceModel.ResponseCode = JsonConvert.DeserializeObject<System.Net.HttpStatusCode>(JObject.Parse(responseBody)?["responseCode"]?.ToString()!);
                 }
                 catch
                 {

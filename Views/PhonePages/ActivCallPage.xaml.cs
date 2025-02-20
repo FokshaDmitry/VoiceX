@@ -28,7 +28,7 @@ namespace VoiceX.Views.PhonePages
     {
         private DateTime startCall;
         bool timeFlag;
-        Timer timer;
+        Timer? timer;
         LocalStoreService localStoreService;
         ProfilePage phonePage;
         bool pause;
@@ -56,7 +56,7 @@ namespace VoiceX.Views.PhonePages
                 {
                     if (CoreService.activeCall != null)
                     {
-
+                        var boo = CoreService.Instance.Core.mediaActivePorts();
                         if (CoreService.activeCall.CallAdtess.Count != 0)
                         {
                             Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");
@@ -68,7 +68,7 @@ namespace VoiceX.Views.PhonePages
                         CallInfo info = new CallInfo();
                         try
                         {
-                           info = CoreService.activeCall.getInfo();
+                            info = CoreService.activeCall.getInfo();
                         }
                         catch
                         {
@@ -109,7 +109,7 @@ namespace VoiceX.Views.PhonePages
                         if (timer != null)
                         {
                             timer.Dispose();
-                            timer = null;
+                            timer = null!;
                         }
                     }
                 }
@@ -124,7 +124,7 @@ namespace VoiceX.Views.PhonePages
             
         }
 
-        private async void EndCall_Click(object sender, RoutedEventArgs e)
+        private void EndCall_Click(object sender, RoutedEventArgs e)
         {
             if(CoreService.activeCall != null)
             {
@@ -139,12 +139,12 @@ namespace VoiceX.Views.PhonePages
                         if (timer != null)
                         {
                             timer.Dispose();
-                            timer = null;
+                            timer = null!;
                         }
                     }
                     catch
                     {
-                        timer = null;
+                        timer = null!;
                     }
                 }
                 else
@@ -223,7 +223,7 @@ namespace VoiceX.Views.PhonePages
         {
             if (timer == null)
             {
-                timer = new Timer(EnalebleCalling, null, (int)TimeSpan.FromSeconds(1).TotalMilliseconds, (int)TimeSpan.FromSeconds(1).TotalMilliseconds);
+                timer = new Timer(EnalebleCalling!, null, (int)TimeSpan.FromSeconds(1).TotalMilliseconds, (int)TimeSpan.FromSeconds(1).TotalMilliseconds);
             }
             
         }

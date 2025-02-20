@@ -22,7 +22,7 @@ DisableProgramGroupPage=yes
 OutputDir=App
 OutputBaseFilename=VoiceX
 Compression=lzma
-SetupIconFile=C:\Users\user\Work\VoiceX\VoiceX\AppPackages\Logo48.ico
+SetupIconFile=C:\Users\user\Work\Logo256.ico
 SolidCompression=yes
 WizardStyle=modern
 
@@ -33,7 +33,7 @@ Name: "hebrew"; MessagesFile: "compiler:Languages\Hebrew.isl"; LicenseFile: lice
 
 
 [Icons]
-Name: "{commondesktop}\VoiceX Phone"; Filename: "{app}\VoiceX.exe"; IconFilename: "{app}\VoiceX\Logo48.ico";
+Name: "{commondesktop}\VoiceX Phone"; Filename: "{app}\VoiceX.exe"; IconFilename: "{app}\VoiceX\Logo256.ico";
 
 [Files]
 Source: "*"; DestDir: {app}; Flags: recursesubdirs createallsubdirs ignoreversion

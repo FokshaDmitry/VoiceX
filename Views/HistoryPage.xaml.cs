@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using VoiceX.DAL.Context;
 using VoiceX.DAL.Entity;
 using VoiceX.Interfeces;
 using VoiceX.Items;
-using VoiceX.Models;
 using VoiceX.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -61,7 +56,7 @@ namespace VoiceX.Views
                     HistoryList.Items.Insert(1, note);
                 }
             }
-            else if (filter.Name == "IgnoreCall" && historyNote.StatusCall == Enums.StatusCall.Ignore)
+            else if (filter.Name == "IgnoreCall" && (historyNote.StatusCall == Enums.StatusCall.Ignore || historyNote.StatusCall == Enums.StatusCall.IncomeIgnore))
             {
                 if (HistoryList.Items.Count == 0)
                 {

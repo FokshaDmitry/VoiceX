@@ -87,7 +87,7 @@
                 <TextBlock  FontFamily="Nunito Sans 10pt Normal" Text="Sunny Aveiro"   HorizontalAlignment="Left" x:Name="AccountFild" Margin="40,11,0,0"  VerticalAlignment="Top" FontSize="12" Foreground="#FF252422" Width="106"/>
                 <Grid  x:Name="ActivGrid" VerticalAlignment="Bottom" Margin="41,0,66,5" HorizontalAlignment="Stretch" >
                     <TextBlock  x:Name="phoneNumber" FontFamily="Nunito Sans 10pt Normal" Text="Active"  VerticalAlignment="Center" FontSize="10" Foreground="#FF101010" HorizontalAlignment="Left" Margin="8,0,0,0" Width="98"/>
-                    <Ellipse Height="6" x:Name="Activ"  Fill="#FF34C471" VerticalAlignment="Center" Width="6" HorizontalAlignment="Left"/>
+                    <Ellipse Height="6" x:Name="Activ"  Fill="#FFF31E38" VerticalAlignment="Center" Width="6" HorizontalAlignment="Left"/>
                 </Grid>
                 <Border Width="1" CornerRadius="0.5" Background="#FFC3C3C3" Height="26" HorizontalAlignment="Right" Margin="0,0,60,0" VerticalAlignment="Center"/>
 

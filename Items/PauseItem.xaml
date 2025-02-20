@@ -5,11 +5,11 @@
     xmlns:local="using:VoiceX.Items"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" HorizontalAlignment="Stretch" Cursor="Hand" VerticalAlignment="Stretch" Name="Select" Background="White" Foreground="#FF252422" Padding="0,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,3,0,0">
+    mc:Ignorable="d" BorderThickness="0" HorizontalAlignment="Stretch" Cursor="Hand" VerticalAlignment="Stretch" Name="Select" Background="White" Foreground="#FF252422" Padding="0,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,3,0,0">
     <ListBoxItem.Content>
         <Grid Background="White">
-            <TextBlock MinHeight="25" Text="Test Pause" x:Name="PauseName" FontSize="16" FontFamily="Nunito Sans 10pt Normal" Width="105" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,2,0,0"/>
-            <Grid x:Name="Check" HorizontalAlignment="Right" Width="24" Height="24" VerticalAlignment="Top">
+            <TextBlock MinHeight="25" Text="Test Pause" x:Name="PauseName" FontSize="16" FontFamily="Nunito Sans 10pt Normal" Width="105" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="7,2,0,0"/>
+            <Grid Margin="0, -4, 0, 0" x:Name="Check" HorizontalAlignment="Right" Width="24" Height="24" VerticalAlignment="Top">
                 <Border Height="2" CornerRadius="1" Width="18" Background="#FF8A63FB" RenderTransformOrigin="0.5,0.5" Margin="5,0,0,0" >
                     <Border.RenderTransform>
                         <TransformGroup>

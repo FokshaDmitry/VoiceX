@@ -69,13 +69,11 @@ namespace VoiceX.Views
         }
         public void ShowInBottomRight()
         {
-            // Задаём позицию возле правого нижнего угла экрана:
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
 
-            // Считаем отступы, чтобы окно "отступало" на 10px от правого нижнего угла
             double offsetX = 10;
-            double offsetY = 50; // немного побольше, чтобы не упиралось прямо в панель задач
+            double offsetY = 50; 
 
             this.Left = screenWidth - this.Width - offsetX;
             this.Top = screenHeight - this.Height - offsetY;
@@ -90,9 +88,8 @@ namespace VoiceX.Views
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
 
-            // Считаем отступы, чтобы окно "отступало" на 10px от правого нижнего угла
             double offsetX = 10;
-            double offsetY = 50; // немного побольше, чтобы не упиралось прямо в панель задач
+            double offsetY = 50; 
 
             this.Left = screenWidth - this.Width - offsetX;
             this.Top = screenHeight - this.Height - offsetY;
