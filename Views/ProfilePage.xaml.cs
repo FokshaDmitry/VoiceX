@@ -73,8 +73,24 @@ namespace VoiceX.Views
             slideLeft = (Storyboard)FindResource("SlideLeftAnimation");
             clickToCallService = new ClickToCallService();
             incomingWindow = new IncomingWindow(mainWindow, this, activCallPage);
+            window.moveOnDialpad += Window_moveOnDialpad;
+            window.moveOnContact += Window_moveOnContact;
         }
-        public  void Hotkeys_HotkeyPressed(string Phone)
+
+        private void Window_moveOnContact()
+        {
+
+            MainFrame.Navigate(clientsPage);
+            slide.Begin();
+        }
+
+        private void Window_moveOnDialpad()
+        {
+            MainFrame.Navigate(dialpadCallPage);
+            slide.Begin();
+        }
+
+        public void Hotkeys_HotkeyPressed(string Phone)
         {
 
             if (!String.IsNullOrEmpty(Phone))

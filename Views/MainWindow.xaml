@@ -30,11 +30,41 @@
             IconSource="/Assets/icone_v2/icon24.ico"
             ToolTipText="VoiceX" TrayMouseDoubleClick="TrayIcon_TrayMouseDoubleClick">
                 <tb:TaskbarIcon.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Open" Click="ShowWindow"/>
-                        <MenuItem Name="Dialpad" Header="Dialpad" Click="Dialpad_Click"/>
-                        <MenuItem Name="Clients" Header="Clients" Click="Clients_Click"/>
-                        <MenuItem Header="Exit" Click="ExitApplication"/>
+                    <ContextMenu Background="Transparent" BorderThickness="0">
+                        <ContextMenu.Resources>
+                            <Style TargetType="ContextMenu">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ContextMenu">
+                                            <Border Padding="18" Width="167" Height="222" Background="White" BorderBrush="#FFE1DDFF" BorderThickness="1" CornerRadius="24">
+                                                <!-- Закругление -->
+                                                <StackPanel>
+                                                    <ItemsPresenter/>
+                                                </StackPanel>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="MenuItem">
+                                            <Border Padding="0" Margin="0" Background="Transparent" BorderThickness="0, 0, 0, 1" BorderBrush="#FFE3DEFF">
+                                                <Grid>
+                                                    <ContentPresenter ContentSource="Header" VerticalAlignment="Center" HorizontalAlignment="Left"  Margin ="0, 6, 0, 6"/>
+                                                </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ContextMenu.Resources>
+                        <MenuItem BorderThickness="0, 0, 0, 1" BorderBrush="Black" Padding="0" Cursor="Hand" FontFamily="Nunito Sans 10pt Normal" Header="Open" Click="ShowWindow" FontSize="18"/>
+                        <MenuItem BorderThickness="0, 0, 0, 1" BorderBrush="Black" Cursor="Hand" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Name="Dialpad" Header="Dialpad" Click="Dialpad_Click"/>
+                        <MenuItem BorderThickness="0, 0, 0, 1" BorderBrush="Black" Cursor="Hand" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Name="Clients" Header="Clients" Click="Clients_Click"/>
+                        <MenuItem BorderThickness="0, 0, 0, 1" BorderBrush="Black" Cursor="Hand" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Name="Help" Header="Help" Click="Help_Click"/>
+                        <MenuItem BorderThickness="0, 0, 0, 1" BorderBrush="Black" Cursor="Hand" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Header="Exit" Click="ExitApplication"/>
                     </ContextMenu>
                 </tb:TaskbarIcon.ContextMenu>
             </tb:TaskbarIcon>

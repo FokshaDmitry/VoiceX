@@ -39,7 +39,6 @@ namespace VoiceX.Services
                     epConfig.uaConfig.stunServer.Add("ice.x-cloud.info:3478");
                     epConfig.uaConfig.natTypeInSdp = 1;
                     epConfig.uaConfig.maxCalls = 15;
-                    epConfig.uaConfig.stunTryIpv6 = false;
                     
                     core.libInit(epConfig);
 
@@ -56,15 +55,15 @@ namespace VoiceX.Services
                         Debug.WriteLine(e.Message);
                     }
                     // Start library
-                    try
-                    {
-                        tcfg.port = 5061;
-                        core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS, tcfg);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e.Message);
-                    }
+                    //try
+                    //{
+                    //    tcfg.port = 5061;
+                    //    core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS, tcfg);
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    Debug.WriteLine(e.Message);
+                    //}
                     core.libStart();
                 }
                 return core; 

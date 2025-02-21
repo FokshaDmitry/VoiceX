@@ -1,5 +1,7 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
 using VoiceX.Services;
@@ -19,6 +21,9 @@ namespace VoiceX.Views
         readonly AddDbContext addDbContext;
         CertificateService certificateService;
         WebService webService;
+        public delegate void MoveOnPage();
+        public event MoveOnPage? moveOnDialpad;
+        public event MoveOnPage? moveOnContact;
         public MainWindow()
         {
             InitializeComponent();
@@ -182,12 +187,23 @@ namespace VoiceX.Views
 
         private void Dialpad_Click(object sender, RoutedEventArgs e)
         {
-
+            this.ShowInBottomRight();
+            moveOnDialpad?.Invoke();
         }
 
         private void Clients_Click(object sender, RoutedEventArgs e)
         {
+            this.ShowInBottomRight();
+            moveOnContact?.Invoke();
+        }
 
+        private void Help_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://x-cloud.info/",
+                UseShellExecute = true
+            });
         }
     }
 }

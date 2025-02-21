@@ -80,7 +80,7 @@
 
             <Grid Visibility="Collapsed" x:Name="AddButtom" Background="White" Margin="-1,-1,-1,-1">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="Add field" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFA0A0A0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,3,0"/>
+                    <TextBlock Text="Add field" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFA0A0A0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,6,0" FontSize="14"/>
                     <Button Cursor="Hand" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" x:Name="AddRegItem" Click="AddRegItem_Click" VerticalContentAlignment="Stretch"  Width="26" Height="26" Padding="0,0,0,0" HorizontalAlignment="Center">
                         <Button.Content>
                             <Border Background="#FFBBBAFF" CornerRadius="50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

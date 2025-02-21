@@ -233,7 +233,7 @@
             </Image>
             <Button Cursor="Hand" BorderThickness="0" ToolTipService.ToolTip="Pauses" ToolTipService.Placement="Mouse" x:Name="Pauses" Click="Pauses_Click" Height="30" Width="30" Background="Transparent" Padding="0,0,0,0" HorizontalAlignment="Right" Margin="0,0,16,0">
                 <Button.Content>
-                    <Border CornerRadius="20" Height="28" Width="28"  Background="#FFFDFEFF" >
+                    <Border BorderThickness="1" BorderBrush="#FFC3B1FD" CornerRadius="20" Height="28" Width="28"  Background="#FFFDFEFF" >
                         <Image Source="/Assets/Icone_v2/Coffee.png" Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </Button.Content>
