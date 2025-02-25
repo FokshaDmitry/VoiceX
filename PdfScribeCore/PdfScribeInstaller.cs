@@ -548,7 +548,7 @@ namespace PdfScribeCore
                             }
                             else
                             {
-                                MessageBox.Show(INFO_INSTALLPRINTER_FAILED);
+                                //MessageBox.Show(INFO_INSTALLPRINTER_FAILED);
                                 // Failed to install printer
                                 this.logEventSource.TraceEvent(TraceEventType.Error,
                                                                     (int)TraceEventType.Error,
@@ -894,7 +894,6 @@ namespace PdfScribeCore
             int pdfScribePrinterHandle = NativeMethods.AddPrinter(null, 2, ref pdfScribePrinter);
             if (pdfScribePrinterHandle != 0)
             {
-                // Added ok
                 int closeCode = NativeMethods.ClosePrinter((IntPtr)pdfScribePrinterHandle);
                 printerAdded = true;
             }

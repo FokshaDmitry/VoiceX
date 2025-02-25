@@ -85,7 +85,7 @@ namespace VoiceX.Items
             App.timeOut = DateTime.Now;
         }
 
-        private async void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             if (!String.IsNullOrEmpty(Search.Text))
             {
