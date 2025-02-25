@@ -12,6 +12,6 @@ namespace VoiceX.Models
     }
     public class data : user_info
     {
-        public List<object> statuses { get; set; }
+        public List<object>? statuses { get; set; }
     }
 }

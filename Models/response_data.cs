@@ -5,6 +5,6 @@ namespace VoiceX.Models
 {
     public class response_data : Responce_model
     {
-        public List<user_info> data { get; set; }
+        public List<user_info>? data { get; set; }
     }
 }

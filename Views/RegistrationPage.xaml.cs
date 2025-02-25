@@ -75,14 +75,14 @@ namespace VoiceX.Views
                         //if we have certificate in certificate store and we have certificate hash
                         if (!certificateService.CheckCertificate("app-cert"))
                         {
-                            certificateService.SaveCertificate(cert.P12l, cert.Key, "app-cert", "r7Z33th35XTCfym6");
+                            certificateService.SaveCertificate(cert.P12l!, cert.Key!, "app-cert", "r7Z33th35XTCfym6");
                         }
                         App.userToken = cert.App_token;
                         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
                         await localStoreService.SaveDataAsync("pbxCode", pbxCode.Substring(0, 3));
-                        await localStoreService.SaveDataAsync("token", cert.App_token);
+                        await localStoreService.SaveDataAsync("token", cert.App_token!);
                         webService = new WebService();
-                        App.AccountData = await webService.GetAccountSettings(pbxCode.Substring(0, 3), App.userToken);
+                        App.AccountData = await webService.GetAccountSettings(pbxCode.Substring(0, 3), App.userToken!);
                     }
                     catch (Exception ex)
                     {
@@ -101,7 +101,7 @@ namespace VoiceX.Views
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                window.ShowError($"Server wrong: {ex.Message}, Message: {App.AccountData.ResponseMessage}");
+                window.ShowError($"Server wrong: {ex.Message}, Message: {App.AccountData!.ResponseMessage}");
                 LoadIcone.Visibility = Visibility.Collapsed;
                 return;
             }

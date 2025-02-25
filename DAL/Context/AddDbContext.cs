@@ -9,7 +9,7 @@ namespace VoiceX.DAL.Context
     class AddDbContext 
     {
         public delegate void Update(HistoryNotes historyNote);
-        public static event Update ChangeHystory;
+        public static event Update? ChangeHystory;
         public AddDbContext()
         {
             InitializeDB();
@@ -129,23 +129,20 @@ namespace VoiceX.DAL.Context
         }
         public async Task RemoveHotKeyUserAsync(Guid Id)
         {
-            if (Id != null)
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+            string openPathDB = Path.Combine(path + "\\HistoryDB.db");
+            using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
             {
-                var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
-                string openPathDB = Path.Combine(path + "\\HistoryDB.db");
-                using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
+                await connection.OpenAsync().ConfigureAwait(true);
+                SqliteCommand sqliteCommand = new SqliteCommand
                 {
-                    await connection.OpenAsync().ConfigureAwait(true);
-                    SqliteCommand sqliteCommand = new SqliteCommand
-                    {
-                        Connection = connection,
-                        CommandText = " DELETE FROM HotKeyUsers WHERE Id = @Id"
-                    };
-                    sqliteCommand.Parameters.AddWithValue("@Id", Id.ToString());
-                    await sqliteCommand.ExecuteReaderAsync();
-                    connection.Close();
-                    connection.Dispose();
-                }
+                    Connection = connection,
+                    CommandText = " DELETE FROM HotKeyUsers WHERE Id = @Id"
+                };
+                sqliteCommand.Parameters.AddWithValue("@Id", Id.ToString());
+                await sqliteCommand.ExecuteReaderAsync();
+                connection.Close();
+                connection.Dispose();
             }
         }
         public async Task SaveCertificateAsunc(string b64P12)
@@ -300,7 +297,7 @@ namespace VoiceX.DAL.Context
                     connection.Dispose();
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return hotKeyUsers;
             }

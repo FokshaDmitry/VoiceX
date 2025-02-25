@@ -10,6 +10,14 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Prefer32Bit>True</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Prefer32Bit>True</Prefer32Bit>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Assets\Fonts\Inter-Regular.ttf" />
     <None Remove="Assets\Fonts\Jost-Regular.ttf" />
@@ -71,6 +79,7 @@
     <None Remove="Assets\Icone_v2\Warning.png" />
     <None Remove="Assets\Icone_v2\x.png" />
     <None Remove="Assets\Logo48.ico" />
+    <None Remove="Services\gsdll32.dll" />
   </ItemGroup>
 
   <ItemGroup>
@@ -168,8 +177,17 @@
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NSwag.Core" Version="14.2.0" />
+    <PackageReference Include="PDFsharp" Version="6.1.1" />
     <PackageReference Include="pjsip-pjsua2-cs" Version="2.10.1" />
     <PackageReference Include="Uno.UI" Version="5.6.33" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\VoiceX\PdfScribeCore\PdfScribeCore.csproj">
+      <Private>True</Private>
+      <CopyLocalSatelliteAssemblies>True</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -298,6 +316,24 @@
     <None Update="default-windowsrsa.p12">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="DLL\PS5UI.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DLL\PSCRIPT.HLP">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DLL\PSCRIPT.NTF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DLL\PSCRIPT5.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DLL\SCPDFPRN.ppd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="gsdll32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Installer.iss">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -310,6 +346,18 @@
     <None Update="license_russian.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="DLL\redmon64pdfscribe.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="windowsdesktop-runtime-8.0.13-win-x86.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="IncomingWindow.xaml">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Page>
   </ItemGroup>
 
 </Project>

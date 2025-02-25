@@ -34,7 +34,7 @@ namespace VoiceX.Views.PhonePages
         }
         private async void DialpadCallPage_Loaded(object sender, RoutedEventArgs e)
         {
-            contacts = await webService.GetcontactsList(App.AccountData.Data.Sip_Settings.Sip_username, App.AccountData.Data.User_Data.CompanyID, App.UserPbx, App.userToken);
+            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
         }
 
         private void CallButton_Click(object sender, RoutedEventArgs e)
@@ -59,7 +59,7 @@ namespace VoiceX.Views.PhonePages
                 }
                 catch
                 {
-                    ProfilePage.window.ShowError("Microphone not found");
+                    ProfilePage.window!.ShowError("Microphone not found");
                     return;
                 }
                 NumberFild.Text = "";
@@ -112,13 +112,13 @@ namespace VoiceX.Views.PhonePages
                 {
                     Backspace.Visibility = Visibility.Visible; 
                 }
-                if (contacts.contacts.Count > 0)
+                if (contacts.contacts!.Count > 0)
                 {
                     ContactList.Items.Clear();
-                    var contact = contacts.contacts.Where(c => c.Telephone.Contains(NumberFild.Text)).FirstOrDefault();
+                    var contact = contacts.contacts.Where(c => c.Telephone!.Contains(NumberFild.Text)).FirstOrDefault();
                     if (contact != null && !String.IsNullOrEmpty(NumberFild.Text))
                     {
-                        ContactList.Items.Add(new CallItem(contact.Name, contact.Telephone));
+                        ContactList.Items.Add(new CallItem(contact.Name!, contact.Telephone!));
                     }
                 }
             }

@@ -14,8 +14,8 @@ namespace VoiceX.Items
     {
         readonly ClickToCallPage clickToCallPage;
         bool flag;
-        public string SearchText;
-        public string ReplaceText;
+        public string? SearchText;
+        public string? ReplaceText;
         public bool Check;
         public RegExItem(ClickToCallPage clickToCallPage)
         {

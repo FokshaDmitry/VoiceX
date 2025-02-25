@@ -1,0 +1,211 @@
+﻿using Microsoft.Win32;
+using NSwag.Collections;
+using System.IO;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Xml.Linq;
+using VoiceX.Items;
+using VoiceX.Services;
+// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
+
+namespace VoiceX.Views
+{
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class FaxPage : Page
+    {
+        readonly WebService webService;
+        public static ObservableDictionary<string, byte[]>? Files;
+        public FaxPage()
+        {
+            this.InitializeComponent();
+            webService = new WebService();
+            Files = new ObservableDictionary<string, byte[]>();
+            Files.CollectionChanged += Files_CollectionChanged!;
+        }
+
+        private async void Files_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            try
+            {
+                if (e.NewItems != null)
+                {
+                    if (e.NewItems.Count != 0)
+                    {
+                        await Dispatcher.InvokeAsync(() => {
+                            if (SelectFileViwe.Items.Count == 1)
+                            {
+                                SelectFileViwe.Items.Clear();
+                                SelectFileViwe.Items.Insert(0, new FaxFileItem(this, false));
+                            }
+                        });
+                        foreach (var item in e.NewItems)
+                        {
+                            var file = (KeyValuePair<string, byte[]>)item;
+                            await Dispatcher.InvokeAsync(() => SelectFileViwe.Items.Insert(0, new FaxFileItem(file, this)));
+                        }
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+        public async Task OpenFileSelector()
+        {
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Title = "Choose Files",
+                Filter = "PDF files (*.pdf)|*.pdf",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                Multiselect = false // Установите true, если нужно выбрать несколько файлов
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                await ParceFile(openFileDialog.FileNames);
+            }
+        }
+        private async void SelectFileViwe_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            //if (e.Contains(StandardDataFormats.StorageItems))
+            //{
+            //    var items = await e.Data;
+            //    var files = items.OfType<StorageFile>().ToList().AsReadOnly();
+            //    await ParceFile(files);
+            //}
+        }
+        private async Task ParceFile(string[] files)
+        {
+            foreach (string filePath in files.Where(f => f.Contains(".pdf")))
+            {
+                string fileName = Path.GetFileName(filePath); // Получаем только имя файла без пути
+                byte[] fileBytes = await File.ReadAllBytesAsync(filePath); // Читаем файл в байты
+                long fileSize = new FileInfo(filePath).Length;
+                var name = fileName + ";" + Math.Round((decimal)fileSize / 1000, 1).ToString();
+                if (!Files!.Keys.Contains(name))
+                {
+                    Files.Add(name, fileBytes);
+                }
+                else
+                {
+                    int n = 1;
+                    while (Files.Keys.Contains($"({n})" + name))
+                    {
+                        n++;
+                    }
+
+                    Files.Add($"({n})" + name, fileBytes);
+                }
+            }
+
+        }
+        private async Task SendFile()
+        {
+            List<string> success = new List<string>();
+            if (!String.IsNullOrEmpty(FaxNumber.Text))
+            {
+                if (!String.IsNullOrEmpty(FaxEmail.Text))
+                {
+                    List<FaxFileItem> faxFileItems = new List<FaxFileItem>();
+                    foreach (var faxItem in SelectFileViwe.Items)
+                    {
+                        faxFileItems.Add((FaxFileItem)faxItem);
+                    }
+                    if (faxFileItems.Count != 0 && faxFileItems.Count() != 0)
+                    {
+                        foreach (var file in faxFileItems)
+                        {
+                            if (file.File.Value.Length != 0)
+                            {
+                                success.Add(await webService.PostToFax(App.AccountData!.Data.User_Data.UserID, "", new string[] { FaxNumber.Text }, file.File.Value, App.UserPbx!));
+                                Files.Remove(file.File.Key);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ProfilePage.window?.ShowError("Select Document");
+                    }
+                }
+                else
+                {
+                    ProfilePage.window?.ShowError("Email Fild is Empty");
+                }
+            }
+            else
+            {
+                ProfilePage.window?.ShowError("Number Fild is Empty");
+            }
+        }
+        private async void Send_Click(object sender, RoutedEventArgs e)
+        {
+            await SendFile();
+        }
+        private void SelectFileViwe_DragEnter(object sender, System.Windows.DragEventArgs e)
+        {
+            //if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            //{
+            //    e.AcceptedOperation = DataPackageOperation.Copy;
+            //}
+            //else
+            //{
+            //    e.AcceptedOperation = DataPackageOperation.None;
+            //}
+            
+        }
+        private void SelectFileViwe_DragOver(object sender, System.Windows.DragEventArgs e)
+        {
+            //if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            //{
+            //    e.AcceptedOperation = DataPackageOperation.Copy;
+            //}
+            //else
+            //{
+            //    e.AcceptedOperation = DataPackageOperation.None;
+            //}
+        }
+        public void RemoveFile(FaxFileItem faxFileItem)
+        {
+            if (faxFileItem != null)
+            {
+                SelectFileViwe.Items.Remove(faxFileItem);
+                Files.Remove(faxFileItem.File.Key);
+                if (SelectFileViwe.Items.Count == 1)
+                {
+                    SelectFileViwe.Items.Clear();
+                    SelectFileViwe.Items.Add(new FaxFileItem(this, true));
+                }
+            }
+        }
+
+        private void Page_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+            if (Files.Count != 0)
+            {
+                try
+                {
+                    SelectFileViwe.Items.Clear();
+                    SelectFileViwe.Items.Add(new FaxFileItem(this, false));
+                    foreach (var file in Files)
+                    {
+                        SelectFileViwe.Items.Insert(0, new FaxFileItem(file, this));
+                    }
+                }
+                catch
+                {
+                    return;
+                }
+
+            }
+            else
+            {
+                SelectFileViwe.Items.Add(new FaxFileItem(this, true));
+            }
+        }
+    }
+}

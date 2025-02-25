@@ -44,6 +44,7 @@ namespace VoiceX.Views
         ClientsPage clientsPage;
         HistoryPage historyPage;
         ClickToCallPage clickToCallPage;
+        FaxPage faxPage;
         Storyboard slide;
         Storyboard slideLeft;
         public IncomingWindow incomingWindow;
@@ -63,6 +64,7 @@ namespace VoiceX.Views
             callPage = new CallPage(this, dialpadCallPage, activCallPage);
             clientsPage = new ClientsPage();
             historyPage = new HistoryPage();
+            faxPage = new FaxPage();
             clickToCallPage = new ClickToCallPage();
             contacts = new contacts_list
             {
@@ -271,7 +273,8 @@ namespace VoiceX.Views
                     slide.Begin();
                     break;
                 case "Fax":
-                    
+                    MainFrame.Navigate(faxPage);
+                    slide.Begin();
                     break;
                 case "HotKeys":
                     

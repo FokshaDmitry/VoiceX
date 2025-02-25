@@ -37,5 +37,8 @@ Name: "{commondesktop}\VoiceX Phone"; Filename: "{app}\VoiceX.exe"; IconFilename
 
 [Files]
 Source: "*"; DestDir: {app}; Flags: recursesubdirs createallsubdirs ignoreversion
+[Registry]
+Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "VoiceX"; ValueData: """{app}\VoiceX.exe"""; Flags: uninsdeletevalue
 [Run]
+Filename: "{app}\windowsdesktop-runtime-8.0.13-win-x86.exe"; Parameters: "/silent"; Flags: waituntilterminated
 Filename: "{app}\VoiceX.exe"; Description: "Run Program"; Flags:  nowait postinstall

@@ -1,0 +1,57 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VoiceX.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Class="VoiceX.Views.FaxPage"
+    mc:Ignorable="d"
+    Background="White" Loaded="Page_Loaded">
+    <Page.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Cursor="Hand" Background="Transparent" CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Grid x:Name="MainGrid" Width="245">
+        <Grid Margin="0,45,0,0" >
+            <Grid MaxWidth="500" x:Name="PageContent">
+                <Grid HorizontalAlignment="Stretch">
+                    <ListBox BorderThickness="0" MaxHeight="145" Background="Transparent" DragEnter="SelectFileViwe_DragEnter" DragOver="SelectFileViwe_DragOver" AllowDrop="True" Drop="SelectFileViwe_Drop" Grid.Row="0" x:Name="SelectFileViwe" Margin="0,15,0,5"  HorizontalAlignment="Center" MinWidth="100" HorizontalContentAlignment="Center" Width="213" VerticalAlignment="Top" >
+
+                    </ListBox>
+                    <Grid Grid.Row="1" Margin="10,0,0,0">
+                        <Grid.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Cursor="Hand" Background="#FF8A63FB" CornerRadius="15">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Grid.Resources>
+                        <Button BorderThickness="0" ToolTipService.ToolTip="Send Fax" ToolTipService.Placement="Mouse" Grid.Column="1" Content="Send" x:Name="Send" Click="Send_Click" VerticalAlignment="Top" Margin="0,275,10,0" Background="#FF8A63FB" Width="148" Height="32" FontSize="18" FontFamily="Jost" Foreground="#E4FFFFFF" Padding="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        <Border Padding="1" CornerRadius="4" BorderThickness="1" VerticalAlignment="Top" BorderBrush="#FFBBBAFF" Width="213" Height="32" Margin="0,173,0,0">
+                            <TextBox BorderThickness="0" Grid.Column="1" x:Name="FaxNumber" FontFamily="Nunito Sans 10pt Normal" Foreground="#FF5C66BD" Padding="6,6,6,0" FontSize="14"  VerticalContentAlignment="Center"/>
+                        </Border>
+                        <Border Padding="1" CornerRadius="4" BorderThickness="1" VerticalAlignment="Top" BorderBrush="#FFBBBAFF" Width="213" Height="32"  Margin="0,219,0,0">
+                            <TextBox BorderThickness="0" Grid.Column="1" x:Name="FaxEmail"  FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="#FF5C66BD" Padding="6,6,6,0" FontSize="14"/>
+                        </Border>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

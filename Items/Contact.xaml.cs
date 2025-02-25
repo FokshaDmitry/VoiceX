@@ -57,9 +57,9 @@ namespace VoiceX.Items
                 var phone = Phone.Text;
                 foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
                 {
-                    phone = phone.Replace(regex.Search, regex.Replace);
+                    phone = phone.Replace(regex?.Search!, regex?.Replace);
                 }
-                CoreService.Instance.MakeCall(phone, App.AccountData.Data.Sip_Settings.Sip_server);
+                CoreService.Instance.MakeCall(phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
             }
             catch
             {

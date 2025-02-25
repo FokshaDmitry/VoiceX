@@ -31,13 +31,13 @@ namespace VoiceX.Views.ClientPages
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             int color = 1;
-            contacts = await webService.GetcontactsList(App.AccountData.Data.Sip_Settings.Sip_username, App.AccountData.Data.User_Data.CompanyID, App.UserPbx, App.userToken);
+            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
             if (contacts.ResponseCode == HttpStatusCode.OK)
             {
                 if (contacts.contacts != null)
                 {
 
-                    var groupContacts = contacts.contacts.GroupBy(c => c.Name[0].ToString().ToUpper()).OrderBy(c => c.Key);
+                    var groupContacts = contacts.contacts.GroupBy(c => c.Name![0].ToString().ToUpper()).OrderBy(c => c.Key);
                     foreach (var groupcontact in groupContacts)
                     {
                         if (groupcontact.Key.All(char.IsDigit))
@@ -46,8 +46,8 @@ namespace VoiceX.Views.ClientPages
                             ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
                         foreach (var contact in groupcontact)
                         {
-                            ContactsList.Items.Add(new Items.Contact(contact.Name, contact.Telephone, color));
-                            ClientsPage.userContactsList.Add(new Items.Contact(contact.Name, contact.Telephone, color));
+                            ContactsList.Items.Add(new Items.Contact(contact.Name!, contact.Telephone!, color));
+                            ClientsPage.userContactsList.Add(new Items.Contact(contact.Name!, contact.Telephone!, color));
                             color = color == 1 ? 0 : 1;
                         }
                     }
