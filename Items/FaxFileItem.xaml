@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="#FFFDFEFF" BorderThickness="0" Padding="0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+    Background="#FFFDFEFF" Margin="0, 12, 0, 0" BorderThickness="0" Padding="0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
 
     <Grid Margin="0" Background="#FFFDFEFF" >
         <Button BorderThickness="0" Visibility="Collapsed" Click="AddFaxItem_Click" Background="Transparent" x:Name="Cloud" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -32,7 +32,7 @@
             </Border>
             <TextBlock TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" x:Name="FileName" Text="Projects.docx" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="45,2,0,0" FontSize="14" Foreground="#FF22215B" FontFamily="Nunito Sans 10pt Normal" Width="135"/>
             <TextBlock TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="Novemaber 300KB" x:Name="Size" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="45,19,0,0" FontSize="12" Foreground="#FF797A9D" FontFamily="Nunito Sans 10pt Normal" Width="135"/>
-            <Button x:Name="Remove" Click="Remove_Click" Height="20" Padding="0,0,0,0" BorderBrush="Transparent" Width="20" Background="Transparent" HorizontalAlignment="Right" Margin="0,1,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Button x:Name="Remove" Click="Remove_Click" Height="20" Padding="0,0,0,0" BorderBrush="Transparent" Width="20" Background="Transparent" HorizontalAlignment="Right" Margin="0,-10,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
                 <Button.Content>
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Rectangle RadiusX="0.5" RadiusY="0.5" Width="11" Height="1" Fill="#FF898989" RenderTransformOrigin="0.5,0.5">

@@ -83,7 +83,7 @@ namespace VoiceX.Services
                 accCfg.regConfig.timeoutSec = 180;
                 
                 //NAT
-                accCfg.natConfig.iceEnabled = true;
+                //accCfg.natConfig.iceEnabled = true;
                 
                 //CREATE
                 accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));

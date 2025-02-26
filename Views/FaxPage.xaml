@@ -24,7 +24,7 @@
         <Grid Margin="0,45,0,0" >
             <Grid MaxWidth="500" x:Name="PageContent">
                 <Grid HorizontalAlignment="Stretch">
-                    <ListBox BorderThickness="0" MaxHeight="145" Background="Transparent" DragEnter="SelectFileViwe_DragEnter" DragOver="SelectFileViwe_DragOver" AllowDrop="True" Drop="SelectFileViwe_Drop" Grid.Row="0" x:Name="SelectFileViwe" Margin="0,15,0,5"  HorizontalAlignment="Center" MinWidth="100" HorizontalContentAlignment="Center" Width="213" VerticalAlignment="Top" >
+                    <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" MaxHeight="145" Background="Transparent" DragEnter="SelectFileViwe_DragEnter" DragOver="SelectFileViwe_DragOver" AllowDrop="True" Drop="SelectFileViwe_Drop" Grid.Row="0" x:Name="SelectFileViwe" Margin="0,15,0,5"  HorizontalAlignment="Center" MinWidth="100" HorizontalContentAlignment="Center" Width="213" VerticalAlignment="Top" Height="145" >
 
                     </ListBox>
                     <Grid Grid.Row="1" Margin="10,0,0,0">

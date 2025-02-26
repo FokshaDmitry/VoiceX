@@ -1,0 +1,34 @@
+﻿<ListBoxItem
+    x:Class="VoiceX.Items.HotKeyItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VoiceX.Items"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Padding="0,0,0,0" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+    <Border Background="#FFFDFEFF" Padding="6,1,0,1">
+        <Grid>
+            <Grid Width="30" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Margin="0,3,0,0" >
+                <Image Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill"/>
+                <Border x:Name="contactBackgroundColor" Background="#FFE5A7E0" CornerRadius="50" >
+                    <TextBlock Text="N" x:Name="FirstWord" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Inter" Foreground="#FFFDFEFF"/>
+                </Border>
+                <Border x:Name="Activ" Width="9" CornerRadius="50" BorderThickness="1" Height="9" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#FFB9B9B5" BorderBrush="White">
+                    <Image Source="/Assets/Icone/Chek.png" Width="5.7" Margin="0.1,0.8,0,0" />
+                </Border>
+            </Grid>
+            <TextBlock TextTrimming="CharacterEllipsis" FontFamily="Nunito Sans 10pt Normal" Text="Name" x:Name="UserName" HorizontalAlignment="Left" Margin="40,5,0,0"  TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="12" Foreground="Black" Width="85"/>
+            <TextBlock FontFamily="Nunito Sans 10pt Normal" Text="Phone" x:Name="Phone" HorizontalAlignment="Left" Margin="40,22,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="10" Foreground="#FF727070" Width="85"/>
+            <Button x:Name="Trash" Click="Trash_Click"  Height="20" Width="20" HorizontalAlignment="Right" Margin="0,6,15,0" VerticalAlignment="Top" Padding="0,0,0,0">
+                <Button.Background>
+                    <ImageBrush>
+                        <ImageBrush.ImageSource>
+                            <BitmapImage UriSource="/Assets/Icone_v2/trash.png" DecodePixelWidth="70" DecodePixelHeight="70"/>
+                        </ImageBrush.ImageSource>
+                    </ImageBrush>
+                </Button.Background>
+            </Button>
+        </Grid>
+    </Border>
+</ListBoxItem>

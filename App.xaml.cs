@@ -29,6 +29,7 @@ namespace VoiceX
         public static string? userToken { get; set; }
         public static bool MyComputer {  get; set; }
         public static DateTime timeOut {  get; set; }
+        private FileSystemWatcher _watcher;
         public CoreService Core { get; } = CoreService.Instance;
         PdfScribeInstaller pdfScribeInstaller;
         Endpoint core;
@@ -36,6 +37,49 @@ namespace VoiceX
         {
             pdfScribeInstaller = new PdfScribeInstaller();
             string exePath = AppDomain.CurrentDomain.BaseDirectory;
+            String standardInputFilename = Path.GetTempFileName();
+            String outputFilename = standardInputFilename + ".pdf";
+            try
+            {
+                //Create pdf file from driver 
+                using (BinaryReader standardInputReader = new BinaryReader(Console.OpenStandardInput()))
+                {
+                    using (FileStream standardInputFile = new FileStream(standardInputFilename, FileMode.Create, FileAccess.ReadWrite))
+                    {
+                        standardInputReader.BaseStream.CopyTo(standardInputFile);
+
+                        standardInputReader.Close();
+                        standardInputReader.Dispose();
+
+                    }
+                }
+                void CreatePdf()
+                {
+                    try
+                    {
+                        // Remove the existing PDF file if present
+                        File.Delete(outputFilename);
+                        // Only set absolute minimum parameters, let the postscript input
+                        // dictate as much as possible
+                        String[] ghostScriptArguments = { "-dBATCH", "-dNOPAUSE", "-dSAFER",  "-sDEVICE=pdfwrite",
+                                                    String.Format("-sOutputFile={0}", outputFilename), standardInputFilename,  "-c", @"[/Creator(PdfScribe 1.0.7 (PSCRIPT5)) /DOCINFO pdfmark", "-f"};
+
+                        GhostScript64.CallAPI(ghostScriptArguments);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+                CreatePdf();
+            }
+            catch
+            {
+
+                // We couldn't delete, or create a file
+                // because it was in use
+
+            }
             if (!mutex.WaitOne(TimeSpan.Zero, true))
             {
                 using (NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", PipeName, PipeDirection.Out))
@@ -77,9 +121,24 @@ namespace VoiceX
             timeOut = new DateTime();
             timeOut = DateTime.Now;
             core = CoreService.Instance.Core;
-            StartPipeServer();
         }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
 
+            StartPipeServer();
+            WatchDirectory(Path.GetTempPath()); // Следим за временной папкой
+        }
+        private void WatchDirectory(string path)
+        {
+            _watcher = new FileSystemWatcher
+            {
+                Path = path,
+                Filter = "*.pdf"
+            };
+            _watcher.Created += new FileSystemEventHandler(OnFileCreated);
+            _watcher.EnableRaisingEvents = true;
+        }
         public bool IsRunningAsAdmin()
         {
             using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
@@ -108,9 +167,10 @@ namespace VoiceX
 
             Environment.Exit(0); // Завершаем текущий процесс
         }
-        private async Task OnFileCreated(string filePath)
+        private async void OnFileCreated(object sender, FileSystemEventArgs e)
         {
             byte[] mass;
+            string filePath = e.FullPath;
             if (filePath!.Contains(".tmp"))
             {
                 try
@@ -123,8 +183,11 @@ namespace VoiceX
                         fs.Close();
                         fs.Dispose();
                     }
-                    var date = DateTime.Now;
-                    FaxPage.Files?.Add($"File: {date.ToString("dd.MM") + "/" + date.ToString("T")};{mass.Length / 1024}", mass);
+                    if (!IsPdfFileEmpty(filePath))
+                    {
+                        var date = DateTime.Now;
+                        FaxPage.Files?.Add($"File: {date.ToString("dd.MM") + "/" + date.ToString("T")};{mass.Length / 1024}", mass);
+                    }
                 }
                 catch (IOException ex)
                 {
@@ -132,6 +195,95 @@ namespace VoiceX
                 }
             }
 
+        }
+        private static bool IsPdfFileEmpty(string filePath)
+        {
+            PdfDocument document = PdfReader.Open(filePath, PdfDocumentOpenMode.ReadOnly);
+
+            // Получение количества страниц в PDF-файле
+            if (document.PageCount > 1)
+            {
+                return false;
+            }
+            else
+            {
+                return IsPageEmpty(document.Pages[0]);
+            }
+        }
+        static bool IsPageEmpty(PdfPage page)
+        {
+
+            // Получение контента страницы
+            var content = ContentReader.ReadContent(page);
+
+            // Проверка наличия контента на странице
+            if (ExtractText(content).Count() > 0)
+            {
+                return false; // Если есть контент, страница не пустая
+            }
+            if (CheckImage(page))
+            {
+                return false;
+            }
+            return true; // Если нет контента, страница пустая
+        }
+        private static IEnumerable<string> ExtractText(CObject cObject)
+        {
+            var textList = new List<string>();
+            if (cObject is COperator)
+            {
+                var cOperator = cObject as COperator;
+                if (cOperator?.OpCode.Name == OpCodeName.Tj.ToString() ||
+                    cOperator?.OpCode.Name == OpCodeName.TJ.ToString())
+                {
+                    foreach (var cOperand in cOperator.Operands)
+                    {
+                        textList.AddRange(ExtractText(cOperand));
+                    }
+                }
+            }
+            else if (cObject is CSequence)
+            {
+                var cSequence = cObject as CSequence;
+                foreach (var element in cSequence!)
+                {
+                    textList.AddRange(ExtractText(element));
+                }
+            }
+            else if (cObject is CString)
+            {
+                var cString = cObject as CString;
+                textList.Add(cString?.Value!);
+            }
+            return textList;
+        }
+        private static bool CheckImage(PdfPage page)
+        {
+            PdfDictionary resources = page.Elements.GetDictionary("/Resources")!;
+            if (resources != null)
+            {
+                // Get external objects dictionary
+                PdfDictionary xObjects = resources.Elements.GetDictionary("/XObject")!;
+                if (xObjects != null)
+                {
+                    ICollection<PdfItem> items = xObjects.Elements.Values!;
+                    // Iterate references to external objects
+                    foreach (PdfItem item in items)
+                    {
+                        PdfReference reference = (PdfReference)item;
+                        if (reference != null)
+                        {
+                            PdfDictionary xObject = (PdfDictionary)reference.Value;
+                            // Is external object an image?
+                            if (xObject != null && xObject.Elements.GetString("/Subtype") == "/Image")
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
         }
         private void StartPipeServer()
         {
@@ -147,62 +299,15 @@ namespace VoiceX
                             string message = await reader.ReadLineAsync();
                             if (message == "RestoreWindow")
                             {
-                                await Current.Dispatcher.InvokeAsync(async () =>
+                                await Current.Dispatcher.InvokeAsync(() =>
                                 {
                                     if (Current.MainWindow is MainWindow mainWindow)
                                     {
                                         mainWindow.RestoreWindow();
-
-                                        String standardInputFilename = Path.GetTempFileName();
-                                        String outputFilename = standardInputFilename + ".pdf";
-                                        try
-                                        {
-                                            //Create pdf file from driver 
-                                            using (BinaryReader standardInputReader = new BinaryReader(Console.OpenStandardInput()))
-                                            {
-                                                using (FileStream standardInputFile = new FileStream(standardInputFilename, FileMode.Create, FileAccess.ReadWrite))
-                                                {
-                                                    standardInputReader.BaseStream.CopyTo(standardInputFile);
-
-                                                    standardInputReader.Close();
-                                                    standardInputReader.Dispose();
-
-                                                }
-                                            }
-                                            async void CreatePdf()
-                                            {
-                                                try
-                                                {
-                                                    // Remove the existing PDF file if present
-                                                    File.Delete(outputFilename);
-                                                    // Only set absolute minimum parameters, let the postscript input
-                                                    // dictate as much as possible
-                                                    String[] ghostScriptArguments = { "-dBATCH", "-dNOPAUSE", "-dSAFER",  "-sDEVICE=pdfwrite",
-                                                    String.Format("-sOutputFile={0}", outputFilename), standardInputFilename,  "-c", @"[/Creator(PdfScribe 1.0.7 (PSCRIPT5)) /DOCINFO pdfmark", "-f"};
-
-                                                    GhostScript64.CallAPI(ghostScriptArguments);
-                                                    await OnFileCreated(outputFilename);
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    MessageBox.Show(ex.Message);
-                                                }
-                                            }
-                                            CreatePdf();
-                                        }
-                                        catch
-                                        {
-
-                                            // We couldn't delete, or create a file
-                                            // because it was in use
-
-                                        }
-
                                     }
                                 });
                             }
                         }
-                        // Закрываем соединение без ошибки
                         try
                         {
                             pipeServer.Disconnect();

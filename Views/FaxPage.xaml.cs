@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using NSwag.Collections;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,12 +19,14 @@ namespace VoiceX.Views
     {
         readonly WebService webService;
         public static ObservableDictionary<string, byte[]>? Files;
-        public FaxPage()
+        ProfilePage profilePage;
+        public FaxPage(ProfilePage profilePage)
         {
             this.InitializeComponent();
             webService = new WebService();
             Files = new ObservableDictionary<string, byte[]>();
             Files.CollectionChanged += Files_CollectionChanged!;
+            this.profilePage = profilePage;
         }
 
         private async void Files_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -40,6 +43,7 @@ namespace VoiceX.Views
                                 SelectFileViwe.Items.Clear();
                                 SelectFileViwe.Items.Insert(0, new FaxFileItem(this, false));
                             }
+                            profilePage.MainFrame.Navigate(this);
                         });
                         foreach (var item in e.NewItems)
                         {
@@ -61,7 +65,7 @@ namespace VoiceX.Views
                 Title = "Choose Files",
                 Filter = "PDF files (*.pdf)|*.pdf",
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                Multiselect = false // Установите true, если нужно выбрать несколько файлов
+                Multiselect = false 
             };
 
             if (openFileDialog.ShowDialog() == true)
@@ -71,12 +75,11 @@ namespace VoiceX.Views
         }
         private async void SelectFileViwe_Drop(object sender, System.Windows.DragEventArgs e)
         {
-            //if (e.Contains(StandardDataFormats.StorageItems))
-            //{
-            //    var items = await e.Data;
-            //    var files = items.OfType<StorageFile>().ToList().AsReadOnly();
-            //    await ParceFile(files);
-            //}
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+                await ParceFile(files);
+            }
         }
         private async Task ParceFile(string[] files)
         {
@@ -122,7 +125,7 @@ namespace VoiceX.Views
                             if (file.File.Value.Length != 0)
                             {
                                 success.Add(await webService.PostToFax(App.AccountData!.Data.User_Data.UserID, "", new string[] { FaxNumber.Text }, file.File.Value, App.UserPbx!));
-                                Files.Remove(file.File.Key);
+                                Files?.Remove(file.File.Key);
                             }
                         }
                     }
@@ -147,33 +150,33 @@ namespace VoiceX.Views
         }
         private void SelectFileViwe_DragEnter(object sender, System.Windows.DragEventArgs e)
         {
-            //if (e.DataView.Contains(StandardDataFormats.StorageItems))
-            //{
-            //    e.AcceptedOperation = DataPackageOperation.Copy;
-            //}
-            //else
-            //{
-            //    e.AcceptedOperation = DataPackageOperation.None;
-            //}
-            
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                e.Effects = System.Windows.DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = System.Windows.DragDropEffects.None;
+            }
+
         }
         private void SelectFileViwe_DragOver(object sender, System.Windows.DragEventArgs e)
         {
-            //if (e.DataView.Contains(StandardDataFormats.StorageItems))
-            //{
-            //    e.AcceptedOperation = DataPackageOperation.Copy;
-            //}
-            //else
-            //{
-            //    e.AcceptedOperation = DataPackageOperation.None;
-            //}
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                e.Effects = System.Windows.DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = System.Windows.DragDropEffects.None;
+            }
         }
         public void RemoveFile(FaxFileItem faxFileItem)
         {
             if (faxFileItem != null)
             {
                 SelectFileViwe.Items.Remove(faxFileItem);
-                Files.Remove(faxFileItem.File.Key);
+                Files?.Remove(faxFileItem.File.Key);
                 if (SelectFileViwe.Items.Count == 1)
                 {
                     SelectFileViwe.Items.Clear();
@@ -185,13 +188,13 @@ namespace VoiceX.Views
         private void Page_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
 
-            if (Files.Count != 0)
+            if (Files?.Count != 0)
             {
                 try
                 {
                     SelectFileViwe.Items.Clear();
                     SelectFileViwe.Items.Add(new FaxFileItem(this, false));
-                    foreach (var file in Files)
+                    foreach (var file in Files!)
                     {
                         SelectFileViwe.Items.Insert(0, new FaxFileItem(file, this));
                     }
@@ -204,7 +207,10 @@ namespace VoiceX.Views
             }
             else
             {
-                SelectFileViwe.Items.Add(new FaxFileItem(this, true));
+                if (SelectFileViwe.Items.Count == 0)
+                {
+                    SelectFileViwe.Items.Add(new FaxFileItem(this, true));
+                }
             }
         }
     }

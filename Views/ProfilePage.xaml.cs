@@ -47,6 +47,7 @@ namespace VoiceX.Views
         FaxPage faxPage;
         Storyboard slide;
         Storyboard slideLeft;
+        HotKeyPage hotKeyPage;
         public IncomingWindow incomingWindow;
         public ProfilePage(MainWindow mainWindow)
         {
@@ -64,7 +65,8 @@ namespace VoiceX.Views
             callPage = new CallPage(this, dialpadCallPage, activCallPage);
             clientsPage = new ClientsPage();
             historyPage = new HistoryPage();
-            faxPage = new FaxPage();
+            faxPage = new FaxPage(this);
+            hotKeyPage = new HotKeyPage();
             clickToCallPage = new ClickToCallPage();
             contacts = new contacts_list
             {
@@ -244,7 +246,7 @@ namespace VoiceX.Views
         }
         
         #region Navigete Button
-        private void Navigate_Click(object sender, RoutedEventArgs e)
+        public void Navigate_Click(object sender, RoutedEventArgs e)
         {
             //App.timeOut = DateTime.Now;
             var Navigate = (Button)sender;
@@ -277,7 +279,8 @@ namespace VoiceX.Views
                     slide.Begin();
                     break;
                 case "HotKeys":
-                    
+                    MainFrame.Navigate(hotKeyPage);
+                    slide.Begin();
                     break;
             }
         }
@@ -347,15 +350,15 @@ namespace VoiceX.Views
             getPauses = await webService.GetPauses(App.AccountData!.Data.Sip_Settings.Sip_username, App.UserPbx!, App.userToken!);
             if (getPauses.ResponseCode == System.Net.HttpStatusCode.OK)
             {
-                PauseList.Items.Add(new PauseItem(new Pause { Name = "Work", Id = 0 }, getPauses.ResponseData.Pause_active == 0));
-                foreach (var pause in getPauses.ResponseData.Pauses)
+                PauseList.Items.Add(new PauseItem(new Pause { Name = "Work", Id = 0 }, getPauses.ResponseData!.Pause_active == 0));
+                foreach (var pause in getPauses.ResponseData.Pauses!)
                 {
                     PauseList.Items.Add(new PauseItem(pause, pause.Id == getPauses.ResponseData.Pause_active));
                 }
             }
             else
             {
-                window?.ShowError(getPauses.ResponseMessage);
+                window?.ShowError(getPauses.ResponseMessage!);
             }
             PausesFild.Visibility = Visibility.Visible;
         }
@@ -379,12 +382,12 @@ namespace VoiceX.Views
                 if (pause != null)
                 {
                     int id = pause.pause.Id;
-                    if (getPauses?.ResponseData.Pause_active != id)
+                    if (getPauses?.ResponseData!.Pause_active != id)
                     {
                         var result = await webService.SetPause(App.AccountData!.Data.Sip_Settings.Sip_username, id, App.UserPbx!, App.userToken!);
                         if (result.ResponseCode == System.Net.HttpStatusCode.OK)
                         {
-                            getPauses!.ResponseData.Pause_active = id;
+                            getPauses!.ResponseData!.Pause_active = id;
                         }
                         else
                         {
@@ -432,16 +435,16 @@ namespace VoiceX.Views
                     if (contacts.contacts != null)
                     {
 
-                        var groupContacts = contacts.contacts.GroupBy(c => c.Name[0].ToString().ToUpper()).OrderBy(c => c.Key);
+                        var groupContacts = contacts.contacts.GroupBy(c => c.Name?[0].ToString().ToUpper()).OrderBy(c => c.Key);
                         foreach (var groupcontact in groupContacts)
                         {
-                            if (groupcontact.Key.All(char.IsDigit))
-                                ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString()));
+                            if (groupcontact.Key!.All(char.IsDigit))
+                                ContactsList.Items.Add(new HeadingContactList(groupcontact.Key!.ToString()));
                             else
-                                ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
+                                ContactsList.Items.Add(new HeadingContactList(groupcontact.Key!.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
                             foreach (var contact in groupcontact)
                             {
-                                ContactsList.Items.Add(new ContactPad(contact.Name, contact.Telephone, keyPads == KeyPads.AddCallPad));
+                                ContactsList.Items.Add(new ContactPad(contact.Name!, contact.Telephone!, keyPads == KeyPads.AddCallPad));
                             }
                         }
                     }
@@ -480,16 +483,16 @@ namespace VoiceX.Views
             ContactsList.Items.Clear();
             if (String.IsNullOrEmpty(Search.Text))
             {
-                var groupContacts = contacts.contacts.GroupBy(c => c.Name.ToString().ToUpper()).OrderBy(c => c.Key);
+                var groupContacts = contacts.contacts!.GroupBy(c => c.Name?.ToString().ToUpper()).OrderBy(c => c.Key);
                 foreach (var groupcontact in groupContacts.ToList())
                 {
-                    if (groupcontact.Key.All(char.IsDigit))
-                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString()));
+                    if (groupcontact.Key!.All(char.IsDigit))
+                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key!.ToString()));
                     else
-                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
+                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key!.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
                     foreach (var contact in groupcontact)
                     {
-                        ContactsList.Items.Add(new ContactPad(contact.Name, contact.Telephone, keyPads == KeyPads.AddCallPad));
+                        ContactsList.Items.Add(new ContactPad(contact.Name!, contact.Telephone!, keyPads == KeyPads.AddCallPad));
                     }
                 }
                 magnifyingGlass.Margin = new Thickness(0, 0, 5, 2);
@@ -498,13 +501,13 @@ namespace VoiceX.Views
             }
             else
             {
-                foreach (var contact in contacts.contacts)
+                foreach (var contact in contacts.contacts!)
                 {
-                    if (contact.Name.Contains(Search.Text))
+                    if (contact.Name!.Contains(Search.Text))
                     {
-                        ContactsList.Items.Add(new ContactPad(contact.Name, contact.Telephone, keyPads == KeyPads.AddCallPad));
+                        ContactsList.Items.Add(new ContactPad(contact.Name!, contact.Telephone!, keyPads == KeyPads.AddCallPad));
                     }
-                    else if (contact.Telephone.Contains(Search.Text))
+                    else if (contact.Telephone!.Contains(Search.Text))
                     {
                         ContactsList.Items.Add(new ContactPad(contact.Name, contact.Telephone, keyPads == KeyPads.AddCallPad));
                     }
@@ -645,7 +648,7 @@ namespace VoiceX.Views
                 }
                 else
                 {
-                    BackspaceNum.Visibility = Visibility.Visible; ;
+                    BackspaceNum.Visibility = Visibility.Visible; 
                 }
             }
         }
