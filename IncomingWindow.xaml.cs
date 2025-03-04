@@ -34,34 +34,35 @@ namespace VoiceX
         }
         public void ShowInBottomRight(string Name, string Phone, bool position)
         {
-            if (position)
+            
+            if (!this.IsVisible)
             {
+                if (position)
+                {
+                    double screenWidth = SystemParameters.PrimaryScreenWidth;
+                    double screenHeight = SystemParameters.PrimaryScreenHeight;
 
-                // Задаём позицию возле правого нижнего угла экрана:
-                double screenWidth = SystemParameters.PrimaryScreenWidth;
-                double screenHeight = SystemParameters.PrimaryScreenHeight;
+                    double offsetX = 10;
+                    double offsetY = 50; 
 
-                // Считаем отступы, чтобы окно "отступало" на 10px от правого нижнего угла
-                double offsetX = 10;
-                double offsetY = 50; // немного побольше, чтобы не упиралось прямо в панель задач
+                    this.Left = screenWidth - this.Width - offsetX;
+                    this.Top = screenHeight - this.Height - offsetY;
+                }
+                else
+                {
+                    double screenWidth = SystemParameters.PrimaryScreenWidth;
+                    double screenHeight = SystemParameters.PrimaryScreenHeight;
 
-                this.Left = screenWidth - this.Width - offsetX;
-                this.Top = screenHeight - this.Height - offsetY;
+                    double windowWidth = this.Width;
+                    double windowHeight = this.Height;
+
+                    this.Left = (screenWidth - windowWidth) / 2;
+                    this.Top = (screenHeight - windowHeight) / 2;
+                }
+                UserName.Text = Name;
+                UserPhone.Text = Phone;
+                this.Show();
             }
-            else
-            {
-                double screenWidth = SystemParameters.PrimaryScreenWidth;
-                double screenHeight = SystemParameters.PrimaryScreenHeight;
-
-                double windowWidth = this.Width;
-                double windowHeight = this.Height;
-
-                this.Left = (screenWidth - windowWidth) / 2;
-                this.Top = (screenHeight - windowHeight) / 2;
-            }
-            UserName.Text = Name;
-            UserPhone.Text = Phone;
-            this.Show();
         }
 
         private void Accept_Click(object sender, RoutedEventArgs e)

@@ -25,7 +25,7 @@ namespace VoiceX.Views
     {
         public static List<Regex_note>? regexNotes;
         readonly WebService webService;
-        readonly AddDbContext addDbContext;
+        AddDbContext addDbContext;
         public static Get_pauses? getPauses;
         public static MainWindow? window {  get; set; }
         public static List<string>? SelectContacts { get; set; }
@@ -48,13 +48,13 @@ namespace VoiceX.Views
         Storyboard slide;
         Storyboard slideLeft;
         HotKeyPage hotKeyPage;
+        AdditionPage additionPage;
         public IncomingWindow incomingWindow;
         public ProfilePage(MainWindow mainWindow)
         {
             this.InitializeComponent();
             window = mainWindow;
             webService = new WebService();
-            addDbContext = new AddDbContext();
             generalSettingPage = new GeneralSettingPage(mainWindow);
             regexNotes = new List<Regex_note>();
             SelectContacts = new List<string>();
@@ -68,6 +68,7 @@ namespace VoiceX.Views
             faxPage = new FaxPage(this);
             hotKeyPage = new HotKeyPage();
             clickToCallPage = new ClickToCallPage();
+            additionPage = new AdditionPage();
             contacts = new contacts_list
             {
                 contacts = new List<Models.Contact>()
@@ -212,6 +213,7 @@ namespace VoiceX.Views
         }
         private async void ControlPage_Loaded(object sender, RoutedEventArgs e)
         {
+            addDbContext = new AddDbContext();
             var account = App.AccountData?.Data.Sip_Settings;
             CoreService.Instance.Login(account?.Sip_username!, account!.Sip_server, account.Sip_proxy, account.Sip_secret, 0);
             General.Checked += Filter_Checked;
@@ -322,6 +324,8 @@ namespace VoiceX.Views
                     C2CCheck.Background = whiteLine;
                     AdditionChek.Background = blueLine;
                 }
+                ContentControl.Navigate(additionPage);
+                slideLeft.Begin();
             }
         }
         private void Menu_Click(object sender, RoutedEventArgs e)

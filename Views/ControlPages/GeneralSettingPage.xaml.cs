@@ -7,7 +7,6 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
 using VoiceX.Services;
-using Windows.UI.Notifications;
 
 namespace VoiceX.Views.ControlPages
 {

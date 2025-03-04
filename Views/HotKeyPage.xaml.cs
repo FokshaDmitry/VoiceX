@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using System.Windows;
 using VoiceX.Items;
 using System.Windows.Media;
+using pj;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -19,27 +21,91 @@ namespace VoiceX.Views
         AddDbContext addDbContext;
         readonly WebService webService;
         List<HotKeyItem> hotKeyItems;
+        static List<BuddyService>? buddyServiceList;
+        static bool token;
         public HotKeyPage()
         {
             this.InitializeComponent();
             addDbContext = new AddDbContext();
             this.Loaded += HotKeyPage_Loaded;
+            this.Unloaded += HotKeyPage_Unloaded;
             webService = new WebService();
             hotKeyItems = new List<HotKeyItem>();
+            buddyServiceList = new List<BuddyService>();
+        }
+
+        private void HotKeyPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            token = false;
+        }
+
+        private async Task UpdateBuddy()
+        {
+            do
+            {
+                await Task.Delay(8000);
+                if (buddyServiceList != null && buddyServiceList.Count() != 0)
+                {
+                    foreach (var buddy in buddyServiceList)
+                    {
+                        try
+                        {
+                            await Dispatcher.InvokeAsync( () => {
+
+                                buddy.subscribePresence(false);
+                                Task.Delay(2000);
+                                buddy.subscribePresence(true);
+                            });
+                        }
+                        catch { }
+                    }
+                }
+            } while (token);
+        }
+        private async void Buddy_onlineStatusChange(string uri, bool isOnline)
+        {
+            if (!String.IsNullOrEmpty(uri))
+            {
+                await Dispatcher.InvokeAsync(() => hotKeyItems.Where(hk => uri.Contains(hk.HotKeyPhone)).DefaultIfEmpty().First()?.SetState(isOnline));
+            }
         }
 
         private void HotKeyPage_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
+                ContactsList.Items.Clear();
+                hotKeyItems.Clear();
                 var hotKeyUsers = addDbContext.GetHotKeyUsers();
                 if (hotKeyUsers.Count != 0)
                 {
                     foreach (var user in hotKeyUsers)
                     {
-                        
+                        var HKItem = new HotKeyItem(user.Id, user.Name!, user.Phone!, ContactsList);
+                        hotKeyItems.Add(HKItem);
+                        ContactsList.Items.Add(HKItem);
+                        var uri = $"sip:{user.Phone}@{App.AccountData?.Data.Sip_Settings.Sip_server}";
+                        var buddyCore = buddyServiceList?.FirstOrDefault(b => b.getInfo().uri == uri);
+                        if (buddyCore == null)
+                        {
+                            BuddyConfig buddyCfg = new BuddyConfig();
+                            buddyCfg.subscribe = true;
+                            buddyCfg.uri = uri;
+                            
+                            BuddyService buddy = new BuddyService();
+                            buddy.create(CoreService.Instance, buddyCfg);
+                            buddy.onlineStatusChange += Buddy_onlineStatusChange;
+                            buddyServiceList?.Add(buddy);
+                        }
+                        else
+                        {
+                            //buddyCore.sendInstantMessage(new SendInstantMessageParam());
+                            Buddy_onlineStatusChange(buddyCore.getInfo().uri, buddyCore.getInfo().presStatus.status == pjsua_buddy_status.PJSUA_BUDDY_STATUS_ONLINE);
+                        }
                     }
                 }
+                token = true;
+                Task.Run(() => UpdateBuddy());
             }
             catch (Exception ex)
             {
@@ -88,6 +154,13 @@ namespace VoiceX.Views
                     var id = Guid.NewGuid();
                     await addDbContext.AddHotKeyUserAsync(new HotKeyUser() { Id = id, Name = name, Phone = phone });
                     var HKItem = new HotKeyItem(id, name, phone, ContactsList);
+                    BuddyConfig buddyCfg = new BuddyConfig();
+                    buddyCfg.uri = $"sip:{phone}@{App.AccountData?.Data.Sip_Settings.Sip_server}"; // Наблюдаемый аккаунт
+                    buddyCfg.subscribe = true;
+                    BuddyService buddy = new BuddyService();
+                    buddy.onlineStatusChange += Buddy_onlineStatusChange;
+                    buddy.create(CoreService.Instance, buddyCfg);
+                    buddyServiceList?.Add(buddy);
                     hotKeyItems.Add(HKItem);
                     ContactsList.Items.Add(HKItem);
                 }

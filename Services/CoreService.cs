@@ -1,6 +1,7 @@
 ﻿
 using pj;
 using System.Diagnostics;
+using System.DirectoryServices.ActiveDirectory;
 using System.Security.Principal;
 using System.Xml.Linq;
 using Windows.UI;
@@ -11,11 +12,14 @@ namespace VoiceX.Services
     {
         public static PjsipLogger? writer;
         public static CallService? activeCall;
+        //public static BuddyService? buddy;
         private static readonly CoreService instance = new CoreService();
         private Endpoint? core;
         public delegate void IncomingCall(); 
         public event IncomingCall? IncomingCallEvent;
         public event IncomingCall? OutgoingCallEvent;
+
+        AccountConfig? accCfg;
         public static CoreService Instance
         {
             get
@@ -28,9 +32,9 @@ namespace VoiceX.Services
             {
                 if (core == null)
                 {
-                    
                     core = new Endpoint();
                     writer = new PjsipLogger();
+                    accCfg = new AccountConfig();
                     core.libCreate();
                     // Init library
                     EpConfig epConfig = new EpConfig();
@@ -45,7 +49,14 @@ namespace VoiceX.Services
                     // Create transport
                     TransportConfig tcfg = new TransportConfig();
                     tcfg.port = 5060;
-
+                    try
+                    {
+                        core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, tcfg);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.Message);
+                    }
                     try
                     {
                         core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, tcfg);
@@ -55,15 +66,6 @@ namespace VoiceX.Services
                         Debug.WriteLine(e.Message);
                     }
                     // Start library
-                    //try
-                    //{
-                    //    tcfg.port = 5061;
-                    //    core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS, tcfg);
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    Debug.WriteLine(e.Message);
-                    //}
                     core.libStart();
                 }
                 return core; 
@@ -74,17 +76,11 @@ namespace VoiceX.Services
         {
             try
             {
-                AccountConfig accCfg = new AccountConfig();
-                accCfg.sipConfig.transportId = 0;
-                accCfg.presConfig.publishEnabled = true;
+                accCfg!.sipConfig.transportId = 0;
                 //REG
                 accCfg.idUri = $"sip:{username}@{domain}";
                 accCfg.regConfig.registrarUri = $"sip:{proxy}";
-                accCfg.regConfig.timeoutSec = 180;
-                
-                //NAT
-                //accCfg.natConfig.iceEnabled = true;
-                
+                accCfg.presConfig.publishEnabled = true;
                 //CREATE
                 accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
                 
@@ -94,6 +90,29 @@ namespace VoiceX.Services
             {
 
             }
+        }
+        public async Task UseIceEnabled(bool flag)
+        {
+            accCfg!.natConfig.iceEnabled = flag;
+            this.shutdown();
+            await Task.Delay(2000);
+            instance.create(accCfg, true);
+        }
+        public async Task UseIpRe(bool flag)
+        {
+            accCfg!.natConfig.sdpNatRewriteUse = flag == true ? 1 : 0;
+            this.shutdown();
+            await Task.Delay(2000);
+            instance.create(accCfg, true);
+        }
+        public async Task UseProxy(string proxy)
+        {
+            accCfg!.regConfig.registrarUri = $"sip:{proxy}";
+            this.shutdown();
+            // this.Dispose();
+           
+            await Task.Delay(2000);
+            instance.create(accCfg, true);
         }
         public void Logout()
         {
@@ -168,16 +187,6 @@ namespace VoiceX.Services
         public override void write(LogEntry entry)
         {
             Debug.WriteLine($"[{entry.level}] {entry.msg}");
-            if (entry.msg.Contains("EC suspended because of inactivity"))
-            {
-                if (CoreService.activeCall != null)
-                {
-                    if (!CoreService.activeCall.isMute)
-                    {
-                        CoreService.activeCall.hangup(new CallOpParam());
-                    }
-                }
-            }
         }
     }
 }

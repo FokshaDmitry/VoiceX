@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using VoiceX.DAL.Context;
+using VoiceX.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -37,6 +38,11 @@ namespace VoiceX.Items
         {
             hotkeyList.Items.Remove(this);
             await addDbContext.RemoveHotKeyUserAsync(hotKeyGuid);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            CoreService.Instance.MakeCall(HotKeyPhone, App.AccountData?.Data.Sip_Settings.Sip_server!);
         }
     }
 }
