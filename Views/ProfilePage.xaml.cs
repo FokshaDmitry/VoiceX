@@ -36,6 +36,7 @@ namespace VoiceX.Views
         contacts_list contacts;
         public static bool TerminateAllCalls { get; set; }
         public static List<string>? AutoAnswerNumbers { get; set; }
+        public static bool onlineToken { get; set; } 
         LocalStoreService localStoreService;
         GeneralSettingPage generalSettingPage;
         DialpadCallPage dialpadCallPage;
@@ -78,6 +79,7 @@ namespace VoiceX.Views
             slideLeft = (Storyboard)FindResource("SlideLeftAnimation");
             clickToCallService = new ClickToCallService();
             incomingWindow = new IncomingWindow(mainWindow, this, activCallPage);
+            onlineToken = true;
             window.moveOnDialpad += Window_moveOnDialpad;
             window.moveOnContact += Window_moveOnContact;
         }
@@ -215,7 +217,33 @@ namespace VoiceX.Views
         {
             addDbContext = new AddDbContext();
             var account = App.AccountData?.Data.Sip_Settings;
-            CoreService.Instance.Login(account?.Sip_username!, account!.Sip_server, account.Sip_proxy, account.Sip_secret, 0);
+
+            string mic = await localStoreService.LoadDataAsync("micro");
+            string audio = await localStoreService.LoadDataAsync("audio");
+            string ip = await localStoreService.LoadDataAsync("ip");
+            string ice = await localStoreService.LoadDataAsync("ice");
+            string proxy = await localStoreService.LoadDataAsync("proxy");
+            var manager = CoreService.Instance.Core.audDevManager();
+
+            if (!String.IsNullOrEmpty(mic))
+            {
+                int id;
+                var res = int.TryParse(mic, out id);
+                if (res)
+                {
+                    manager.setCaptureDev(id);
+                }
+            }
+            if (!String.IsNullOrEmpty(audio))
+            {
+                int id;
+                var res = int.TryParse(audio, out id);
+                if (res)
+                {
+                    manager.setCaptureDev(id);
+                }
+            }
+            CoreService.Instance.Login(account?.Sip_username!, account!.Sip_server, account.Sip_proxy, account.Sip_secret, 0, proxy == "1", ice == "1", ip == "1");
             General.Checked += Filter_Checked;
             Addition.Checked += Filter_Checked;
             C2C.Checked += Filter_Checked;

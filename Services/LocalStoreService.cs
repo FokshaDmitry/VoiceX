@@ -19,7 +19,7 @@ namespace VoiceX.Services
         {
             using (var isoStore = IsolatedStorageFile.GetUserStoreForAssembly())
             {
-                if (!isoStore.FileExists(key)) return null!;
+                if (!isoStore.FileExists(key)) return "";
 
                 using (var reader = new StreamReader(new IsolatedStorageFileStream(key, FileMode.Open, isoStore)))
                 {

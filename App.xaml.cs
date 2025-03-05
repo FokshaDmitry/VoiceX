@@ -30,11 +30,13 @@ namespace VoiceX
         public static bool MyComputer {  get; set; }
         public static DateTime timeOut {  get; set; }
         private FileSystemWatcher _watcher;
+        LocalStoreService _storeService;
         public CoreService Core { get; } = CoreService.Instance;
         PdfScribeInstaller pdfScribeInstaller;
         Endpoint core;
         public App()
         {
+            _storeService = new LocalStoreService();
             pdfScribeInstaller = new PdfScribeInstaller();
             string exePath = AppDomain.CurrentDomain.BaseDirectory;
             String standardInputFilename = Path.GetTempFileName();
@@ -122,10 +124,10 @@ namespace VoiceX
             timeOut = DateTime.Now;
             core = CoreService.Instance.Core;
         }
-        protected override void OnStartup(StartupEventArgs e)
+        protected async override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
+            
             StartPipeServer();
             WatchDirectory(Path.GetTempPath()); // Следим за временной папкой
         }

@@ -84,50 +84,57 @@ namespace VoiceX.Views.ControlPages
                 {
                     try
                     {
-                        if (CoreService.Instance.getInfo() != null)
+                        if (ProfilePage.onlineToken)
                         {
-                            await Dispatcher.InvokeAsync(() =>
+                            if (CoreService.Instance.getInfo() != null)
                             {
-                                try
+                                await Dispatcher.InvokeAsync(() =>
                                 {
-                                    if (SmartPhone.IsChecked == true)
+                                    try
                                     {
-                                        var info = CoreService.Instance.getInfo();
-                                        if (info.regIsActive)
+                                        if (SmartPhone.IsChecked == true)
                                         {
-                                            Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 76, 176, 78));
-                                            if (!info.onlineStatus)
+                                            var info = CoreService.Instance.getInfo();
+                                            if (info.regIsActive)
                                             {
-
-                                                PresenceStatus presenceStatus = new PresenceStatus();
-                                                presenceStatus.status = pjsua_buddy_status.PJSUA_BUDDY_STATUS_ONLINE;
-                                                CoreService.Instance.setOnlineStatus(presenceStatus);
-                                            }
-                                            timeOut = 1000;
-                                        }
-                                        else
-                                        {
-                                            if (info.regStatus != pjsip_status_code.PJSIP_SC_OK && info.regStatus != pjsip_status_code.PJSIP_SC_TRYING)
-                                            {
-                                                window.ShowError(info.regStatusText);
-                                                window.Show();
-                                                window.WindowState = WindowState.Normal;
-                                                window.Activate();
-                                                CoreService.Instance.setRegistration(true);
-                                                if (CoreService.Instance.getInfo().regStatus != pjsip_status_code.PJSIP_SC_OK)
+                                                Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 76, 176, 78));
+                                                if (!info.onlineStatus)
                                                 {
-                                                    timeOut = 10000;
+
+                                                    PresenceStatus presenceStatus = new PresenceStatus();
+                                                    presenceStatus.status = pjsua_buddy_status.PJSUA_BUDDY_STATUS_ONLINE;
+                                                    CoreService.Instance.setOnlineStatus(presenceStatus);
                                                 }
+                                                timeOut = 1000;
                                             }
-                                            Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 200, 77, 77));
+                                            else
+                                            {
+                                                if (info.regStatus != pjsip_status_code.PJSIP_SC_OK && info.regStatus != pjsip_status_code.PJSIP_SC_TRYING)
+                                                {
+                                                    window.ShowError(info.regStatusText);
+                                                    window.Show();
+                                                    window.WindowState = WindowState.Normal;
+                                                    window.Activate();
+                                                    CoreService.Instance.setRegistration(true);
+                                                    if (CoreService.Instance.getInfo().regStatus != pjsip_status_code.PJSIP_SC_OK)
+                                                    {
+                                                        timeOut = 10000;
+                                                    }
+                                                }
+                                                Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 200, 77, 77));
+                                            }
                                         }
                                     }
-                                }
-                                catch
-                                {
+                                    catch
+                                    {
 
-                                }
-                            });
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                await Dispatcher.InvokeAsync(() => { Activ.Fill = new SolidColorBrush(Color.FromArgb(255, 200, 77, 77)); });
+                            }
                         }
                         else
                         {

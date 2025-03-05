@@ -5,7 +5,7 @@
     xmlns:local="using:VoiceX.Items"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="0,0,0,0">
+    mc:Ignorable="d" Background="White" Width="209" HorizontalContentAlignment="Stretch" BorderThickness="0" VerticalContentAlignment="Stretch" Cursor="Hand" Padding="0,0,0,0">
 
     <Grid Background="#FFFDFEFF">
         <TextBlock x:Name="DeviceName" TextTrimming="CharacterEllipsis" Width="180" HorizontalAlignment="Left" FontSize="14" FontFamily="Nunito Sans 10pt Normal" Margin="10,5,0,5" />

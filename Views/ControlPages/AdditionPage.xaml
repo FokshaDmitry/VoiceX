@@ -7,10 +7,130 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="White" MaxWidth="500" x:Name="additionPage">
+    <Page.Resources>
+        <Style TargetType="CheckBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid ClipToBounds="False">
+                                <Border x:Name="CheckBorder"
+                                    Width="16" Height="16"
+                                    CornerRadius="4"
+                                    BorderThickness="1"
+                                    BorderBrush="#8C63FF"
+                                    Background="Transparent"
+                                    ClipToBounds="False"
+                                    Margin="5,0,10,0">
+                                </Border>
+
+                                <!-- Галочка, выходящая за рамку -->
+                                <Path x:Name="CheckMark"
+                                  Data="M9,18 L14,24 L26,11"
+                                  StrokeThickness="1"
+                                  Stroke="#8C63FF"
+                                  StrokeEndLineCap="Round"
+                                  StrokeStartLineCap="Round"
+                                  Visibility="Hidden"
+                                  ClipToBounds="False" Margin="1,-8,0,0">
+                                    <Path.RenderTransform>
+                                        <TranslateTransform X="-2" Y="-2"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Grid>
+
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#8C63FF"/>
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#A48AFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderBrush" Value="#C5C5FF"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="Border" Background="White" BorderBrush="#D1D0FF" BorderThickness="1" CornerRadius="4" Padding="12, 0, 0, 0" Height="32" Width="209">
+                                <ToggleButton Padding="0" x:Name="ToggleButton" Background="Transparent" BorderThickness="0" ClickMode="Press" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Grid Background="White">
+                                        <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding SelectionBoxItem}" Margin="0,0,30,0" VerticalAlignment="Center" Height="32"/>
+                                        <Path x:Name="Arrow" Data="M 0 0 L 6 6 L 12 0" HorizontalAlignment="Right" VerticalAlignment="Center" Width="13" Height="8" Stroke="#C5C5FF" StrokeThickness="2" RenderTransformOrigin="0.5,0.5" Margin="0,0,10,0"/>
+                                    </Grid>
+                                </ToggleButton>
+                            </Border>
+                            <Popup x:Name="Popup"
+                               Placement="Bottom"
+                               AllowsTransparency="True"
+                               PopupAnimation="Slide"
+                               StaysOpen="False"
+                               IsOpen="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                <Border Background="White"
+                                    BorderBrush="#C5C5FF"
+                                    BorderThickness="1"
+                                    CornerRadius="4">
+                                    <ScrollViewer>
+                                        <StackPanel IsItemsHost="True"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="ToggleButton" Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                                <Setter TargetName="ToggleButton" Property="Background" Value="Transparent"/>
+                            </Trigger>
+                            <!-- При наведении меняем цвет рамки -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#A48AFF"/>
+                                <Setter TargetName="Arrow" Property="Stroke" Value="#A48AFF"/>
+                            </Trigger>
+
+                            <!-- При фокусе меняем цвет рамки -->
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#8C63FF"/>
+                                <Setter TargetName="Arrow" Property="Stroke" Value="#8C63FF"/>
+                            </Trigger>
+
+                            <!-- Если ComboBox раскрыт -->
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter TargetName="Arrow" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="180"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
     <Grid>
-        <TextBox BorderThickness="1" x:Name="NewAdress" MaxHeight="40" Foreground="#FF252422" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" MinHeight="20"  TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Height="24" Margin="10,20,49,0" MinWidth="100" FontWeight="Bold" Padding="6,3,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
-        <!--<ToggleSwitch PointerEntered="Cursor_PointerEntered" PointerExited="Cursor_PointerExited" PointerPressed="AdditionPage_PointerPressed" Style="{StaticResource ToggleSwitchStyleBorder}" Toggled="Include_Toggled"  x:Name="Include" VerticalAlignment="Top" Width="30" HorizontalAlignment="Right" Margin="0,15,9,0" />-->
-        <ComboBox SelectionChanged="Microphones_SelectionChanged" MaxDropDownHeight="90" IsDropDownOpen="True" ScrollViewer.VerticalScrollBarVisibility="Visible" x:Name="Microphones" Background="Transparent" Width="213" Margin="16,60,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422"/>
-        <ComboBox SelectionChanged="Audio_SelectionChanged" MaxDropDownHeight="90" IsDropDownOpen="True" ScrollViewer.VerticalScrollBarVisibility="Visible" x:Name="Audio" Background="Transparent" Width="213" Margin="16,135,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422"/>
+        <CheckBox Click="Proxy_Checked" x:Name="Proxy" Content="SIP Proxy" Margin="18,15,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
+        <CheckBox Click="Ice_Checked" x:Name="Ice" Content="ICE" Margin="18,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16"/>
+        <CheckBox Click="Ip_Checked" x:Name="Ip" Content="IP rewrite" Margin="17,83,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
+        <TextBlock Text="Speaker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,129,0,0" Foreground="#FFADADAD"/>
+        <ComboBox  SelectionChanged="Microphones_SelectionChanged" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Microphones" Background="Transparent" Width="213" Margin="18,152,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBlock Text="Microphone" Margin="18,196,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
+        <ComboBox SelectionChanged="Audio_SelectionChanged" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Audio" Background="Transparent" Width="213" Margin="18,219,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
     </Grid>
 </Page>

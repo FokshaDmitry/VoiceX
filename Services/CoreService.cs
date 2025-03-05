@@ -1,10 +1,6 @@
 ﻿
 using pj;
 using System.Diagnostics;
-using System.DirectoryServices.ActiveDirectory;
-using System.Security.Principal;
-using System.Xml.Linq;
-using Windows.UI;
 
 namespace VoiceX.Services
 {
@@ -72,15 +68,23 @@ namespace VoiceX.Services
             } 
         }
        
-        public void Login(string username, string domain, string proxy, string password, int transport)
+        public void Login(string username, string domain, string proxy, string password, int transport, bool useProxy, bool iceEnabled, bool useIpRewrite)
         {
             try
             {
                 accCfg!.sipConfig.transportId = 0;
                 //REG
                 accCfg.idUri = $"sip:{username}@{domain}";
-                accCfg.regConfig.registrarUri = $"sip:{proxy}";
-                accCfg.presConfig.publishEnabled = true;
+                if (useProxy)
+                {
+                    accCfg.regConfig.registrarUri = $"sip:{proxy}";
+                }
+                else
+                {
+                    accCfg.regConfig.registrarUri = $"sip:{domain}";
+                }
+                accCfg.natConfig.iceEnabled = iceEnabled;
+                accCfg.natConfig.sdpNatRewriteUse = useIpRewrite ? 1 : 0;
                 //CREATE
                 accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
                 
@@ -98,14 +102,14 @@ namespace VoiceX.Services
             await Task.Delay(2000);
             instance.create(accCfg, true);
         }
-        public async Task UseIpRe(bool flag)
+        public async Task UseIpRewrite(bool flag)
         {
             accCfg!.natConfig.sdpNatRewriteUse = flag == true ? 1 : 0;
             this.shutdown();
             await Task.Delay(2000);
             instance.create(accCfg, true);
         }
-        public async Task UseProxy(string proxy)
+        public async Task UseProxy(string? proxy)
         {
             accCfg!.regConfig.registrarUri = $"sip:{proxy}";
             this.shutdown();
