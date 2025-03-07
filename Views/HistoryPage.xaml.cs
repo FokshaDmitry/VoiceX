@@ -207,10 +207,6 @@ namespace VoiceX.Views
                 }
             }
         }
-        private void HistoryPage_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            App.timeOut = DateTime.Now;
-        }
 
         public void AddMoreNotes()
         {

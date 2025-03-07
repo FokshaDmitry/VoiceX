@@ -1,10 +1,12 @@
 ﻿using Microsoft.Win32;
 using NSwag.Collections;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Media;
 using System.Xml.Linq;
 using VoiceX.Items;
 using VoiceX.Services;
@@ -106,9 +108,9 @@ namespace VoiceX.Views
         private async Task SendFile()
         {
             List<string> success = new List<string>();
-            if (!String.IsNullOrEmpty(FaxNumber.Text))
+            if (!String.IsNullOrEmpty(FaxNumber.Text) && FaxNumber.Text != "Fax number")
             {
-                if (!String.IsNullOrEmpty(FaxEmail.Text))
+                if (!String.IsNullOrEmpty(FaxEmail.Text) && FaxEmail.Text != "Notify Email")
                 {
                     List<FaxFileItem> faxFileItems = new List<FaxFileItem>();
                     foreach (var faxItem in SelectFileViwe.Items)
@@ -208,6 +210,46 @@ namespace VoiceX.Views
                 {
                     SelectFileViwe.Items.Add(new FaxFileItem(this, true));
                 }
+            }
+        }
+
+        private void FaxNumber_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var num = (System.Windows.Controls.TextBox)sender;
+            if (num.Text == "Fax number")
+            {
+                num.Text = "";
+                num.Foreground = new SolidColorBrush(Color.FromArgb(255, 92, 102, 189));
+            }
+        }
+
+        private void FaxEmail_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var email = (System.Windows.Controls.TextBox)sender;
+            if (email.Text == "Notify Email")
+            {
+                email.Text = "";
+                email.Foreground = new SolidColorBrush(Color.FromArgb(255, 92, 102, 189));
+            }
+        }
+
+        private void FaxNumber_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var num = (System.Windows.Controls.TextBox)sender;
+            if(num.Text == "")
+            {
+                num.Text = "Fax number";
+                num.Foreground = new SolidColorBrush(Color.FromArgb(255, 195, 195, 196));
+            }
+        }
+
+        private void FaxEmail_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var email = (System.Windows.Controls.TextBox)sender;
+            if (email.Text == "")
+            {
+                email.Text = "Notify Email";
+                email.Foreground = new SolidColorBrush(Color.FromArgb(255, 195, 195, 196));
             }
         }
     }

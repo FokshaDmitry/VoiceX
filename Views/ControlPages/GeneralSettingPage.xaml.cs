@@ -234,10 +234,5 @@ namespace VoiceX.Views.ControlPages
                 LopTop_Toggled(SmartPhone, new RoutedEventArgs());
             }
         }
-
-        private void Grid_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            App.timeOut = DateTime.Now;
-        }
     }
 }

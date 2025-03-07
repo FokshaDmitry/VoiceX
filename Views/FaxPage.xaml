@@ -43,10 +43,10 @@
                         </Grid.Resources>
                         <Button BorderThickness="0" ToolTipService.ToolTip="Send Fax" ToolTipService.Placement="Mouse" Grid.Column="1" Content="Send" x:Name="Send" Click="Send_Click" VerticalAlignment="Top" Margin="0,275,10,0" Background="#FF8A63FB" Width="148" Height="32" FontSize="18" FontFamily="Jost" Foreground="#E4FFFFFF" Padding="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
                         <Border Padding="1" CornerRadius="4" BorderThickness="1" VerticalAlignment="Top" BorderBrush="#FFBBBAFF" Width="213" Height="32" Margin="0,173,0,0">
-                            <TextBox BorderThickness="0" Grid.Column="1" x:Name="FaxNumber" FontFamily="Nunito Sans 10pt Normal" Foreground="#FF5C66BD" Padding="6,6,6,0" FontSize="14"  VerticalContentAlignment="Center"/>
+                            <TextBox GotFocus="FaxNumber_GotFocus" LostFocus="FaxNumber_LostFocus" Text="Fax number" BorderThickness="0" Grid.Column="1" x:Name="FaxNumber" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFC3C3C4" Padding="6,0,6,0" FontSize="14"  VerticalContentAlignment="Center"/>
                         </Border>
                         <Border Padding="1" CornerRadius="4" BorderThickness="1" VerticalAlignment="Top" BorderBrush="#FFBBBAFF" Width="213" Height="32"  Margin="0,219,0,0">
-                            <TextBox BorderThickness="0" Grid.Column="1" x:Name="FaxEmail"  FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="#FF5C66BD" Padding="6,6,6,0" FontSize="14"/>
+                            <TextBox GotFocus="FaxEmail_GotFocus" LostFocus="FaxEmail_LostFocus" Text="Notify Email" BorderThickness="0" Grid.Column="1" x:Name="FaxEmail"  FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="#FFC3C3C4" Padding="6,6,6,0" FontSize="14"/>
                         </Border>
                     </Grid>
 

@@ -8,9 +8,6 @@ using VoiceX.Services;
 
 namespace VoiceX.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
 
@@ -34,8 +31,11 @@ namespace VoiceX.Views
             {
                 Interval = TimeSpan.FromMinutes(1)
             };
-            timer.Tick += Timer_Tick!;
-            timer.Start();
+            if (!App.MyComputer)
+            {
+                timer.Tick += Timer_Tick!;
+                timer.Start();
+            }
             certificateService = new CertificateService();
         }
 
@@ -46,7 +46,7 @@ namespace VoiceX.Views
         private async void Timer_Tick(object sender, object e)
         {
             TimeSpan difference = DateTime.Now - App.timeOut;
-            if (difference.TotalHours > 1 && !App.MyComputer)
+            if (difference.TotalHours > 1)
             {
                 timer.Stop();
                 await addDbContext.DropDatabaseAsync();
@@ -208,6 +208,16 @@ namespace VoiceX.Views
                 FileName = "https://x-cloud.info/",
                 UseShellExecute = true
             });
+        }
+
+        private void Window_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            App.timeOut = DateTime.Now;
+        }
+
+        private void Window_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            App.timeOut = DateTime.Now;
         }
     }
 }

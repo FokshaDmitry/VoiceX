@@ -23,8 +23,6 @@
                                     ClipToBounds="False"
                                     Margin="5,0,10,0">
                                 </Border>
-
-                                <!-- Галочка, выходящая за рамку -->
                                 <Path x:Name="CheckMark"
                                   Data="M9,18 L14,24 L26,11"
                                   StrokeThickness="1"

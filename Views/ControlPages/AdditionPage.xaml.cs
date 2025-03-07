@@ -72,11 +72,6 @@ namespace VoiceX.Views.ControlPages
             
         }
 
-        private void AdditionPage_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            App.timeOut = DateTime.Now;
-        }
-
         private async void Microphones_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
