@@ -8,6 +8,8 @@ using VoiceX.Items;
 using System.Windows.Media;
 using pj;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
+using VoiceX.Enums;
+using System.Diagnostics;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -62,11 +64,11 @@ namespace VoiceX.Views
                 }
             } while (token);
         }
-        private async void Buddy_onlineStatusChange(string uri, bool isOnline)
+        private async void Buddy_onlineStatusChange(string uri, HotKeyStatus hotKeyStatus)
         {
             if (!String.IsNullOrEmpty(uri))
             {
-                await Dispatcher.InvokeAsync(() => hotKeyItems.Where(hk => uri.Contains(hk.HotKeyPhone)).DefaultIfEmpty().First()?.SetState(isOnline));
+                await Dispatcher.InvokeAsync(() => hotKeyItems.Where(hk => uri.Contains(hk.HotKeyPhone)).DefaultIfEmpty().First()?.SetState(hotKeyStatus));
             }
         }
 
@@ -99,8 +101,24 @@ namespace VoiceX.Views
                         }
                         else
                         {
-                            //buddyCore.sendInstantMessage(new SendInstantMessageParam());
-                            Buddy_onlineStatusChange(buddyCore.getInfo().uri, buddyCore.getInfo().presStatus.status == pjsua_buddy_status.PJSUA_BUDDY_STATUS_ONLINE);
+                            HotKeyStatus hotKeyStatus = HotKeyStatus.None;
+                            var info = buddyCore.getInfo();
+                            if (info.presStatus.statusText.ToLower().Contains("ready"))
+                            {
+                                hotKeyStatus = HotKeyStatus.Online;
+                            }
+                            else if (info.presStatus.statusText.ToLower().Contains("unavailable"))
+                            {
+                                hotKeyStatus = HotKeyStatus.Offline;
+                            }
+                            else
+                            {
+                                if (info.presStatus.statusText.ToLower().Contains("on the phone"))
+                                {
+                                    hotKeyStatus = HotKeyStatus.Busy;
+                                }
+                            }
+                            Buddy_onlineStatusChange(buddyCore.getInfo().uri, hotKeyStatus);
                         }
                     }
                 }
@@ -159,6 +177,7 @@ namespace VoiceX.Views
                     buddyCfg.subscribe = true;
                     BuddyService buddy = new BuddyService();
                     buddy.onlineStatusChange += Buddy_onlineStatusChange;
+                   
                     buddy.create(CoreService.Instance, buddyCfg);
                     buddyServiceList?.Add(buddy);
                     hotKeyItems.Add(HKItem);

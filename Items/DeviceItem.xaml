@@ -5,9 +5,26 @@
     xmlns:local="using:VoiceX.Items"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Background="White" Width="209" HorizontalContentAlignment="Stretch" BorderThickness="0" VerticalContentAlignment="Stretch" Cursor="Hand" Padding="0,0,0,0">
-
-    <Grid Background="#FFFDFEFF">
+    mc:Ignorable="d" Background="Transparent" Width="207" HorizontalContentAlignment="Stretch" BorderThickness="0" VerticalContentAlignment="Stretch" Cursor="Hand" Padding="0,0,0,0">
+    <ComboBoxItem.Style>
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border  x:Name="Border"
+                            Background="Transparent"
+                            CornerRadius="12"
+                            Padding="0">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ComboBoxItem.Style>
+    <Border CornerRadius="12" Background="#FFFDFEFF">
         <TextBlock x:Name="DeviceName" TextTrimming="CharacterEllipsis" Width="180" HorizontalAlignment="Left" FontSize="14" FontFamily="Nunito Sans 10pt Normal" Margin="10,5,0,5" />
-    </Grid>
+    </Border>
 </ComboBoxItem>

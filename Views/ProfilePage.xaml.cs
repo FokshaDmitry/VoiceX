@@ -35,7 +35,7 @@ namespace VoiceX.Views
         KeyPads keyPads;
         contacts_list contacts;
         public static bool TerminateAllCalls { get; set; }
-        public static List<string>? AutoAnswerNumbers { get; set; }
+        public static List<string>? AutoAnswerNumbers;
         public static bool onlineToken { get; set; } 
         LocalStoreService localStoreService;
         GeneralSettingPage generalSettingPage;
@@ -60,7 +60,7 @@ namespace VoiceX.Views
             regexNotes = new List<Regex_note>();
             SelectContacts = new List<string>();
             TerminateAllCalls = false;
-            if (AutoAnswerNumbers == null) AutoAnswerNumbers = new List<string>();
+            if(AutoAnswerNumbers == null) AutoAnswerNumbers = new List<string>();
             dialpadCallPage = new DialpadCallPage();
             activCallPage = new ActivCallPage(this);
             callPage = new CallPage(this, dialpadCallPage, activCallPage);
@@ -144,35 +144,46 @@ namespace VoiceX.Views
             {
                 await Dispatcher.InvokeAsync(() =>
                 {
-                    var info = CoreService.activeCall.getInfo();
-                    if (AutoAnswerNumbers!.Contains(info.remoteContact))
-                    {
-                        Thread.Sleep(3000);
-                        CoreService.activeCall.Accept();
-                        MainFrame.Navigate(activCallPage);
-                        slide.Begin();
-                    }
-                    else
+                    try
                     {
 
-                        CoreService.activeCall?.PlayRingTone("Incoming");
-                        var visible = window?.Visibility == Visibility.Visible;
-                        if (visible) 
+                        var info = CoreService.activeCall.getInfo();
+                        if (AutoAnswerNumbers != null && AutoAnswerNumbers.Contains(info.remoteContact))
                         {
-                            window?.Show();
-                            window!.WindowState = WindowState.Normal;
-                            window.Activate();
-                            MainFrame.Navigate(callPage);
+                            Thread.Sleep(3000);
+                            CoreService.activeCall.Accept();
+                            MainFrame.Navigate(activCallPage);
                             slide.Begin();
-                            incomingWindow.ShowInBottomRight(ExtractValue(info.remoteContact), ExtractValue(info.remoteUri), !visible);
                         }
                         else
                         {
-                            incomingWindow.ShowInBottomRight(ExtractValue(info.remoteContact), ExtractValue(info.remoteUri), !visible);
+
+                            CoreService.activeCall?.PlayRingTone("Incoming");
+                            var visible = window?.Visibility == Visibility.Visible;
+                            if (visible)
+                            {
+                                window?.Show();
+                                window!.WindowState = WindowState.Normal;
+                                window.Activate();
+                                MainFrame.Navigate(callPage);
+                                slide.Begin();
+                                incomingWindow.ShowInBottomRight(ExtractValue(info.remoteContact), ExtractValue(info.remoteUri), !visible);
+                            }
+                            else
+                            {
+                                incomingWindow.ShowInBottomRight(ExtractValue(info.remoteContact), ExtractValue(info.remoteUri), !visible);
+                            }
+                        }
+                        StatusCall = StatusCall.Incoming;
+                        if (CoreService.activeCall != null)
+                        {
+                            CoreService.activeCall.EndCallEvent += ActiveCall_EndCallEvent;
                         }
                     }
-                    StatusCall = StatusCall.Incoming;
-                    CoreService.activeCall!.EndCallEvent += ActiveCall_EndCallEvent;
+                    catch
+                    {
+
+                    }
                 });
             }
         }
@@ -223,6 +234,37 @@ namespace VoiceX.Views
             string ip = await localStoreService.LoadDataAsync("ip");
             string ice = await localStoreService.LoadDataAsync("ice");
             string proxy = await localStoreService.LoadDataAsync("proxy");
+            CoreService.Instance.Login(account?.Sip_username!, account!.Sip_server, account.Sip_proxy, account.Sip_secret, 0, proxy == "1", ice == "1", ip == "1");
+            General.Checked += Filter_Checked;
+            Addition.Checked += Filter_Checked;
+            C2C.Checked += Filter_Checked;
+            ContentControl.Navigate(generalSettingPage);
+            CoreService.Instance.IncomingCallEvent += Instance_IncomingCallEvent;
+            CoreService.Instance.OutgoingCallEvent += Instance_OutgoingCallEvent;
+
+            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
+            var AAlist = await localStoreService.LoadDataAsync("AACallList");
+            if (!String.IsNullOrEmpty(AAlist))
+            {
+                AutoAnswerNumbers = JsonConvert.DeserializeObject<List<string>>(AAlist);
+                if (AutoAnswerNumbers == null) AutoAnswerNumbers = new List<string>();
+            }
+            try
+            {
+                //User RegEx
+                var regex = await localStoreService.LoadDataAsync("regexs");
+                if (!String.IsNullOrEmpty(regex))
+                {
+                    regexNotes = JsonConvert.DeserializeObject<List<Regex_note>>(regex);
+                }
+            }
+            catch
+            {
+                regexNotes = new List<Regex_note>();
+            }
+            clickToCallService!.HotkeyPressed += new ClickToCallService.HotkeyDelegate(Hotkeys_HotkeyPressed);
+            clickToCallPage.OnChangeKey += clickToCallService.ChangeKey;
+            clickToCallService.ChangeKey();
             var manager = CoreService.Instance.Core.audDevManager();
 
             if (!String.IsNullOrEmpty(mic))
@@ -240,39 +282,9 @@ namespace VoiceX.Views
                 var res = int.TryParse(audio, out id);
                 if (res)
                 {
-                    manager.setCaptureDev(id);
+                    manager.setPlaybackDev(id);
                 }
             }
-            CoreService.Instance.Login(account?.Sip_username!, account!.Sip_server, account.Sip_proxy, account.Sip_secret, 0, proxy == "1", ice == "1", ip == "1");
-            General.Checked += Filter_Checked;
-            Addition.Checked += Filter_Checked;
-            C2C.Checked += Filter_Checked;
-            ContentControl.Navigate(generalSettingPage);
-            CoreService.Instance.IncomingCallEvent += Instance_IncomingCallEvent;
-            CoreService.Instance.OutgoingCallEvent += Instance_OutgoingCallEvent;
-
-            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
-            var AAlist = await localStoreService.LoadDataAsync("AACallList");
-            if (AAlist != null)
-            {
-                AutoAnswerNumbers = JsonConvert.DeserializeObject<List<string>>(AAlist);
-            }
-            try
-            {
-                //User RegEx
-                var regex = await localStoreService.LoadDataAsync("regexs");
-                if (regex != null)
-                {
-                    regexNotes = JsonConvert.DeserializeObject<List<Regex_note>>(regex);
-                }
-            }
-            catch
-            {
-                regexNotes = new List<Regex_note>();
-            }
-            clickToCallService!.HotkeyPressed += new ClickToCallService.HotkeyDelegate(Hotkeys_HotkeyPressed);
-            clickToCallPage.OnChangeKey += clickToCallService.ChangeKey;
-            clickToCallService.ChangeKey();
         }
         
         #region Navigete Button

@@ -15,8 +15,8 @@ namespace VoiceX.Views
     {
 
         LocalStoreService localStoreService;
-        RegistrationPage registrationPage;
-        ProfilePage profilePage;
+        RegistrationPage? registrationPage;
+        ProfilePage? profilePage;
         readonly DispatcherTimer timer;
         readonly AddDbContext addDbContext;
         CertificateService certificateService;
@@ -28,8 +28,6 @@ namespace VoiceX.Views
         {
             InitializeComponent();
             localStoreService = new LocalStoreService();
-            registrationPage = new RegistrationPage(this);
-            profilePage = new ProfilePage(this);
             addDbContext = new AddDbContext();
             webService = new WebService();
             timer = new DispatcherTimer
@@ -111,27 +109,32 @@ namespace VoiceX.Views
                         {
                             App.userToken = token;
                             App.UserPbx = pbx;
+                            profilePage = new ProfilePage(this);
                             this.MainPage.Content = profilePage;
                         }
                         else
                         {
+                            registrationPage = new RegistrationPage(this);
                             this.MainPage.Content = registrationPage;
                             ShowError("Server error: Sip Data not found");
                         }
                     }
                     else
                     {
+                        registrationPage = new RegistrationPage(this);
                         this.MainPage.Content = registrationPage;
                         ShowError("App error: Certificate not found");
                     }
                 }
                 else
                 {
+                    registrationPage = new RegistrationPage(this);
                     this.MainPage.Content = registrationPage;
                 }
             }
             else
             {
+                registrationPage = new RegistrationPage(this);
                 this.MainPage.Content = registrationPage;
             }
         }
@@ -151,6 +154,7 @@ namespace VoiceX.Views
         {
             ErrorMessage.Text = message;
             ErrorPlate.Visibility = Visibility.Visible;
+            ShowInBottomRight();
         }
         public void Exit_Click(object sender, RoutedEventArgs e)
         {

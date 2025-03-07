@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using VoiceX.Services;
-using Windows.Storage;
+﻿using VoiceX.Services;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Windows.Controls;
@@ -11,11 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using pj;
-using System.Text.RegularExpressions;
-using System.Windows.Media.Animation;
-using VoiceX.Models;
 using VoiceX.DAL.Context;
-using VoiceX.DAL.Entity;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 

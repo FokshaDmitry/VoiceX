@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using VoiceX.DAL.Context;
+using VoiceX.Enums;
 using VoiceX.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -30,9 +31,22 @@ namespace VoiceX.Items
             this.hotKeyGuid = hotKeyGuid;
             addDbContext = new AddDbContext();
         }
-        public void SetState(bool state)
+        public void SetState(HotKeyStatus hotKeyStatus)
         {
-            this.Activ.Background = state ? new SolidColorBrush(Color.FromArgb(255, 76, 176, 78)) : new SolidColorBrush(Color.FromArgb(255, 243, 30, 56));
+            switch (hotKeyStatus)
+            {
+                case HotKeyStatus.Online:
+                    this.Activ.Background = new SolidColorBrush(Color.FromArgb(255, 76, 176, 78));
+                    break;
+                case HotKeyStatus.Offline:
+                    this.Activ.Background = new SolidColorBrush(Color.FromArgb(255, 243, 30, 56));
+                    break;
+                case HotKeyStatus.Busy:
+                    this.Activ.Background = new SolidColorBrush(Color.FromArgb(255, 255, 217, 0));
+                    break;
+                default:
+                    break;
+            }
         }
         private async void Trash_Click(object sender, RoutedEventArgs e)
         {

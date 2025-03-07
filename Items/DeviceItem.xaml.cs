@@ -14,12 +14,12 @@ namespace VoiceX.Items
     public sealed partial class DeviceItem : ComboBoxItem
     {
         public bool Checked { get; set; }
-        public AudioDevInfo AudioDevInfo { get; set; }
-        public DeviceItem(AudioDevInfo audioDevInfo)
+        public int caps { get; set; }
+        public DeviceItem(string name, int caps)
         {
             this.InitializeComponent();
-            AudioDevInfo = audioDevInfo;
-            this.DeviceName.Text = Encoding.UTF8.GetString(Encoding.Default.GetBytes(audioDevInfo.name)).Replace("?", "");
+            this.caps = caps;
+            this.DeviceName.Text = Encoding.UTF8.GetString(Encoding.Default.GetBytes(name)).Replace("?", "");
         }
     }
 }

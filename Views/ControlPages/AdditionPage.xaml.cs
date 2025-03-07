@@ -1,4 +1,5 @@
-﻿using pj;
+﻿using Microsoft.VisualBasic.Devices;
+using pj;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -25,26 +26,26 @@ namespace VoiceX.Views.ControlPages
             this.Loaded += AdditionPage_Loaded;
             localStoreService = new LocalStoreService();
         }
-        private void AdditionPage_Loaded(object sender, RoutedEventArgs e)
+        private async void AdditionPage_Loaded(object sender, RoutedEventArgs e)
         {
+            string micro = await localStoreService.LoadDataAsync("micro");
+            string audio = await localStoreService.LoadDataAsync("audio");
             Microphones.Items.Clear();
             Audio.Items.Clear();
             var manager = CoreService.Instance.Core.audDevManager();
             manager.refreshDevs();
             var deviceCount = manager.enumDev2();
-
-            
-            AudioDevInfo idaud = new AudioDevInfo();
-            AudioDevInfo idmic = new AudioDevInfo();
-            try
+            int mic = 0;
+            int aud = 0;
+            if (!String.IsNullOrEmpty(micro))
             {
-                idaud = manager.getDevInfo(manager.getPlaybackDev());
-                idmic = manager.getDevInfo(manager.getCaptureDev());
+                int.TryParse(micro, out mic);
             }
-            catch
+            if (!String.IsNullOrEmpty(audio))
             {
-
+                int.TryParse(audio, out aud);
             }
+            int index = 0;
             foreach (var device in deviceCount)
             {
                 if (device != null)
@@ -53,15 +54,18 @@ namespace VoiceX.Views.ControlPages
                     {
                         Debug.WriteLine($"[SIP] ID: Микрофон (ввод): {device.name}");
                         
-                        Microphones.Items.Add(new DeviceItem(device) { IsSelected = device.caps == idmic.caps });
+                        Microphones.Items.Add(new DeviceItem(device.name, index) { IsSelected = index == mic });
                     }
                     if (device.outputCount > 0)
                     {
                         Debug.WriteLine($"[SIP] ID: Динамик (вывод): {device.name}");
-                        Audio.Items.Add(new DeviceItem(device) { IsSelected = device.caps == idaud.caps });
+                        Audio.Items.Add(new DeviceItem(device.name, index) { IsSelected = index == aud });
                     }
+                    index++;
                 }
             }
+            Microphones.SelectionChanged += Microphones_SelectionChanged;
+            Audio.SelectionChanged += Audio_SelectionChanged;
         }
         private void Include_Toggled(object sender, RoutedEventArgs e)
         {
@@ -82,8 +86,8 @@ namespace VoiceX.Views.ControlPages
                 if (selectItem != null)
                 {
                     var manager = CoreService.Instance.Core.audDevManager();
-                    manager.setCaptureDev((int)selectItem.AudioDevInfo.caps);
-                    await localStoreService.SaveDataAsync("micro", selectItem.AudioDevInfo.caps.ToString());
+                    manager.setCaptureDev((int)selectItem.caps);
+                    await localStoreService.SaveDataAsync("micro", selectItem.caps.ToString());
                 }
             }
             catch
@@ -101,8 +105,8 @@ namespace VoiceX.Views.ControlPages
                 if (selectItem != null)
                 {
                     var manager = CoreService.Instance.Core.audDevManager();
-                    manager.setCaptureDev((int)selectItem.AudioDevInfo.caps);
-                    await localStoreService.SaveDataAsync("audio", selectItem.AudioDevInfo.caps.ToString());
+                    manager.setPlaybackDev((int)selectItem.caps);
+                    await localStoreService.SaveDataAsync("audio", selectItem.caps.ToString());
                 }
             }
             catch

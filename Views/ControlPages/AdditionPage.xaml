@@ -70,7 +70,7 @@
                         <Grid>
                             <Border x:Name="Border" Background="White" BorderBrush="#D1D0FF" BorderThickness="1" CornerRadius="4" Padding="12, 0, 0, 0" Height="32" Width="209">
                                 <ToggleButton Padding="0" x:Name="ToggleButton" Background="Transparent" BorderThickness="0" ClickMode="Press" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
-                                    <Grid Background="White">
+                                    <Grid Background="White" >
                                         <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding SelectionBoxItem}" Margin="0,0,30,0" VerticalAlignment="Center" Height="32"/>
                                         <Path x:Name="Arrow" Data="M 0 0 L 6 6 L 12 0" HorizontalAlignment="Right" VerticalAlignment="Center" Width="13" Height="8" Stroke="#C5C5FF" StrokeThickness="2" RenderTransformOrigin="0.5,0.5" Margin="0,0,10,0"/>
                                     </Grid>
@@ -83,9 +83,9 @@
                                StaysOpen="False"
                                IsOpen="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                                 <Border Background="White"
-                                    BorderBrush="#C5C5FF"
+                                    BorderBrush="#8C63FF"
                                     BorderThickness="1"
-                                    CornerRadius="4">
+                                    CornerRadius="12">
                                     <ScrollViewer>
                                         <StackPanel IsItemsHost="True"/>
                                     </ScrollViewer>
@@ -128,9 +128,10 @@
         <CheckBox Click="Proxy_Checked" x:Name="Proxy" Content="SIP Proxy" Margin="18,15,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
         <CheckBox Click="Ice_Checked" x:Name="Ice" Content="ICE" Margin="18,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16"/>
         <CheckBox Click="Ip_Checked" x:Name="Ip" Content="IP rewrite" Margin="17,83,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
+        <Border BorderThickness="0" Margin="0, 117, 0, 0" Height="1" Width="213" Background="#FFC3B1FD"/>
         <TextBlock Text="Speaker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,129,0,0" Foreground="#FFADADAD"/>
-        <ComboBox  SelectionChanged="Microphones_SelectionChanged" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Microphones" Background="Transparent" Width="213" Margin="18,152,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <ComboBox MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Audio" Background="Transparent" Width="213" Margin="18,152,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBlock Text="Microphone" Margin="18,196,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
-        <ComboBox SelectionChanged="Audio_SelectionChanged" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Audio" Background="Transparent" Width="213" Margin="18,219,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <ComboBox MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Microphones" Background="Transparent" Width="213" Margin="18,219,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
     </Grid>
 </Page>
