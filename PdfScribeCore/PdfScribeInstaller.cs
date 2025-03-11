@@ -538,7 +538,7 @@ namespace PdfScribeCore
                                 }
                                 else
                                 {
-                                    MessageBox.Show(INFO_INSTALLCONFIGPORT_FAILED);
+                                    //MessageBox.Show(INFO_INSTALLCONFIGPORT_FAILED);
                                     // Failed to configure port
                                     this.logEventSource.TraceEvent(TraceEventType.Error,
                                                                         (int)TraceEventType.Error,
@@ -558,7 +558,7 @@ namespace PdfScribeCore
                         }
                         else
                         {
-                            MessageBox.Show(INFO_INSTALLPRINTERDRIVER_FAILED);
+                            //MessageBox.Show(INFO_INSTALLPRINTERDRIVER_FAILED);
                             // Failed to install printer driver
                             this.logEventSource.TraceEvent(TraceEventType.Error,
                                                             (int)TraceEventType.Error,
@@ -568,7 +568,7 @@ namespace PdfScribeCore
                     }
                     else
                     {
-                        MessageBox.Show(INFO_INSTALLPORT_FAILED);
+                        //MessageBox.Show(INFO_INSTALLPORT_FAILED);
                         // Failed to add printer port
                         this.logEventSource.TraceEvent(TraceEventType.Error,
                                                         (int)TraceEventType.Error,
@@ -578,7 +578,7 @@ namespace PdfScribeCore
                 }
                 else
                 {
-                    MessageBox.Show(INFO_INSTALLCOPYDRIVER_FAILED);
+                    //MessageBox.Show(INFO_INSTALLCOPYDRIVER_FAILED);
                     //Failed to copy printer driver files
                     this.logEventSource.TraceEvent(TraceEventType.Error,
                                                     (int)TraceEventType.Error,
@@ -588,7 +588,7 @@ namespace PdfScribeCore
             }
             else
             {
-                MessageBox.Show(INFO_INSTALLPORTMONITOR_FAILED);
+                //MessageBox.Show(INFO_INSTALLPORTMONITOR_FAILED);
                 //Failed to add port monitor
                 this.logEventSource.TraceEvent(TraceEventType.Error,
                                                 (int)TraceEventType.Error,
