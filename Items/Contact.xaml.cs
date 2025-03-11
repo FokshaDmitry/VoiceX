@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using VoiceX.Views;
 using VoiceX.Views.ControlPages;
 using VoiceX.Views.PhonePages;
 using Windows.ApplicationModel.Core;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -55,6 +57,7 @@ namespace VoiceX.Items
                 {
                     phone = phone.Replace(regex?.Search!, regex?.Replace);
                 }
+                phone = Regex.Replace(phone, @"\D", "");
                 CoreService.Instance.MakeCall(phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
             }
             catch

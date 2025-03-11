@@ -17,15 +17,14 @@ namespace VoiceX.Items
         {
             this.InitializeComponent();
             this.pause = pause;
-            PauseName.Text = pause.Name;
+            Pause.Content = pause.Name;
+            Pause.IsChecked = select;
             IsSelect = select;
-            Check.Visibility = select ? Visibility.Visible : Visibility.Collapsed; 
         }
 
         public void SelectChange(bool select)
         {
             IsSelect = select;
-            Check.Visibility = select ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

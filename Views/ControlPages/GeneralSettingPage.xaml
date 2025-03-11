@@ -125,7 +125,7 @@
                 <ToggleButton Click="Tcp_Toggled" Cursor="Hand" x:Name="Tcp" VerticalAlignment="Top" Margin="0,5,0,0" Width="48" Height="27" HorizontalAlignment="Left" />
                 <ToggleButton Click="Tls_Toggled" Cursor="Hand" x:Name="Tls" VerticalAlignment="Top" Margin="100,5,0,0" Width="46" HorizontalAlignment="Left" />
                 <TextBlock Text="TCP" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8"/>
-                <TextBlock Text="TLS" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8"/>
+                <TextBlock Text="UDP" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8"/>
             </Grid>
         </Border>
         <Image Width="45" Height="66" HorizontalAlignment="Left" Margin="65,80,0,0" VerticalAlignment="Top">

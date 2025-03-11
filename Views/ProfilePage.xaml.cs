@@ -110,6 +110,7 @@ namespace VoiceX.Views
                         {
                             Phone = Phone.Replace(regex.Search!, regex.Replace);
                         }
+                        Phone = Regex.Replace(Phone, @"\D", "");
                         try
                         {
                             CoreService.Instance.MakeCall(Phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
@@ -234,7 +235,10 @@ namespace VoiceX.Views
             string ip = await localStoreService.LoadDataAsync("ip");
             string ice = await localStoreService.LoadDataAsync("ice");
             string proxy = await localStoreService.LoadDataAsync("proxy");
-            CoreService.Instance.Login(account?.Sip_username!, account!.Sip_server, account.Sip_proxy, account.Sip_secret, 0, proxy == "1", ice == "1", ip == "1");
+            string transport = await localStoreService.LoadDataAsync("transport");
+            int transportId = 0;
+            int.TryParse(transport, out transportId);
+            CoreService.Instance.Login(account?.Sip_username!, account!.Sip_server, account.Sip_proxy, account.Sip_secret, transportId, proxy == "1", ice == "1", ip == "1");
             General.Checked += Filter_Checked;
             Addition.Checked += Filter_Checked;
             C2C.Checked += Filter_Checked;
@@ -309,7 +313,14 @@ namespace VoiceX.Views
                     slide.Begin();
                     break;
                 case "Phone":
-                    MainFrame.Navigate(dialpadCallPage);
+                    if (CoreService.activeCall != null)
+                    {
+                        MainFrame.Navigate(activCallPage);
+                    }
+                    else
+                    {
+                        MainFrame.Navigate(dialpadCallPage);
+                    }
                     slide.Begin();
                     break;
                 case "History":
@@ -385,26 +396,29 @@ namespace VoiceX.Views
         }
         private async void Pauses_Click(object sender, RoutedEventArgs e)
         {
-            PauseList.Items.Clear();
-            getPauses = new Get_pauses
+            if (!PausesFild.IsVisible)
             {
-                ResponseData = new Status_pause()
-            };
-            getPauses.ResponseData.Pauses = new List<Pause>();
-            getPauses = await webService.GetPauses(App.AccountData!.Data.Sip_Settings.Sip_username, App.UserPbx!, App.userToken!);
-            if (getPauses.ResponseCode == System.Net.HttpStatusCode.OK)
-            {
-                PauseList.Items.Add(new PauseItem(new Pause { Name = "Work", Id = 0 }, getPauses.ResponseData!.Pause_active == 0));
-                foreach (var pause in getPauses.ResponseData.Pauses!)
+                PausesFild.Visibility = Visibility.Visible;
+                PauseList.Items.Clear();
+                getPauses = new Get_pauses
                 {
-                    PauseList.Items.Add(new PauseItem(pause, pause.Id == getPauses.ResponseData.Pause_active));
+                    ResponseData = new Status_pause()
+                };
+                getPauses.ResponseData.Pauses = new List<Pause>();
+                getPauses = await webService.GetPauses(App.AccountData!.Data.Sip_Settings.Sip_username, App.UserPbx!, App.userToken!);
+                if (getPauses.ResponseCode == HttpStatusCode.OK)
+                {
+                    PauseList.Items.Add(new PauseItem(new Pause { Name = "Work", Id = 0 }, getPauses.ResponseData!.Pause_active == 0));
+                    foreach (var pause in getPauses.ResponseData.Pauses!)
+                    {
+                        PauseList.Items.Add(new PauseItem(pause, pause.Id == getPauses.ResponseData.Pause_active));
+                    }
+                }
+                else
+                {
+                    window?.ShowError(getPauses.ResponseMessage!);
                 }
             }
-            else
-            {
-                window?.ShowError(getPauses.ResponseMessage!);
-            }
-            PausesFild.Visibility = Visibility.Visible;
         }
 
         private void PauseList_SelectionChanged(object sender, SelectionChangedEventArgs e)

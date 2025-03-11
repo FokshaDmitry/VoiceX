@@ -8,37 +8,41 @@
     mc:Ignorable="d" BorderThickness="0" HorizontalAlignment="Stretch" Cursor="Hand" VerticalAlignment="Stretch" Name="Select" Background="White" Foreground="#FF252422" Padding="0,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,3,0,0">
     <ListBoxItem.Content>
         <Grid Background="White">
-            <TextBlock MinHeight="25" Text="Test Pause" x:Name="PauseName" FontSize="16" FontFamily="Nunito Sans 10pt Normal" Width="105" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="7,2,0,0"/>
-            <Grid Margin="0, -4, 0, 0" x:Name="Check" HorizontalAlignment="Right" Width="24" Height="24" VerticalAlignment="Top">
-                <Border Height="2" CornerRadius="1" Width="18" Background="#FF8A63FB" RenderTransformOrigin="0.5,0.5" Margin="5,0,0,0" >
-                    <Border.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="-8"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Border.RenderTransform>
-                    <Border.LayoutTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="-30"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Border.LayoutTransform>
-                </Border>
-                <Border Height="2" CornerRadius="1" Width="10" Background="#FF8A63FB" Margin="-2,4.7,11,0" RenderTransformOrigin="0.5,0.5" >
-                    <Border.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="42"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Border.RenderTransform>
-                </Border>
-            </Grid>
+            <Grid.Resources>
+                <Style TargetType="RadioButton">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="RadioButton">
+                                <StackPanel Orientation="Horizontal" Margin="4">
+                                    <Grid Width="16" Height="16" Margin="0,0,8,0">
+                                        <Ellipse Stroke="#C5C5FF"
+                                     StrokeThickness="1"
+                                     Fill="Transparent"/>
+                                        <Ellipse x:Name="CheckedEllipse"
+                                     Width="9" Height="9"
+                                     Fill="#8C63FF"
+                                     Visibility="Collapsed"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="CheckedEllipse" Property="Visibility" Value="Visible"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Opacity" Value="0.4"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Grid.Resources>
+            <RadioButton GroupName="Pauses" x:Name="Pause" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" Content="Test Pause" FontSize="16" />
         </Grid>
     </ListBoxItem.Content>
 </ListBoxItem>

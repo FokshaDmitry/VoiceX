@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 using VoiceX.Enums;
 using VoiceX.Services;
@@ -53,6 +54,7 @@ namespace VoiceX.Items
             {
                 userPhone = userPhone.Replace(regex.Search!, regex.Replace);
             }
+            userPhone = Regex.Replace(userPhone, @"\D", "");
             CoreService.Instance.MakeCall(userPhone, App.AccountData!.Data.Sip_Settings.Sip_server);
         }
 

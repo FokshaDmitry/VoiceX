@@ -72,7 +72,7 @@ namespace VoiceX.Services
         {
             try
             {
-                accCfg!.sipConfig.transportId = 0;
+                accCfg!.sipConfig.transportId = transport;
                 //REG
                 accCfg.idUri = $"sip:{username}@{domain}";
                 if (useProxy)
@@ -95,26 +95,29 @@ namespace VoiceX.Services
 
             }
         }
+        public async Task ChangeTransport(int id)
+        {
+            accCfg!.sipConfig.transportId = id;
+            await ReloadCore();
+        }
         public async Task UseIceEnabled(bool flag)
         {
             accCfg!.natConfig.iceEnabled = flag;
-            this.shutdown();
-            await Task.Delay(2000);
-            instance.create(accCfg, true);
+            await ReloadCore();
         }
         public async Task UseIpRewrite(bool flag)
         {
             accCfg!.natConfig.sdpNatRewriteUse = flag == true ? 1 : 0;
-            this.shutdown();
-            await Task.Delay(2000);
-            instance.create(accCfg, true);
+            await ReloadCore();
         }
         public async Task UseProxy(string? proxy)
         {
             accCfg!.regConfig.registrarUri = $"sip:{proxy}";
+            await ReloadCore();
+        }
+        private async Task ReloadCore()
+        {
             this.shutdown();
-            // this.Dispose();
-           
             await Task.Delay(2000);
             instance.create(accCfg, true);
         }

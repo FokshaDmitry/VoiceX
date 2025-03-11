@@ -392,7 +392,7 @@ namespace VoiceX.Services
                 if (ringTonePlayer != null)
                 {
                     AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
-                    if (speaker != null)
+                    if (speaker != null && !ringTonePlayer.Equals(speaker))
                     {
                         ringTonePlayer.stopTransmit(speaker);
                         ringTonePlayer.Dispose();

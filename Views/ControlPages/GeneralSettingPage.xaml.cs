@@ -37,22 +37,22 @@ namespace VoiceX.Views.ControlPages
             AccountFild.Text = App.AccountData?.Data.User_Data.Name;
             phoneNumber.Text = App.AccountData?.Data.Sip_Settings.Sip_username;
             PbXText.Text = "PBX" + App.UserPbx?.TrimStart('0');
-            var type = await localStoreService.LoadDataAsync("Trasnsport");
+            var type = await localStoreService.LoadDataAsync("transport");
             if (!String.IsNullOrEmpty(type))
             {
                 switch (type)
                 {
-                    case "Tcp":
+                    case "0":
                         Tcp.IsChecked = true;
                         break;
-                    case "Tls":
+                    case "1":
                         Tls.IsChecked = true;
                         break;
                 }
             }
             else
             {
-                await localStoreService.SaveDataAsync("Trasnsport", "Tcp");
+                await localStoreService.SaveDataAsync("transport", "0");
                 Tcp.IsChecked = true;
             }
             if (App.AccountData?.Data.Is_mobile == 0)
@@ -157,7 +157,10 @@ namespace VoiceX.Views.ControlPages
             {
                 LoadIcone.Visibility = Visibility.Visible;
                 Tls.IsChecked = false;
-                await localStoreService.SaveDataAsync("Trasnsport", "Tcp");
+                ProfilePage.onlineToken = false;
+                await localStoreService.SaveDataAsync("transport", "0");
+                await CoreService.Instance.ChangeTransport(0);
+                ProfilePage.onlineToken = true;
                 LoadIcone.Visibility = Visibility.Collapsed;
             }
             else if (Tls.IsChecked == false)
@@ -171,12 +174,15 @@ namespace VoiceX.Views.ControlPages
             {
                 LoadIcone.Visibility = Visibility.Visible;
                 Tcp.IsChecked = false;
-                await localStoreService.SaveDataAsync("Trasnsport", "Tls");
+                ProfilePage.onlineToken = false;
+                await localStoreService.SaveDataAsync("transport", "1");
+                await CoreService.Instance.ChangeTransport(1);
+                ProfilePage.onlineToken = true;
                 LoadIcone.Visibility = Visibility.Collapsed;
             }
             else if (Tls.IsChecked == false)
             {
-                Tcp.IsChecked = true;
+                Tcp.IsChecked = true; 
             }
         }
         

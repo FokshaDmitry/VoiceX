@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -53,6 +54,7 @@ namespace VoiceX.Views.PhonePages
                 {
                     phone = phone.Replace(regex.Search!, regex.Replace);
                 }
+                phone = Regex.Replace(phone, @"\D", "");
                 try
                 {
                     CoreService.Instance.MakeCall(phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
