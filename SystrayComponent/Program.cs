@@ -42,6 +42,11 @@ namespace SystrayComponent
             pdfScribeInstaller = new PdfScribeInstaller();
             String standardInputFilename = Path.GetTempFileName();
             String outputFilename = standardInputFilename + ".pdf";
+            Debug.WriteLine(Application.StartupPath);
+            Debug.WriteLine(pdfScribeInstaller.RetrievePrinterDriverDirectory());
+            pdfScribeInstaller.UninstallPdfScribePrinter();
+            pdfScribeInstaller.RemovePDFScribePrinterDriver();
+            pdfScribeInstaller.RemovePdfScribePortMonitor();
             if (!pdfScribeInstaller.InstallPdfScribePrinter(Application.StartupPath, pdfScribeInstaller.RetrievePrinterDriverDirectory() + "\\SystrayComponent.exe", ""))
             {
                 MessageBox.Show(Application.StartupPath);

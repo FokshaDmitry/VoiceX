@@ -127,7 +127,8 @@ namespace PdfScribeCore
         [DllImport("winspool.drv", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern Int32 DeleteMonitor(String pName, String pEnvironment, String pMonitorName);
 
-
+        [DllImport("winspool.drv", SetLastError = true, CharSet = CharSet.Auto)]
+        internal static extern bool EnumPorts(string pName, uint level, IntPtr pPorts, uint cbBuf, out uint pcbNeeded, out uint pcReturned);
 
         [DllImport("winspool.drv", EntryPoint = "XcvDataW", SetLastError = true)]
         internal static extern bool XcvData(IntPtr hXcv,

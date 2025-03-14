@@ -12,20 +12,20 @@ using System.Windows;
 
 namespace PdfScribeCore
 {
- 
+
     public class PdfScribeInstaller
     {
         #region Printer Driver Win32 API Constants
 
         const uint DRIVER_KERNELMODE = 0x00000001;
-        const uint DRIVER_USERMODE =  0x00000002;
-        
-        const uint APD_STRICT_UPGRADE =  0x00000001;
+        const uint DRIVER_USERMODE = 0x00000002;
+
+        const uint APD_STRICT_UPGRADE = 0x00000001;
         const uint APD_STRICT_DOWNGRADE = 0x00000002;
         const uint APD_COPY_ALL_FILES = 0x00000004;
         const uint APD_COPY_NEW_FILES = 0x00000008;
         const uint APD_COPY_FROM_DIRECTORY = 0x00000010;
-        
+
         const uint DPD_DELETE_UNUSED_FILES = 0x00000001;
         const uint DPD_DELETE_SPECIFIC_VERSION = 0x00000002;
         const uint DPD_DELETE_ALL_FILES = 0x00000004;
@@ -46,12 +46,12 @@ namespace PdfScribeCore
         const string PRINTPROCESOR = "winprint";
 
         const string DRIVERMANUFACTURER = "X Cloud";
-        
+
         const string DRIVERFILE = "PSCRIPT5.DLL";
         const string DRIVERUIFILE = "PS5UI.DLL";
         const string DRIVERHELPFILE = "PSCRIPT.HLP";
         const string DRIVERDATAFILE = "SCPDFPRN.PPD";
-        
+
         enum DriverFileIndex
         {
             Min = 0,
@@ -97,7 +97,7 @@ namespace PdfScribeCore
             this.logEventSource.Listeners.Add(additionalListener);
         }
 
-        
+
         #region Constructors
 
         public PdfScribeInstaller()
@@ -334,7 +334,7 @@ namespace PdfScribeCore
                 oldRedirectValue = DisableWow64Redirection();
 
                 monitorDllFullPathname = Path.Combine(Environment.SystemDirectory, monitorDll);
-                
+
                 File.Delete(monitorDllFullPathname);
                 monitorDllRemoved = true;
             }
@@ -343,15 +343,15 @@ namespace PdfScribeCore
                 // This one is likely very bad -
                 // log and rethrow so we don't continue
                 // to try to uninstall
-                logEventSource.TraceEvent(TraceEventType.Critical, 
-                                          (int)TraceEventType.Critical, 
+                logEventSource.TraceEvent(TraceEventType.Critical,
+                                          (int)TraceEventType.Critical,
                                           NATIVE_COULDNOTENABLE64REDIRECTION + String.Format(WIN32ERROR, windows32Ex.NativeErrorCode.ToString()));
                 throw;
             }
             catch (IOException)
             {
                 // File still in use
-                logEventSource.TraceEvent(TraceEventType.Error, (int)TraceEventType.Error, String.Format(FILENOTDELETED_INUSE, monitorDllFullPathname));  
+                logEventSource.TraceEvent(TraceEventType.Error, (int)TraceEventType.Error, String.Format(FILENOTDELETED_INUSE, monitorDllFullPathname));
             }
             catch (UnauthorizedAccessException)
             {
@@ -368,8 +368,8 @@ namespace PdfScribeCore
                 {
                     // Couldn't turn file redirection back on -
                     // this is not good
-                    logEventSource.TraceEvent(TraceEventType.Critical, 
-                                              (int)TraceEventType.Critical, 
+                    logEventSource.TraceEvent(TraceEventType.Critical,
+                                              (int)TraceEventType.Critical,
                                               NATIVE_COULDNOTREVERT64REDIRECTION + String.Format(WIN32ERROR, windows32Ex.NativeErrorCode.ToString()));
                     throw;
                 }
@@ -498,103 +498,103 @@ namespace PdfScribeCore
                                                (int)TraceEventType.Verbose,
                                                "Port monitor successfully installed.");
                 undoInstallActions.Push(this.RemovePdfScribePortMonitor);
-                
+
                 if (CopyPrinterDriverFiles(driverSourceDirectory, printerDriverFiles.Concat(printerDriverDependentFiles).ToArray()))
                 {
-                    
+
                     this.logEventSource.TraceEvent(TraceEventType.Verbose,
                                                    (int)TraceEventType.Verbose,
                                                    "Printer drivers copied or already exist.");
                     undoInstallActions.Push(this.RemovePdfScribePortMonitor);
-                   
+
                     if (AddPdfScribePort())
                     {
                         this.logEventSource.TraceEvent(TraceEventType.Verbose,
                                                        (int)TraceEventType.Verbose,
                                                        "Redirection port added.");
                         undoInstallActions.Push(this.RemovePDFScribePrinterDriver);
-                        
+
                         if (InstallPdfScribePrinterDriver())
                         {
                             this.logEventSource.TraceEvent(TraceEventType.Verbose,
                                                            (int)TraceEventType.Verbose,
                                                            "Printer driver installed.");
                             undoInstallActions.Push(this.DeletePdfScribePrinter);
-                            
+
                             if (AddPdfScribePrinter())
                             {
                                 this.logEventSource.TraceEvent(TraceEventType.Verbose,
                                                                (int)TraceEventType.Verbose,
                                                                "Virtual printer installed.");
                                 undoInstallActions.Push(this.RemovePdfScribePortConfig);
-                                
+
                                 if (ConfigurePdfScribePort(outputHandlerCommand, outputHandlerArguments))
                                 {
                                     this.logEventSource.TraceEvent(TraceEventType.Verbose,
                                                                    (int)TraceEventType.Verbose,
                                                                    "Printer configured.");
-                                    
+
                                     printerInstalled = true;
                                 }
                                 else
                                 {
-                                    //MessageBox.Show(INFO_INSTALLCONFIGPORT_FAILED);
+                                    MessageBox.Show(INFO_INSTALLCONFIGPORT_FAILED);
                                     // Failed to configure port
                                     this.logEventSource.TraceEvent(TraceEventType.Error,
                                                                         (int)TraceEventType.Error,
                                                                         INFO_INSTALLCONFIGPORT_FAILED);
                                 }
-                                    
+
                             }
                             else
                             {
-                                //MessageBox.Show(INFO_INSTALLPRINTER_FAILED);
+                                MessageBox.Show(INFO_INSTALLPRINTER_FAILED);
                                 // Failed to install printer
                                 this.logEventSource.TraceEvent(TraceEventType.Error,
                                                                     (int)TraceEventType.Error,
                                                                     INFO_INSTALLPRINTER_FAILED);
                             }
-                                
+
                         }
                         else
                         {
-                            //MessageBox.Show(INFO_INSTALLPRINTERDRIVER_FAILED);
+                            MessageBox.Show(INFO_INSTALLPRINTERDRIVER_FAILED);
                             // Failed to install printer driver
                             this.logEventSource.TraceEvent(TraceEventType.Error,
                                                             (int)TraceEventType.Error,
                                                             INFO_INSTALLPRINTERDRIVER_FAILED);
                         }
-                            
+
                     }
                     else
                     {
-                        //MessageBox.Show(INFO_INSTALLPORT_FAILED);
+                        MessageBox.Show(INFO_INSTALLPORT_FAILED);
                         // Failed to add printer port
                         this.logEventSource.TraceEvent(TraceEventType.Error,
                                                         (int)TraceEventType.Error,
                                                         INFO_INSTALLPORT_FAILED);
                     }
-                        
+
                 }
                 else
                 {
-                    //MessageBox.Show(INFO_INSTALLCOPYDRIVER_FAILED);
+                    MessageBox.Show(INFO_INSTALLCOPYDRIVER_FAILED);
                     //Failed to copy printer driver files
                     this.logEventSource.TraceEvent(TraceEventType.Error,
                                                     (int)TraceEventType.Error,
                                                     INFO_INSTALLCOPYDRIVER_FAILED);
                 }
-                    
+
             }
             else
             {
-                //MessageBox.Show(INFO_INSTALLPORTMONITOR_FAILED);
+                MessageBox.Show(INFO_INSTALLPORTMONITOR_FAILED);
                 //Failed to add port monitor
                 this.logEventSource.TraceEvent(TraceEventType.Error,
                                                 (int)TraceEventType.Error,
                                                 INFO_INSTALLPORTMONITOR_FAILED);
             }
-                
+
             if (printerInstalled == false)
             {
                 // Printer installation failed -
@@ -603,7 +603,7 @@ namespace PdfScribeCore
                 {
                     undoInstall undoAction = undoInstallActions.Pop();
                     try
-                    { 
+                    {
                         if (!undoAction())
                         {
                             this.logEventSource.TraceEvent(TraceEventType.Error,
@@ -693,7 +693,7 @@ namespace PdfScribeCore
                 filesCopied = true;
             }
             catch (IOException ioEx)
-            { 
+            {
                 logEventSource.TraceEvent(TraceEventType.Error,
                                           (int)TraceEventType.Error,
                                           String.Format(FILENOTCOPIED_PRINTERDRIVER, ioEx.Message));
@@ -901,7 +901,7 @@ namespace PdfScribeCore
             {
                 logEventSource.TraceEvent(TraceEventType.Error,
                                           (int)TraceEventType.Error,
-                                          "Could not add PDF Scribe virtual printer. " + 
+                                          "Could not add PDF Scribe virtual printer. " +
                                           String.Format(WIN32ERROR, Marshal.GetLastWin32Error().ToString()));
             }
             return printerAdded;
@@ -928,7 +928,7 @@ namespace PdfScribeCore
                 {
                     logEventSource.TraceEvent(TraceEventType.Error,
                                               (int)TraceEventType.Error,
-                                              "Could not delete PDF Scribe virtual printer. "  +
+                                              "Could not delete PDF Scribe virtual printer. " +
                                               String.Format(WIN32ERROR, Marshal.GetLastWin32Error().ToString()));
                 }
             }
@@ -985,7 +985,7 @@ namespace PdfScribeCore
 
         }
 
-        
+
         private bool ConfigurePdfScribePort(String commandValue,
                                             String argumentsValue)
         {
@@ -995,11 +995,11 @@ namespace PdfScribeCore
             RegistryKey portConfiguration;
             try
             {
-                
-                portConfiguration = Registry.LocalMachine.CreateSubKey("SYSTEM\\CurrentControlSet\\Control\\Print\\Monitors\\" + 
+
+                portConfiguration = Registry.LocalMachine.CreateSubKey("SYSTEM\\CurrentControlSet\\Control\\Print\\Monitors\\" +
                                                                                 PORTMONITOR +
                                                                                 "\\Ports\\" + PORTNAME);
-                
+
                 portConfiguration.SetValue("Description", "X-Cloud Printer", RegistryValueKind.String);
                 portConfiguration.SetValue("Command", commandValue, RegistryValueKind.String);
                 portConfiguration.SetValue("Arguments", argumentsValue, RegistryValueKind.String);
