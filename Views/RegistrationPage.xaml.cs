@@ -6,11 +6,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using VoiceX.Services;
-using Windows.Storage.Streams;
-using Windows.Storage;
-using Windows.ApplicationModel;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using System.Linq;
+using System.IO.Packaging;
 
 namespace VoiceX.Views
 {
@@ -64,7 +64,7 @@ namespace VoiceX.Views
                 // inport selfsign
                 if (!certificateService.CheckCertificate("default-windowsrsa"))
                 {
-                    certificateService.SaveCertificate(Package.Current.InstalledPath + "\\default-windowsrsa.p12", "r7Z33th35XTCfym6", "default-windowsrsa");
+                    certificateService.SaveCertificate(AppDomain.CurrentDomain.BaseDirectory + "\\default-windowsrsa.p12", "r7Z33th35XTCfym6", "default-windowsrsa");
                 }
                 var cert = await webService.GetCertificateAsync(pbxCode, "windows");
                 if (String.IsNullOrEmpty(cert.Error))
@@ -78,7 +78,6 @@ namespace VoiceX.Views
                             certificateService.SaveCertificate(cert.P12l!, cert.Key!, "app-cert", "r7Z33th35XTCfym6");
                         }
                         App.userToken = cert.App_token;
-                        ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
                         await localStoreService.SaveDataAsync("pbxCode", pbxCode.Substring(0, 3));
                         await localStoreService.SaveDataAsync("token", cert.App_token!);
                         webService = new WebService();
@@ -262,17 +261,6 @@ namespace VoiceX.Views
             {
                 Debug.WriteLine($"Ошибка при сохранении сертификата: {ex.Message}");
             }
-        }
-        public static string EncodeToBase64String(IBuffer buffer)
-        {
-            byte[] data;
-            using (var reader = DataReader.FromBuffer(buffer))
-            {
-                data = new byte[buffer.Length];
-                reader.ReadBytes(data);
-            }
-
-            return Convert.ToBase64String(data);
         }
     }
 }

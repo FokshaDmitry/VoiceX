@@ -11,9 +11,13 @@ using PdfSharp.Pdf.Content;
 using PdfSharp.Pdf.Content.Objects;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf;
-using PdfScribeCore;
 using System.Diagnostics;
-using System.Security.Principal;
+using System.Threading;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using PdfScribeCore;
+using System.Threading.Tasks;
 
 namespace VoiceX
 {
@@ -32,15 +36,16 @@ namespace VoiceX
         private FileSystemWatcher _watcher;
         LocalStoreService _storeService;
         public CoreService Core { get; } = CoreService.Instance;
-        PdfScribeInstaller pdfScribeInstaller;
         Endpoint core;
+        private PdfScribeInstaller pdfScribeInstaller;
+
         public App()
         {
             _storeService = new LocalStoreService();
-            pdfScribeInstaller = new PdfScribeInstaller();
             string exePath = AppDomain.CurrentDomain.BaseDirectory;
             String standardInputFilename = Path.GetTempFileName();
             String outputFilename = standardInputFilename + ".pdf";
+            pdfScribeInstaller = new PdfScribeInstaller();
             try
             {
                 //Create pdf file from driver 
@@ -82,6 +87,36 @@ namespace VoiceX
                 // because it was in use
 
             }
+            if (!pdfScribeInstaller.IsPdfScribePrinterInstalled())
+            {
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        Process process = new Process();
+                        var psi = new ProcessStartInfo
+                        {
+                            FileName = exePath + "PrinterInstaller\\SystrayComponent.exe",
+                            Arguments = exePath + "VoiceX.exe",
+                            UseShellExecute = true,
+                            Verb = "runas", // Запуск с правами администратора
+                            CreateNoWindow = true,
+                            WindowStyle = ProcessWindowStyle.Hidden
+                        };
+                        process.StartInfo = psi;
+                        process.Start();
+                        Task.Delay(5000);
+                        if (process.WaitForExit(10000))
+                        {
+                            process.Kill(true);
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                });
+            }
             if (!mutex.WaitOne(TimeSpan.Zero, true))
             {
                 using (NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", PipeName, PipeDirection.Out))
@@ -102,19 +137,6 @@ namespace VoiceX
                 }
                 Environment.Exit(0);
                 return;
-            }
-            if (!pdfScribeInstaller.IsPdfScribePrinterInstalled())
-            {
-                if (!IsRunningAsAdmin())
-                {
-                    RestartAsAdmin();
-                    return; // Завершаем текущий процесс
-                }
-                if (pdfScribeInstaller.InstallPdfScribePrinter(exePath + "\\DLL", exePath + "\\VoiceX.exe", ""))
-                {
-                    
-                }
-
             }
             AccountData = new Account_data();
             UserPbx = "";
@@ -140,34 +162,6 @@ namespace VoiceX
             };
             _watcher.Created += new FileSystemEventHandler(OnFileCreated);
             _watcher.EnableRaisingEvents = true;
-        }
-        public bool IsRunningAsAdmin()
-        {
-            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
-            {
-                WindowsPrincipal principal = new WindowsPrincipal(identity);
-                return principal.IsInRole(WindowsBuiltInRole.Administrator);
-            }
-        }
-        public static void RestartAsAdmin()
-        {
-            ProcessStartInfo psi = new ProcessStartInfo
-            {
-                FileName = Process.GetCurrentProcess().MainModule!.FileName,
-                UseShellExecute = true,
-                Verb = "runas" // Запуск с правами администратора
-            };
-
-            try
-            {
-                Process.Start(psi);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка при запуске от имени администратора: {ex.Message}");
-            }
-
-            Environment.Exit(0); // Завершаем текущий процесс
         }
         private async void OnFileCreated(object sender, FileSystemEventArgs e)
         {

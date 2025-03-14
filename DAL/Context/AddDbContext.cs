@@ -3,6 +3,9 @@ using System.IO;
 using VoiceX.Enums;
 using Microsoft.Data.Sqlite;
 using System.Diagnostics;
+using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace VoiceX.DAL.Context
 {

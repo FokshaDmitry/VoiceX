@@ -8,9 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using VoiceX.Services;
 using VoiceX.Views;
-using VoiceX.Views.ControlPages;
-using VoiceX.Views.PhonePages;
-using Windows.ApplicationModel.Core;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -33,18 +30,6 @@ namespace VoiceX.Items
             this.UserName.Text = Name;
             this.Phone.Text = Phone;
             contactBackgroundColor.Background = color == 1 ?  new SolidColorBrush(Color.FromArgb(255, 138, 99, 251)) : new SolidColorBrush(Color.FromArgb(255, 229, 167, 224));
-        }
-
-        private void Info_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            var Img = (Button)sender;
-            Img.Margin = new Thickness(0, 5, Img.Margin.Right, 0);
-        }
-
-        private void Info_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            var Img = (Button)sender;
-            Img.Margin = new Thickness(0, 6, Img.Margin.Right, 0);
         }
 
         private void Call_Click(object sender, RoutedEventArgs e)

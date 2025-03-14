@@ -1,6 +1,8 @@
 ﻿using System.IO.IsolatedStorage;
 using System.IO;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System;
 
 namespace VoiceX.Services
 {

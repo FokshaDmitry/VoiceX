@@ -2,21 +2,53 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <ApplicationIcon>Logo256.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
+    <Platforms>AnyCPU;x86;x64</Platforms>
+    <UseWPF>True</UseWPF>
+    <Nullable>enable</Nullable>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <UseWindowsForms>True</UseWindowsForms>
+    <ApplicationManifest></ApplicationManifest>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+    <Optimize>False</Optimize>
+    <Prefer32Bit>True</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <WarningLevel>4</WarningLevel>
+    <Optimize>False</Optimize>
     <Prefer32Bit>True</Prefer32Bit>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
     <Prefer32Bit>True</Prefer32Bit>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>True</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <WarningLevel>4</WarningLevel>
+    <Optimize>False</Optimize>
+    <Prefer32Bit>True</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>True</Prefer32Bit>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Remove="app.manifest" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Assets\Fonts\Inter-Regular.ttf" />
@@ -79,10 +111,18 @@
     <None Remove="Assets\Icone_v2\Warning.png" />
     <None Remove="Assets\Icone_v2\x.png" />
     <None Remove="Assets\Logo48.ico" />
+    <None Remove="gsdll32.dll" />
+    <None Remove="gsdll64.dll" />
     <None Remove="Services\gsdll32.dll" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="gsdll32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="gsdll64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Logo256.ico" />
   </ItemGroup>
 
@@ -180,17 +220,16 @@
     <PackageReference Include="NSwag.Core" Version="14.2.0" />
     <PackageReference Include="PDFsharp" Version="6.1.1" />
     <PackageReference Include="pjsip-pjsua2-cs" Version="2.10.1" />
-    <PackageReference Include="Uno.UI" Version="5.6.33" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\VoiceX\PdfScribeCore\PdfScribeCore.csproj">
-      <Private>True</Private>
-      <CopyLocalSatelliteAssemblies>True</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
+    <ProjectReference Include="..\..\VoiceX\PdfScribeCore\PdfScribeCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\edward_israel-master\pdfscribe\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="TTT.Generic">
       <HintPath>..\..\VoiceX\SystrayComponent\embed\TTT.Generic.dll</HintPath>
       <Private>True</Private>
@@ -316,24 +355,6 @@
     <None Update="default-windowsrsa.p12">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="DLL\PS5UI.DLL">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="DLL\PSCRIPT.HLP">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="DLL\PSCRIPT.NTF">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="DLL\PSCRIPT5.DLL">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="DLL\SCPDFPRN.ppd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="gsdll32.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Installer.iss">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -346,7 +367,49 @@
     <None Update="license_russian.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="DLL\redmon64pdfscribe.dll">
+    <None Update="PrinterInstaller\app.publish\SystrayComponent.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\gsdll32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\PdfScribeCore.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\PdfScribeCore.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\PS5UI.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\PSCRIPT.HLP">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\PSCRIPT.NTF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\PSCRIPT5.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\redmon64pdfscribe.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\SCPDFPRN.PPD">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\SystrayComponent.application">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\SystrayComponent.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\SystrayComponent.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\SystrayComponent.exe.manifest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\SystrayComponent.pdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="windowsdesktop-runtime-8.0.13-win-x86.exe">
@@ -358,6 +421,10 @@
     <Page Update="IncomingWindow.xaml">
       <CopyToOutputDirectory></CopyToOutputDirectory>
     </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="PrinterInstaller\" />
   </ItemGroup>
 
 </Project>

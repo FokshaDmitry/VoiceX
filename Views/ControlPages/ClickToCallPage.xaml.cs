@@ -7,6 +7,9 @@ using VoiceX.Services;
 using System.Linq;
 using VoiceX.DAL.Context;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 

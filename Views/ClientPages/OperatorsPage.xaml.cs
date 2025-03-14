@@ -1,11 +1,13 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
-using Windows.ApplicationModel.Contacts;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 

@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using VoiceX.Enums;
@@ -56,18 +58,6 @@ namespace VoiceX.Items
             }
             userPhone = Regex.Replace(userPhone, @"\D", "");
             CoreService.Instance.MakeCall(userPhone, App.AccountData!.Data.Sip_Settings.Sip_server);
-        }
-
-        private void Info_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            var Img = (Button)sender;
-            Img.Margin = new Thickness(0, 5, Img.Margin.Right, 0);
-        }
-
-        private void Info_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            var Img = (Button)sender;
-            Img.Margin = new Thickness(0, 6, Img.Margin.Right, 0);
         }
 
     }
