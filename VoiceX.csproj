@@ -215,11 +215,12 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.1" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NSwag.Core" Version="14.2.0" />
     <PackageReference Include="PDFsharp" Version="6.1.1" />
     <PackageReference Include="pjsip-pjsua2-cs" Version="2.10.1" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>

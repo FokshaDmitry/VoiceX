@@ -5,8 +5,6 @@ using System.Net.Http;
 using System.Text;
 using System.Security.Cryptography.X509Certificates;
 using VoiceX.Models;
-using Microsoft.VisualBasic;
-using System.ComponentModel.Design;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
@@ -364,10 +362,10 @@ namespace VoiceX.Services
                     var ldapData = JObject.Parse(responseBody)?["data"]?["ldap_settings"];
                     account.Data = JsonConvert.DeserializeObject<Data>(appData?.ToString()!)!;
                     account.Data.Sip_Settings = JsonConvert.DeserializeObject<Sip_settings>(sipSettings?.ToString()!)!;
-                    account.Data.Sip_Settings.Sip_secret = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(account.Data.Sip_Settings.Sip_secret));
+                    account.Data.Sip_Settings.Sip_secret = Encoding.UTF8.GetString(Convert.FromBase64String(account.Data.Sip_Settings.Sip_secret));
                     account.Data.Sip_Settings.Sip_server = $"pbx{pbxCode.Substring(1, 2)}.x-cloud.info";
                     account.Data.User_Data = JsonConvert.DeserializeObject<User_data>(usedData?.ToString()!)!;
-
+                    account.Data.Ldap_Settings = JsonConvert.DeserializeObject<Ldap_settings>(ldapData?.ToString()!)!;
                 }
                 catch (Exception ex)
                 {

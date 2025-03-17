@@ -8,7 +8,7 @@
       d:DesignHeight="420" d:DesignWidth="245">
     <Page.Resources>
         <Style TargetType="Button">
-            <Setter Property="Background" Value="#A459FC"/>
+            <Setter Property="Background" Value="#FFE5E5FF"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Padding" Value="10"/>
@@ -24,19 +24,19 @@
             </Setter>
         </Style>
     </Page.Resources>
-   
+
     <Grid x:Name="MainGrid" Width="245" Height="420" Background="#FFEBE2FF" >
         <Grid.Resources>
             <Style TargetType="Button">
-                <Setter Property="Background" Value="#A459FC"/>
+                <Setter Property="Background" Value="#FFE5E5FF"/>
                 <Setter Property="FontSize" Value="16"/>
                 <Setter Property="Padding" Value="10"/>
                 <Setter Property="BorderThickness" Value="0"/>
-                
+
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Border Background="#A459FC" CornerRadius="20">
+                            <Border Background="#FFE5E5FF" CornerRadius="6">
                                 <ContentPresenter HorizontalAlignment="Center" 
                                       VerticalAlignment="Center"/>
                             </Border>
@@ -52,13 +52,19 @@
                 </Style.Triggers>
             </Style>
         </Grid.Resources>
-        <Grid Background="#FFEBE2FF" >
+        <Grid >
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFC1BFFF"/>
+                    <GradientStop Color="White" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
             <Rectangle VerticalAlignment="Top" Margin="10,20,10,0" Height="231">
                 <Rectangle.Fill>
                     <ImageBrush ImageSource="/assets/icone_v2/illustration.png"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <Button Width="160" Height="35" Margin="0,355,0,0" Background="#FF8A63FB" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Jost-Regular.ttf#Jost" Content="Continue" x:Name="Send" Click="Button_Send" Foreground="White" FontWeight="Bold" />
+            <Button Width="220" Height="38" Margin="0,355,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="Continue" x:Name="Send" Click="Button_Send" Foreground="#FF7B76FF" />
 
             <Grid Background="Transparent" VerticalAlignment="Top" Margin="0,330,0,0" HorizontalAlignment="Center">
                 <CheckBox  x:Name="Select" Click="Select_Click" MinWidth="10" FontFamily="/Assets/Fonts/Inter-Regular.ttf#Inter" MinHeight="10" VerticalAlignment="Stretch" Foreground="#FF5C66BD" FontSize="6" HorizontalAlignment="Left" Background="Transparent"/>
@@ -91,5 +97,5 @@
             <Image  Source="/Assets/Icone_v2/LodingIcone.gif" HorizontalAlignment="Center" VerticalAlignment="Center" Width="88"/>
         </Grid>
     </Grid>
-    
+
 </Page>

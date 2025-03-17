@@ -282,7 +282,7 @@
                             </Border>
                         </Button.Content>
                     </Button>
-                    <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" SelectionChanged="PauseList_SelectionChanged" x:Name="PauseList" Height="137" Margin="0,0,0,8" Width="187" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                    <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" x:Name="PauseList" Height="137" Margin="0,0,0,8" Width="187" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
 
                     </ListBox>
                 </Grid>

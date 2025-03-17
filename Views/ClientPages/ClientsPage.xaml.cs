@@ -19,12 +19,14 @@ namespace VoiceX.Views.ClientPages
         readonly WebService webService;
         public static List<Items.Contact> userContactsList;
         OperatorsPage operatorsPage;
+        ContactsPage contactsPages;
         public ClientsPage()
         {
             this.InitializeComponent();
             webService = new WebService();
             userContactsList = new List<Items.Contact>();
             operatorsPage = new OperatorsPage();
+            contactsPages = new ContactsPage();
         }
         private void Filter_Checked(object sender, RoutedEventArgs e)
         {
@@ -42,17 +44,8 @@ namespace VoiceX.Views.ClientPages
             {
                 OperatorsCheck.Background = whiteLine;
                 ClientsChek.Background = blueLine;
+                PageContent.Navigate(contactsPages);
             }
-        }
-        private void PauseList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var list = (ListBox)sender;
-            foreach (var item in list.Items)
-            {
-                var pause = (PauseItem)item;
-                pause.SelectChange(pause == list.SelectedItem);
-            }
-
         }
 
         private void contactsPage_Loaded(object sender, RoutedEventArgs e)

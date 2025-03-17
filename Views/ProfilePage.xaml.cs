@@ -425,22 +425,20 @@ namespace VoiceX.Views
             }
         }
 
-        private void PauseList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var list = (ListBox)sender;
-            foreach (var item in list.Items)
-            {
-                var pause = (PauseItem)item;
-                pause.SelectChange(pause == list.SelectedItem);
-            }
-
-        }
-
         private async void Save_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var pause = (PauseItem)PauseList.SelectedItem;
+                PauseItem pause = null!; 
+                foreach (var item in PauseList.Items)
+                {
+                    var pauses = (PauseItem)item;
+                    if (pauses.Pause.IsChecked == true)
+                    {
+                        pause = pauses;
+                    }
+                } 
+                   
                 if (pause != null)
                 {
                     int id = pause.pause.Id;

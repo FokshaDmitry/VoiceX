@@ -15,7 +15,7 @@ namespace VoiceX.Models
                 Is_mobile = 0,
                 Ldap_Settings = new Ldap_settings()
             };
-            Data.Ldap_Settings.Bs = "";
+            Data.Ldap_Settings.Base = "";
             Data.Ldap_Settings.Dn = "";
             Data.Ldap_Settings.Pass = "";
             Data.Ldap_Settings.Type = "";
