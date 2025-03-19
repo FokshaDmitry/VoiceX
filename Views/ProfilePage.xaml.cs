@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
@@ -86,6 +87,7 @@ namespace VoiceX.Views
             onlineToken = true;
             window.moveOnDialpad += Window_moveOnDialpad;
             window.moveOnContact += Window_moveOnContact;
+            this.PreviewKeyDown += OnPreviewKeyDown;
         }
 
         private void Window_moveOnContact()
@@ -722,6 +724,18 @@ namespace VoiceX.Views
         {
             var Img = (Button)sender;
             Img.Margin = new Thickness(Img.Margin.Left, Img.Margin.Top + 1, Img.Margin.Right, Img.Margin.Bottom);
+        }
+        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // Если нажата клавиша Backspace
+            if (e.Key == Key.Back)
+            {
+                // Проверяем, фокус не в TextBox или PasswordBox
+                if (!(Keyboard.FocusedElement is TextBox) && !(Keyboard.FocusedElement is PasswordBox))
+                {
+                    e.Handled = true; // Блокируем "назад"
+                }
+            }
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using VoiceX.Interfeces;
 using VoiceX.Items;
 using VoiceX.Models;
@@ -19,21 +20,34 @@ namespace VoiceX.Views.ClientPages
     public sealed partial class ContactsPage : Page, IMoreItems
     {
         LDAPService ldapService;
+        contacts_list contacts;
+        readonly WebService webService;
         public ContactsPage()
         {
             this.InitializeComponent();
             this.Loaded += ContactsPage_Loaded;
             ldapService = new LDAPService();
+            webService = new WebService();
+            contacts = new contacts_list
+            {
+                contacts = new List<Models.Contact>()
+            };
         }
 
-        private void ContactsPage_Loaded(object sender, RoutedEventArgs e)
+        private async void ContactsPage_Loaded(object sender, RoutedEventArgs e)
         {
+            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
+            if (contacts.ResponseCode != HttpStatusCode.OK || contacts.contacts == null)
+            {
+                contacts.contacts = new List<Models.Contact>();
+            }
             AddMoreNotes();
             ldapService.Authenticate(App.AccountData?.Data.Ldap_Settings.Dn!, App.AccountData?.Data.Ldap_Settings.Pass!);
             var clients = ldapService.GetLdapUsers(50, App.AccountData?.Data.Ldap_Settings.Base!);
             ContactsList.Items.Clear();
             if (clients.Count != 0)
             {
+                clients = clients.Where(c => !contacts.contacts.Select(u => u.Telephone).Contains(c.Phone)).ToList();
                 var groupContacts = clients.GroupBy(c => c.Name?[0].ToString().ToUpper()).OrderBy(c => c.Key);
                 foreach (var groupcontact in groupContacts.ToList())
                 {
@@ -51,10 +65,6 @@ namespace VoiceX.Views.ClientPages
                 ContactsList.Items.Add(new MoreItems(this));
             }
         }
-
-        private void magnifyingGlass_Click(object sender, RoutedEventArgs e)
-        {
-        }
         public void AddMoreNotes()
         {
             int count = ContactsList.Items.Count;
@@ -66,6 +76,7 @@ namespace VoiceX.Views.ClientPages
 
             if (clients != null && clients.Count != 0)
             {
+                clients = clients.Where(c => !contacts.contacts!.Select(u => u.Telephone).Contains(c.Phone)).ToList();
                 var groupContacts = clients.GroupBy(c => c.Name![0].ToString().ToUpper()).OrderBy(c => c.Key);
                 foreach (var groupcontact in groupContacts.ToList())
                 {
@@ -84,7 +95,6 @@ namespace VoiceX.Views.ClientPages
             }
 
         }
-
         private void Search_TextChanged(object sender, TextChangedEventArgs e)
         {
             ContactsList.Items.Clear();
@@ -94,6 +104,7 @@ namespace VoiceX.Views.ClientPages
                 var clients = ldapService.SearchLdaps(App.AccountData?.Data.Ldap_Settings.Base!, search);
                 if (clients.Count != 0)
                 {
+                    clients = clients.Where(c => !contacts.contacts!.Select(u => u.Telephone).Contains(c.Phone)).ToList();
                     var groupContacts = clients.GroupBy(c => c.Name?[0].ToString().ToUpper()).OrderBy(c => c.Key);
                     foreach (var groupcontact in groupContacts.ToList())
                     {

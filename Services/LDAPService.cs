@@ -2,11 +2,9 @@
 using System;
 using VoiceX.Models;
 using System.Linq;
-using System.DirectoryServices;
 using System.Net;
 using System.DirectoryServices.Protocols;
 using System.Diagnostics;
-using System.Buffers.Text;
 using SearchScope = System.DirectoryServices.Protocols.SearchScope;
 
 namespace VoiceX.Services
@@ -20,24 +18,31 @@ namespace VoiceX.Services
         }
         public void Authenticate(string distinguishedName, string password)
         {
-            try
+            if (!String.IsNullOrEmpty(distinguishedName) && !String.IsNullOrEmpty(password))
             {
-                // Подключение
-                var identifier = new LdapDirectoryIdentifier("pb.i.voicex.center", 389);
+                try
+                {
+                    // Подключение
+                    var identifier = new LdapDirectoryIdentifier("pb.i.voicex.center", 389);
 
-                var credential = new NetworkCredential(distinguishedName, password);
-                ldapConnection = new LdapConnection(identifier, credential, AuthType.Basic);
+                    var credential = new NetworkCredential(distinguishedName, password);
+                    ldapConnection = new LdapConnection(identifier, credential, AuthType.Basic);
 
 
-                ldapConnection.SessionOptions.ProtocolVersion = 3;
+                    ldapConnection.SessionOptions.ProtocolVersion = 3;
 
-                ldapConnection.Bind(); // Аутентификация
+                    ldapConnection.Bind(); // Аутентификация
 
-                Console.WriteLine("✅ Успешно подключено к LDAP!");
+                    Console.WriteLine("✅ Успешно подключено к LDAP!");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
             }
-            catch (Exception ex) 
+            else
             {
-                Debug.WriteLine(ex);
+                ldapConnection = null;
             }
 
         }
