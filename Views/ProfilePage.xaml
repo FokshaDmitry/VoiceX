@@ -325,22 +325,35 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <RadioButton Cursor="Hand" Grid.Column="0" IsChecked="True" GroupName="Filter" Name="Keypad" Checked="Filter_Checked_1" MinWidth="55" Background="Transparent" MinHeight="25" HorizontalAlignment="Stretch">
+                        <Grid.Resources>
+                            <Style TargetType="RadioButton">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="RadioButton">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <ContentPresenter />
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Grid.Resources>
+                        <RadioButton Cursor="Hand" Grid.Column="0" IsChecked="True" GroupName="Filter" Name="Keypad" Checked="Filter_Checked_1" MinWidth="55" Background="Transparent" MinHeight="25" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                             <StackPanel Margin="0,4,0,4">
-                                <TextBlock FontFamily="Nunito Sans 10pt Normal" x:Name="KeyText" Text="Keypad" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="15,1,0,0" Foreground="#FF252422"/>
-                                <Grid x:Name="GeneralCheck1" Height="1.5" Background="#FF8A63FB" Margin="0,2,0,0"/>
+                                <TextBlock FontFamily="Nunito Sans 10pt Normal" x:Name="KeyText" Text="Keypad" FontSize="16" Margin="0,-3,0,0" Foreground="#FF252422"/>
+                                <Grid x:Name="GeneralCheck1" Height="1.5" Background="#FF8A63FB" Margin="0,-1,0,0"/>
                             </StackPanel>
                         </RadioButton>
                         <RadioButton Cursor="Hand" Grid.Column="2" MinWidth="55" MinHeight="25" Name="Contactspad" GroupName="Filter" Checked="Filter_Checked_1" HorizontalAlignment="Stretch">
                             <StackPanel Margin="0,4,0,4">
-                                <TextBlock FontFamily="Nunito Sans 10pt Normal" x:Name="ContactspadText" Text="Contacts" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="15,1,0,0" Foreground="#FF252422"/>
-                                <Grid x:Name="AdditionChek1" Height="1.5" VerticalAlignment="Stretch" Background="#FFFDFEFF" Margin="0,2,0,0"/>
+                                <TextBlock FontFamily="Nunito Sans 10pt Normal" x:Name="ContactspadText" Text="Contacts" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0,-3,0,0" Foreground="#FF252422"/>
+                                <Grid x:Name="AdditionChek1" Height="1.5" VerticalAlignment="Stretch" Background="#FFFDFEFF" Margin="0,-1,0,0"/>
                             </StackPanel>
                         </RadioButton>
                     </Grid>
                     <Grid Margin="0,93,0,0">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Top" >
-                            <TextBox  x:Name="KeypadFild" TextAlignment="Center" BorderThickness="0,0,0,1" MinHeight="23"  FontFamily="Nunito Sans 10pt Normal" Canvas.Left="2" Margin="10,0,10,0" BorderBrush="#FFC2C3C3" FontSize="14" Height="23" VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Width="189" Padding="10,0,6,0" Background="#FFFDFEFF"/>
+                            <TextBox TextChanged="KeypadFild_TextChanged" x:Name="KeypadFild" TextAlignment="Center" BorderThickness="0,0,0,1" MinHeight="23"  FontFamily="Nunito Sans 10pt Normal" Canvas.Left="2" Margin="10,0,10,0" BorderBrush="#FFC2C3C3" FontSize="14" Height="23" VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Width="189" Padding="10,0,6,0" Background="#FFFDFEFF"/>
                             <Button BorderBrush="Transparent" BorderThickness="0" Visibility="Collapsed" Click="BackspaceNum_Click" Height="15" Background="Transparent" Padding="-2,-2,-2,-2" Width="15" x:Name="BackspaceNum" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,2" >
                                 <Button.Content>
                                     <Image Height="15" Width="15" Stretch="Fill">
@@ -392,7 +405,7 @@
                     </Grid>
                     <Grid Visibility="Collapsed" x:Name="ContactListPad" Margin="0,93,0,0" Background="White">
                         <Grid VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,2,0,0">
-                            <TextBox BorderThickness="0, 0, 0, 1" x:Name="Search"  MinHeight="26" Width="172" BorderBrush="#FFC2C3C3" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="11" Height="25" Padding="10,5,20,5"/>
+                            <TextBox TextChanged="Search_TextChanged" BorderThickness="0, 0, 0, 1" x:Name="Search"  MinHeight="26" Width="172" BorderBrush="#FFC2C3C3" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="11" Height="25" Padding="10,5,20,5"/>
                             <Grid Height="15" x:Name="magnifyingGlass" Width="15" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,3">
                                 <Rectangle x:Name="magnifyingGlassLine" Fill="#FF898989" Height="1.1" Width="6" RadiusX="1" RadiusY="1" RenderTransformOrigin="0.5,0.5" Margin="8,8.6,0,0">
                                     <Rectangle.RenderTransform>
@@ -458,7 +471,7 @@
                     <TextBlock  Text="Key Pad" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0" FontSize="20" FontFamily="Nunito Sans 10pt Normal"/>
                     <Grid Margin="0,59,0,0">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
-                            <TextBox  x:Name="DTMFFild" TextAlignment="Center" BorderThickness="0,0,0,1" MinHeight="23"  FontFamily="Nunito Sans 10pt Normal"  Canvas.Left="2" BorderBrush="#FFC2C3C3" FontSize="14" Height="23" VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Width="189" Padding="10,0,6,0" Background="#FFFDFEFF"/>
+                            <TextBox TextChanged="DTMFFild_TextChanged" x:Name="DTMFFild" TextAlignment="Center" BorderThickness="0,0,0,1" MinHeight="23"  FontFamily="Nunito Sans 10pt Normal"  Canvas.Left="2" BorderBrush="#FFC2C3C3" FontSize="14" Height="23" VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Width="189" Padding="10,0,6,0" Background="#FFFDFEFF"/>
                             <Button BorderBrush="Transparent" BorderThickness="0" Visibility="Collapsed" Click="Backspace_Click" Height="15" Background="Transparent" Padding="-2,-2,-2,-2" Width="15" x:Name="Backspace" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,2" >
                                 <Button.Content>
                                     <Image Height="15" Width="15" Stretch="Fill">

@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using pj;
-using VoiceX.DAL.Context;
 using System.Threading;
 using System;
 using System.Linq;
@@ -29,7 +28,6 @@ namespace VoiceX.Views.PhonePages
         bool pause;
         bool Microphone;
         bool Audio;
-        AddDbContext dbContext;
         public ActivCallPage(ProfilePage profilePage)
         {
             this.InitializeComponent();
@@ -39,7 +37,6 @@ namespace VoiceX.Views.PhonePages
             localStoreService = new LocalStoreService();
             Microphone = true;
             Audio = true;
-            dbContext = new AddDbContext();
             phonePage = profilePage;
         }
 
@@ -52,46 +49,58 @@ namespace VoiceX.Views.PhonePages
                     if (CoreService.activeCall != null)
                     {
                         var boo = CoreService.Instance.Core.mediaActivePorts();
-                        if (CoreService.activeCall.CallAdtess.Count != 0)
+                        if (CoreService.activeCall.CallAdtess.Count() != 0)
                         {
+                            var calls = CoreService.activeCall.CallAdtess;
                             Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");
                             StatusCurrentCall.Text = ProfilePage.StatusCall.ToString().ToUpper() + " " + "CALL";
                             PhoneText.Text = CoreService.activeCall.CallAdtess.Aggregate((current, next) => phonePage.ExtractValue(current) + ", " + phonePage.ExtractValue(next)).TrimEnd(' ', ',');
                             TransferCall.IsEnabled = false;
                             Pause.IsEnabled = false;
                         }
-                        CallInfo info = new CallInfo();
-                        try
+                        else
                         {
-                            info = CoreService.activeCall.getInfo();
-                        }
-                        catch
-                        {
-
-                        }
-                        if (info != null)
-                        {
-                            if (timeFlag)
+                            CallInfo info = new CallInfo();
+                            try
                             {
-                                startCall = DateTime.Now;
-                                timeFlag = false;
-                                if (ProfilePage.AutoAnswerNumbers!.Contains(info.remoteContact))
+                                info = CoreService.activeCall.getInfo();
+                            }
+                            catch
+                            {
+
+                            }
+                            if (info != null)
+                            {
+                                if (timeFlag)
                                 {
-                                    AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 112, 80, 204));
-                                    AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refreshblue.png"));
+                                    startCall = DateTime.Now;
+                                    timeFlag = false;
+                                    if (ProfilePage.AutoAnswerNumbers!.Contains(info.remoteContact))
+                                    {
+                                        AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 112, 80, 204));
+                                        AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refreshblue.png"));
+                                    }
+                                    else
+                                    {
+                                        AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
+                                        AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refresh.png"));
+                                    }
                                 }
-                                else
+                                if (String.IsNullOrEmpty(PhoneText.Text))
                                 {
-                                    AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
-                                    AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refresh.png"));
+                                    PhoneText.Text = phonePage.ExtractValue(info.remoteUri);
+                                }
+                                if (String.IsNullOrEmpty(UserNameText.Text))
+                                {
+                                    var userName = phonePage.ExtractValue(info.remoteContact);
+                                    var contactName = ProfilePage.LDAPService?.SearchLdaps(App.AccountData?.Data.Ldap_Settings.Base!, userName).Where(l => l.Phone == userName).Select(l => l.Name).FirstOrDefault();
+                                    UserNameText.Text = String.IsNullOrEmpty(contactName) ? userName : contactName;
                                 }
                             }
-                            PhoneText.Text = phonePage.ExtractValue(info.remoteUri );
-                            UserNameText.Text = phonePage.ExtractValue(info.remoteContact);
                         }
                         Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");
                         StatusCurrentCall.Text = ProfilePage.StatusCall.ToString().ToUpper() + " " + "CALL";
-                        AddCall.IsEnabled = ProfilePage.StatusCall != Enums.StatusCall.Incoming;
+                        //AddCall.IsEnabled = ProfilePage.StatusCall != Enums.StatusCall.Incoming;
                         CloseMicrophone.Visibility = Microphone ? Visibility.Collapsed : Visibility.Visible;
                         CloseSound.Visibility = Audio ? Visibility.Collapsed : Visibility.Visible;
                         TransferCall.IsEnabled = true;
@@ -106,6 +115,7 @@ namespace VoiceX.Views.PhonePages
                             timer.Dispose();
                             timer = null!;
                         }
+                        phonePage.Navigate_Click(new Button() { Name = "Profile" }, new RoutedEventArgs());
                     }
                 }
                 catch
@@ -123,29 +133,8 @@ namespace VoiceX.Views.PhonePages
         {
             if(CoreService.activeCall != null)
             {
-                
-                if (CoreService.activeCall?.CallAdtess.Count != 0)
-                {
-
-                    ProfilePage.TerminateAllCalls = true;
-                    CoreService.activeCall?.hangup(new CallOpParam());
-                    try
-                    {
-                        if (timer != null)
-                        {
-                            timer.Dispose();
-                            timer = null!;
-                        }
-                    }
-                    catch
-                    {
-                        timer = null!;
-                    }
-                }
-                else
-                {
-                    CoreService.activeCall?.hangup(new CallOpParam());
-                }
+                CoreService.activeCall.EndAllCalls = true;
+                CoreService.activeCall?.hangup(new CallOpParam());
             }
         }
         private void Sound_Click(object sender, RoutedEventArgs e)
@@ -254,6 +243,12 @@ namespace VoiceX.Views.PhonePages
         private async Task UpdateAutoAncwerCallList()
         {
              await localStoreService.SaveDataAsync("AACallList", JsonConvert.SerializeObject(ProfilePage.AutoAnswerNumbers));
+        }
+
+        private void ActivPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            UserNameText.Text = "";
+            PhoneText.Text = "";
         }
     }
 }

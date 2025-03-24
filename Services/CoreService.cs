@@ -1,9 +1,12 @@
 ﻿
 using pj;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Documents;
+using System.Windows.Threading;
 
 namespace VoiceX.Services
 {
@@ -17,7 +20,7 @@ namespace VoiceX.Services
         public delegate void IncomingCall(); 
         public event IncomingCall? IncomingCallEvent;
         public event IncomingCall? OutgoingCallEvent;
-
+        public static List<CallService>? activeCalls;
         AccountConfig? accCfg;
         public static CoreService Instance
         {
@@ -34,6 +37,7 @@ namespace VoiceX.Services
                     core = new Endpoint();
                     writer = new PjsipLogger();
                     accCfg = new AccountConfig();
+                    
                     core.libCreate();
                     // Init library
                     EpConfig epConfig = new EpConfig();
@@ -70,7 +74,78 @@ namespace VoiceX.Services
                 return core; 
             } 
         }
-       
+        public async static void AddParticipant(string phone, string server)
+        {
+            try
+            {
+                string participantUri = $"sip:{phone}@{server}";
+                Debug.WriteLine($"[CALL] Звоним новому участнику: {participantUri}...");
+
+                CallService newCall = new CallService(CoreService.Instance); // Создаём новый вызов
+                CallOpParam callParam = new CallOpParam();
+                newCall.makeCall(participantUri, callParam);
+
+                Debug.WriteLine($"[CALL] Ожидаем соединение с {participantUri}...");
+                // Ожидаем подключения нового участника
+                while (true)
+                {
+                    await Task.Delay(1000);
+                    CallInfo newCallInfo = newCall.getInfo();
+
+                    if (newCallInfo.state == pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)
+                    {
+                        Debug.WriteLine($"[CALL] Новый участник {participantUri} подключен. Добавляем в конференцию...");
+                        MergeCalls(activeCall!, newCall);
+                        if (activeCalls == null)
+                        {
+                            activeCalls = new List<CallService>();
+                            activeCalls.Add(activeCall!);
+                        }
+                        else if (activeCalls.Count == 0)
+                        {
+                            activeCalls.Add(activeCall!);
+                        }
+                        activeCalls.Add(newCall);
+                        return;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CALL] Ошибка при добавлении участника: {ex.Message}");
+            }
+        }
+        private static void MergeCalls(CallService call1, CallService call2)
+        {
+            try
+            {
+                //Endpoint ep = CoreService.Instance.Core;
+
+                AudioMedia call1Audio = call1.getAudioMedia(0);
+                AudioMedia call2Audio = call2.getAudioMedia(0);
+
+                if (call1Audio != null && call2Audio != null)
+                {
+                    // Создаём аудиомост между звонками
+                    call1Audio.startTransmit(call2Audio);
+                    call2Audio.startTransmit(call1Audio);
+                    AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
+
+                    call1Audio.startTransmit(speaker);
+                    call2Audio.startTransmit(speaker);
+                    Debug.WriteLine("[CALL] Вызовы успешно объединены в конференцию.");
+                }
+                else
+                {
+                    Debug.WriteLine("[CALL] Ошибка: один из вызовов не имеет аудиопотока.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CALL] Ошибка при объединении звонков: {ex.Message}");
+            }
+        }
         public void Login(string username, string domain, string proxy, string password, int transport, bool useProxy, bool iceEnabled, bool useIpRewrite)
         {
             try

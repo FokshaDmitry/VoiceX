@@ -67,7 +67,7 @@ namespace VoiceX.Items
         {
             if (CoreService.activeCall != null)
             {
-                CoreService.activeCall.AddParticipant(UserPhone, App.AccountData?.Data.Sip_Settings.Sip_server!);
+                CoreService.AddParticipant(UserPhone, App.AccountData?.Data.Sip_Settings.Sip_server!);
             }
         }
     }

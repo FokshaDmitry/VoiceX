@@ -174,10 +174,10 @@ namespace VoiceX.Views
             try
             {
                 PreAsk.Visibility = Visibility.Hidden;
+                this.MainPage.Content = registrationPage;
                 localStoreService.ClearIsolatedStorage();
                 await addDbContext.DropDatabaseAsync();
                 await webService.LogOut(App.UserPbx!, App.userToken!);
-                this.MainPage.Content = registrationPage;
                 CoreService.Instance.Logout();
             }
             catch

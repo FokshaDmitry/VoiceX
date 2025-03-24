@@ -27,16 +27,32 @@ namespace VoiceX.Views.PhonePages
             phoneCallPage = dialpadCallPage;
             this.activCallPage = activCallPage;
             slide = (Storyboard)profilePage.FindResource("SlideUpAnimation");
+            this.Unloaded += CallPage_Unloaded;
         }
+
+        private void CallPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            UserNameText.Text = "";
+            PhoneText.Text = "";
+        }
+
         private void IncomeCallPage_Loaded(object sender, RoutedEventArgs e)
         {
             if (CoreService.activeCall != null)
             {
                 var info = CoreService.activeCall.getInfo();
-                if (!String.IsNullOrEmpty(info.remoteUri))
+                if (!String.IsNullOrEmpty(info.remoteContact))
                 {
-                    PhoneText.Text = phonePage.ExtractValue(info.remoteContact);
-                    UserNameText.Text = phonePage.ExtractValue(info.remoteUri);
+                    if (String.IsNullOrEmpty(PhoneText.Text))
+                    {
+                        PhoneText.Text = phonePage.ExtractValue(info.remoteContact);
+                    }
+                    if (String.IsNullOrEmpty(UserNameText.Text))
+                    {
+                        var userName = phonePage.ExtractValue(info.remoteContact);
+                        var contactName = ProfilePage.LDAPService?.SearchLdaps(App.AccountData?.Data.Ldap_Settings.Base!, userName).Where(l => l.Phone == userName).Select(l => l.Name).FirstOrDefault();
+                        UserNameText.Text = String.IsNullOrEmpty(contactName) ? userName : contactName;
+                    }
                 }
                 else
                 {

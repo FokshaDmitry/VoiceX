@@ -19,14 +19,12 @@ namespace VoiceX.Views.ClientPages
     /// </summary>
     public sealed partial class ContactsPage : Page, IMoreItems
     {
-        LDAPService ldapService;
         contacts_list contacts;
         readonly WebService webService;
         public ContactsPage()
         {
             this.InitializeComponent();
             this.Loaded += ContactsPage_Loaded;
-            ldapService = new LDAPService();
             webService = new WebService();
             contacts = new contacts_list
             {
@@ -42,10 +40,9 @@ namespace VoiceX.Views.ClientPages
                 contacts.contacts = new List<Models.Contact>();
             }
             AddMoreNotes();
-            ldapService.Authenticate(App.AccountData?.Data.Ldap_Settings.Dn!, App.AccountData?.Data.Ldap_Settings.Pass!);
-            var clients = ldapService.GetLdapUsers(50, App.AccountData?.Data.Ldap_Settings.Base!);
+            var clients = ProfilePage.LDAPService?.GetLdapUsers(50, App.AccountData?.Data.Ldap_Settings.Base!);
             ContactsList.Items.Clear();
-            if (clients.Count != 0)
+            if (clients != null && clients.Count != 0)
             {
                 clients = clients.Where(c => !contacts.contacts.Select(u => u.Telephone).Contains(c.Phone)).ToList();
                 var groupContacts = clients.GroupBy(c => c.Name?[0].ToString().ToUpper()).OrderBy(c => c.Key);
@@ -71,8 +68,7 @@ namespace VoiceX.Views.ClientPages
             Debug.WriteLine(count);
             count += 25;
             ContactsList.Items.Clear();
-            ContactsList.Items.Add(new MoreItems(this));
-            var clients = ldapService.GetLdapUsers(count, App.AccountData?.Data.Ldap_Settings.Base!);
+            var clients = ProfilePage.LDAPService?.GetLdapUsers(count, App.AccountData?.Data.Ldap_Settings.Base!);
 
             if (clients != null && clients.Count != 0)
             {
@@ -101,8 +97,8 @@ namespace VoiceX.Views.ClientPages
             var search = Search.Text;
             if (!String.IsNullOrEmpty(search))
             {
-                var clients = ldapService.SearchLdaps(App.AccountData?.Data.Ldap_Settings.Base!, search);
-                if (clients.Count != 0)
+                var clients = ProfilePage.LDAPService?.SearchLdaps(App.AccountData?.Data.Ldap_Settings.Base!, search);
+                if (clients != null && clients.Count != 0)
                 {
                     clients = clients.Where(c => !contacts.contacts!.Select(u => u.Telephone).Contains(c.Phone)).ToList();
                     var groupContacts = clients.GroupBy(c => c.Name?[0].ToString().ToUpper()).OrderBy(c => c.Key);

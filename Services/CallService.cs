@@ -4,10 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text.RegularExpressions;
 
 namespace VoiceX.Services
 {
@@ -16,8 +13,9 @@ namespace VoiceX.Services
 
         AudioMediaPlayer? ringTonePlayer;
         public bool isMute;
-        public List<string> CallAdtess { get; set; }
+        public List<string> CallAdtess {get; set; }
         DateTime startTime;
+        public bool EndAllCalls;
         public delegate void EndCall(string Name, string Phone, DateTime StartCall);
         public event EndCall? EndCallEvent;
         public CallService(Account acc, int call_id = -1) : base(acc, call_id)
@@ -26,6 +24,7 @@ namespace VoiceX.Services
             startTime = new DateTime();
             startTime = DateTime.MinValue;
             isMute = false;
+            EndAllCalls = false;
         }
         public void Accept()
         {
@@ -66,22 +65,62 @@ namespace VoiceX.Services
                     try
                     {
                         StopRingTone();
+                        
                         if (CoreService.activeCall != null)
                         {
-                            var info = CoreService.activeCall.getInfo();
-                            if (CallAdtess != null && CallAdtess.Count() != 0)
+                            if (EndAllCalls)
                             {
-                                CallAdtess.Remove(info.localUri);
-                            }
-                            if (CallAdtess != null && CallAdtess.Count() == 0)
-                            {
-                                EndCallEvent?.Invoke(info.remoteUri, info.remoteContact, startTime);
-                                CoreService.activeCall?.Dispose();
+                                if (CoreService.activeCalls != null)
+                                {
+                                    if (CoreService.activeCalls.Count != 0)
+                                    {
+                                        foreach (var call in CoreService.activeCalls)
+                                        {
+                                            if (call != null)
+                                            {
+                                                var info = call.getInfo();
+                                                if (info != null)
+                                                {
+                                                    if (info.remoteContact != ci.remoteContact)
+                                                    {
+                                                        call.hangup(new CallOpParam());
+                                                        CoreService.activeCalls.Remove(call);
+                                                    }
+                                                }   
+                                            }
+                                        }
+                                    }
+                                }
+
                                 CoreService.activeCall = null;
-                                DisableMicrophone();
+                            }
+                            else
+                            {
+                                if (CoreService.activeCall.CallAdtess.Count() == 1)
+                                {
+
+                                    CoreService.activeCall = null;
+                                    return;
+                                }
+                                var info = CoreService.activeCall.getInfo();
+                                if (CoreService.activeCall.CallAdtess != null && CoreService.activeCall.CallAdtess.Count() != 0)
+                                {
+                                    var phone = ExtractValue(info.remoteContact);
+                                    var address = CoreService.activeCall.CallAdtess.FirstOrDefault(c => c.Contains(phone));
+                                    if (address != null)
+                                    {
+                                        CoreService.activeCall.CallAdtess.Remove(address);
+                                    }
+                                }
+                                if (CoreService.activeCall.CallAdtess != null && CoreService.activeCall.CallAdtess.Count() == 0)
+                                {
+                                    EndCallEvent?.Invoke(info.remoteUri, info.remoteContact, startTime);
+                                    CoreService.activeCall?.Dispose();
+                                    CoreService.activeCall = null;
+                                    DisableMicrophone();
+                                }
                             }
                         }
-                        this?.Dispose();
                     }
                     catch { }
                     break;
@@ -276,76 +315,12 @@ namespace VoiceX.Services
                 Debug.WriteLine($"[CALL] Ошибка при запуске гудка: {ex.Message}");
             }
         }
-        public void AddParticipant(string phone, string server)
-        {
-            try
-            {
-                string participantUri = $"sip:{phone}@{server}";
-                Debug.WriteLine($"[CALL] Звоним новому участнику: {participantUri}...");
-
-                CallService newCall = new CallService(CoreService.Instance); // Создаём новый вызов
-                CallOpParam callParam = new CallOpParam();
-                newCall.makeCall(participantUri, callParam);
-
-                Debug.WriteLine($"[CALL] Ожидаем соединение с {participantUri}...");
-                // Ожидаем подключения нового участника
-                Task.Run(async () =>
-                {
-                    while (true)
-                    {
-                        await Task.Delay(1000);
-                        await Dispatcher.CurrentDispatcher.InvokeAsync(() =>
-                        {
-                            CallInfo newCallInfo = newCall.getInfo();
-
-                            if (newCallInfo.state == pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)
-                            {
-                                Debug.WriteLine($"[CALL] Новый участник {participantUri} подключен. Добавляем в конференцию...");
-                                MergeCalls(this, newCall);
-                                CallAdtess?.Add(participantUri);
-                                return;
-                            }
-                        });
-                        
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[CALL] Ошибка при добавлении участника: {ex.Message}");
-            }
-        }
+        
 
         /// <summary>
         /// Объединить два вызова в конференцию
         /// </summary>
-        private void MergeCalls(CallService call1, CallService call2)
-        {
-            try
-            {
-                //Endpoint ep = CoreService.Instance.Core;
-
-                AudioMedia call1Audio = call1.getAudioMedia(0);
-                AudioMedia call2Audio = call2.getAudioMedia(0);
-
-                if (call1Audio != null && call2Audio != null)
-                {
-                    // Создаём аудиомост между звонками
-                    call1Audio.startTransmit(call2Audio);
-                    call2Audio.startTransmit(call1Audio);
-
-                    Debug.WriteLine("[CALL] Вызовы успешно объединены в конференцию.");
-                }
-                else
-                {
-                    Debug.WriteLine("[CALL] Ошибка: один из вызовов не имеет аудиопотока.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[CALL] Ошибка при объединении звонков: {ex.Message}");
-            }
-        }
+        
         public void TransferCall(string phone, string server)
         {
             try
@@ -405,6 +380,22 @@ namespace VoiceX.Services
             {
                 Debug.WriteLine($"[CALL] Ошибка при остановке гудка: {ex.Message}");
             }
+        }
+        public string ExtractValue(string input)
+        {
+            Match match = Regex.Match(input, "\"([^\"]+)\"");
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+
+            match = Regex.Match(input, @"sip:([^@]+)@");
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+
+            return string.Empty;
         }
     }
 }

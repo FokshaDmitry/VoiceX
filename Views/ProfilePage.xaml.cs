@@ -39,9 +39,9 @@ namespace VoiceX.Views
         public static ClickToCallService? clickToCallService { get; set; }
         KeyPads keyPads;
         contacts_list contacts;
-        public static bool TerminateAllCalls { get; set; }
         public static List<string>? AutoAnswerNumbers;
         public static bool onlineToken { get; set; } 
+        public static LDAPService? LDAPService { get; set; }
         LocalStoreService localStoreService;
         GeneralSettingPage generalSettingPage;
         DialpadCallPage dialpadCallPage;
@@ -64,7 +64,6 @@ namespace VoiceX.Views
             generalSettingPage = new GeneralSettingPage(mainWindow);
             regexNotes = new List<Regex_note>();
             SelectContacts = new List<string>();
-            TerminateAllCalls = false;
             if(AutoAnswerNumbers == null) AutoAnswerNumbers = new List<string>();
             dialpadCallPage = new DialpadCallPage();
             activCallPage = new ActivCallPage(this);
@@ -84,6 +83,7 @@ namespace VoiceX.Views
             slideLeft = (Storyboard)FindResource("SlideLeftAnimation");
             clickToCallService = new ClickToCallService();
             incomingWindow = new IncomingWindow(mainWindow, this, activCallPage);
+            LDAPService = new LDAPService();
             onlineToken = true;
             window.moveOnDialpad += Window_moveOnDialpad;
             window.moveOnContact += Window_moveOnContact;
@@ -92,7 +92,6 @@ namespace VoiceX.Views
 
         private void Window_moveOnContact()
         {
-
             MainFrame.Navigate(clientsPage);
             slide.Begin();
         }
@@ -174,11 +173,29 @@ namespace VoiceX.Views
                                 window.Activate();
                                 MainFrame.Navigate(callPage);
                                 slide.Begin();
-                                incomingWindow.ShowInBottomRight(ExtractValue(info.remoteContact), ExtractValue(info.remoteUri), !visible);
+                                if (!String.IsNullOrEmpty(info.remoteContact))
+                                {
+                                    var userName = ExtractValue(info.remoteContact);
+                                    var contactName = ProfilePage.LDAPService?.SearchLdaps(App.AccountData?.Data.Ldap_Settings.Base!, userName).Where(l => l.Phone == userName).Select(l => l.Name).FirstOrDefault();
+                                    incomingWindow.ShowInBottomRight(String.IsNullOrEmpty(contactName) ? userName : contactName, userName, !visible);
+                                }
+                                else
+                                {
+                                    incomingWindow.ShowInBottomRight("No Informations", "No Informations", !visible);
+                                }
                             }
                             else
                             {
-                                incomingWindow.ShowInBottomRight(ExtractValue(info.remoteContact), ExtractValue(info.remoteUri), !visible);
+                                if (!String.IsNullOrEmpty(info.remoteContact))
+                                {
+                                    var userName = ExtractValue(info.remoteContact);
+                                    var contactName = ProfilePage.LDAPService?.SearchLdaps(App.AccountData?.Data.Ldap_Settings.Base!, userName).Where(l => l.Phone == userName).Select(l => l.Name).FirstOrDefault();
+                                    incomingWindow.ShowInBottomRight(String.IsNullOrEmpty(contactName) ? userName : contactName, userName, !visible);
+                                }
+                                else
+                                {
+                                    incomingWindow.ShowInBottomRight("No Informations", "No Informations", !visible);
+                                }
                             }
                         }
                         StatusCall = StatusCall.Incoming;
@@ -235,7 +252,7 @@ namespace VoiceX.Views
         {
             addDbContext = new AddDbContext();
             var account = App.AccountData?.Data.Sip_Settings;
-
+            LDAPService?.Authenticate(App.AccountData?.Data.Ldap_Settings.Dn!, App.AccountData?.Data.Ldap_Settings.Pass!);
             string mic = await localStoreService.LoadDataAsync("micro");
             string audio = await localStoreService.LoadDataAsync("audio");
             string ip = await localStoreService.LoadDataAsync("ip");
@@ -538,47 +555,6 @@ namespace VoiceX.Views
                 ContactListPad.Visibility = Visibility.Visible;
             }
         }
-        private void SearchFild_TextChanging(TextBox sender, TextChangedEventArgs args)
-        {
-            SolidColorBrush magnifyingGlassColorGrey = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
-            SolidColorBrush magnifyingGlassColorBlack = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
-            ContactsList.Items.Clear();
-            if (String.IsNullOrEmpty(Search.Text))
-            {
-                var groupContacts = contacts.contacts!.GroupBy(c => c.Name?.ToString().ToUpper()).OrderBy(c => c.Key);
-                foreach (var groupcontact in groupContacts.ToList())
-                {
-                    if (groupcontact.Key!.All(char.IsDigit))
-                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key!.ToString()));
-                    else
-                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key!.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
-                    foreach (var contact in groupcontact)
-                    {
-                        ContactsList.Items.Add(new ContactPad(contact.Name!, contact.Telephone!, keyPads == KeyPads.AddCallPad));
-                    }
-                }
-                magnifyingGlass.Margin = new Thickness(0, 0, 5, 2);
-                magnifyingGlassEllipse.Stroke = magnifyingGlassColorGrey;
-                magnifyingGlassLine.Fill = magnifyingGlassColorGrey;
-            }
-            else
-            {
-                foreach (var contact in contacts.contacts!)
-                {
-                    if (contact.Name!.Contains(Search.Text))
-                    {
-                        ContactsList.Items.Add(new ContactPad(contact.Name!, contact.Telephone!, keyPads == KeyPads.AddCallPad));
-                    }
-                    else if (contact.Telephone!.Contains(Search.Text))
-                    {
-                        ContactsList.Items.Add(new ContactPad(contact.Name, contact.Telephone, keyPads == KeyPads.AddCallPad));
-                    }
-                }
-                magnifyingGlass.Margin = new Thickness(0, 0, 23, 2);
-                magnifyingGlassEllipse.Stroke = magnifyingGlassColorBlack;
-                magnifyingGlassLine.Fill = magnifyingGlassColorBlack;
-            }
-        }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
@@ -646,13 +622,24 @@ namespace VoiceX.Views
                         var uri = $"sip:{KeypadFild.Text}@{App.AccountData!.Data.Sip_Settings.Sip_server}";
                         if (CoreService.activeCall.CallAdtess?.Count == 0)
                         {
-                            CoreService.activeCall.AddParticipant(KeypadFild.Text, App.AccountData.Data.Sip_Settings.Sip_server);
+                            var info = CoreService.activeCall.getInfo();
+                            if (info != null) 
+                            {
+                                if (!String.IsNullOrEmpty(info.remoteContact))
+                                {
+                                    CoreService.activeCall.CallAdtess.Add(info.remoteContact);
+                                }
+                            }
                         }
-                        if (CoreService.activeCall.CallAdtess!.Contains(uri))
+                        if (!CoreService.activeCall.CallAdtess!.Contains(uri))
                         {
                             CoreService.activeCall.CallAdtess.Add(uri);
-
                         }
+                        else
+                        {
+                            return;
+                        }
+                        CoreService.AddParticipant(KeypadFild.Text, App.AccountData.Data.Sip_Settings.Sip_server);
                     }
                 }
                 KeypadFild.Text = "";
@@ -677,22 +664,6 @@ namespace VoiceX.Views
             }
         }
 
-        private void DTMFFild_TextChanging(TextBox sender, TextChangedEventArgs args)
-        {
-            if (CoreService.activeCall != null)
-            {
-                if (String.IsNullOrEmpty(sender.Text))
-                {
-                    Backspace.Visibility = Visibility.Collapsed;
-                    CoreService.activeCall.dialDtmf(sender.Text);
-                }
-                else
-                {
-                    Backspace.Visibility = Visibility.Visible; ;
-                }
-            }
-        }
-
         private void BackspaceNum_Click(object sender, RoutedEventArgs e)
         {
             if (!String.IsNullOrEmpty(KeypadFild.Text))
@@ -700,27 +671,13 @@ namespace VoiceX.Views
                 KeypadFild.Text = KeypadFild.Text.Substring(0, KeypadFild.Text.Length - 1);
             }
         }
-        private void KeypadFild_TextChanging(TextBox sender, TextChangedEventArgs args)
-        {
-            if (CoreService.activeCall != null)
-            {
-                if (String.IsNullOrEmpty(sender.Text))
-                {
-                    BackspaceNum.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    BackspaceNum.Visibility = Visibility.Visible; 
-                }
-            }
-        }
-        private void Profile_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void Profile_MouseEnter(object sender, MouseEventArgs e)
         {
             var Img = (Button)sender;
             Img.Margin = new Thickness(Img.Margin.Left, Img.Margin.Top - 1, Img.Margin.Right, Img.Margin.Bottom);
         }
 
-        private void Profile_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        private void Profile_MouseLeave(object sender, MouseEventArgs e)
         {
             var Img = (Button)sender;
             Img.Margin = new Thickness(Img.Margin.Left, Img.Margin.Top + 1, Img.Margin.Right, Img.Margin.Bottom);
@@ -735,6 +692,76 @@ namespace VoiceX.Views
                 {
                     e.Handled = true; // Блокируем "назад"
                 }
+            }
+        }
+
+        private void DTMFFild_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var Num = (TextBox)sender;
+            if (CoreService.activeCall != null)
+            {
+                if (!String.IsNullOrEmpty(Num.Text))
+                {
+                    CoreService.activeCall.dialDtmf(Num.Text);
+                }
+            }
+        }
+
+        private void KeypadFild_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var num = (TextBox)sender;
+            if (CoreService.activeCall != null)
+            {
+                if (String.IsNullOrEmpty(num.Text))
+                {
+                    BackspaceNum.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    BackspaceNum.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        private void Search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SolidColorBrush magnifyingGlassColorGrey = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
+            SolidColorBrush magnifyingGlassColorBlack = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
+            ContactsList.Items.Clear();
+            if (String.IsNullOrEmpty(Search.Text))
+            {
+                var groupContacts = contacts.contacts!.GroupBy(c => c.Name?.ToString().ToUpper()).OrderBy(c => c.Key);
+                foreach (var groupcontact in groupContacts.ToList())
+                {
+                    if (groupcontact.Key!.All(char.IsDigit))
+                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key!.ToString()));
+                    else
+                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key!.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
+                    foreach (var contact in groupcontact)
+                    {
+                        ContactsList.Items.Add(new ContactPad(contact.Name!, contact.Telephone!, keyPads == KeyPads.AddCallPad));
+                    }
+                }
+                magnifyingGlass.Margin = new Thickness(0, 0, 5, 2);
+                magnifyingGlassEllipse.Stroke = magnifyingGlassColorGrey;
+                magnifyingGlassLine.Fill = magnifyingGlassColorGrey;
+            }
+            else
+            {
+                foreach (var contact in contacts.contacts!)
+                {
+                    if (contact.Name!.Contains(Search.Text))
+                    {
+                        ContactsList.Items.Add(new ContactPad(contact.Name!, contact.Telephone!, keyPads == KeyPads.AddCallPad));
+                    }
+                    else if (contact.Telephone!.Contains(Search.Text))
+                    {
+                        ContactsList.Items.Add(new ContactPad(contact.Name, contact.Telephone, keyPads == KeyPads.AddCallPad));
+                    }
+                }
+                magnifyingGlass.Margin = new Thickness(0, 0, 23, 2);
+                magnifyingGlassEllipse.Stroke = magnifyingGlassColorBlack;
+                magnifyingGlassLine.Fill = magnifyingGlassColorBlack;
             }
         }
     }

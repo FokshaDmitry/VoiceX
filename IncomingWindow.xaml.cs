@@ -34,7 +34,6 @@ namespace VoiceX
         }
         public void ShowInBottomRight(string Name, string Phone, bool position)
         {
-            
             if (!this.IsVisible)
             {
                 if (position)
