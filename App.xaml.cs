@@ -326,9 +326,9 @@ namespace VoiceX
                 globalSelectedText = ClipboardHelper.getGlobalSelectedText(); 
                 Debug.WriteLine("SELECT TEXT: " + globalSelectedText);
             }
-            catch
+            catch (Exception ex)
             {
-
+                Debug.Write(ex.Message);
                 return "";
             }
             return globalSelectedText;
