@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Documents;
-using System.Windows.Threading;
 
 namespace VoiceX.Services
 {
@@ -106,6 +104,10 @@ namespace VoiceX.Services
                             activeCalls.Add(activeCall!);
                         }
                         activeCalls.Add(newCall);
+                        return;
+                    }
+                    if (newCallInfo.state == pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)
+                    {
                         return;
                     }
 

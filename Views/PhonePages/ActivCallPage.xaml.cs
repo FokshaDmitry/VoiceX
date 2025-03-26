@@ -54,7 +54,7 @@ namespace VoiceX.Views.PhonePages
                             var calls = CoreService.activeCall.CallAdtess;
                             Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");
                             StatusCurrentCall.Text = ProfilePage.StatusCall.ToString().ToUpper() + " " + "CALL";
-                            PhoneText.Text = CoreService.activeCall.CallAdtess.Aggregate((current, next) => phonePage.ExtractValue(current) + ", " + phonePage.ExtractValue(next)).TrimEnd(' ', ',');
+                            PhoneText.Text = CoreService.activeCall.CallAdtess.Count() == 1 ? phonePage.ExtractValue(CoreService.activeCall.CallAdtess.First()) : CoreService.activeCall.CallAdtess.Aggregate((current, next) => phonePage.ExtractValue(current) + ", " + phonePage.ExtractValue(next)).TrimEnd(' ', ',');
                             TransferCall.IsEnabled = false;
                             Pause.IsEnabled = false;
                         }
@@ -115,7 +115,10 @@ namespace VoiceX.Views.PhonePages
                             timer.Dispose();
                             timer = null!;
                         }
-                        phonePage.Navigate_Click(new Button() { Name = "Profile" }, new RoutedEventArgs());
+                        if (phonePage.MainFrame.Content.ToString() != "VoiceX.Views.PhonePages.DialpadCallPage")
+                        {
+                            phonePage.Navigate_Click(new Button() { Name = "Phone" }, new RoutedEventArgs());
+                        }
                     }
                 }
                 catch

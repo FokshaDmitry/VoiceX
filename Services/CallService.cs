@@ -68,37 +68,33 @@ namespace VoiceX.Services
                         
                         if (CoreService.activeCall != null)
                         {
-                            if (EndAllCalls)
+                            if (EndAllCalls && CoreService.activeCalls != null && CoreService.activeCalls.Count != 0)
                             {
-                                if (CoreService.activeCalls != null)
+                                foreach (var call in CoreService.activeCalls)
                                 {
-                                    if (CoreService.activeCalls.Count != 0)
+                                    if (call != null)
                                     {
-                                        foreach (var call in CoreService.activeCalls)
+                                        var info = call.getInfo();
+                                        if (info != null)
                                         {
-                                            if (call != null)
+                                            if (info.remoteContact != ci.remoteContact)
                                             {
-                                                var info = call.getInfo();
-                                                if (info != null)
-                                                {
-                                                    if (info.remoteContact != ci.remoteContact)
-                                                    {
-                                                        call.hangup(new CallOpParam());
-                                                        CoreService.activeCalls.Remove(call);
-                                                    }
-                                                }   
+                                                call.hangup(new CallOpParam());
                                             }
                                         }
                                     }
                                 }
-
+                                CoreService.activeCalls.Clear();
+                                var phones = CoreService.activeCall.CallAdtess.Count() == 1 ? ExtractValue(CoreService.activeCall.CallAdtess.First()) : CoreService.activeCall.CallAdtess.Aggregate((current, next) => ExtractValue(current) + ", " + ExtractValue(next)).TrimEnd(' ', ',');
                                 CoreService.activeCall = null;
+                                CoreService.activeCalls = null;
+                                EndCallEvent?.Invoke(phones, phones, startTime);
                             }
                             else
                             {
                                 if (CoreService.activeCall.CallAdtess.Count() == 1)
                                 {
-
+                                    EndCallEvent?.Invoke(ExtractValue(CoreService.activeCall.CallAdtess.First()), ExtractValue(CoreService.activeCall.CallAdtess.First()), startTime);
                                     CoreService.activeCall = null;
                                     return;
                                 }
@@ -114,10 +110,13 @@ namespace VoiceX.Services
                                 }
                                 if (CoreService.activeCall.CallAdtess != null && CoreService.activeCall.CallAdtess.Count() == 0)
                                 {
-                                    EndCallEvent?.Invoke(info.remoteUri, info.remoteContact, startTime);
-                                    CoreService.activeCall?.Dispose();
-                                    CoreService.activeCall = null;
-                                    DisableMicrophone();
+                                    if (info.remoteContact == ci.remoteContact)
+                                    {
+                                        EndCallEvent?.Invoke(ExtractValue(info.remoteUri), ExtractValue(info.remoteContact), startTime);
+                                        CoreService.activeCall?.Dispose();
+                                        CoreService.activeCall = null;
+                                        DisableMicrophone();
+                                    }
                                 }
                             }
                         }

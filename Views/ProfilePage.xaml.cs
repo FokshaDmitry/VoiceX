@@ -228,7 +228,22 @@ namespace VoiceX.Views
                         ProfilePage.StatusCall = StatusCall.Ignore;
                     }
                 }
-                await addDbContext.AddNoteAcync(new HistoryNotes() { Id = Guid.NewGuid(), Name = ExtractValue(Name), Phone = ExtractValue(Phone), StartDialog = StartCall, EndDialog = DateTime.Now, StatusCall = ProfilePage.StatusCall });
+                var phone = LDAPService?.SearchLdaps(App.AccountData?.Data.Ldap_Settings.Base!, Phone);
+                if (phone != null) 
+                {
+                    if (phone.Count() != 0)
+                    {
+                        var phoneNumber = phone.FirstOrDefault(p => p.Phone == Phone);
+                        if (phoneNumber != null)
+                        {
+                            if (!String.IsNullOrEmpty(phoneNumber.Name))
+                            {
+                                Name = phoneNumber.Name;
+                            }
+                        }
+                    }
+                }
+                await addDbContext.AddNoteAcync(new HistoryNotes() { Id = Guid.NewGuid(), Name = Name, Phone = Phone, StartDialog = StartCall, EndDialog = DateTime.Now, StatusCall = ProfilePage.StatusCall });
                 incomingWindow.Hide();
             });
         }
