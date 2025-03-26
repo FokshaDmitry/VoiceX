@@ -22,7 +22,7 @@ namespace VoiceX.Views.ControlPages
         LocalStoreService localStoreService;
         public AdditionPage()
         {
-            this.InitializeComponent();
+            this.InitializeComponent(); 
             this.Loaded += AdditionPage_Loaded;
             localStoreService = new LocalStoreService();
         }
