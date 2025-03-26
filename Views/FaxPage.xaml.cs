@@ -2,15 +2,12 @@
 using NSwag.Collections;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Media;
-using System.Xml.Linq;
 using VoiceX.Items;
 using VoiceX.Services;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238

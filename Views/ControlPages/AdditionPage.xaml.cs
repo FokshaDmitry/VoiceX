@@ -1,10 +1,5 @@
-﻿using Microsoft.VisualBasic.Devices;
-using pj;
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Security.Cryptography.Xml;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using VoiceX.Items;
