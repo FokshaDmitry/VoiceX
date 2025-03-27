@@ -8,8 +8,6 @@
     <Platforms>AnyCPU;x86;x64</Platforms>
     <UseWPF>True</UseWPF>
     <Nullable>enable</Nullable>
-    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
-    <UseWindowsForms>True</UseWindowsForms>
     <ApplicationManifest></ApplicationManifest>
   </PropertyGroup>
 

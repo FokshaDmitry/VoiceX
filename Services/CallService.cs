@@ -366,11 +366,14 @@ namespace VoiceX.Services
                 if (ringTonePlayer != null)
                 {
                     AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
-                    if (speaker != null && !ringTonePlayer.Equals(speaker))
+                    if (speaker != null)
                     {
-                        ringTonePlayer.stopTransmit(speaker);
-                        ringTonePlayer.Dispose();
-                        ringTonePlayer = null;
+                        if (ringTonePlayer.getPortId() != -1 && speaker.getPortId() != -1) 
+                        {
+                            ringTonePlayer.stopTransmit(speaker);
+                            ringTonePlayer.Dispose();
+                            ringTonePlayer = null;
+                        } 
                     }
                     Debug.WriteLine("[CALL] Гудок остановлен.");
                 }
