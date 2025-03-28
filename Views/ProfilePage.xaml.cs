@@ -217,6 +217,16 @@ namespace VoiceX.Views
             await Dispatcher.InvokeAsync(async () => {
                 MainFrame.Navigate(dialpadCallPage);
                 slide.Begin();
+                if (ProfilePage.StatusCall == StatusCall.Incoming)
+                {
+                    if (Phone.Length >= 8 && Phone.Length <= 10)
+                    {
+                        if (Phone.First() != '0')
+                        {
+                            Phone = "0" + Phone;
+                        }
+                    }
+                }
                 if (StartCall == DateTime.MinValue)
                 {
                     if (ProfilePage.StatusCall == StatusCall.Incoming)
@@ -228,6 +238,7 @@ namespace VoiceX.Views
                         ProfilePage.StatusCall = StatusCall.Ignore;
                     }
                 }
+                
                 var phone = LDAPService?.SearchLdaps(App.AccountData?.Data.Ldap_Settings.Base!, Phone);
                 if (phone != null) 
                 {
@@ -239,6 +250,10 @@ namespace VoiceX.Views
                             if (!String.IsNullOrEmpty(phoneNumber.Name))
                             {
                                 Name = phoneNumber.Name;
+                                if (!String.IsNullOrEmpty(phoneNumber.Phone))
+                                {
+                                    Phone = phoneNumber.Phone;
+                                }
                             }
                         }
                     }

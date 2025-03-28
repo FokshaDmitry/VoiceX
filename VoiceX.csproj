@@ -414,6 +414,9 @@
     <None Update="PrinterInstaller\SystrayComponent.pdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="VC_redist.x86.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="windowsdesktop-runtime-8.0.13-win-x86.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VoiceX"
-#define MyAppVersion "1.0.0.7"
+#define MyAppVersion "1.0.0.9"
 #define MyAppPublisher "X-Cloud"
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -20,7 +20,7 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 
 OutputDir=App
-OutputBaseFilename=VoiceX_1.0.0.7
+OutputBaseFilename=VoiceX_1.0.0.9
 Compression=lzma
 SetupIconFile=C:\Users\user\Work\Logo256.ico
 SolidCompression=yes
@@ -41,4 +41,5 @@ Source: "*"; DestDir: {app}; Flags: recursesubdirs createallsubdirs ignoreversio
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "VoiceX"; ValueData: """{app}\VoiceX.exe"""; Flags: uninsdeletevalue
 [Run]
 Filename: "{app}\windowsdesktop-runtime-8.0.13-win-x86.exe"; Parameters: "/silent"; Flags: waituntilterminated
+Filename: "{app}\VC_redist.x86.exe"; Parameters: "/silent"; Flags: waituntilterminated
 Filename: "{app}\VoiceX.exe"; Description: "Run Program"; Flags:  nowait postinstall

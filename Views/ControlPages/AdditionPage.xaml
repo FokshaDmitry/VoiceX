@@ -132,6 +132,6 @@
         <TextBlock Text="Microphone" Margin="18,196,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
         <ComboBox MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Microphones" Background="Transparent" Width="213" Margin="18,219,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         <TextBlock Text="Version:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="12,275,0,0"/>
-        <TextBlock Text="1.0.0.7" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="185,275,0,0"/>
+        <TextBlock Text="1.0.0.9" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="185,275,0,0"/>
     </Grid>
 </Page>

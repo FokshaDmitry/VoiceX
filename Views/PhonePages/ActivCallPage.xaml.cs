@@ -212,7 +212,10 @@ namespace VoiceX.Views.PhonePages
             {
                 timer = new Timer(EnalebleCalling!, null, (int)TimeSpan.FromSeconds(1).TotalMilliseconds, (int)TimeSpan.FromSeconds(1).TotalMilliseconds);
             }
-            
+            CloseSound.Visibility = Visibility.Collapsed;
+            CloseMicrophone.Visibility = Visibility.Collapsed;
+            Microphone = true;
+            Audio = true;
         }
         private async void AutoAnswer_Click(object sender, RoutedEventArgs e)
         {
@@ -252,6 +255,10 @@ namespace VoiceX.Views.PhonePages
         {
             UserNameText.Text = "";
             PhoneText.Text = "";
+            CloseMicrophone.Visibility = Visibility.Collapsed;
+            CloseSound.Visibility = Visibility.Collapsed;
+            Microphone = true;
+            Audio = true;
         }
     }
 }
