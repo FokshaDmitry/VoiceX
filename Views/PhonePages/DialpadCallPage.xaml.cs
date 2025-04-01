@@ -31,7 +31,9 @@ namespace VoiceX.Views.PhonePages
         }
         private async void DialpadCallPage_Loaded(object sender, RoutedEventArgs e)
         {
+            ProfilePage.window!.LoadIcone.Visibility = Visibility.Visible;
             contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
+            ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
         }
 
         private void CallButton_Click(object sender, RoutedEventArgs e)

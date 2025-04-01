@@ -19,18 +19,76 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Storyboard x:Key="RippleAnimation">
+            <!-- Анимация 1-го круга -->
+            <!--<DoubleAnimation Storyboard.TargetName="Ripple1"
+                                 Storyboard.TargetProperty="Opacity"
+                                 From="0" To="1" Duration="0:0:1" BeginTime="0:0:0"
+                                 AutoReverse="True" RepeatBehavior="Forever"/>-->
+            <DoubleAnimation Storyboard.TargetName="Ripple1"
+                                 Storyboard.TargetProperty="Width"
+                                 From="49" To="67" Duration="0:0:1" BeginTime="0:0:0"
+                                 RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="Ripple1"
+                                 Storyboard.TargetProperty="Height"
+                                 From="49" To="67" Duration="0:0:1" BeginTime="0:0:0"
+                                 RepeatBehavior="Forever"/>
+
+            <!-- Анимация 2-го круга (задержка 0.3 сек) -->
+            <!--<DoubleAnimation Storyboard.TargetName="Ripple2"
+                                 Storyboard.TargetProperty="Opacity"
+                                 From="0" To="1" Duration="0:0:1" BeginTime="0:0:0.3"
+                                 AutoReverse="True" RepeatBehavior="Forever"/>-->
+            <DoubleAnimation Storyboard.TargetName="Ripple2"
+                                 Storyboard.TargetProperty="Width"
+                                 From="67" To="82" Duration="0:0:1" BeginTime="0:0:0.3"
+                                 RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="Ripple2"
+                                 Storyboard.TargetProperty="Height"
+                                 From="67" To="82" Duration="0:0:1" BeginTime="0:0:0.3"
+                                 RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="Ripple3"
+                                Storyboard.TargetProperty="Width"
+                                From="49" To="67" Duration="0:0:1" BeginTime="0:0:0.0"
+                                RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="Ripple3"
+                                Storyboard.TargetProperty="Height"
+                                From="49" To="67" Duration="0:0:1" BeginTime="0:0:0.0"
+                                RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="Ripple4"
+                                Storyboard.TargetProperty="Width"
+                                From="67" To="82" Duration="0:0:1" BeginTime="0:0:0.3"
+                                RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="Ripple4"
+                                Storyboard.TargetProperty="Height"
+                                From="67" To="82" Duration="0:0:1" BeginTime="0:0:0.3"
+                                RepeatBehavior="Forever"/>
+        </Storyboard>
     </Page.Resources>
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource RippleAnimation}"/>
+        </EventTrigger>
+    </Page.Triggers>
     <Grid x:Name="IncomeCall"  Background="White">
         <TextBlock HorizontalAlignment="Center" Text="Incoming call" VerticalAlignment="Top" Margin="0,10,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="12" Foreground="#FF898989"/>
         <TextBlock x:Name="UserNameText" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Foreground="#FF252422" FontWeight="Normal"/>
         <TextBlock x:Name="PhoneText" HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,55,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="14" Foreground="#FF252422" FontWeight="Normal"/>
-        <Border CornerRadius="50" Width="59" Height="59" Background="#FFFDF2F3" HorizontalAlignment="Center" Margin="0,226,112,0" VerticalAlignment="Top">
-            <Border Background="#FFFDD8D9" CornerRadius="50" Width="48" Height="48">
-                <Button BorderThickness="0" Background="Transparent" Cursor="Hand" Click="EndCall_Click"  VerticalAlignment="Center" Width="35" Height="35" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" HorizontalAlignment="Center">
+        <Border x:Name="Ripple2" CornerRadius="50" Width="82" Height="82" Background="#FFFDF2F3" HorizontalAlignment="Center" Margin="0,226,112,0" VerticalAlignment="Top">
+            <Border x:Name="Ripple1" Background="#FFFDD8D9" CornerRadius="50" Width="67" Height="67">
+                <Button BorderThickness="0" Background="Transparent" Cursor="Hand" Click="EndCall_Click"  VerticalAlignment="Center" Width="49" Height="49" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" HorizontalAlignment="Center">
                     <Button.Content>
-                        <Border CornerRadius="50" Background="#FFF31E38" Width="35" Height="35">
-                            <Image Width="22" Height="22" RenderTransformOrigin="0.5,0.5">
-                                
+                        <Border CornerRadius="50" Background="#FFF31E38" Width="49" Height="49">
+                            <Image Width="24" Height="24" RenderTransformOrigin="0.5,0.5">
+                                <Image.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="135"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Image.RenderTransform>
+
                                 <Image.Source>
                                     <BitmapImage UriSource="/Assets/Icone_v2/phoneNavigate.png" DecodePixelWidth="80" DecodePixelHeight="80"/>
                                 </Image.Source>
@@ -40,12 +98,12 @@
                 </Button>
             </Border>
         </Border>
-        <Border CornerRadius="50" Width="102" Height="102" Background="#FFF2FEF5" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="114,200,0,0">
-            <Border CornerRadius="50" Width="83" Height="83" Background="#FFCBFDD7">
-                <Button Cursor="Hand" BorderThickness="0" Background="Transparent" Name="Accept" Click="Accept_Click"  VerticalAlignment="Center" Width="62" Height="62"  FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" HorizontalAlignment="Center" Grid.Row="1">
+        <Border  x:Name="Ripple4" CornerRadius="50" Width="82" Height="82" Background="#FFE7FEED" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="114,226,0,0">
+            <Border x:Name="Ripple3" CornerRadius="50" Width="67" Height="67" Background="#FFCBFDD7">
+                <Button Cursor="Hand" BorderThickness="0" Background="Transparent" Name="Accept" Click="Accept_Click"  VerticalAlignment="Center" Width="49" Height="49"  FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" HorizontalAlignment="Center" Grid.Row="1">
                     <Button.Content>
-                        <Border CornerRadius="50" Background="#FF06D665" Width="62" Height="62">
-                            <Image Width="29" Height="29">
+                        <Border CornerRadius="50" Background="#FF06D665" Width="49" Height="49">
+                            <Image Width="24" Height="24">
                                 <Image.Source>
                                     <BitmapImage UriSource="/Assets/Icone_v2/phoneNavigate.png" DecodePixelWidth="90" DecodePixelHeight="90"/>
                                 </Image.Source>

@@ -219,6 +219,11 @@ namespace VoiceX.Views
                 slide.Begin();
                 if (ProfilePage.StatusCall == StatusCall.Incoming)
                 {
+                    foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
+                    {
+                        Phone = Phone.Replace(regex.Search!, regex.Replace);
+                    }
+                    Phone = Regex.Replace(Phone, @"\D", "");
                     if (Phone.Length >= 8 && Phone.Length <= 10)
                     {
                         if (Phone.First() != '0')
@@ -299,7 +304,9 @@ namespace VoiceX.Views
             CoreService.Instance.IncomingCallEvent += Instance_IncomingCallEvent;
             CoreService.Instance.OutgoingCallEvent += Instance_OutgoingCallEvent;
 
+            window!.LoadIcone.Visibility = Visibility.Visible;
             contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
+            window!.LoadIcone.Visibility = Visibility.Collapsed;
             var AAlist = await localStoreService.LoadDataAsync("AACallList");
             if (!String.IsNullOrEmpty(AAlist))
             {
@@ -458,7 +465,9 @@ namespace VoiceX.Views
                     ResponseData = new Status_pause()
                 };
                 getPauses.ResponseData.Pauses = new List<Pause>();
+                window!.LoadIcone.Visibility = Visibility.Visible;
                 getPauses = await webService.GetPauses(App.AccountData!.Data.Sip_Settings.Sip_username, App.UserPbx!, App.userToken!);
+                window.LoadIcone.Visibility = Visibility.Collapsed;
                 if (getPauses.ResponseCode == HttpStatusCode.OK)
                 {
                     PauseList.Items.Add(new PauseItem(new Pause { Name = "Work", Id = 0 }, getPauses.ResponseData!.Pause_active == 0));
@@ -493,8 +502,10 @@ namespace VoiceX.Views
                     int id = pause.pause.Id;
                     if (getPauses?.ResponseData!.Pause_active != id)
                     {
+                        window!.LoadIcone.Visibility = Visibility.Visible;
                         var result = await webService.SetPause(App.AccountData!.Data.Sip_Settings.Sip_username, id, App.UserPbx!, App.userToken!);
-                        if (result.ResponseCode == System.Net.HttpStatusCode.OK)
+                        window!.LoadIcone.Visibility = Visibility.Collapsed;
+                        if (result.ResponseCode == HttpStatusCode.OK)
                         {
                             getPauses!.ResponseData!.Pause_active = id;
                         }

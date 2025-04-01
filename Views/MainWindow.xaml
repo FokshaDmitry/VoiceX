@@ -21,8 +21,41 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Storyboard x:Key="RotationAnimation">
+            <!-- Анимация для 1 круга -->
+            <DoubleAnimation Storyboard.TargetName="Rotate1"
+                                 Storyboard.TargetProperty="Angle"
+                                 From="0" To="360"
+                                 Duration="0:0:3"
+                                 RepeatBehavior="Forever"/>
+
+            <!-- Анимация для 2 круга -->
+            <DoubleAnimation Storyboard.TargetName="Rotate2"
+                                 Storyboard.TargetProperty="Angle"
+                                 From="0" To="360"
+                                 Duration="0:0:5"
+                                 RepeatBehavior="Forever"/>
+
+            <!-- Анимация для 3 круга -->
+            <DoubleAnimation Storyboard.TargetName="Rotate3"
+                                 Storyboard.TargetProperty="Angle"
+                                 From="0" To="360"
+                                 Duration="0:0:2"
+                                 RepeatBehavior="Forever"/>
+
+            <!-- Анимация для 4 круга -->
+            <DoubleAnimation Storyboard.TargetName="Rotate4"
+                                 Storyboard.TargetProperty="Angle"
+                                 From="0" To="360"
+                                 Duration="0:0:1"
+                                 RepeatBehavior="Forever"/>
+        </Storyboard>
     </Window.Resources>
-    
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource RotationAnimation}"/>
+        </EventTrigger>
+    </Window.Triggers>
     <Page>
 
         <Grid>
@@ -71,7 +104,7 @@
             <Frame NavigationUIVisibility="Hidden" x:Name="MainPage">
                 
             </Frame>
-            <Grid Visibility="Collapsed" x:Name="ErrorPlate" Background="#CC202244" Margin="-5,0,-5,0" >
+            <Grid Visibility="Collapsed" x:Name="ErrorPlate"  Background="#999692ED" Margin="-5,0,-5,0" >
                 <Border CornerRadius="12" Background="White" Width="204" Height="150">
                     <Grid>
                         <Button Cursor="Hand" Click="Close_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,5,8,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
@@ -122,7 +155,7 @@
                     </Grid>
                 </Border>
             </Grid>
-            <Grid x:Name="PreAsk" Visibility="Collapsed" Background="#CC202244" Margin="-5,0,-5,0" >
+            <Grid x:Name="PreAsk" Visibility="Collapsed"  Background="#999692ED" Margin="-5,0,-5,0" >
                 <Border CornerRadius="12" Background="White" Width="204" Height="246">
                     <Grid>
                         <Image Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Top" Width="90" Margin="0,18,0,0">
@@ -152,6 +185,68 @@
                         </Button>
                     </Grid>
                 </Border>
+            </Grid>
+            <Grid Visibility="Collapsed" x:Name="LoadIcone"  Background="#999692ED">
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="88" Height="88">
+                    <Ellipse Width="84" Height="84" Fill="Transparent" StrokeThickness="4">
+                        <Ellipse.Stroke>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Color="#7B76FF" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="0.6526"/>
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </Ellipse.Stroke>
+                        <Ellipse.RenderTransform>
+                            <RotateTransform x:Name="Rotate1" Angle="-75" CenterX="42" CenterY="42"/>
+                        </Ellipse.RenderTransform>
+                    </Ellipse>
+
+                    <!-- Второй круг -->
+                    <Ellipse Width="58" Height="58" StrokeThickness="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Ellipse.Stroke>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Color="#BCBAFF" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="0.6526" />
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </Ellipse.Stroke>
+                        <Ellipse.RenderTransform>
+                            <RotateTransform x:Name="Rotate2" Angle="-45" CenterX="29" CenterY="29"/>
+                        </Ellipse.RenderTransform>
+                    </Ellipse>
+
+                    <!-- Третий круг -->
+                    <Ellipse Width="38" Height="38" StrokeThickness="4">
+                        <Ellipse.Stroke>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Color="#D1D0FF" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="0.6526"/>
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </Ellipse.Stroke>
+                        <Ellipse.RenderTransform>
+                            <RotateTransform x:Name="Rotate3" Angle="60" CenterX="19" CenterY="19"/>
+                        </Ellipse.RenderTransform>
+                    </Ellipse>
+
+                    <!-- Четвертый круг -->
+                    <Ellipse Width="20" Height="20" StrokeThickness="4">
+                        <Ellipse.Stroke>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Color="#8833FF" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="0.6526"/>
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </Ellipse.Stroke>
+                        <Ellipse.RenderTransform>
+                            <RotateTransform  x:Name="Rotate4" Angle="-135" CenterX="10" CenterY="10"/>
+                        </Ellipse.RenderTransform>
+                    </Ellipse>
+                </Grid>
             </Grid>
         </Grid>
         

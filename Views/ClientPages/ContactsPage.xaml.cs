@@ -34,7 +34,9 @@ namespace VoiceX.Views.ClientPages
 
         private async void ContactsPage_Loaded(object sender, RoutedEventArgs e)
         {
+            ProfilePage.window!.LoadIcone.Visibility = Visibility.Visible;
             contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
+            ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
             if (contacts.ResponseCode != HttpStatusCode.OK || contacts.contacts == null)
             {
                 contacts.contacts = new List<Models.Contact>();

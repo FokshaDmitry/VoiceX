@@ -105,7 +105,9 @@ namespace VoiceX.Views
                 {
                     if (certificateService.CheckCertificate("app-cert"))
                     {
+                        LoadIcone.Visibility = Visibility.Visible;
                         App.AccountData = await webService.GetAccountSettings(pbx, token);
+                        LoadIcone.Visibility = Visibility.Collapsed;
                         if(App.AccountData.ResponseCode == HttpStatusCode.OK)
                         {
                             App.userToken = token;
@@ -157,6 +159,7 @@ namespace VoiceX.Views
             ErrorPlate.Visibility = Visibility.Visible;
             ShowInBottomRight();
         }
+        
         public void Exit_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -173,12 +176,14 @@ namespace VoiceX.Views
         {
             try
             {
+                LoadIcone.Visibility = Visibility.Visible;
                 PreAsk.Visibility = Visibility.Hidden;
-                this.MainPage.Content = registrationPage;
+                this.MainPage.Content = new RegistrationPage(this);
                 localStoreService.ClearIsolatedStorage();
                 await addDbContext.DropDatabaseAsync();
                 await webService.LogOut(App.UserPbx!, App.userToken!);
                 CoreService.Instance.Logout();
+                LoadIcone.Visibility = Visibility.Hidden;
             }
             catch
             {

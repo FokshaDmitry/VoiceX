@@ -93,9 +93,7 @@
             </Grid>
             <TextBlock HorizontalAlignment="Center" FontFamily="/Assets/Fonts/NunitoSans_10pt-Regular.ttf#NunitoSans" Text="Enter access code"  x:Name="StatusResponce" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" FontSize="11" Margin="0,296,0,0" Foreground="#FF898989"/>
         </Grid>
-        <Grid Visibility="Collapsed" x:Name="LoadIcone" Background="#CC000000">
-            <Image  Source="/Assets/Icone_v2/LodingIcone.gif" HorizontalAlignment="Center" VerticalAlignment="Center" Width="88"/>
-        </Grid>
+        
     </Grid>
 
 </Page>

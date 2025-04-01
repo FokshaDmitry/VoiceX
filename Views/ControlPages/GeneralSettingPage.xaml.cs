@@ -157,13 +157,13 @@ namespace VoiceX.Views.ControlPages
         {
             if ((bool)Tcp.IsChecked!)
             {
-                LoadIcone.Visibility = Visibility.Visible;
+                window!.LoadIcone.Visibility = Visibility.Visible;
                 Tls.IsChecked = false;
                 ProfilePage.onlineToken = false;
                 await localStoreService.SaveDataAsync("transport", "0");
                 await CoreService.Instance.ChangeTransport(0);
                 ProfilePage.onlineToken = true;
-                LoadIcone.Visibility = Visibility.Collapsed;
+                window!.LoadIcone.Visibility = Visibility.Collapsed;
             }
             else if (Tls.IsChecked == false)
             {
@@ -174,13 +174,13 @@ namespace VoiceX.Views.ControlPages
         {
             if ((bool)Tls.IsChecked!)
             {
-                LoadIcone.Visibility = Visibility.Visible;
+                window!.LoadIcone.Visibility = Visibility.Visible;
                 Tcp.IsChecked = false;
                 ProfilePage.onlineToken = false;
                 await localStoreService.SaveDataAsync("transport", "1");
                 await CoreService.Instance.ChangeTransport(1);
                 ProfilePage.onlineToken = true;
-                LoadIcone.Visibility = Visibility.Collapsed;
+                window!.LoadIcone.Visibility = Visibility.Collapsed;
             }
             else if (Tls.IsChecked == false)
             {
@@ -193,7 +193,7 @@ namespace VoiceX.Views.ControlPages
             var swich = (ToggleButton)sender;
             if ((bool)swich.IsChecked!)
             {
-                LoadIcone.Visibility = Visibility.Visible;
+                window!.LoadIcone.Visibility = Visibility.Visible;
                 if (await webService.ChangeCallType("mobile", App.UserPbx!, App.userToken!) == System.Net.HttpStatusCode.OK)
                 {
                     CoreService.Instance.setRegistration(true);
@@ -203,10 +203,10 @@ namespace VoiceX.Views.ControlPages
                 {
                     SmartPhone.IsChecked = false;
                     LopTop.IsChecked = true;
-                    LoadIcone.Visibility = Visibility.Collapsed;
+                    window!.LoadIcone.Visibility = Visibility.Collapsed;
                     return;
                 }
-                LoadIcone.Visibility = Visibility.Collapsed;
+                window!.LoadIcone.Visibility = Visibility.Collapsed;
             }
             else
             {
@@ -220,7 +220,7 @@ namespace VoiceX.Views.ControlPages
             var swich = (ToggleButton)sender;
             if ((bool)swich.IsChecked!)
             {
-                LoadIcone.Visibility = Visibility.Visible;
+                window!.LoadIcone.Visibility = Visibility.Visible;
                 if (await webService.ChangeCallType("fix", App.UserPbx!, App.userToken!) == System.Net.HttpStatusCode.OK)
                 {
                     CoreService.Instance.setRegistration(false);
@@ -231,10 +231,10 @@ namespace VoiceX.Views.ControlPages
                 {
                     SmartPhone.IsChecked = true;
                     LopTop.IsChecked = false;
-                    LoadIcone.Visibility = Visibility.Collapsed;
+                    window!.LoadIcone.Visibility = Visibility.Collapsed;
                     return;
                 }
-                LoadIcone.Visibility = Visibility.Collapsed;
+                window!.LoadIcone.Visibility = Visibility.Collapsed;
             }
             else
             {

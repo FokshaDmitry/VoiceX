@@ -149,8 +149,6 @@
             </Image.Source>
         </Image>
         <TextBlock HorizontalAlignment="Left" MinHeight="12" x:Name="Error" Margin="94,348,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="9" Foreground="#FFDF0505"/>
-        <Grid Visibility="Collapsed" x:Name="LoadIcone" Background="#CC000000">
-            <Image Source="/Assets/Icone_v2/LodingIcone.gif" HorizontalAlignment="Center" VerticalAlignment="Center" Width="88"/>
-        </Grid>
+        
     </Grid>
 </Grid>

@@ -144,7 +144,10 @@ namespace VoiceX.Services
                         Debug.WriteLine($"[CALL] Включаем аудио... ");
                         aud_med.startTransmit(mgr.getPlaybackDevMedia());
                         Debug.WriteLine("[CALL] Включаем микрофон...");
-                        mgr.getCaptureDevMedia().startTransmit(aud_med);
+                        if (!isMute)
+                        {
+                            mgr.getCaptureDevMedia().startTransmit(aud_med);
+                        }
                     }
                     catch { }
                 }
@@ -178,8 +181,10 @@ namespace VoiceX.Services
         }
         public bool MuteMicrophone(bool mute)
         {
+            
             try
             {
+                isMute = !mute;
                 AudioMedia mic = CoreService.Instance.Core.audDevManager().getCaptureDevMedia();
                 if (mic != null)
                 {
@@ -335,28 +340,6 @@ namespace VoiceX.Services
             catch (Exception ex)
             {
                 Debug.WriteLine($"[CALL] Ошибка при переводе вызова: {ex.Message}");
-            }
-        }
-        private void SetupAudio()
-        {
-            try
-            {
-                AudioMedia remoteAudio = getAudioMedia(0);
-                AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
-
-                if (remoteAudio != null && speaker != null)
-                {
-                    remoteAudio.startTransmit(speaker);
-                    Debug.WriteLine("[CALL] Аудиопоток собеседника передаётся в динамики.");
-                }
-                else
-                {
-                    Debug.WriteLine("[CALL] Ошибка: Не удалось получить аудиопотоки.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[CALL] Ошибка при настройке аудио: {ex.Message}");
             }
         }
         public void StopRingTone()

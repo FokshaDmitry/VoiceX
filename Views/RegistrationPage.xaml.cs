@@ -29,7 +29,6 @@ namespace VoiceX.Views
             window = mainWindow;
             profilePage = new ProfilePage(mainWindow);
             App.AccountData = new Models.Account_data();
-            LoadIcone.Visibility = Visibility.Collapsed;
             certificateService = new CertificateService();
             localStoreService = new LocalStoreService();
         }
@@ -56,7 +55,7 @@ namespace VoiceX.Views
                 window.ShowError("PBX code must contain six numbers");
                 return;
             }
-            LoadIcone.Visibility = Visibility.Visible;
+            window.LoadIcone.Visibility = Visibility.Visible;
             try
             {
                 // inport selfsign
@@ -84,14 +83,14 @@ namespace VoiceX.Views
                     catch (Exception ex)
                     {
                         window.ShowError($"App wrong: Convert, Message: {ex.Message}");
-                        LoadIcone.Visibility = Visibility.Collapsed;
+                        window.LoadIcone.Visibility = Visibility.Collapsed;
                         return;
                     }
                 }
                 else
                 {
                     window.ShowError($"Token error: {cert.Error}");
-                    LoadIcone.Visibility = Visibility.Collapsed;
+                    window.LoadIcone.Visibility = Visibility.Collapsed;
                     return;
                 }
             }
@@ -99,7 +98,7 @@ namespace VoiceX.Views
             {
                 Debug.WriteLine(ex.Message);
                 window.ShowError($"Server wrong: {ex.Message}, Message: {App.AccountData!.ResponseMessage}");
-                LoadIcone.Visibility = Visibility.Collapsed;
+                window.LoadIcone.Visibility = Visibility.Collapsed;
                 return;
             }
             if (App.AccountData.ResponseCode == HttpStatusCode.OK)
@@ -107,19 +106,19 @@ namespace VoiceX.Views
                 try
                 {
                     App.UserPbx = $"{pbxCode.Substring(0, 3)}";
-                    LoadIcone.Visibility = Visibility.Collapsed;
+                    window.LoadIcone.Visibility = Visibility.Collapsed;
                     window.MainPage.Navigate(profilePage); 
                 }
                 catch (Exception ex)
                 {
                     window.ShowError($"App wrong: {ex.Message}, \n Message: {App.AccountData.ResponseMessage}");
-                    LoadIcone.Visibility = Visibility.Collapsed;
+                    window.LoadIcone.Visibility = Visibility.Collapsed;
                 }
             }
             else
             {
                 window.ShowError("Server wrong: " + App.AccountData.ResponseMessage + "Responce Code:" + App.AccountData.ResponseCode.ToString());
-                LoadIcone.Visibility = Visibility.Collapsed;
+                window.LoadIcone.Visibility = Visibility.Collapsed;
             }
         }
         private async void Select_Click(object sender, System.Windows.RoutedEventArgs e)

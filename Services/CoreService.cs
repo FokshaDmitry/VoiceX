@@ -93,7 +93,7 @@ namespace VoiceX.Services
                     if (newCallInfo.state == pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)
                     {
                         Debug.WriteLine($"[CALL] Новый участник {participantUri} подключен. Добавляем в конференцию...");
-                        MergeCalls(activeCall!, newCall);
+                        
                         if (activeCalls == null)
                         {
                             activeCalls = new List<CallService>();
@@ -104,6 +104,7 @@ namespace VoiceX.Services
                             activeCalls.Add(activeCall!);
                         }
                         activeCalls.Add(newCall);
+                        MergeCalls(activeCalls);
                         return;
                     }
                     if (newCallInfo.state == pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)
@@ -118,29 +119,19 @@ namespace VoiceX.Services
                 Debug.WriteLine($"[CALL] Ошибка при добавлении участника: {ex.Message}");
             }
         }
-        private static void MergeCalls(CallService call1, CallService call2)
+        private static void MergeCalls(List<CallService> callServices)
         {
             try
             {
-                //Endpoint ep = CoreService.Instance.Core;
-
-                AudioMedia call1Audio = call1.getAudioMedia(0);
-                AudioMedia call2Audio = call2.getAudioMedia(0);
-
-                if (call1Audio != null && call2Audio != null)
+                AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
+                foreach (CallService call in callServices) 
                 {
-                    // Создаём аудиомост между звонками
-                    call1Audio.startTransmit(call2Audio);
-                    call2Audio.startTransmit(call1Audio);
-                    AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
-
-                    call1Audio.startTransmit(speaker);
-                    call2Audio.startTransmit(speaker);
-                    Debug.WriteLine("[CALL] Вызовы успешно объединены в конференцию.");
-                }
-                else
-                {
-                    Debug.WriteLine("[CALL] Ошибка: один из вызовов не имеет аудиопотока.");
+                    AudioMedia callAudio = call.getAudioMedia(0);
+                    if (callAudio != null)
+                    {
+                        callAudio.startTransmit(callAudio);
+                        callAudio.startTransmit(speaker);
+                    }  
                 }
             }
             catch (Exception ex)

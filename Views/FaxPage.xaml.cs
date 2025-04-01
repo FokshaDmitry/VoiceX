@@ -119,6 +119,7 @@ namespace VoiceX.Views
                     }
                     if (faxFileItems.Count != 0 && faxFileItems.Count() != 0)
                     {
+                        ProfilePage.window!.LoadIcone.Visibility = Visibility.Visible;
                         foreach (var file in faxFileItems)
                         {
                             if (file.File.Value.Length != 0)
@@ -127,6 +128,7 @@ namespace VoiceX.Views
                                 Files?.Remove(file.File.Key);
                             }
                         }
+                        ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
                     }
                     else
                     {

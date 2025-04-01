@@ -25,17 +25,15 @@ namespace VoiceX.Views.ControlPages
         private bool toggele;
         public RegExItem? SelectItem { get; set; }
         LocalStoreService storeService;
-        AddDbContext dbContext;
         public delegate void ChangeKey();
         public event ChangeKey? OnChangeKey;
         public ClickToCallPage()
         {
             this.InitializeComponent();
-            MainTab = 4;
+            MainTab = 1;
             KeyLetter = "S";
             toggele = false;
             storeService = new LocalStoreService();
-            dbContext = new AddDbContext();
         }
         private async void ClickToCall_Loaded(object sender, RoutedEventArgs e)
         {
@@ -44,7 +42,7 @@ namespace VoiceX.Views.ControlPages
             var mainKey = await storeService.LoadDataAsync("key");
             if(!String.IsNullOrEmpty(mainTab) && !String.IsNullOrEmpty(mainKey))
             {
-                MainTab = int.Parse(mainTab);
+                int.TryParse(mainTab, out MainTab);
                 KeyLetter = mainKey;
                 switch (MainTab)
                 {
@@ -136,7 +134,9 @@ namespace VoiceX.Views.ControlPages
         }
         private async void HotKeyBox_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+            var key = e.SystemKey == Key.None ? e.Key : e.SystemKey;
+            
+            switch (key)
             {
                 case Key.LeftCtrl:
                     HotKeyBox.Text = "CTRL + ";
@@ -158,11 +158,29 @@ namespace VoiceX.Views.ControlPages
                     MainTab = 4;
                     toggele = true;
                     break;
+                case Key.LeftAlt:
+                    HotKeyBox.Text = "ALT + ";
+                    MainTab = 1;
+                    toggele = true;
+                    break;
+                case Key.RightAlt:
+                    HotKeyBox.Text = "ALT + ";
+                    MainTab = 1;
+                    toggele = true;
+                    break;
                 default:
-                    if (toggele)
+                    if (MainTab == 2)
                     {
-                        HotKeyBox.Text += e.Key.ToString();
-                        KeyLetter = e.Key.ToString();
+                        if (key.ToString() == "C")
+                        {
+                            toggele = false;
+                        }
+                    }
+                    if (toggele && !key.ToString().Contains("Oem"))
+                    {
+                        KeyConverter keyConverter = new KeyConverter();
+                        KeyLetter = keyConverter.ConvertToString(key)!;
+                        HotKeyBox.Text += KeyLetter;
                         toggele = false;
                         await storeService.SaveDataAsync("mainkey", MainTab.ToString());
                         await storeService.SaveDataAsync("key", KeyLetter);
@@ -177,7 +195,8 @@ namespace VoiceX.Views.ControlPages
         }
         private void HotKeyBox_KeyUp(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+            var key = e.SystemKey == Key.None ? e.Key : e.SystemKey;
+            switch (key)
             {
                 case Key.LeftCtrl:
                     if (toggele)
@@ -207,6 +226,22 @@ namespace VoiceX.Views.ControlPages
                     if (toggele)
                     {
                         HotKeyBox.Text = "Shift + (invalid)";
+                        MainTab = 0;
+                        toggele = false;
+                    }
+                    break;
+                case Key.LeftAlt:
+                    if (toggele)
+                    {
+                        HotKeyBox.Text = "ALT + (invalid)";
+                        MainTab = 0;
+                        toggele = false;
+                    }
+                    break;
+                case Key.RightAlt:
+                    if (toggele)
+                    {
+                        HotKeyBox.Text = "ALT + (invalid)";
                         MainTab = 0;
                         toggele = false;
                     }

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace VoiceX.Services
 {
@@ -85,10 +86,21 @@ namespace VoiceX.Services
             catch
             {
                 Key = "S";
-                MainKey = 4;
+                MainKey = 1;
             }
-            TypeConverter converter = TypeDescriptor.GetConverter(typeof(Keys));
-            Keys keys1 = (Keys)converter.ConvertFromString(Key)!;
+            Keys keys1 = new Keys();
+            
+            try
+            {
+                keys1 = (Keys)char.Parse(Key);
+            }
+            catch
+            {
+                keys1 = (Keys)char.Parse("S");
+                MainKey = 1;
+                await storeService.SaveDataAsync("mainkey", "1");
+                await storeService.SaveDataAsync("key", "S");
+            }
             if (!String.IsNullOrEmpty(Key.ToString()) && MainKey > 0)
             {
                 RegisterCombo(RegistId, MainKey, keys1);
