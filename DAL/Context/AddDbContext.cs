@@ -13,12 +13,7 @@ namespace VoiceX.DAL.Context
     {
         public delegate void Update(HistoryNotes historyNote);
         public static event Update? ChangeHystory;
-        public AddDbContext()
-        {
-            InitializeDB();
-        }
-        public Delegate Uadete { get; set; }
-        private async void InitializeDB()
+        public async void InitializeDB()
         {
             var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
             if (!Directory.Exists(path))
@@ -56,16 +51,6 @@ namespace VoiceX.DAL.Context
                     "Domain TEXT NOT NULL, " +
                     "Level TEXT NOT NULL, " +
                     "Message TEXT NOT NULL)";
-                SqliteCommand command = new SqliteCommand(initCmd, connection);
-                await command.ExecuteReaderAsync();
-                connection.Close();
-                connection.Dispose();
-            }
-            using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
-            {
-                await connection.OpenAsync();
-                string initCmd = "CREATE TABLE IF NOT EXISTS " +
-                    "Certificate(Id TEXT PRIMARY KEY)";
                 SqliteCommand command = new SqliteCommand(initCmd, connection);
                 await command.ExecuteReaderAsync();
                 connection.Close();
@@ -146,28 +131,6 @@ namespace VoiceX.DAL.Context
                 await sqliteCommand.ExecuteReaderAsync();
                 connection.Close();
                 connection.Dispose();
-            }
-        }
-        public async Task SaveCertificateAsunc(string b64P12)
-        {
-            if (!String.IsNullOrEmpty(b64P12))
-            {
-                var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
-                string openPathDB = Path.Combine(path + "\\HistoryDB.db");
-                using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
-                {
-                    await connection.OpenAsync();
-                    SqliteCommand sqliteCommand = new SqliteCommand
-                    {
-                        Connection = connection,
-                        CommandText = "INSERT INTO Certificate VALUES (@Id)"
-                    };
-                    sqliteCommand.Parameters.AddWithValue("@Id", b64P12);
-                    await sqliteCommand.ExecuteReaderAsync();
-                    connection.Close();
-                    connection.Dispose();
-
-                }
             }
         }
         public void AddNote(HistoryNotes historyNotes)

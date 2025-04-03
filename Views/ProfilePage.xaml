@@ -19,6 +19,25 @@
             </Setter>
         </Style>
         
+        <Style TargetType="ToolTip">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="HasDropShadow" Value="True"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToolTip">
+                        <Border CornerRadius="6" Padding="4" Background="White"
+                    BorderThickness="1"
+                     BorderBrush="#FFC1BFFF" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Storyboard x:Key="SlideUpAnimation">
             <DoubleAnimation Storyboard.TargetName="SlideTransform"
                          Storyboard.TargetProperty="Y"

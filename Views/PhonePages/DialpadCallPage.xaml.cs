@@ -18,22 +18,9 @@ namespace VoiceX.Views.PhonePages
     /// </summary>
     public sealed partial class DialpadCallPage : Page
     {
-
-        contacts_list contacts;
-        readonly WebService webService;
         public DialpadCallPage()
         {
             this.InitializeComponent();
-            this.Loaded += DialpadCallPage_Loaded;
-            webService = new WebService();
-            contacts = new contacts_list();
-            contacts.contacts = new List<Models.Contact>();
-        }
-        private async void DialpadCallPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            ProfilePage.window!.LoadIcone.Visibility = Visibility.Visible;
-            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
-            ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
         }
 
         private void CallButton_Click(object sender, RoutedEventArgs e)
@@ -63,15 +50,6 @@ namespace VoiceX.Views.PhonePages
                     return;
                 }
                 NumberFild.Text = "";
-            }
-        }
-
-        private void ContactList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            CallItem callItem = (CallItem)ContactList.SelectedItem;
-            if (callItem != null)
-            {
-                CallNumber(callItem.UserPhone);
             }
         }
 
@@ -111,15 +89,6 @@ namespace VoiceX.Views.PhonePages
                 else
                 {
                     Backspace.Visibility = Visibility.Visible; 
-                }
-                if (contacts.contacts!.Count > 0)
-                {
-                    ContactList.Items.Clear();
-                    var contact = contacts.contacts.Where(c => c.Telephone!.Contains(NumberFild.Text)).FirstOrDefault();
-                    if (contact != null && !String.IsNullOrEmpty(NumberFild.Text))
-                    {
-                        ContactList.Items.Add(new CallItem(contact.Name!, contact.Telephone!));
-                    }
                 }
             }
             catch

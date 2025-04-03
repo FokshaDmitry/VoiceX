@@ -90,11 +90,9 @@
     <None Remove="Assets\Icone_v2\LinePhone.png" />
     <None Remove="Assets\Icone_v2\ListChek.png" />
     <None Remove="Assets\Icone_v2\LodingIcone.gif" />
-    <None Remove="Assets\Icone_v2\mdi_keypad.png" />
     <None Remove="Assets\Icone_v2\microphone.png" />
     <None Remove="Assets\Icone_v2\pause.png" />
     <None Remove="Assets\Icone_v2\phoneNavigate.png" />
-    <None Remove="Assets\Icone_v2\plus.png" />
     <None Remove="Assets\Icone_v2\refresh.png" />
     <None Remove="Assets\Icone_v2\refreshblue.png" />
     <None Remove="Assets\Icone_v2\Reload.png" />
@@ -288,9 +286,6 @@
     <Resource Include="Assets\Icone_v2\LodingIcone.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\mdi_keypad.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Assets\Icone_v2\microphone.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -298,9 +293,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\phoneNavigate.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\plus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\refresh.png">
@@ -348,6 +340,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Assets\Icone_v2\mdi_keypad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Icone_v2\plus.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Assets\Ring\iphone-11-pro.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

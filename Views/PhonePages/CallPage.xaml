@@ -20,11 +20,6 @@
             </Setter>
         </Style>
         <Storyboard x:Key="RippleAnimation">
-            <!-- Анимация 1-го круга -->
-            <!--<DoubleAnimation Storyboard.TargetName="Ripple1"
-                                 Storyboard.TargetProperty="Opacity"
-                                 From="0" To="1" Duration="0:0:1" BeginTime="0:0:0"
-                                 AutoReverse="True" RepeatBehavior="Forever"/>-->
             <DoubleAnimation Storyboard.TargetName="Ripple1"
                                  Storyboard.TargetProperty="Width"
                                  From="49" To="67" Duration="0:0:1" BeginTime="0:0:0"
@@ -33,12 +28,6 @@
                                  Storyboard.TargetProperty="Height"
                                  From="49" To="67" Duration="0:0:1" BeginTime="0:0:0"
                                  RepeatBehavior="Forever"/>
-
-            <!-- Анимация 2-го круга (задержка 0.3 сек) -->
-            <!--<DoubleAnimation Storyboard.TargetName="Ripple2"
-                                 Storyboard.TargetProperty="Opacity"
-                                 From="0" To="1" Duration="0:0:1" BeginTime="0:0:0.3"
-                                 AutoReverse="True" RepeatBehavior="Forever"/>-->
             <DoubleAnimation Storyboard.TargetName="Ripple2"
                                  Storyboard.TargetProperty="Width"
                                  From="67" To="82" Duration="0:0:1" BeginTime="0:0:0.3"

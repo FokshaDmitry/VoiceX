@@ -19,12 +19,31 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style TargetType="ToolTip">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="HasDropShadow" Value="True"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToolTip">
+                        <Border CornerRadius="6" Padding="4" Background="White"
+            BorderThickness="1"
+             BorderBrush="#FFC1BFFF" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
     <Grid>
         <Grid VerticalAlignment="Top">
             <TextBlock Text="Dail Transform" x:Name="DailText" FontFamily="Nunito Sans 10pt Normal" Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,5,0,0" FontSize="16"/>
             <Border Height="24" Margin="16,27,16,0" CornerRadius="6" BorderBrush="#FFBBBAFF" Background="Transparent" BorderThickness="1">
-                <TextBox BorderThickness="0" Cursor="Hand" ToolTipService.ToolTip="Change control combination" ToolTipService.Placement="Mouse" Background="Transparent" x:Name="HotKeyBox" IsReadOnly="True" KeyDown="HotKeyBox_KeyDown" KeyUp="HotKeyBox_KeyUp" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Height="24" MinWidth="150" FontWeight="Normal" Padding="6,4,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Foreground="#FF252422" BorderBrush="#FFBBBAFF"/>
+                <TextBox BorderThickness="0" ToolTip="Change control combination" Cursor="Hand" ToolTipService.ToolTip="Change control combination" ToolTipService.Placement="Mouse" Background="Transparent" x:Name="HotKeyBox" IsReadOnly="True" KeyDown="HotKeyBox_KeyDown" KeyUp="HotKeyBox_KeyUp" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Height="24" MinWidth="150" FontWeight="Normal" Padding="6,4,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Foreground="#FF252422" BorderBrush="#FFBBBAFF"/>
             </Border>
             <Image Width="14" Height="14" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,25,5">
                 <Image.Source>

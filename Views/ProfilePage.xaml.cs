@@ -286,6 +286,7 @@ namespace VoiceX.Views
         private async void ControlPage_Loaded(object sender, RoutedEventArgs e)
         {
             addDbContext = new AddDbContext();
+            addDbContext.InitializeDB();
             var account = App.AccountData?.Data.Sip_Settings;
             LDAPService?.Authenticate(App.AccountData?.Data.Ldap_Settings.Dn!, App.AccountData?.Data.Ldap_Settings.Pass!);
             string mic = await localStoreService.LoadDataAsync("micro");
