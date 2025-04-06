@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -17,18 +18,13 @@ namespace VoiceX.Views
     public sealed partial class HistoryPage : Page, IMoreItems  
     {
         readonly AddDbContext addDbContext;
-        readonly List<HistoryNote> histories;
         RadioButton filter;
-        readonly WebService webService;
-        
         public HistoryPage()
         {
             this.InitializeComponent();
             addDbContext = new AddDbContext();
-            histories = new List<HistoryNote>();
             addDbContext = new AddDbContext();
             filter = new RadioButton();
-            webService = new WebService();
             AddDbContext.ChangeHystory += AddDbContext_ChangeHystory;
         }
 
@@ -36,7 +32,7 @@ namespace VoiceX.Views
         {
             var time = historyNote.EndDialog - historyNote.StartDialog;
             string textTime = time.Minutes == 0 ? $"({time.Seconds}s.)" : $"({time.Minutes}m. {time.Seconds}s.)";
-            var note = new HistoryNote(historyNote.Name, historyNote.Phone, historyNote.StartDialog, textTime, historyNote.StatusCall);
+            var note = new HistoryNote(historyNote.Name!, historyNote.Phone!, historyNote.StartDialog, textTime, historyNote.StatusCall);
             if (filter.Name == "OutCall" && historyNote.StatusCall == Enums.StatusCall.Outgoing)
             {
                 if (HistoryList.Items.Count == 0)
@@ -85,13 +81,18 @@ namespace VoiceX.Views
         }
 
         private void HistoryPage_Loaded(object sender, RoutedEventArgs e)
-        {         
+        {
             List<HistoryNotes> historyNotes = addDbContext.GetNotes(50);
+            FillListBox(historyNotes, 0);
+            filter.Name = "AllCall";
+        }
+        public void FillListBox(List<HistoryNotes> historyNotes, int quality)
+        {
             HistoryList.Items.Clear();
-            histories.Clear();
             var groupNote = historyNotes.GroupBy(h => h.EndDialog.Date).OrderByDescending(h => h.Key);
             foreach (var group in groupNote)
             {
+                quality++;
                 HistoryList.Items.Add(new HeadingContactList(group.Key.ToString("d.M.yyyy")));
                 foreach (var Note in group.OrderByDescending(h => h.EndDialog))
                 {
@@ -105,16 +106,14 @@ namespace VoiceX.Views
                     {
                         textTime = "(0s.)";
                     }
-                    var note = new HistoryNote(Note.Name, Note.Phone, Note.EndDialog, textTime, Note.StatusCall);
+                    var note = new HistoryNote(Note.Name!, Note.Phone!, Note.EndDialog, textTime, Note.StatusCall);
                     HistoryList.Items.Add(note);
-                    histories.Add(note);
                 }
             }
-            if (histories.Count == 50)
+            if (HistoryList.Items.Count == quality + 50)
             {
                 HistoryList.Items.Add(new MoreItems(this));
             }
-            filter.Name = "AllCall";
         }
         private void Filter_Checked(object sender, RoutedEventArgs e)
         {
@@ -127,7 +126,6 @@ namespace VoiceX.Views
             var textCalor = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
             var darkTextColor = new SolidColorBrush(Color.FromArgb(255, 37, 36, 34));
             var whiteLine = new SolidColorBrush(Color.FromArgb(255, 245, 246, 247));
-            HistoryList.Items.Clear();
             if (filter.Name == "OutCall")
             {
                 AllText.Foreground = textCalor;
@@ -140,14 +138,9 @@ namespace VoiceX.Views
                 ChekIn.Background = whiteLine;
                 CheckAll.Background = whiteLine;
                 ChekIgnore.Background = whiteLine;
-                foreach (var group in histories.Where(h => h.statusCall == Enums.StatusCall.Outgoing).GroupBy(h => h.dateCall.Date).OrderByDescending(h => h.Key))
-                {
-                    HistoryList.Items.Add(new HeadingContactList(group.Key.ToString("d.M.yyyy")));
-                    foreach (var note in group.OrderByDescending(g => g.dateCall))
-                    {
-                        HistoryList.Items.Add(note);
-                    }
-                }
+
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(50, Enums.StatusCall.Outgoing);
+                FillListBox(historyNotes, 0);
             }
             else if(filter.Name == "InCall")
             {
@@ -160,14 +153,9 @@ namespace VoiceX.Views
                 ChekIn.Background = blueLine;
                 CheckAll.Background = whiteLine;
                 ChekIgnore.Background = whiteLine;
-                foreach (var group in histories.Where(h => h.statusCall == Enums.StatusCall.Incoming).GroupBy(h => h.dateCall.Date).OrderByDescending(h => h.Key))
-                {
-                    HistoryList.Items.Add(new HeadingContactList(group.Key.ToString("d.M.yyyy")));
-                    foreach (var note in group.OrderByDescending(g => g.dateCall))
-                    {
-                        HistoryList.Items.Add(note);
-                    }
-                }
+
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(50, Enums.StatusCall.Incoming);
+                FillListBox(historyNotes, 0);
             }
             else if(filter.Name == "AllCall")
             {
@@ -180,14 +168,9 @@ namespace VoiceX.Views
                 ChekIn.Background = whiteLine;
                 CheckAll.Background = blueLine;
                 ChekIgnore.Background = whiteLine;
-                foreach (var group in histories.GroupBy(h => h.dateCall.Date).OrderByDescending(h => h.Key))
-                {
-                    HistoryList.Items.Add(new HeadingContactList(group.Key.ToString("d.M.yyyy")));
-                    foreach (var note in group.OrderByDescending(g => g.dateCall))
-                    {
-                        HistoryList.Items.Add(note);
-                    }
-                }
+
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(50);
+                FillListBox(historyNotes, 0);
             }
             else if (filter.Name == "IgnoreCall")
             {
@@ -200,40 +183,34 @@ namespace VoiceX.Views
                 ChekIn.Background = whiteLine;
                 CheckAll.Background = whiteLine;
                 ChekIgnore.Background = blueLine;
-                foreach (var group in histories.Where(h => h.statusCall == Enums.StatusCall.Ignore || h.statusCall == Enums.StatusCall.IncomeIgnore).GroupBy(h => h.dateCall.Date).OrderByDescending(h => h.Key))
-                {
-                    HistoryList.Items.Add(new HeadingContactList(group.Key.ToString("d.M.yyyy")));
-                    foreach (var note in group.OrderByDescending(g => g.dateCall))
-                    {
-                        HistoryList.Items.Add(note);
-                    }
-                }
+
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(50, Enums.StatusCall.Ignore);
+                FillListBox(historyNotes, 0);
             }
         }
 
         public void AddMoreNotes()
         {
-            int currentItems = histories.Count;
-            List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50);
-            HistoryList.Items.Clear();
-            histories.Clear();
-            var groupNote = historyNotes.GroupBy(h => h.StartDialog.Date).OrderByDescending(h => h.Key);
-            foreach (var group in groupNote)
+            int currentItems = HistoryList.Items.Count;
+            if (filter.Name == "OutCall")
             {
-                HistoryList.Items.Add(new HeadingContactList(group.Key.ToString("d.M.yyyy")));
-                foreach (var Note in group.OrderByDescending(h => h.StartDialog))
-                {
-                    var time = Note.EndDialog - Note.StartDialog;
-                    string textTime = time.Minutes == 0 ? $"({time.Seconds}s.)" : $"({time.Minutes}m. {time.Seconds}s.)";
-
-                    var note = new HistoryNote(Note.Name, Note.Phone, Note.StartDialog, textTime, Note.StatusCall);
-                    HistoryList.Items.Add(note);
-                    histories.Add(note);
-                }
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50, Enums.StatusCall.Outgoing);
+                FillListBox(historyNotes, 0);
             }
-            if (histories.Count == currentItems + 50)
+            else if (filter.Name == "InCall")
             {
-                HistoryList.Items.Add(new MoreItems(this));
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50, Enums.StatusCall.Incoming);
+                FillListBox(historyNotes, 0);
+            }
+            else if (filter.Name == "AllCall")
+            {
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50);
+                FillListBox(historyNotes, 0);
+            }
+            else if (filter.Name == "IgnoreCall")
+            {
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50, Enums.StatusCall.Ignore);
+                FillListBox(historyNotes, 0);
             }
         }
     }

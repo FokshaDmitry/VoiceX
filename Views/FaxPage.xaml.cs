@@ -151,25 +151,25 @@ namespace VoiceX.Views
         }
         private void SelectFileViwe_DragEnter(object sender, System.Windows.DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                e.Effects = System.Windows.DragDropEffects.Copy;
+                e.Effects = DragDropEffects.Copy;
             }
             else
             {
-                e.Effects = System.Windows.DragDropEffects.None;
+                e.Effects = DragDropEffects.None;
             }
 
         }
         private void SelectFileViwe_DragOver(object sender, System.Windows.DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                e.Effects = System.Windows.DragDropEffects.Copy;
+                e.Effects = DragDropEffects.Copy;
             }
             else
             {
-                e.Effects = System.Windows.DragDropEffects.None;
+                e.Effects = DragDropEffects.None;
             }
         }
         public void RemoveFile(FaxFileItem faxFileItem)

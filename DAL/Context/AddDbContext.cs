@@ -225,7 +225,52 @@ namespace VoiceX.DAL.Context
                 using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
                 {
                     connection.Open();
-                    string command = $"SELECT * FROM History ORDER BY datetime(StartDialog) DESC LIMIT {NumberItems};";
+                    string command = $"SELECT * FROM History ORDER BY datetime(EndDialog) DESC LIMIT {NumberItems};";
+                    SqliteCommand sqliteCommand = new SqliteCommand(command, connection);
+                    var reader = sqliteCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        historyNotes.Add(new HistoryNotes { Id = Guid.Parse(reader.GetString(0)), Name = reader.GetString(1), Phone = reader.GetString(2), StatusCall = reader.GetString(3) == "Outgoing" ? StatusCall.Outgoing : reader.GetString(3) == "Incoming" ? StatusCall.Incoming : reader.GetString(3) == "Ignore" ? StatusCall.Ignore : StatusCall.IncomeIgnore, StartDialog = DateTime.Parse(reader.GetString(4)), EndDialog = DateTime.Parse(reader.GetString(5)) });
+                    }
+                    connection.Close();
+                    connection.Dispose();
+                }
+            }
+            catch
+            {
+                return historyNotes;
+            }
+            return historyNotes;
+        }
+        public List<HistoryNotes> GetNotes(int NumberItems, StatusCall statusCall)
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+            List<HistoryNotes> historyNotes = new List<HistoryNotes>();
+            string openPathDB = Path.Combine(path + "\\HistoryDB.db");
+            string filter = "";
+            switch (statusCall)
+            {
+                case StatusCall.Outgoing:
+                    filter = "'Outgoing'";
+                    break;
+                case StatusCall.Incoming:
+                    filter = "'Incoming'";
+                    break;
+                case StatusCall.Ignore:
+                    filter = "'IncomeIgnore', 'Ignore'";
+                    break;
+                case StatusCall.IncomeIgnore:
+                    filter = "'IncomeIgnore', 'Ignore'";
+                    break;
+                default:
+                    break;
+            }
+            try
+            {
+                using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
+                {
+                    connection.Open();
+                    string command = $"SELECT * FROM History WHERE StatusCall IN ({filter}) ORDER BY datetime(EndDialog) DESC LIMIT {NumberItems};";
                     SqliteCommand sqliteCommand = new SqliteCommand(command, connection);
                     var reader = sqliteCommand.ExecuteReader();
                     while (reader.Read())

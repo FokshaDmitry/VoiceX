@@ -27,13 +27,13 @@
                     <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" MaxHeight="145" Background="Transparent" DragEnter="SelectFileViwe_DragEnter" DragOver="SelectFileViwe_DragOver" AllowDrop="True" Drop="SelectFileViwe_Drop" Grid.Row="0" x:Name="SelectFileViwe" Margin="0,15,0,5"  HorizontalAlignment="Center" MinWidth="100" HorizontalContentAlignment="Center" Width="213" VerticalAlignment="Top" Height="145" >
 
                     </ListBox>
-                    <Grid Grid.Row="1" Margin="10,0,0,0">
+                    <Grid Grid.Row="1">
                         <Grid.Resources>
                             <Style TargetType="Button">
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="Button">
-                                            <Border Cursor="Hand" Background="#FF8A63FB" CornerRadius="15">
+                                            <Border Cursor="Hand" Background="#FFE5E5FF" CornerRadius="6">
                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             </Border>
                                         </ControlTemplate>
@@ -41,11 +41,11 @@
                                 </Setter>
                             </Style>
                         </Grid.Resources>
-                        <Button BorderThickness="0" ToolTipService.ToolTip="Send Fax" ToolTipService.Placement="Mouse" Grid.Column="1" Content="Send" x:Name="Send" Click="Send_Click" VerticalAlignment="Top" Margin="0,275,10,0" Background="#FF8A63FB" Width="148" Height="32" FontSize="18" FontFamily="Jost" Foreground="#E4FFFFFF" Padding="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
-                        <Border Padding="1" CornerRadius="4" BorderThickness="1" VerticalAlignment="Top" BorderBrush="#FFBBBAFF" Width="213" Height="32" Margin="0,173,0,0">
+                        <Button BorderThickness="0" ToolTipService.ToolTip="Send Fax" ToolTipService.Placement="Mouse" Grid.Column="1" Content="Send" x:Name="Send" Click="Send_Click" VerticalAlignment="Top" Margin="0,275,0,0" Background="#FF8A63FB" Width="213" Height="36" FontSize="18" FontFamily="Jost" Foreground="#FF7B76FF" Padding="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        <Border Padding="1" CornerRadius="4" BorderThickness="1" VerticalAlignment="Top" BorderBrush="#FFD1D0FF" Width="213" Height="32" Margin="0,173,0,0">
                             <TextBox GotFocus="FaxNumber_GotFocus" LostFocus="FaxNumber_LostFocus" Text="Fax number" BorderThickness="0" Grid.Column="1" x:Name="FaxNumber" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFC3C3C4" Padding="6,0,6,0" FontSize="14"  VerticalContentAlignment="Center"/>
                         </Border>
-                        <Border Padding="1" CornerRadius="4" BorderThickness="1" VerticalAlignment="Top" BorderBrush="#FFBBBAFF" Width="213" Height="32"  Margin="0,219,0,0">
+                        <Border Padding="1" CornerRadius="4" BorderThickness="1" VerticalAlignment="Top" BorderBrush="#FFD1D0FF" Width="213" Height="32"  Margin="0,219,0,0">
                             <TextBox GotFocus="FaxEmail_GotFocus" LostFocus="FaxEmail_LostFocus" Text="Notify Email" BorderThickness="0" Grid.Column="1" x:Name="FaxEmail"  FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="#FFC3C3C4" Padding="6,6,6,0" FontSize="14"/>
                         </Border>
                     </Grid>
