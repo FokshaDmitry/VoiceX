@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -9,7 +8,6 @@ using VoiceX.DAL.Context;
 using VoiceX.DAL.Entity;
 using VoiceX.Interfeces;
 using VoiceX.Items;
-using VoiceX.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -195,22 +193,22 @@ namespace VoiceX.Views
             if (filter.Name == "OutCall")
             {
                 List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50, Enums.StatusCall.Outgoing);
-                FillListBox(historyNotes, 0);
+                FillListBox(historyNotes, currentItems);
             }
             else if (filter.Name == "InCall")
             {
                 List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50, Enums.StatusCall.Incoming);
-                FillListBox(historyNotes, 0);
+                FillListBox(historyNotes, currentItems);
             }
             else if (filter.Name == "AllCall")
             {
                 List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50);
-                FillListBox(historyNotes, 0);
+                FillListBox(historyNotes, currentItems);
             }
             else if (filter.Name == "IgnoreCall")
             {
                 List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50, Enums.StatusCall.Ignore);
-                FillListBox(historyNotes, 0);
+                FillListBox(historyNotes, currentItems);
             }
         }
     }

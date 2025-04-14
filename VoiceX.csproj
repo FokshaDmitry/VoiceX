@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <TargetFramework>net9.0-windows7.0</TargetFramework>
     <ApplicationIcon>Logo256.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
     <Platforms>AnyCPU;x86;x64</Platforms>
@@ -58,42 +58,43 @@
     <None Remove="Assets\Icone_v2\BackgroundTopElement.png" />
     <None Remove="Assets\Icone_v2\Backspace.png" />
     <None Remove="Assets\Icone_v2\Box.png" />
-    <None Remove="Assets\Icone_v2\calendar.png" />
     <None Remove="Assets\Icone_v2\carbon_order-details.png" />
-    <None Remove="Assets\Icone_v2\ClockCount.png" />
     <None Remove="Assets\Icone_v2\Cloud.png" />
     <None Remove="Assets\Icone_v2\Coffee.png" />
     <None Remove="Assets\Icone_v2\ContactInfo.png" />
     <None Remove="Assets\Icone_v2\ContactMessage.png" />
     <None Remove="Assets\Icone_v2\ContactPhone.png" />
-    <None Remove="Assets\Icone_v2\contactsNavigate.png" />
     <None Remove="Assets\Icone_v2\Copy.png" />
     <None Remove="Assets\Icone_v2\Devise.png" />
     <None Remove="Assets\Icone_v2\Doc.png" />
     <None Remove="Assets\Icone_v2\Error.png" />
     <None Remove="Assets\Icone_v2\exitApp.png" />
-    <None Remove="Assets\Icone_v2\faxNavigate.png" />
     <None Remove="Assets\Icone_v2\FileIcone.png" />
     <None Remove="Assets\Icone_v2\FileText.png" />
     <None Remove="Assets\Icone_v2\Folder.png" />
     <None Remove="Assets\Icone_v2\GreyUser.png" />
-    <None Remove="Assets\Icone_v2\historyNavigate.png" />
-    <None Remove="Assets\Icone_v2\homeNavigate.png" />
+    <None Remove="Assets\Icone_v2\Icon-Clock.png" />
+    <None Remove="Assets\Icone_v2\Icon-House.png" />
+    <None Remove="Assets\Icone_v2\Icon-Phone-Menu.png" />
     <None Remove="Assets\Icone_v2\Icon-Phone.png" />
     <None Remove="Assets\Icone_v2\Icon-PhoneSlash.png" />
+    <None Remove="Assets\Icone_v2\Icon-Printer.png" />
+    <None Remove="Assets\Icone_v2\Icon-Subtitles.png" />
+    <None Remove="Assets\Icone_v2\Icon-User.png" />
     <None Remove="Assets\Icone_v2\icon16.ico" />
     <None Remove="Assets\Icone_v2\icon24.ico" />
     <None Remove="Assets\Icone_v2\icon48.ico" />
     <None Remove="Assets\Icone_v2\illustration.png" />
     <None Remove="Assets\Icone_v2\Key.png" />
-    <None Remove="Assets\Icone_v2\Keyboard.png" />
     <None Remove="Assets\Icone_v2\LinePhone.png" />
     <None Remove="Assets\Icone_v2\ListChek.png" />
     <None Remove="Assets\Icone_v2\LodingIcone.gif" />
+    <None Remove="Assets\Icone_v2\mdi_keypad.png" />
     <None Remove="Assets\Icone_v2\microphone.png" />
     <None Remove="Assets\Icone_v2\pause.png" />
-    <None Remove="Assets\Icone_v2\phoneNavigate.png" />
+    <None Remove="Assets\Icone_v2\plus.png" />
     <None Remove="Assets\Icone_v2\refresh.png" />
+    <None Remove="Assets\Icone_v2\refreshblue.png" />
     <None Remove="Assets\Icone_v2\Reload.png" />
     <None Remove="Assets\Icone_v2\SmartPhone.png" />
     <None Remove="Assets\Icone_v2\SpeakerHigh.png" />
@@ -102,7 +103,6 @@
     <None Remove="Assets\Icone_v2\TransferCall.png" />
     <None Remove="Assets\Icone_v2\trash.png" />
     <None Remove="Assets\Icone_v2\User-48.png" />
-    <None Remove="Assets\Icone_v2\UserTree.png" />
     <None Remove="Assets\Icone_v2\Warning.png" />
     <None Remove="Assets\Icone_v2\x.png" />
     <None Remove="Assets\Logo48.ico" />
@@ -137,11 +137,29 @@
     <Resource Include="Assets\Icone_v2\Avatar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Icone_v2\MenuItems\History.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\MenuItems\Profile.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\MenuItems\Dialpad.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Icone_v2\Icon-Phone.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Icon-PhoneSlash.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\MenuItems\Fax.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\MenuItems\Hotkey.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\MenuItems\Contacts.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\icon16.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -164,13 +182,7 @@
     <Resource Include="Assets\Icone_v2\Box.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\calendar.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Assets\Icone_v2\carbon_order-details.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\ClockCount.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Cloud.png">
@@ -186,9 +198,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\ContactPhone.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\contactsNavigate.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Copy.png">
@@ -210,12 +219,12 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NSwag.Core" Version="14.2.0" />
+    <PackageReference Include="NSwag.Core" Version="14.3.0" />
     <PackageReference Include="PDFsharp" Version="6.1.1" />
     <PackageReference Include="pjsip-pjsua2-cs" Version="2.10.1" />
-    <PackageReference Include="System.DirectoryServices.Protocols" Version="9.0.3" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -246,9 +255,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Icone_v2\faxNavigate.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Assets\Icone_v2\FileIcone.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -261,19 +267,10 @@
     <Resource Include="Assets\Icone_v2\GreyUser.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\historyNavigate.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\homeNavigate.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Assets\Icone_v2\illustration.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Key.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\Keyboard.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\LinePhone.png">
@@ -285,13 +282,16 @@
     <Resource Include="Assets\Icone_v2\LodingIcone.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Icone_v2\mdi_keypad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Icone_v2\microphone.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\pause.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\phoneNavigate.png">
+    <Resource Include="Assets\Icone_v2\plus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\refresh.png">
@@ -321,9 +321,6 @@
     <Resource Include="Assets\Icone_v2\User-48.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\UserTree.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Assets\Icone_v2\Warning.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -336,15 +333,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Assets\Icone_v2\mdi_keypad.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Icone_v2\plus.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Icone_v2\refreshblue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Assets\Ring\iphone-11-pro.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -414,8 +402,8 @@
     <None Update="VC_redist.x86.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="windowsdesktop-runtime-8.0.13-win-x86.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="windowsdesktop-runtime-9.0.4-win-x86.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
@@ -427,6 +415,12 @@
 
   <ItemGroup>
     <Folder Include="PrinterInstaller\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Icone_v2\refreshblue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

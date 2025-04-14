@@ -71,7 +71,7 @@
             <Button Cursor="Hand" Name="AutoAnswer" Click="AutoAnswer_Click"  VerticalAlignment="Top" Width="38" Height="38" Background="Transparent" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" BorderBrush="#FFDDDBFF" HorizontalAlignment="Left" Margin="5,65,0,0">
                 <Button.Content>
                     <StackPanel>
-                        <Image x:Name="AutoAnswerImage" Source="/Assets/Icone_v2/refresh.png" Width="20" Height="20" />
+                        <Image x:Name="AutoAnswerImage" Source="/Assets/Icone_v2/refreshblue.png" Width="20" Height="20" />
                     </StackPanel>
                 </Button.Content>
             </Button>
@@ -109,7 +109,7 @@
                             </TransformGroup>
                         </Image.RenderTransform>
                         <Image.Source>
-                            <BitmapImage UriSource="/Assets/Icone_v2/phoneNavigate.png" DecodePixelWidth="90" DecodePixelHeight="90"/>
+                            <BitmapImage UriSource="/Assets/Icone_v2/MenuItems/Dialpad.png" DecodePixelWidth="90" DecodePixelHeight="90"/>
                         </Image.Source>
                     </Image>
                 </Border>

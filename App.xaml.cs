@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using PdfScribeCore;
 using System.Threading.Tasks;
+using System.Text;
+using System.Runtime.InteropServices;
 
 namespace VoiceX
 {
@@ -26,6 +28,11 @@ namespace VoiceX
     /// </summary>
     public partial class App : Application
     {
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
         private const string PipeName = "VoiceXSingleInstance";
         private static Mutex mutex = new Mutex(true, "{VoiceX_Unique_Id}");
         public static Account_data? AccountData { get; set; }
@@ -33,15 +40,13 @@ namespace VoiceX
         public static string? userToken { get; set; }
         public static bool MyComputer {  get; set; }
         public static DateTime timeOut {  get; set; }
-        private FileSystemWatcher _watcher;
-        LocalStoreService _storeService;
+        private FileSystemWatcher? _watcher;
         public CoreService Core { get; } = CoreService.Instance;
         Endpoint core;
         private PdfScribeInstaller pdfScribeInstaller;
 
         public App()
         {
-            _storeService = new LocalStoreService();
             string exePath = AppDomain.CurrentDomain.BaseDirectory;
             String standardInputFilename = Path.GetTempFileName();
             String outputFilename = standardInputFilename + ".pdf";
@@ -146,7 +151,7 @@ namespace VoiceX
             timeOut = DateTime.Now;
             core = CoreService.Instance.Core;
         }
-        protected async override void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
             
@@ -320,7 +325,7 @@ namespace VoiceX
         public static string TTTHotKey_HotkeyPressed()
         {
 
-            string globalSelectedText;
+            string globalSelectedText = "";
             try
             {
                 globalSelectedText = ClipboardHelper.getGlobalSelectedText(); 

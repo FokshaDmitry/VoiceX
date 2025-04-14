@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -56,6 +57,7 @@ namespace VoiceX.Views
         HotKeyPage hotKeyPage;
         AdditionPage additionPage;
         public IncomingWindow incomingWindow;
+        List<string> MenuIcons;
         public ProfilePage(MainWindow mainWindow)
         {
             this.InitializeComponent();
@@ -85,6 +87,7 @@ namespace VoiceX.Views
             incomingWindow = new IncomingWindow(mainWindow, this, activCallPage);
             LDAPService = new LDAPService();
             onlineToken = true;
+            MenuIcons = new List<string>();
             window.moveOnDialpad += Window_moveOnDialpad;
             window.moveOnContact += Window_moveOnContact;
             this.PreviewKeyDown += OnPreviewKeyDown;
@@ -285,6 +288,15 @@ namespace VoiceX.Views
         }
         private async void ControlPage_Loaded(object sender, RoutedEventArgs e)
         {
+            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Icone_v2", "MenuItems");
+            string[] fileNames = Directory.GetFiles(folderPath);
+
+            foreach (string file in fileNames)
+            {
+                var fileName = Path.GetFileName(file);
+                MenuIcons.Add(fileName.Replace(".png", ""));
+                
+            }
             addDbContext = new AddDbContext();
             addDbContext.InitializeDB();
             var account = App.AccountData?.Data.Sip_Settings;
@@ -357,7 +369,7 @@ namespace VoiceX.Views
         {
             //App.timeOut = DateTime.Now;
             var Navigate = (Button)sender;
-            switch (Navigate.Name)
+            switch (Navigate.ToolTip.ToString())
             {
                 case "Profile":
                     if (MainFrame.CanGoBack)
@@ -373,7 +385,7 @@ namespace VoiceX.Views
                     MainFrame.Navigate(clientsPage);
                     slide.Begin();
                     break;
-                case "Phone":
+                case "Dialpad":
                     if (CoreService.activeCall != null)
                     {
                         MainFrame.Navigate(activCallPage);
@@ -392,7 +404,7 @@ namespace VoiceX.Views
                     MainFrame.Navigate(faxPage);
                     slide.Begin();
                     break;
-                case "HotKeys":
+                case "Hotkeys":
                     MainFrame.Navigate(hotKeyPage);
                     slide.Begin();
                     break;
@@ -445,14 +457,10 @@ namespace VoiceX.Views
             if (Menu.Margin.Bottom == -50)
             {
                 Menu.Margin = new Thickness(0, 0, 0, 0);
-                Butter.Visibility = Visibility.Collapsed;
-                Cross.Visibility = Visibility.Visible;
             }
             else
             {
                 Menu.Margin = new Thickness(0, 0, 0, -50);
-                Butter.Visibility = Visibility.Visible;
-                Cross.Visibility = Visibility.Collapsed;
             }
         }
         private async void Pauses_Click(object sender, RoutedEventArgs e)
@@ -713,17 +721,6 @@ namespace VoiceX.Views
                 KeypadFild.Text = KeypadFild.Text.Substring(0, KeypadFild.Text.Length - 1);
             }
         }
-        private void Profile_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var Img = (Button)sender;
-            Img.Margin = new Thickness(Img.Margin.Left, Img.Margin.Top - 1, Img.Margin.Right, Img.Margin.Bottom);
-        }
-
-        private void Profile_MouseLeave(object sender, MouseEventArgs e)
-        {
-            var Img = (Button)sender;
-            Img.Margin = new Thickness(Img.Margin.Left, Img.Margin.Top + 1, Img.Margin.Right, Img.Margin.Bottom);
-        }
         private void OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             // Если нажата клавиша Backspace
@@ -805,6 +802,11 @@ namespace VoiceX.Views
                 magnifyingGlassEllipse.Stroke = magnifyingGlassColorBlack;
                 magnifyingGlassLine.Fill = magnifyingGlassColorBlack;
             }
+        }
+
+        private void Scroll_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
