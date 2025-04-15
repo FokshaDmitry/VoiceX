@@ -57,7 +57,7 @@ namespace VoiceX.Views
         HotKeyPage hotKeyPage;
         AdditionPage additionPage;
         public IncomingWindow incomingWindow;
-        List<string> MenuIcons;
+        Dictionary<int, string> MenuIcons;
         public ProfilePage(MainWindow mainWindow)
         {
             this.InitializeComponent();
@@ -87,7 +87,7 @@ namespace VoiceX.Views
             incomingWindow = new IncomingWindow(mainWindow, this, activCallPage);
             LDAPService = new LDAPService();
             onlineToken = true;
-            MenuIcons = new List<string>();
+            MenuIcons = new Dictionary<int, string>();
             window.moveOnDialpad += Window_moveOnDialpad;
             window.moveOnContact += Window_moveOnContact;
             this.PreviewKeyDown += OnPreviewKeyDown;
@@ -293,10 +293,11 @@ namespace VoiceX.Views
 
             foreach (string file in fileNames)
             {
-                var fileName = Path.GetFileName(file);
-                MenuIcons.Add(fileName.Replace(".png", ""));
-                
+                var fileName = Path.GetFileName(file).Split(";");
+                MenuIcons.Add(Convert.ToInt32(fileName[0]), fileName[1].Replace(".png", ""));
             }
+            var items = MenuIcons.OrderByDescending(m => m.Key);
+            
             addDbContext = new AddDbContext();
             addDbContext.InitializeDB();
             var account = App.AccountData?.Data.Sip_Settings;
@@ -367,7 +368,6 @@ namespace VoiceX.Views
         #region Navigete Button
         public void Navigate_Click(object sender, RoutedEventArgs e)
         {
-            //App.timeOut = DateTime.Now;
             var Navigate = (Button)sender;
             switch (Navigate.ToolTip.ToString())
             {
@@ -407,6 +407,9 @@ namespace VoiceX.Views
                 case "Hotkeys":
                     MainFrame.Navigate(hotKeyPage);
                     slide.Begin();
+                    break;
+                default:
+
                     break;
             }
         }

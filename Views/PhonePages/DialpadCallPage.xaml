@@ -66,7 +66,7 @@
                     <Border CornerRadius="50" Background="#FF06D665" Width="42" Height="42">
                         <Image Width="26" Height="26">
                             <Image.Source>
-                                <BitmapImage UriSource="/Assets/Icone_v2/MenuItems/Dialpad.png" DecodePixelWidth="90" DecodePixelHeight="90"/>
+                                <BitmapImage UriSource="/Assets/Icone_v2/Dialpad.png" DecodePixelWidth="90" DecodePixelHeight="90"/>
                             </Image.Source>
                         </Image>
                     </Border>

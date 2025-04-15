@@ -109,7 +109,7 @@
                             </TransformGroup>
                         </Image.RenderTransform>
                         <Image.Source>
-                            <BitmapImage UriSource="/Assets/Icone_v2/MenuItems/Dialpad.png" DecodePixelWidth="90" DecodePixelHeight="90"/>
+                            <BitmapImage UriSource="/Assets/Icone_v2/Dialpad.png" DecodePixelWidth="90" DecodePixelHeight="90"/>
                         </Image.Source>
                     </Image>
                 </Border>

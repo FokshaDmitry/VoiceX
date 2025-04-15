@@ -66,6 +66,7 @@
     <None Remove="Assets\Icone_v2\ContactPhone.png" />
     <None Remove="Assets\Icone_v2\Copy.png" />
     <None Remove="Assets\Icone_v2\Devise.png" />
+    <None Remove="Assets\Icone_v2\Dialpad.png" />
     <None Remove="Assets\Icone_v2\Doc.png" />
     <None Remove="Assets\Icone_v2\Error.png" />
     <None Remove="Assets\Icone_v2\exitApp.png" />
@@ -137,13 +138,16 @@
     <Resource Include="Assets\Icone_v2\Avatar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\History.png">
+    <Resource Include="Assets\Icone_v2\Dialpad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\MenuItems\4%3bHistory.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\Profile.png">
+    <Resource Include="Assets\Icone_v2\MenuItems\3%3bProfile.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\Dialpad.png">
+    <Resource Include="Assets\Icone_v2\MenuItems\1%3bDialpad.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Icon-Phone.png">
@@ -152,13 +156,13 @@
     <Resource Include="Assets\Icone_v2\Icon-PhoneSlash.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\Fax.png">
+    <Resource Include="Assets\Icone_v2\MenuItems\5%3bFax.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\Hotkey.png">
+    <Resource Include="Assets\Icone_v2\MenuItems\6%3bHotkey.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\Contacts.png">
+    <Resource Include="Assets\Icone_v2\MenuItems\2%3bContacts.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\icon16.ico">

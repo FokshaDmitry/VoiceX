@@ -79,7 +79,7 @@
                                 </Image.RenderTransform>
 
                                 <Image.Source>
-                                    <BitmapImage UriSource="/Assets/Icone_v2/phoneNavigate.png" DecodePixelWidth="80" DecodePixelHeight="80"/>
+                                    <BitmapImage UriSource="/Assets/Icone_v2/Dialpad.png" DecodePixelWidth="80" DecodePixelHeight="80"/>
                                 </Image.Source>
                             </Image>
                         </Border>
@@ -94,7 +94,7 @@
                         <Border CornerRadius="50" Background="#FF06D665" Width="49" Height="49">
                             <Image Width="24" Height="24">
                                 <Image.Source>
-                                    <BitmapImage UriSource="/Assets/Icone_v2/phoneNavigate.png" DecodePixelWidth="90" DecodePixelHeight="90"/>
+                                    <BitmapImage UriSource="/Assets/Icone_v2/Dialpad.png" DecodePixelWidth="90" DecodePixelHeight="90"/>
                                 </Image.Source>
                             </Image>
                         </Border>
