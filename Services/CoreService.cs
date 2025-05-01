@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using VoiceX.DAL.Context;
 
 namespace VoiceX.Services
 {
@@ -233,6 +234,7 @@ namespace VoiceX.Services
                 }
                 catch (Exception ex)
                 {
+                    activeCall = null;
                     Debug.WriteLine($"Ошибка при вызове: {ex.Message}");
                     return null!;
                 }
@@ -262,9 +264,16 @@ namespace VoiceX.Services
     }
     public class PjsipLogger : LogWriter
     {
-        public override void write(LogEntry entry)
+        AddDbContext dbContext;
+        public PjsipLogger()
+        {
+            dbContext = new AddDbContext();
+            dbContext.InitializeDB();
+        }
+        public async override void write(LogEntry entry)
         {
             Debug.WriteLine($"[{entry.level}] {entry.msg}");
+            await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = entry.level, Domain = entry.threadId.ToString(), Message = entry.msg, Created = DateTime.Now});
         }
     }
 }

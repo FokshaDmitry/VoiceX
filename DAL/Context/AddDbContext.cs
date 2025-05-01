@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
+using System.Globalization;
 
 namespace VoiceX.DAL.Context
 {
@@ -46,15 +48,51 @@ namespace VoiceX.DAL.Context
             using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
             {
                 await connection.OpenAsync().ConfigureAwait(true);
-                string initCmd = "CREATE TABLE IF NOT EXISTS " +
-                    "Loggin(Id TEXT PRIMARY KEY, " +
-                    "Domain TEXT NOT NULL, " +
-                    "Level TEXT NOT NULL, " +
-                    "Message TEXT NOT NULL)";
-                SqliteCommand command = new SqliteCommand(initCmd, connection);
-                await command.ExecuteReaderAsync();
+
+                // Имя таблицы
+                string tableName = "Loggin";
+
+                // Все нужные поля (ключ — имя поля, значение — SQL-определение)
+                var requiredColumns = new Dictionary<string, string>
+                {
+                    { "Id", "TEXT PRIMARY KEY" },
+                    { "Domain", "TEXT NOT NULL" },
+                    { "Level", "INT NOT NULL" },
+                    { "Created", "TEXT NOT NULL DEFAULT ''" },
+                    { "Message", "TEXT NOT NULL" }
+                };
+
+                // Создаём таблицу, если она ещё не существует (с базовой структурой)
+                string initCmd = $"CREATE TABLE IF NOT EXISTS {tableName} (" +
+                                 string.Join(", ", requiredColumns.Select(kvp => $"{kvp.Key} {kvp.Value}")) + ")";
+                var createCmd = new SqliteCommand(initCmd, connection);
+                await createCmd.ExecuteNonQueryAsync();
+
+                // Получаем текущие колонки в таблице
+                var existingColumns = new HashSet<string>();
+                string pragmaCmd = $"PRAGMA table_info({tableName});";
+                var pragma = new SqliteCommand(pragmaCmd, connection);
+                using (var reader = await pragma.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        string columnName = reader.GetString(1); // index 1 = name
+                        existingColumns.Add(columnName);
+                    }
+                }
+
+                // Добавляем недостающие поля
+                foreach (var kvp in requiredColumns)
+                {
+                    if (!existingColumns.Contains(kvp.Key))
+                    {
+                        string alterCmd = $"ALTER TABLE {tableName} ADD COLUMN {kvp.Key} {kvp.Value};";
+                        var alter = new SqliteCommand(alterCmd, connection);
+                        await alter.ExecuteNonQueryAsync();
+                    }
+                }
+
                 connection.Close();
-                connection.Dispose();
             }
             using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
             {
@@ -77,18 +115,27 @@ namespace VoiceX.DAL.Context
                 string openPathDB = Path.Combine(path + "\\HistoryDB.db");
                 using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
                 {
-                    await connection.OpenAsync().ConfigureAwait(true);
-                    SqliteCommand sqliteCommand = new SqliteCommand
+                    try
                     {
-                        Connection = connection,
-                        CommandText = "INSERT INTO Loggin VALUES (@Id, @Domain, @Level, @Message)"
-                    };
-                    sqliteCommand.Parameters.AddWithValue("@Id", logginNotes.Id.ToString());
-                    sqliteCommand.Parameters.AddWithValue("@Domain", logginNotes.Domain);
-                    sqliteCommand.Parameters.AddWithValue("@Message", logginNotes.Message);
-                    await sqliteCommand.ExecuteReaderAsync();
-                    connection.Close();
-                    connection.Dispose();
+                        await connection.OpenAsync().ConfigureAwait(true);
+                        SqliteCommand sqliteCommand = new SqliteCommand
+                        {
+                            Connection = connection,
+                            CommandText = "INSERT INTO Loggin VALUES (@Id, @Domain, @Level, @Message, @Created)"
+                        };
+                        sqliteCommand.Parameters.AddWithValue("@Id", logginNotes.Id.ToString());
+                        sqliteCommand.Parameters.AddWithValue("@Domain", logginNotes.Domain);
+                        sqliteCommand.Parameters.AddWithValue("@Level", logginNotes.Level);
+                        sqliteCommand.Parameters.AddWithValue("@Message", logginNotes.Message);
+                        sqliteCommand.Parameters.AddWithValue("@Created", logginNotes.Created);
+                        await sqliteCommand.ExecuteReaderAsync();
+                        connection.Close();
+                        connection.Dispose();
+                    }
+                    catch 
+                    {
+
+                    }
                 }
             }
         }
@@ -313,6 +360,28 @@ namespace VoiceX.DAL.Context
                 return hotKeyUsers;
             }
             return hotKeyUsers;
+        }
+        public async Task DeleteOldLogsAsync()
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+            string openPathDB = Path.Combine(path + "\\HistoryDB.db");
+            using (var connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWrite"))
+            {
+                await connection.OpenAsync().ConfigureAwait(false);
+
+                // Предполагаем, что поле Created содержит дату в формате "yyyy-MM-dd"
+                string today = DateTime.UtcNow.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                // Удаляем все записи, которые не соответствуют сегодняшней дате
+                string deleteCmd = "DELETE FROM Loggin WHERE date(Created) != @today;";
+                var command = new SqliteCommand(deleteCmd, connection);
+                command.Parameters.AddWithValue("@today", today);
+                int affectedRows = await command.ExecuteNonQueryAsync();
+
+                Console.WriteLine($"Удалено {affectedRows} записей старше {today}");
+
+                connection.Close();
+            }
         }
         public async Task DropDatabaseAsync()
         {

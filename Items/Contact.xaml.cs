@@ -42,7 +42,7 @@ namespace VoiceX.Items
                 {
                     phone = phone.Replace(regex?.Search!, regex?.Replace);
                 }
-                phone = Regex.Replace(phone, @"\D", "");
+                phone = Regex.Replace(phone, @"[^0-9*#]", "");
                 CoreService.Instance.MakeCall(phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
             }
             catch

@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using VoiceX.DAL.Context;
 using VoiceX.Enums;
 using VoiceX.Services;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using VoiceX.Views;
+using System.Linq;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -57,6 +61,11 @@ namespace VoiceX.Items
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
+            {
+                HotKeyPhone = HotKeyPhone.Replace(regex.Search!, regex.Replace);
+            }
+            HotKeyPhone = Regex.Replace(HotKeyPhone, @"^[0-9*#]", "");
             CoreService.Instance.MakeCall(HotKeyPhone, App.AccountData?.Data.Sip_Settings.Sip_server!);
         }
     }

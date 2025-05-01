@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using VoiceX.DAL.Context;
 using VoiceX.DAL.Entity;
 using VoiceX.Interfeces;
@@ -83,6 +84,10 @@ namespace VoiceX.Views
             List<HistoryNotes> historyNotes = addDbContext.GetNotes(50);
             FillListBox(historyNotes, 0);
             filter.Name = "AllCall";
+            if (ProfilePage.window != null)
+            {
+                ProfilePage.window.TrayIcon.IconSource = new BitmapImage(new Uri("pack://application:,,,/Assets/icone_v2/icon24.ico"));
+            }
         }
         public void FillListBox(List<HistoryNotes> historyNotes, int quality)
         {
@@ -120,10 +125,10 @@ namespace VoiceX.Views
             {
                 return;
             }
-            var blueLine = new SolidColorBrush(Color.FromArgb(255, 138, 99, 251));
+            var blueLine = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
             var textCalor = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
             var darkTextColor = new SolidColorBrush(Color.FromArgb(255, 37, 36, 34));
-            var whiteLine = new SolidColorBrush(Color.FromArgb(255, 245, 246, 247));
+            var whiteLine = new SolidColorBrush(Color.FromArgb(255, 240, 240, 255));
             if (filter.Name == "OutCall")
             {
                 AllText.Foreground = textCalor;

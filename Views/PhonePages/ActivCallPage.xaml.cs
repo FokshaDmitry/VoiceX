@@ -75,9 +75,9 @@ namespace VoiceX.Views.PhonePages
                                 {
                                     startCall = DateTime.Now;
                                     timeFlag = false;
-                                    if (ProfilePage.AutoAnswerNumbers!.Contains(info.remoteContact))
+                                    if (!ProfilePage.AutoAnswerNumbers!.Contains(info.remoteContact))
                                     {
-                                        AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 112, 80, 204));
+                                        AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
                                         AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refreshblue.png"));
                                     }
                                     else
@@ -227,15 +227,15 @@ namespace VoiceX.Views.PhonePages
                     if (!ProfilePage.AutoAnswerNumbers!.Contains(uri))
                     {
                         ProfilePage.AutoAnswerNumbers.Add(uri);
-                        AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 112, 80, 204));
-                        AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refreshblue.png"));
+                        AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
+                        AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refresh.png"));
                         await UpdateAutoAncwerCallList();
                     }
                     else
                     {
                         ProfilePage.AutoAnswerNumbers.Remove(uri);
-                        AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 137, 137, 137));
-                        AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refresh.png"));
+                        AutoAnswerText.Foreground = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+                        AutoAnswerImage.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icone_v2/refreshblue.png"));
                         await UpdateAutoAncwerCallList();
                     }
                 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using VoiceX.Items;
-using VoiceX.Models;
 using VoiceX.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -31,8 +28,8 @@ namespace VoiceX.Views.ClientPages
         private void Filter_Checked(object sender, RoutedEventArgs e)
         {
             RadioButton filter = (RadioButton)sender;
-            var blueLine = new SolidColorBrush(Color.FromArgb(255, 138, 99, 251));
-            var whiteLine = new SolidColorBrush(Color.FromArgb(255, 253, 254, 255));
+            var blueLine = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+            var whiteLine = new SolidColorBrush(Color.FromArgb(255, 240, 240, 255));
 
             if (filter.Name == "Operators")
             {
@@ -50,6 +47,8 @@ namespace VoiceX.Views.ClientPages
 
         private void contactsPage_Loaded(object sender, RoutedEventArgs e)
         {
+            Clients.IsChecked = false;
+            Operators.IsChecked = true;
             Clients.Checked += Filter_Checked;
             Operators.Checked += Filter_Checked;
             PageContent.Navigate(operatorsPage);

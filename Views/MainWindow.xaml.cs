@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
 using VoiceX.Services;
@@ -94,7 +95,6 @@ namespace VoiceX.Views
 
             double offsetX = 10;
             double offsetY = 50; 
-
             this.Left = screenWidth - this.Width - offsetX;
             this.Top = screenHeight - this.Height - offsetY;
             var token = await localStoreService.LoadDataAsync("token");
@@ -180,9 +180,9 @@ namespace VoiceX.Views
                 PreAsk.Visibility = Visibility.Hidden;
                 this.MainPage.Content = new RegistrationPage(this);
                 localStoreService.ClearIsolatedStorage();
-                await addDbContext.DropDatabaseAsync();
                 await webService.LogOut(App.UserPbx!, App.userToken!);
                 CoreService.Instance.Logout();
+                await addDbContext.DropDatabaseAsync();
                 LoadIcone.Visibility = Visibility.Hidden;
             }
             catch

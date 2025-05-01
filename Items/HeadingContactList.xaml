@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     Background="#FFF5F8FF" BorderThickness="0" Height="17" Padding="0,0,0,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,3,0,0">
 
-    <Grid Background="#FFF5F8FF" >
-        <TextBlock Text="Aa" FontSize="12" x:Name="Heanding" Foreground="#FF898989" Height="15.9609" Margin="5,0,0,0"/>
+    <Grid Background="#FFF1F2FF" >
+        <TextBlock Text="Aa" FontSize="12" x:Name="Heanding" Foreground="#FF7B76FF" Height="15.9609" Margin="5,0,0,0"/>
     </Grid>
 </ListBoxItem>

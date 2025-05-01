@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows7.0</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <ApplicationIcon>Logo256.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
     <Platforms>AnyCPU;x86;x64</Platforms>
@@ -55,7 +55,7 @@
     <None Remove="Assets\Fonts\NunitoSans_10pt-Regular.ttf" />
     <None Remove="Assets\Icone_v2\Arrow.png" />
     <None Remove="Assets\Icone_v2\Avatar.png" />
-    <None Remove="Assets\Icone_v2\BackgroundTopElement.png" />
+    <None Remove="Assets\Icone_v2\Background.png" />
     <None Remove="Assets\Icone_v2\Backspace.png" />
     <None Remove="Assets\Icone_v2\Box.png" />
     <None Remove="Assets\Icone_v2\carbon_order-details.png" />
@@ -89,7 +89,6 @@
     <None Remove="Assets\Icone_v2\Key.png" />
     <None Remove="Assets\Icone_v2\LinePhone.png" />
     <None Remove="Assets\Icone_v2\ListChek.png" />
-    <None Remove="Assets\Icone_v2\LodingIcone.gif" />
     <None Remove="Assets\Icone_v2\mdi_keypad.png" />
     <None Remove="Assets\Icone_v2\microphone.png" />
     <None Remove="Assets\Icone_v2\pause.png" />
@@ -119,7 +118,9 @@
     <Content Include="gsdll64.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Logo256.ico" />
+    <Content Include="Logo256.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -138,32 +139,17 @@
     <Resource Include="Assets\Icone_v2\Avatar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\Dialpad.png">
+    <Resource Include="Assets\Icone_v2\Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\4%3bHistory.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\3%3bProfile.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\1%3bDialpad.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Resource Include="Assets\Icone_v2\Dialpad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Icon-Phone.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Icon-PhoneSlash.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\5%3bFax.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\6%3bHotkey.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\MenuItems\2%3bContacts.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\icon16.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -175,9 +161,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Arrow.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\BackgroundTopElement.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Backspace.png">
@@ -281,9 +264,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\ListChek.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\LodingIcone.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\mdi_keypad.png">

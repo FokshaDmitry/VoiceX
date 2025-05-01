@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
@@ -16,11 +19,20 @@ namespace VoiceX.Views.PhonePages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+    
     public sealed partial class DialpadCallPage : Page
     {
+        private bool isRightButtonDown = false;
+        private DispatcherTimer rightClickTimer;
         public DialpadCallPage()
         {
             this.InitializeComponent();
+            // Инициализация таймера
+            rightClickTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(100) // Интервал между событиями (100 мс)
+            };
+            rightClickTimer.Tick += RightClickTimer_Tick;
         }
 
         private void CallButton_Click(object sender, RoutedEventArgs e)
@@ -39,7 +51,7 @@ namespace VoiceX.Views.PhonePages
                 {
                     phone = phone.Replace(regex.Search!, regex.Replace);
                 }
-                phone = Regex.Replace(phone, @"\D", "");
+                phone = Regex.Replace(phone, @"[^0-9*#]", "");
                 try
                 {
                     CoreService.Instance.MakeCall(phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
@@ -85,6 +97,7 @@ namespace VoiceX.Views.PhonePages
                 if (String.IsNullOrEmpty(NumberFild.Text))
                 {
                     Backspace.Visibility = Visibility.Collapsed;
+                    isRightButtonDown = false;
                 }
                 else
                 {
@@ -94,6 +107,73 @@ namespace VoiceX.Views.PhonePages
             catch
             {
                 return;
+            }
+        }
+
+        private void Page_GotFocus(object sender, RoutedEventArgs e)
+        {
+            NumberFild.Focus();
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            NumberFild.Focus();
+        }
+
+        private void Backspace_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Thread.Sleep(100);
+            if (!isRightButtonDown)
+            {
+                isRightButtonDown = true; 
+                rightClickTimer.Start(); // Запуск таймера
+            }
+        }
+
+        private  void RightClickTimer_Tick(object? sender, EventArgs e)
+        {
+            if (isRightButtonDown)
+            {
+                if (!String.IsNullOrEmpty(NumberFild.Text))
+                {
+                    NumberFild.Text = NumberFild.Text.Substring(0, NumberFild.Text.Length - 1);
+                }
+            }
+        }
+
+        private void Backspace_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            isRightButtonDown = false;
+            rightClickTimer.Stop();
+        }
+        private void NumberFild_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (e.Key == Key.Delete)
+            {
+                if (!isRightButtonDown)
+                {
+                    if (!String.IsNullOrEmpty(NumberFild.Text))
+                    {
+                        NumberFild.Text = "";
+                    }
+                }
+            }
+        }
+
+        private void NumberFild_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (textBox != null)
+            {
+                // Добавляем текст в конец
+                textBox.Text += e.Text;
+
+                // Устанавливаем курсор в конец
+                textBox.CaretIndex = textBox.Text.Length;
+
+                // Предотвращаем стандартное поведение
+                e.Handled = true;
             }
         }
     }

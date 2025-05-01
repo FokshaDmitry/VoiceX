@@ -56,10 +56,17 @@ namespace VoiceX.Items
             {
                 userPhone = userPhone.Replace(regex.Search!, regex.Replace);
             }
-            userPhone = Regex.Replace(userPhone, @"\D", "");
+            userPhone = Regex.Replace(userPhone, @"^[0-9*#]", "");
             CoreService.Instance.MakeCall(userPhone, App.AccountData!.Data.Sip_Settings.Sip_server);
         }
 
+        private void UserName_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(userPhone))
+            {
+                Clipboard.SetText(userPhone);
+            }
+        }
     }
 
 }

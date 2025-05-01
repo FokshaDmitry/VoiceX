@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -11,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
 using VoiceX.DAL.Entity;
@@ -58,6 +58,8 @@ namespace VoiceX.Views
         AdditionPage additionPage;
         public IncomingWindow incomingWindow;
         Dictionary<int, string> MenuIcons;
+        private Timer _dailyTimer;
+
         public ProfilePage(MainWindow mainWindow)
         {
             this.InitializeComponent();
@@ -118,7 +120,7 @@ namespace VoiceX.Views
                         {
                             Phone = Phone.Replace(regex.Search!, regex.Replace);
                         }
-                        Phone = Regex.Replace(Phone, @"\D", "");
+                        Phone = Regex.Replace(Phone, @"^[0-9*#]", "");
                         try
                         {
                             CoreService.Instance.MakeCall(Phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
@@ -218,21 +220,19 @@ namespace VoiceX.Views
         private async void ActiveCall_EndCallEvent(string Name, string Phone, DateTime StartCall)
         {
             await Dispatcher.InvokeAsync(async () => {
-                MainFrame.Navigate(dialpadCallPage);
+                Navigate_Click(Dialpad, new RoutedEventArgs());
                 slide.Begin();
-                if (ProfilePage.StatusCall == StatusCall.Incoming)
+                incomingWindow.Hide();
+                foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
                 {
-                    foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
+                    Phone = Phone.Replace(regex.Search!, regex.Replace);
+                }
+                Phone = Regex.Replace(Phone, @"\D", "");
+                if (Phone.Length >= 8 && Phone.Length <= 10)
+                {
+                    if (Phone.First() != '0')
                     {
-                        Phone = Phone.Replace(regex.Search!, regex.Replace);
-                    }
-                    Phone = Regex.Replace(Phone, @"\D", "");
-                    if (Phone.Length >= 8 && Phone.Length <= 10)
-                    {
-                        if (Phone.First() != '0')
-                        {
-                            Phone = "0" + Phone;
-                        }
+                        Phone = "0" + Phone;
                     }
                 }
                 if (StartCall == DateTime.MinValue)
@@ -267,7 +267,16 @@ namespace VoiceX.Views
                     }
                 }
                 await addDbContext.AddNoteAcync(new HistoryNotes() { Id = Guid.NewGuid(), Name = Name, Phone = Phone, StartDialog = StartCall, EndDialog = DateTime.Now, StatusCall = ProfilePage.StatusCall });
-                incomingWindow.Hide();
+                if (ProfilePage.StatusCall == StatusCall.IncomeIgnore)
+                {
+                    if (window != null)
+                    {
+                        if (!window.IsActive)
+                        {
+                            window.TrayIcon.IconSource = new BitmapImage(new Uri("pack://application:,,,/Assets/icone_v2/icon24.ico"));
+                        }
+                    }
+                }
             });
         }
         public string ExtractValue(string input)
@@ -288,14 +297,6 @@ namespace VoiceX.Views
         }
         private async void ControlPage_Loaded(object sender, RoutedEventArgs e)
         {
-            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Icone_v2", "MenuItems");
-            string[] fileNames = Directory.GetFiles(folderPath);
-
-            foreach (string file in fileNames)
-            {
-                var fileName = Path.GetFileName(file).Split(";");
-                MenuIcons.Add(Convert.ToInt32(fileName[0]), fileName[1].Replace(".png", ""));
-            }
             var items = MenuIcons.OrderByDescending(m => m.Key);
             
             addDbContext = new AddDbContext();
@@ -344,6 +345,10 @@ namespace VoiceX.Views
             clickToCallPage.OnChangeKey += clickToCallService.ChangeKey;
             clickToCallService.ChangeKey();
             var manager = CoreService.Instance.Core.audDevManager();
+            _dailyTimer = new Timer(async _ =>
+            {
+                await addDbContext.DeleteOldLogsAsync();
+            }, null, TimeSpan.FromHours(2), TimeSpan.FromHours(2));
 
             if (!String.IsNullOrEmpty(mic))
             {
@@ -369,48 +374,71 @@ namespace VoiceX.Views
         public void Navigate_Click(object sender, RoutedEventArgs e)
         {
             var Navigate = (Button)sender;
-            switch (Navigate.ToolTip.ToString())
-            {
-                case "Profile":
-                    if (MainFrame.CanGoBack)
-                    {
-                        while (MainFrame.CanGoBack)
-                        {
-                            MainFrame.RemoveBackEntry();
-                        }
-                    }
-                    MainFrame.Content = null;
-                    break;
-                case "Contacts":
-                    MainFrame.Navigate(clientsPage);
-                    slide.Begin();
-                    break;
-                case "Dialpad":
-                    if (CoreService.activeCall != null)
-                    {
-                        MainFrame.Navigate(activCallPage);
-                    }
-                    else
-                    {
-                        MainFrame.Navigate(dialpadCallPage);
-                    }
-                    slide.Begin();
-                    break;
-                case "History":
-                    MainFrame.Navigate(historyPage);
-                    slide.Begin();
-                    break;
-                case "Fax":
-                    MainFrame.Navigate(faxPage);
-                    slide.Begin();
-                    break;
-                case "Hotkeys":
-                    MainFrame.Navigate(hotKeyPage);
-                    slide.Begin();
-                    break;
-                default:
+            var paths = MenuItems.Children.OfType<Button>()
+                                  .Select(button => button.Content)
+                                  .OfType<Border>()
+                                  .Select(border => border.Child).OfType<System.Windows.Shapes.Path>();
 
-                    break;
+            // Устанавливаем белый цвет для каждого Path
+            foreach (var path in paths)
+            {
+                path.Fill = Brushes.White;
+            }
+            var border = Navigate.Content as Border;
+            if (border != null)
+            {
+                var select = border.Child as System.Windows.Shapes.Path;
+                if (select != null)
+                {
+                    select.Fill = new SolidColorBrush(Color.FromArgb(255, 123, 118, 255));
+                }
+            }
+            var page = Navigate.ToolTip.ToString();
+            if (!String.IsNullOrEmpty(page))
+            {
+                switch (page)
+                {
+                    case "Profile":
+                        if (MainFrame.CanGoBack)
+                        {
+                            while (MainFrame.CanGoBack)
+                            {
+                                MainFrame.RemoveBackEntry();
+                            }
+                        }
+                        MainFrame.Content = null;
+                        break;
+                    case "Contacts":
+                        MainFrame.Navigate(clientsPage);
+                        slide.Begin();
+                        break;
+                    case "Dialpad":
+                        if (CoreService.activeCall != null)
+                        {
+                            MainFrame.Navigate(activCallPage);
+                        }
+                        else
+                        {
+                            MainFrame.Navigate(dialpadCallPage);
+                        }
+                        slide.Begin();
+                        break;
+                    case "History":
+                        MainFrame.Navigate(historyPage);
+                        slide.Begin();
+                        break;
+                    case "Fax":
+                        MainFrame.Navigate(faxPage);
+                        slide.Begin();
+                        break;
+                    case "Hotkeys":
+                        MainFrame.Navigate(hotKeyPage);
+                        slide.Begin();
+                        break;
+                    default:
+
+                        break;
+                }
             }
         }
         #endregion
@@ -418,16 +446,14 @@ namespace VoiceX.Views
         private void Filter_Checked(object sender, RoutedEventArgs e)
         {
             RadioButton filter = (RadioButton)sender;
-            var blueLine = new SolidColorBrush(Color.FromArgb(255, 138, 99, 251));
-            var whiteLine = new SolidColorBrush(Color.FromArgb(255, 253, 254, 255));
 
             if (filter.Name == "General")
             {
                 if (GeneralCheck != null)
                 {
-                    GeneralCheck.Background = blueLine;
-                    C2CCheck.Background = whiteLine;
-                    AdditionChek.Background = whiteLine;
+                    GeneralCheck.Visibility = Visibility.Visible;
+                    C2CCheck.Visibility = Visibility.Collapsed;
+                    AdditionChek.Visibility = Visibility.Collapsed;
                 }
                 ContentControl.Navigate(generalSettingPage);
                 slideLeft.Begin();
@@ -436,9 +462,9 @@ namespace VoiceX.Views
             {
                 if (C2CCheck != null)
                 {
-                    GeneralCheck.Background = whiteLine;
-                    C2CCheck.Background = blueLine;
-                    AdditionChek.Background = whiteLine;
+                    GeneralCheck.Visibility = Visibility.Collapsed;
+                    C2CCheck.Visibility = Visibility.Visible;
+                    AdditionChek.Visibility = Visibility.Collapsed;
                 }
                 ContentControl.Navigate(clickToCallPage);
                 slideLeft.Begin();
@@ -447,9 +473,9 @@ namespace VoiceX.Views
             {
                 if (AdditionChek != null)
                 {
-                    GeneralCheck.Background = whiteLine;
-                    C2CCheck.Background = whiteLine;
-                    AdditionChek.Background = blueLine;
+                    GeneralCheck.Visibility = Visibility.Collapsed;
+                    C2CCheck.Visibility = Visibility.Collapsed;
+                    AdditionChek.Visibility = Visibility.Visible;
                 }
                 ContentControl.Navigate(additionPage);
                 slideLeft.Begin();
@@ -809,7 +835,18 @@ namespace VoiceX.Views
 
         private void Scroll_Click(object sender, RoutedEventArgs e)
         {
-
+            var scroll = (Button)sender;
+            scroll.Visibility = Visibility.Collapsed;
+            if (scroll.Name == "MoreRight")
+            {
+                MoreLeft.Visibility = Visibility.Visible;
+                MenuItems.Margin = new Thickness(MenuItems.Margin.Left + 38, 0, 0, 0);
+            }
+            else
+            {
+                MoreRight.Visibility = Visibility.Visible;
+                MenuItems.Margin = new Thickness(MenuItems.Margin.Left - 38, 0, 0, 0);
+            }
         }
     }
 }
