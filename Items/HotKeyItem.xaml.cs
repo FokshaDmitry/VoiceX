@@ -61,11 +61,6 @@ namespace VoiceX.Items
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
-            {
-                HotKeyPhone = HotKeyPhone.Replace(regex.Search!, regex.Replace);
-            }
-            HotKeyPhone = Regex.Replace(HotKeyPhone, @"^[0-9*#]", "");
             CoreService.Instance.MakeCall(HotKeyPhone, App.AccountData?.Data.Sip_Settings.Sip_server!);
         }
     }

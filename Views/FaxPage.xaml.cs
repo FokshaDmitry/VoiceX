@@ -122,10 +122,21 @@ namespace VoiceX.Views
                         ProfilePage.window!.LoadIcone.Visibility = Visibility.Visible;
                         foreach (var file in faxFileItems)
                         {
-                            if (file.File.Value.Length != 0)
+                            if (file.File.Value != null && file.File.Value.Length != 0)
                             {
-                                success.Add(await webService.PostToFax(App.AccountData!.Data.User_Data.UserID, "", new string[] { FaxNumber.Text }, file.File.Value, App.UserPbx!));
-                                Files?.Remove(file.File.Key);
+                                try
+                                {
+                                    success.Add(await webService.PostToFax(App.AccountData!.Data.User_Data.UserID, "", new string[] { FaxNumber.Text }, file.File.Value, App.UserPbx!));
+                                    Files?.Remove(file.File.Key);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ProfilePage.window?.ShowError(ex.InnerException?.Message!);
+                                }
+                            }
+                            else
+                            {
+                                ProfilePage.window?.ShowError("Select Document");
                             }
                         }
                         ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
