@@ -93,6 +93,7 @@
     <None Remove="Assets\Icone_v2\microphone.png" />
     <None Remove="Assets\Icone_v2\pause.png" />
     <None Remove="Assets\Icone_v2\plus.png" />
+    <None Remove="Assets\Icone_v2\redicon24.ico" />
     <None Remove="Assets\Icone_v2\refresh.png" />
     <None Remove="Assets\Icone_v2\refreshblue.png" />
     <None Remove="Assets\Icone_v2\Reload.png" />
@@ -104,6 +105,8 @@
     <None Remove="Assets\Icone_v2\trash.png" />
     <None Remove="Assets\Icone_v2\User-48.png" />
     <None Remove="Assets\Icone_v2\Warning.png" />
+    <None Remove="Assets\Icone_v2\whiteicon24.ico" />
+    <None Remove="Assets\Icone_v2\whiteicon24.png" />
     <None Remove="Assets\Icone_v2\x.png" />
     <None Remove="Assets\Logo48.ico" />
     <None Remove="gsdll32.dll" />
@@ -278,6 +281,9 @@
     <Resource Include="Assets\Icone_v2\plus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Icone_v2\redicon24.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Icone_v2\refresh.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -306,6 +312,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Warning.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\whiteicon24.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\whiteicon24.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\x.png">

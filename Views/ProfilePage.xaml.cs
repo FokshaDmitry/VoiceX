@@ -271,10 +271,7 @@ namespace VoiceX.Views
                 {
                     if (window != null)
                     {
-                        if (!window.IsActive)
-                        {
-                            window.TrayIcon.IconSource = new BitmapImage(new Uri("pack://application:,,,/Assets/icone_v2/icon24.ico"));
-                        }
+                        window.TrayIcon.IconSource = new BitmapImage(new Uri("pack://application:,,,/Assets/icone_v2/redicon24.ico"));
                     }
                 }
             });

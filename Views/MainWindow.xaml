@@ -79,7 +79,7 @@
 
         <Grid>
             <tb:TaskbarIcon x:Name="TrayIcon"
-            IconSource="/Assets/icone_v2/icon24.ico"
+            IconSource="/Assets/icone_v2/whiteicon24.ico"
             ToolTipText="VoiceX" TrayMouseDoubleClick="TrayIcon_TrayMouseDoubleClick">
                 <tb:TaskbarIcon.ContextMenu>
                     <ContextMenu Background="Transparent" BorderThickness="0">
