@@ -228,13 +228,7 @@ namespace VoiceX.Views
                     Phone = Phone.Replace(regex.Search!, regex.Replace);
                 }
                 Phone = Regex.Replace(Phone, @"\D", "");
-                if (Phone.Length >= 8 && Phone.Length <= 10)
-                {
-                    if (Phone.First() != '0')
-                    {
-                        Phone = "0" + Phone;
-                    }
-                }
+                
                 if (StartCall == DateTime.MinValue)
                 {
                     if (ProfilePage.StatusCall == StatusCall.Incoming)
@@ -264,6 +258,23 @@ namespace VoiceX.Views
                                 }
                             }
                         }
+                    }
+                }
+                if (Name.All(char.IsDigit))
+                {
+                    if (Name.Length >= 8 && Name.Length <= 10)
+                    {
+                        if (Name.First() != '0')
+                        {
+                            Name = "0" + Name;
+                        }
+                    }
+                }
+                if (Phone.Length >= 8 && Phone.Length <= 10)
+                {
+                    if (Phone.First() != '0')
+                    {
+                        Phone = "0" + Phone;
                     }
                 }
                 await addDbContext.AddNoteAcync(new HistoryNotes() { Id = Guid.NewGuid(), Name = Name, Phone = Phone, StartDialog = StartCall, EndDialog = DateTime.Now, StatusCall = ProfilePage.StatusCall });

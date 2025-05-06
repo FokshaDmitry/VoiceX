@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VoiceX"
-#define MyAppVersion "1.0.0.19"
+#define MyAppVersion "1.0.0.20"
 #define MyAppPublisher "X-Cloud"
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -20,7 +20,7 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 
 OutputDir=App
-OutputBaseFilename=VoiceX_1.0.0.19
+OutputBaseFilename=VoiceX_1.0.0.20
 Compression=lzma
 SetupIconFile=C:\Users\user\Work\Logo256.ico
 SolidCompression=yes
@@ -33,7 +33,7 @@ Name: "hebrew"; MessagesFile: "compiler:Languages\Hebrew.isl"; LicenseFile: lice
 
 
 [Icons]
-Name: "{commondesktop}\VoiceX Phone"; Filename: "{app}\VoiceX.exe"; IconFilename: "{app}\VoiceX\Logo256.ico";
+Name: "{commondesktop}\VoiceX Phone"; Filename: "{app}\VoiceX.exe"; IconFilename: "{app}\Logo256.ico";
 
 [Files]
 Source: "*"; DestDir: {app}; Flags: recursesubdirs createallsubdirs ignoreversion

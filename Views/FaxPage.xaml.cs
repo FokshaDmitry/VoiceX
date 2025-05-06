@@ -76,7 +76,7 @@ namespace VoiceX.Views
         {
             if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
             {
-                string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 await ParceFile(files);
             }
         }

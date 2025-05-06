@@ -52,11 +52,6 @@ namespace VoiceX.Items
 
         private void Call_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
-            {
-                userPhone = userPhone.Replace(regex.Search!, regex.Replace);
-            }
-            userPhone = Regex.Replace(userPhone, @"^[0-9*#]", "");
             CoreService.Instance.MakeCall(userPhone, App.AccountData!.Data.Sip_Settings.Sip_server);
         }
 
