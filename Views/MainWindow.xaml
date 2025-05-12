@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         Closing="Window_Closing"
-        Title="VoiceX" MinWidth="260" MouseEnter="Window_MouseEnter" MouseLeave="Window_MouseLeave" Icon="/Assets/Icone_v2/icon16.ico" MinHeight="460" MaxHeight="460" MaxWidth="260" Background="#FFEBE2FF" Loaded="Window_Loaded">
+        Title="VoiceX" MinWidth="260" MouseEnter="Window_MouseEnter" MouseLeave="Window_MouseLeave" Icon="/Assets/Icone_v2/BlueIcon.ico" MinHeight="460" MaxHeight="460" MaxWidth="260" Background="#FFEBE2FF" Loaded="Window_Loaded">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Template">
@@ -79,7 +79,7 @@
 
         <Grid>
             <tb:TaskbarIcon x:Name="TrayIcon"
-            IconSource="/Assets/icone_v2/whiteicon24.ico"
+            IconSource="/Assets/icone_v2/TrayIcon.ico"
             ToolTipText="VoiceX" TrayMouseDoubleClick="TrayIcon_TrayMouseDoubleClick">
                 <tb:TaskbarIcon.ContextMenu>
                     <ContextMenu Background="Transparent" BorderThickness="0">

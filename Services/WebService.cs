@@ -40,15 +40,21 @@ namespace VoiceX.Services
                 { new ByteArrayContent(fax_file), nameof(fax_file), "document.pdf" }
             };
             await content.CopyToAsync(ms);
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
-            HttpClient httpClient = new HttpClient(httpClientHandler);
+            
             string raw = "";
             bool isRetry = false;
         retry:;
             try
             {
-
-                var httprsp = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api/fax/send.php"), content);
+                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("app-cert");
+                if (clientCertificate == null)
+                {
+                    return "Certificate don't found";
+                }
+                HttpClientHandler httpClientHandler = new HttpClientHandler();
+                httpClientHandler.ClientCertificates.Add(clientCertificate);
+                HttpClient httpClient = new HttpClient(httpClientHandler);
+                var httprsp = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api/CrossPlatform/fax/send.php "), content);
                 raw = await httprsp.Content.ReadAsStringAsync();
 
             }

@@ -58,7 +58,7 @@
         <Grid x:Name="ControlMainPage" Height="420" Width="245" Background="White">
             <Grid Margin="0,45,0,0" Cursor="Hand">
                 <Grid x:Name="PageContent" Cursor="Hand">
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="25" MaxWidth="500" Margin="5,7,5,0">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="25" MaxWidth="500" Margin="12,7,12,0">
                         <Grid.Resources>
                             <Style TargetType="RadioButton">
                                 <Setter Property="Template">

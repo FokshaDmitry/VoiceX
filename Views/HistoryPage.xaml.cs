@@ -86,7 +86,7 @@ namespace VoiceX.Views
             filter.Name = "AllCall";
             if (ProfilePage.window != null)
             {
-                ProfilePage.window.TrayIcon.IconSource = new BitmapImage(new Uri("pack://application:,,,/Assets/icone_v2/whiteicon24.ico"));
+                ProfilePage.window.TrayIcon.IconSource = new BitmapImage(new Uri("pack://application:,,,/Assets/icone_v2/TrayIcon.ico"));
             }
         }
         public void FillListBox(List<HistoryNotes> historyNotes, int quality)

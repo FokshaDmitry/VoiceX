@@ -57,6 +57,7 @@
     <None Remove="Assets\Icone_v2\Avatar.png" />
     <None Remove="Assets\Icone_v2\Background.png" />
     <None Remove="Assets\Icone_v2\Backspace.png" />
+    <None Remove="Assets\Icone_v2\BlueIcon.ico" />
     <None Remove="Assets\Icone_v2\Box.png" />
     <None Remove="Assets\Icone_v2\carbon_order-details.png" />
     <None Remove="Assets\Icone_v2\Cloud.png" />
@@ -93,7 +94,6 @@
     <None Remove="Assets\Icone_v2\microphone.png" />
     <None Remove="Assets\Icone_v2\pause.png" />
     <None Remove="Assets\Icone_v2\plus.png" />
-    <None Remove="Assets\Icone_v2\redicon24.ico" />
     <None Remove="Assets\Icone_v2\refresh.png" />
     <None Remove="Assets\Icone_v2\refreshblue.png" />
     <None Remove="Assets\Icone_v2\Reload.png" />
@@ -103,14 +103,16 @@
     <None Remove="Assets\Icone_v2\TopLogo.png" />
     <None Remove="Assets\Icone_v2\TransferCall.png" />
     <None Remove="Assets\Icone_v2\trash.png" />
+    <None Remove="Assets\Icone_v2\TrayIcon.ico" />
+    <None Remove="Assets\Icone_v2\TrayIgnoreIcon.ico" />
     <None Remove="Assets\Icone_v2\User-48.png" />
     <None Remove="Assets\Icone_v2\Warning.png" />
-    <None Remove="Assets\Icone_v2\whiteicon24.ico" />
     <None Remove="Assets\Icone_v2\whiteicon24.png" />
     <None Remove="Assets\Icone_v2\x.png" />
     <None Remove="Assets\Logo48.ico" />
     <None Remove="gsdll32.dll" />
     <None Remove="gsdll64.dll" />
+    <None Remove="Logo256.ico" />
     <None Remove="Services\gsdll32.dll" />
   </ItemGroup>
 
@@ -144,6 +146,9 @@
     </Resource>
     <Resource Include="Assets\Icone_v2\Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\BlueIcon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Dialpad.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -281,9 +286,6 @@
     <Resource Include="Assets\Icone_v2\plus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\redicon24.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Assets\Icone_v2\refresh.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -308,13 +310,16 @@
     <Resource Include="Assets\Icone_v2\trash.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Icone_v2\TrayIcon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\TrayIgnoreIcon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Icone_v2\User-48.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Warning.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\whiteicon24.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\whiteicon24.png">

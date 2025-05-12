@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using NSwag.Collections;
+﻿using NSwag.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
