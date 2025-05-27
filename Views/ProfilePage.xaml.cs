@@ -600,7 +600,6 @@ namespace VoiceX.Views
                 {
                     if (contacts.contacts != null)
                     {
-
                         var groupContacts = contacts.contacts.GroupBy(c => c.Name?[0].ToString().ToUpper()).OrderBy(c => c.Key);
                         foreach (var groupcontact in groupContacts)
                         {

@@ -5,7 +5,7 @@
     xmlns:local="using:VoiceX.Items"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Margin="0, 10, 0, 0" Padding="0, 0, 0, 0" BorderThickness="0" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+    mc:Ignorable="d" Margin="5, 10, 0, 0" Padding="0, 0, 0, 0" BorderThickness="0" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
     <ListBoxItem.Resources>
         <Style TargetType="Button">
             <Setter Property="Template">

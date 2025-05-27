@@ -128,16 +128,15 @@ namespace VoiceX.Views
                                     success.Add(await webService.PostToFax(App.AccountData!.Data.User_Data.UserID, "", new string[] { FaxNumber.Text }, file.File.Value, App.UserPbx!));
                                     Files?.Remove(file.File.Key);
                                 }
-                                catch (Exception ex)
+                                catch
                                 {
-                                    ProfilePage.window?.ShowError(ex.InnerException?.Message!);
+                                    //ProfilePage.window?.ShowError(ex.InnerException?.Message!);
                                 }
                             }
-                            else
-                            {
-                                ProfilePage.window?.ShowError("Select Document");
-                            }
                         }
+                        MessageBox.Show($"Success send files: ({success.Where(s => s.Contains("success")).Count()})\n" +
+                                    $"Warning send files: ({success.Where(s => s.Contains("warning")).Count()})",
+                                    "Fax Status", MessageBoxButton.OK, MessageBoxImage.Information);
                         ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
                     }
                     else

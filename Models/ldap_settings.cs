@@ -1,6 +1,4 @@
-﻿
-
-namespace VoiceX.Models
+﻿namespace VoiceX.Models
 {
     public class Ldap_settings
     {

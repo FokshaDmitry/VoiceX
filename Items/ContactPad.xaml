@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="0,0,0,0" BorderBrush="#FFF2F3F4">
+    Background="Transparent" BorderThickness="0" Margin="10, 2, 0, 0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="0,0,0,0" BorderBrush="#FFF2F3F4">
     <Border Background="#FFFDFEFF"  BorderThickness="0, 0, 0, 1">
         <Grid>
             <TextBlock x:Name="userName" Text="Amelia Rogers" FontSize="14" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,3,0,0"/>

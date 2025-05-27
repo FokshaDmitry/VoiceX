@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using VoiceX.DAL.Context;
 
 namespace VoiceX.Services
 {
@@ -19,6 +20,7 @@ namespace VoiceX.Services
         response_data responseData;
         user_dbinfo user_dbinfo;
         CertificateService certificateService;
+        AddDbContext dbContext;
         public WebService()
         {
             account = new Account_data();
@@ -28,6 +30,7 @@ namespace VoiceX.Services
             user_dbinfo = new user_dbinfo();
             user_dbinfo.data = new data(); 
             certificateService = new CertificateService();
+            dbContext = new AddDbContext();
         }
         public async Task<string> PostToFax(string user_id, string message, string[] phones, byte[] fax_file, string pbxCode)
         {
@@ -56,15 +59,17 @@ namespace VoiceX.Services
                 HttpClient httpClient = new HttpClient(httpClientHandler);
                 var httprsp = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api/CrossPlatform/fax/send.php "), content);
                 raw = await httprsp.Content.ReadAsStringAsync();
+                await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = raw, Created = DateTime.Now });
 
             }
-            catch
+            catch (Exception ex) 
             {
                 if (!isRetry)
                 {
                     isRetry = true;
                     goto retry;
                 }
+                await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
             }
             var result = JObject.Parse(raw)?["message"]?.ToString() + " " + JObject.Parse(raw)?["type"]?.ToString();
             return result;
@@ -99,11 +104,13 @@ namespace VoiceX.Services
                 {
                     var response = await httpClient.PutAsync(new Uri($"https://appauth.voicex.biz/{pbxCode.Substring(0, 3)}/stats/api_v2/app/auth.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
+                    await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
             }
             catch (Exception ex)
             {
                 certificate.Error = ex.Message;
+                await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
                 return certificate;
             }
             if (!String.IsNullOrEmpty(responseBody))
@@ -215,12 +222,14 @@ namespace VoiceX.Services
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
                     var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_redirect_list.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
+                    await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
             }
             catch (Exception ex)
             {
                 contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
                 contacts.ResponseMessage = ex.Message;
+                await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
                 return contacts;
             }
             if (!String.IsNullOrEmpty(responseBody))
@@ -271,11 +280,13 @@ namespace VoiceX.Services
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
                     var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/change_call_type.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
+                    await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
                 return JsonConvert.DeserializeObject<System.Net.HttpStatusCode>(JObject.Parse(responseBody)["responseCode"]?.ToString()!);
             }
-            catch
+            catch (Exception ex) 
             {
+                await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
                 return System.Net.HttpStatusCode.BadRequest;
             }
         }
@@ -295,10 +306,13 @@ namespace VoiceX.Services
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
                     var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/logout.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
+                    await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
             }
-            catch
+            catch (Exception ex)
             {
+
+                await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
                 return;
             }
         }
@@ -324,12 +338,14 @@ namespace VoiceX.Services
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
                     var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_account_settings.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
+                    await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
             }
             catch (Exception ex)
             {
                 account.ResponseCode = System.Net.HttpStatusCode.BadRequest;
                 account.ResponseMessage = ex.Message;
+                await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
                 return account;
             }
             #endregion
@@ -353,6 +369,7 @@ namespace VoiceX.Services
                 {
                     account.ResponseCode = System.Net.HttpStatusCode.BadRequest;
                     account.ResponseMessage = ex.Message;
+                    await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
                     return account;
                 }
 
@@ -406,12 +423,14 @@ namespace VoiceX.Services
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
                     var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/pauses/get_pauses.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
+                    await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
             }
             catch (Exception ex)
             {
                 getPauses.ResponseCode = System.Net.HttpStatusCode.NotFound;
                 getPauses.ResponseMessage = ex.Message;
+                await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
                 return getPauses;
             }
             if (!String.IsNullOrEmpty(responseBody))
@@ -481,12 +500,14 @@ namespace VoiceX.Services
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
                     var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/pauses/set_pause.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
+                    await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
             }
             catch (Exception ex)
             {
                 responceModel.ResponseCode = System.Net.HttpStatusCode.NotFound;
                 responceModel.ResponseMessage = ex.Message;
+                await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
                 return responceModel;
             }
             if (!String.IsNullOrEmpty(responseBody))

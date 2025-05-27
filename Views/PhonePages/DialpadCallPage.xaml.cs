@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
-using VoiceX.Items;
-using VoiceX.Models;
 using VoiceX.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -34,7 +31,6 @@ namespace VoiceX.Views.PhonePages
             };
             rightClickTimer.Tick += RightClickTimer_Tick;
         }
-
         private void CallButton_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrEmpty(NumberFild.Text))
@@ -96,12 +92,32 @@ namespace VoiceX.Views.PhonePages
             {
                 if (String.IsNullOrEmpty(NumberFild.Text))
                 {
-                    Backspace.Visibility = Visibility.Collapsed;
-                    isRightButtonDown = false;
+                    if (Backspace != null && Backspace.Visibility != Visibility.Collapsed)
+                    {
+                        Backspace.Visibility = Visibility.Collapsed;
+                        isRightButtonDown = false;
+                        NumberFild.Text = "Enter phone number";
+                        NumberFild.Foreground = new SolidColorBrush(Color.FromArgb(255, 194, 194, 195));
+                    }
                 }
-                else
+                else if(NumberFild.Text != "Enter phone number")
                 {
-                    Backspace.Visibility = Visibility.Visible; 
+                    if (Backspace != null && Backspace.Visibility != Visibility.Visible)
+                    {
+                        Backspace.Visibility = Visibility.Visible;
+                        NumberFild.Text = NumberFild.Text.Replace("Enter phone number", "");
+                        NumberFild.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
+                    }
+                    string phone = NumberFild.Text;
+                    if (!String.IsNullOrEmpty(phone))
+                    {
+                        foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
+                        {
+                            phone = phone.Replace(regex.Search!, regex.Replace);
+                        }
+                        phone = Regex.Replace(phone, @"[^0-9*#]", "");
+                        NumberFild.Text = phone;
+                    }
                 }
             }
             catch

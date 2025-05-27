@@ -5,7 +5,6 @@ using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
 using System.Linq;
-using VoiceX.DAL.Context;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System;
@@ -90,36 +89,12 @@ namespace VoiceX.Views.ControlPages
             ProfilePage.regexNotes?.Clear();
             foreach (RegExItem regExItem in RegExList.Items.Cast<RegExItem>())
             {
-                if (!String.IsNullOrEmpty(regExItem.SearchText))
+                if (!String.IsNullOrEmpty(regExItem.SearchText) && regExItem.SearchText != "Search")
                 {
                     ProfilePage.regexNotes?.Add(new Regex_note() { Check = regExItem.Check, Replace = regExItem.ReplaceText, Search = regExItem.SearchText });
-                    
                 }
             }
             await storeService.SaveDataAsync("regexs", JsonConvert.SerializeObject(ProfilePage.regexNotes));
-        }
-
-        public void UpMainItem(RegExItem regExItem)
-        {
-            RegExList.Items.Insert(0, regExItem);
-        }
-        public void UpBotton_Click(object sender, RoutedEventArgs e)
-        {
-            if(SelectItem != null)
-            {
-                MoveItem(-1);
-            }
-        }
-        private void MoveItem(int direction)
-        {
-            int index = RegExList.Items.IndexOf(SelectItem);
-            if (index == -1)
-                return;
-            int newIndex = index + direction;
-            if (newIndex < 0 || newIndex >= RegExList.Items.Count)
-                return; 
-            RegExList.Items.Remove(SelectItem);
-            RegExList.Items.Insert(newIndex, SelectItem);
         }
         private async void Remove_Click(object sender, RoutedEventArgs e)
         {
@@ -279,7 +254,7 @@ namespace VoiceX.Views.ControlPages
         {
             if (RegExList.Items.Cast<RegExItem>().Last() == regEx)
             {
-                RegExList.Items.Insert(0, new RegExItem(this, "", "", false));
+                RegExList.Items.Insert(0, new RegExItem(this, "Search", "Replace", false));
             }
 
         }
@@ -297,13 +272,6 @@ namespace VoiceX.Views.ControlPages
         private void RegExList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-        }
-        private void Down_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectItem != null)
-            {
-                MoveItem(1);
-            }
         }
     }
 }

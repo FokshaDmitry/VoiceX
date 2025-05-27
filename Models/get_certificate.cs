@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace VoiceX.Models
+﻿namespace VoiceX.Models
 {
     public class Get_certificate : Responce_model
     {

@@ -9,20 +9,19 @@
 
     <Grid>
         <Grid VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,2,0,0">
-            <TextBox TextChanged="Search_TextChanged" BorderThickness="0, 0, 0, 1" x:Name="Search"  MinHeight="26" Width="225" BorderBrush="#FFABADB3" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="14" Height="25" Padding="6,0,6,0"/>
+            <TextBox TextChanged="Search_TextChanged" BorderThickness="0, 0, 0, 1" x:Name="Search"  MinHeight="26" Width="225" BorderBrush="#FFD8D8FE" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="14" Height="25" Padding="6,0,6,0"/>
             <Grid HorizontalAlignment="Right" Margin="0,0,7,0">
-                <Grid x:Name="magnifyingGlassLine" Background="#FF898989" Height="1.1" Width="6" RenderTransformOrigin="0.5,0.5" Margin="8,8.6,0,0">
-                    <Grid.RenderTransform>
+                <Border CornerRadius="0.5" x:Name="magnifyingGlassLine" Background="#FFBFBDFC" Height="1.1" Width="6" RenderTransformOrigin="0.5,0.5" Margin="8,8.6,0,0">
+                    <Border.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
                             <SkewTransform/>
                             <RotateTransform Angle="45"/>
                             <TranslateTransform/>
                         </TransformGroup>
-                    </Grid.RenderTransform>
-
-                </Grid>
-                <Ellipse x:Name="magnifyingGlassEllipse" Fill="White" StrokeThickness="1" Width="10" Height="11" Stroke="#FF898989"/>
+                    </Border.RenderTransform>
+                </Border>
+                <Ellipse x:Name="magnifyingGlassEllipse" Fill="White" StrokeThickness="1" Width="10" Height="11" Stroke="#FFBFBDFC"/>
             </Grid>
         </Grid>
 

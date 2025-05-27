@@ -41,63 +41,35 @@
     </Page.Resources>
     <Grid>
         <Grid VerticalAlignment="Top">
-            <TextBlock Text="Dail Transform" x:Name="DailText" FontFamily="Nunito Sans 10pt Normal" Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,5,0,0" FontSize="16"/>
-            <Border Height="24" Margin="16,27,16,0" CornerRadius="6" BorderBrush="#FFBBBAFF" Background="Transparent" BorderThickness="1">
-                <TextBox BorderThickness="0" ToolTip="Change control combination" Cursor="Hand" ToolTipService.ToolTip="Change control combination" ToolTipService.Placement="Mouse" Background="Transparent" x:Name="HotKeyBox" IsReadOnly="True" KeyDown="HotKeyBox_KeyDown" KeyUp="HotKeyBox_KeyUp" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Height="24" MinWidth="150" FontWeight="Normal" Padding="6,4,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Foreground="#FF252422" BorderBrush="#FFBBBAFF"/>
+            <TextBlock Text="Dail Transform" x:Name="DailText" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFB5B5B5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,5,0,0" FontSize="14"/>
+            <Border Height="32" Margin="16,27,16,0" CornerRadius="4" BorderBrush="#FFD1D0FF" Background="Transparent" BorderThickness="1" Width="213">
+                <TextBox BorderThickness="0" ToolTip="Change control combination" Cursor="Hand" ToolTipService.ToolTip="Change control combination" ToolTipService.Placement="Mouse" Background="Transparent" x:Name="HotKeyBox" IsReadOnly="True" KeyDown="HotKeyBox_KeyDown" KeyUp="HotKeyBox_KeyUp" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Height="24" MinWidth="150" FontWeight="Normal" Padding="6,4,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Foreground="#FF252422" BorderBrush="#FFBBBAFF" Margin="0,4,0,0"/>
             </Border>
-            <Image Width="14" Height="14" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,25,5">
-                <Image.Source>
-                    <BitmapImage UriSource="/Assets/Icone_v2/Reload.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
-                </Image.Source>
-            </Image>
         </Grid>
-        <Grid Margin="0,55,0,0" Height="250" VerticalAlignment="Top">
+        <Border CornerRadius="150" BorderThickness="0" Height="1" Width="213" Background="#FFC3B1FD" VerticalAlignment="Top" Margin="9,80,9,0" Grid.ColumnSpan="2"/>
+        <Grid Margin="0,92,0,0" Height="250" VerticalAlignment="Top">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="10*"/>
             </Grid.RowDefinitions>
             <Grid x:Name="SectionGrig" Grid.Row="0">
-                <TextBlock Text="Enter Data" Margin="16,0,0,0" FontFamily="Nunito Sans 10pt Normal"/>
-                <Button Cursor="Hand" Click="Remove_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,1,16,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <TextBlock Text="Enter Data" Margin="16,0,0,0" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFB5B5B5"/>
+                <Button Cursor="Hand" Click="Remove_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,0,16,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
                     <Button.Content>
                         <Image>
                             <Image.Source>
-                                <BitmapImage UriSource="/Assets/Icone_v2/x.png" DecodePixelWidth="40" DecodePixelHeight="40"/>
+                                <BitmapImage UriSource="/Assets/Icone_v2/Icon-TrashSimple.png" DecodePixelWidth="40" DecodePixelHeight="40"/>
                             </Image.Source>
                         </Image>
                     </Button.Content>
                 </Button>
-                <Button Cursor="Hand" Click="UpBotton_Click" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,1,35,0" RenderTransformOrigin="0.5,0.5">
-                    <Button.Content>
-                        <Image RenderTransformOrigin="0.5,0.5">
-                            <Image.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform Angle="-180"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </Image.RenderTransform>
-                            <Image.Source>
-                                <BitmapImage UriSource="/Assets/Icone_v2/Arrow.png" DecodePixelWidth="40" DecodePixelHeight="40"/>
-                            </Image.Source>
-                        </Image>
-                    </Button.Content>
-                </Button>
-                <Button x:Name="Down" Click="Down_Click" Cursor="Hand" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,1,55,0">
+                
+                
+                <Button Cursor="Hand" Background="Transparent" Click="ServerButton_Click" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="15" Padding="0,0,0,0" BorderBrush="Transparent" Width="15" HorizontalAlignment="Right" Margin="0,0,38,0" VerticalAlignment="Top">
                     <Button.Content>
                         <Image>
                             <Image.Source>
-                                <BitmapImage UriSource="/Assets/Icone_v2/Arrow.png" DecodePixelWidth="40" DecodePixelHeight="40"/>
-                            </Image.Source>
-                        </Image>
-                    </Button.Content>
-                </Button>
-                <Button Cursor="Hand" Background="Transparent" Click="ServerButton_Click" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="15" Padding="0,0,0,0" BorderBrush="Transparent" Width="15" HorizontalAlignment="Right" Margin="0,1,75,0">
-                    <Button.Content>
-                        <Image>
-                            <Image.Source>
-                                <BitmapImage UriSource="/Assets/Icone_v2/FileIcone.png" DecodePixelWidth="40" DecodePixelHeight="40"/>
+                                <BitmapImage UriSource="/Assets/Icone_v2/Icon-File.png" DecodePixelWidth="40" DecodePixelHeight="40"/>
                             </Image.Source>
                         </Image>
                     </Button.Content>

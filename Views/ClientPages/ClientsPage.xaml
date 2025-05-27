@@ -19,9 +19,8 @@
         </Style>
     </Page.Resources>
     <Grid x:Name="MainGrid" Width="245">
-        <Grid Margin="0,45,0,0" >
-            <TextBlock Text="Contacts" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Margin="16,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="25" MaxWidth="500" Margin="16,39,16,0">
+        <Grid Margin="0,55,0,0" >
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="25" MaxWidth="500" Margin="16,0,16,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -39,7 +38,7 @@
                     </StackPanel>
                 </RadioButton>
             </Grid>
-            <Frame x:Name="PageContent" Margin="0, 70, 0, 0">
+            <Frame x:Name="PageContent" Margin="0,30,0,0">
 
             </Frame>
         </Grid>

@@ -66,27 +66,27 @@
             </Setter>
         </Style>
     </ListBoxItem.Resources>
-    <Border Background="#FFFDFEFF" BorderThickness="1" CornerRadius="6" BorderBrush="#FFBBBAFF" >
+    <Border x:Name="RegExBorder" Background="#FFFDFEFF" BorderThickness="1" CornerRadius="6" BorderBrush="#FFBBBAFF" >
         <Grid>
             <Grid x:Name="RegItem" Height="32" VerticalAlignment="Top" Margin="3,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="7*"/>
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox GotFocus="Search_GotFocus" LostFocus="Search_LosingFocus" BorderThickness="0,0,1,0" Background="Transparent" Grid.Column="0"  MinWidth="10" TextChanged="Search_TextChanged" x:Name="Search"    VerticalAlignment="Stretch" FontSize="14" BorderBrush="#FFBBBAFF" Padding="32,0,0,0" HorizontalContentAlignment="Center" FontFamily="Nunito Sans 10pt Normal" Height="32" VerticalContentAlignment="Center" />
-                <TextBox GotFocus="Replece_GotFocus" LostFocus="Replece_LosingFocus" BorderThickness="1,0,0,0" Background="Transparent" Grid.Column="1"  x:Name="Replece" IsReadOnly="True" VerticalAlignment="Stretch" FontSize="14" BorderBrush="#FFB0AFF0" Padding="3,0,6,0" FlowDirection="LeftToRight" VerticalContentAlignment="Center" />
+                <TextBox Text="Search" GotFocus="Search_GotFocus" LostFocus="Search_LosingFocus" BorderThickness="0,0,1,0" Background="Transparent" Grid.Column="0"  MinWidth="10" TextChanged="Search_TextChanged" x:Name="Search"    VerticalAlignment="Stretch" FontSize="14" BorderBrush="#FFBBBAFF" Padding="32,0,0,0" FontFamily="Nunito Sans 10pt Normal" Height="32" VerticalContentAlignment="Center" Foreground="#FFB5B5B5" />
+                <TextBox Text="Replace" GotFocus="Replece_GotFocus" LostFocus="Replece_LosingFocus" BorderThickness="1,0,0,0" Background="Transparent" Grid.Column="1"  x:Name="Replece" IsReadOnly="True" VerticalAlignment="Stretch" FontSize="14" BorderBrush="#FFB0AFF0" Padding="3,0,6,2" FlowDirection="LeftToRight" VerticalContentAlignment="Center" Foreground="#FFB5B5B5" />
                 <ToggleButton Click="Flag_Click" x:Name="Flag" VerticalAlignment="Center" Width="30" HorizontalAlignment="Left" Padding="0,0,0,1" />
             </Grid>
 
             <Grid Visibility="Collapsed" x:Name="AddButtom" Background="White" Margin="-1,-1,-1,-1">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="Add field" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFA0A0A0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,6,0" FontSize="14"/>
+                    <TextBlock Text="Add field" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFC2C2C3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,6,0" FontSize="14"/>
                     <Button Cursor="Hand" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" x:Name="AddRegItem" Click="AddRegItem_Click" VerticalContentAlignment="Stretch"  Width="26" Height="26" Padding="0,0,0,0" HorizontalAlignment="Center">
                         <Button.Content>
-                            <Border Background="#FFBBBAFF" CornerRadius="50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Border Background="#FFE6E5FF" CornerRadius="50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <Grid>
-                                    <Border CornerRadius="0.5" Background="#FFFDFEFF" Width="1" Height="12"/>
-                                    <Border CornerRadius="0.5" Background="#FFFDFEFF" Width="12" Height="1" />
+                                    <Border CornerRadius="0.5" Background="#FF7B76FF" Width="1" Height="12"/>
+                                    <Border CornerRadius="0.5" Background="#FF7B76FF" Width="12" Height="1" />
                                 </Grid>
                             </Border>
                         </Button.Content>

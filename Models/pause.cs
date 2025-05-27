@@ -1,5 +1,4 @@
-﻿
-namespace VoiceX.Models
+﻿namespace VoiceX.Models
 {
     public class Pause
     {

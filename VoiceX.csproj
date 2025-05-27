@@ -53,7 +53,6 @@
     <None Remove="Assets\Fonts\Jost-Regular.ttf" />
     <None Remove="Assets\Fonts\Montserrat-Regular.ttf" />
     <None Remove="Assets\Fonts\NunitoSans_10pt-Regular.ttf" />
-    <None Remove="Assets\Icone_v2\Arrow.png" />
     <None Remove="Assets\Icone_v2\Avatar.png" />
     <None Remove="Assets\Icone_v2\Background.png" />
     <None Remove="Assets\Icone_v2\Backspace.png" />
@@ -66,22 +65,21 @@
     <None Remove="Assets\Icone_v2\ContactMessage.png" />
     <None Remove="Assets\Icone_v2\ContactPhone.png" />
     <None Remove="Assets\Icone_v2\Copy.png" />
-    <None Remove="Assets\Icone_v2\Devise.png" />
     <None Remove="Assets\Icone_v2\Dialpad.png" />
     <None Remove="Assets\Icone_v2\Doc.png" />
     <None Remove="Assets\Icone_v2\Error.png" />
     <None Remove="Assets\Icone_v2\exitApp.png" />
-    <None Remove="Assets\Icone_v2\FileIcone.png" />
-    <None Remove="Assets\Icone_v2\FileText.png" />
     <None Remove="Assets\Icone_v2\Folder.png" />
     <None Remove="Assets\Icone_v2\GreyUser.png" />
     <None Remove="Assets\Icone_v2\Icon-Clock.png" />
+    <None Remove="Assets\Icone_v2\Icon-File.png" />
     <None Remove="Assets\Icone_v2\Icon-House.png" />
     <None Remove="Assets\Icone_v2\Icon-Phone-Menu.png" />
     <None Remove="Assets\Icone_v2\Icon-Phone.png" />
     <None Remove="Assets\Icone_v2\Icon-PhoneSlash.png" />
     <None Remove="Assets\Icone_v2\Icon-Printer.png" />
     <None Remove="Assets\Icone_v2\Icon-Subtitles.png" />
+    <None Remove="Assets\Icone_v2\Icon-TrashSimple.png" />
     <None Remove="Assets\Icone_v2\Icon-User.png" />
     <None Remove="Assets\Icone_v2\icon16.ico" />
     <None Remove="Assets\Icone_v2\icon24.ico" />
@@ -108,7 +106,6 @@
     <None Remove="Assets\Icone_v2\User-48.png" />
     <None Remove="Assets\Icone_v2\Warning.png" />
     <None Remove="Assets\Icone_v2\whiteicon24.png" />
-    <None Remove="Assets\Icone_v2\x.png" />
     <None Remove="Assets\Logo48.ico" />
     <None Remove="gsdll32.dll" />
     <None Remove="gsdll64.dll" />
@@ -153,10 +150,16 @@
     <Resource Include="Assets\Icone_v2\Dialpad.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Icone_v2\Icon-File.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Icone_v2\Icon-Phone.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Icon-PhoneSlash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Icon-TrashSimple.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\icon16.ico">
@@ -166,9 +169,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\icon48.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\Arrow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Backspace.png">
@@ -198,9 +198,6 @@
     <Resource Include="Assets\Icone_v2\Copy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\Devise.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Assets\Icone_v2\Doc.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -214,7 +211,7 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NSwag.Core" Version="14.3.0" />
     <PackageReference Include="PDFsharp" Version="6.1.1" />
@@ -250,12 +247,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Icone_v2\FileIcone.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\FileText.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Assets\Icone_v2\Folder.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -323,9 +314,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\whiteicon24.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Icone_v2\x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Logo48.ico">
