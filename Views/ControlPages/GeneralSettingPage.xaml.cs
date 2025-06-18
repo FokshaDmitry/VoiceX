@@ -194,7 +194,7 @@ namespace VoiceX.Views.ControlPages
             if ((bool)swich.IsChecked!)
             {
                 window!.LoadIcone.Visibility = Visibility.Visible;
-                if (await webService.ChangeCallType("mobile", App.UserPbx!, App.userToken!) == System.Net.HttpStatusCode.OK)
+                if (await webService.ChangeCallType("mobile", App.UserPbx!, App.userToken!, App.fw!) == System.Net.HttpStatusCode.OK)
                 {
                     CoreService.Instance.setRegistration(true);
                     LopTop.IsChecked = false;
@@ -221,7 +221,7 @@ namespace VoiceX.Views.ControlPages
             if ((bool)swich.IsChecked!)
             {
                 window!.LoadIcone.Visibility = Visibility.Visible;
-                if (await webService.ChangeCallType("fix", App.UserPbx!, App.userToken!) == System.Net.HttpStatusCode.OK)
+                if (await webService.ChangeCallType("fix", App.UserPbx!, App.userToken!, App.fw!) == System.Net.HttpStatusCode.OK)
                 {
                     CoreService.Instance.setRegistration(false);
                     await Task.Delay(1000);

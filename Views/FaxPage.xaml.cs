@@ -125,7 +125,7 @@ namespace VoiceX.Views
                             {
                                 try
                                 {
-                                    success.Add(await webService.PostToFax(App.AccountData!.Data.User_Data.UserID, "", new string[] { FaxNumber.Text }, file.File.Value, App.UserPbx!));
+                                    success.Add(await webService.PostToFax(App.AccountData!.Data.User_Data.UserID, "", new string[] { FaxNumber.Text }, file.File.Value, App.UserPbx!, App.fw));
                                     Files?.Remove(file.File.Key);
                                 }
                                 catch

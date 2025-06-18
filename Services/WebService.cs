@@ -32,8 +32,9 @@ namespace VoiceX.Services
             certificateService = new CertificateService();
             dbContext = new AddDbContext();
         }
-        public async Task<string> PostToFax(string user_id, string message, string[] phones, byte[] fax_file, string pbxCode)
+        public async Task<string> PostToFax(string user_id, string message, string[] phones, byte[] fax_file, string pbxCode, string fw)
         {
+            string url = $"https://app.{fw}.voicex.center/{pbxCode}/stats/api/CrossPlatform/fax/send.php";
             var ms = new MemoryStream();
             var content = new MultipartFormDataContent
             {
@@ -57,7 +58,7 @@ namespace VoiceX.Services
                 HttpClientHandler httpClientHandler = new HttpClientHandler();
                 httpClientHandler.ClientCertificates.Add(clientCertificate);
                 HttpClient httpClient = new HttpClient(httpClientHandler);
-                var httprsp = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api/CrossPlatform/fax/send.php "), content);
+                var httprsp = await httpClient.PostAsync(new Uri(url), content);
                 raw = await httprsp.Content.ReadAsStringAsync();
                 await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = raw, Created = DateTime.Now });
 
@@ -76,7 +77,7 @@ namespace VoiceX.Services
         }
         public async Task<Get_certificate> GetCertificateAsync(string pbxCode, string os)
         {
-            if (pbxCode.Where(char.IsDigit).Count() != 6)
+            if (pbxCode.Where(char.IsDigit).Count() != 8)
             {
                 certificate.Error = "Wrong pbxCode";
                 return certificate;
@@ -102,7 +103,7 @@ namespace VoiceX.Services
                 handler.ClientCertificates.Add(clientCertificate);
                 using (var httpClient = new HttpClient(handler))
                 {
-                    var response = await httpClient.PutAsync(new Uri($"https://appauth.voicex.biz/{pbxCode.Substring(0, 3)}/stats/api_v2/app/auth.php"), content);
+                    var response = await httpClient.PutAsync(new Uri($"https://auth.{pbxCode.Substring(3, 2)}.voicex.center/{pbxCode.Substring(0, 3)}/stats/api_v2/app/auth.php"), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                     await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
@@ -173,7 +174,7 @@ namespace VoiceX.Services
         //    }
         //    return responseBody;
         //}
-        public async Task<contacts_list> GetcontactsList(string sip_username, string companyID, string pbxCode, string userToken)
+        public async Task<contacts_list> GetcontactsList(string sip_username, string companyID, string pbxCode, string userToken, string fw)
         {
             contacts_list contacts = new contacts_list
             {
@@ -197,12 +198,19 @@ namespace VoiceX.Services
                 contacts.ResponseMessage = "PBX not exist";
                 return contacts;
             }
+            if (String.IsNullOrEmpty(fw)) 
+            {
+                contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
+                contacts.ResponseMessage = "FW number not exist";
+                return contacts;
+            }
             if (pbxCode.Where(char.IsDigit).Count() != 3)
             {
                 contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
                 contacts.ResponseMessage = "Wrong PBX";
                 return contacts;
             }
+            string url = $"https://app.{fw}.voicex.center/{pbxCode}/stats/api_v2/app/get_redirect_list.php";
             string responseBody = "";
             try
             {
@@ -220,7 +228,7 @@ namespace VoiceX.Services
                 using (var httpClient = new HttpClient(handler))
                 {
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_redirect_list.php"), content);
+                    var response = await httpClient.PutAsync(new Uri(url), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                     await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
@@ -261,8 +269,30 @@ namespace VoiceX.Services
             
             return contacts!;
         }
-        public async Task<System.Net.HttpStatusCode> ChangeCallType(string callType, string pbxCode, string userToken)
+        public async Task<System.Net.HttpStatusCode> ChangeCallType(string callType, string pbxCode, string userToken, string fw   )
         {
+            if (String.IsNullOrEmpty(userToken))
+            {
+                return System.Net.HttpStatusCode.MisdirectedRequest;
+            }
+            if (String.IsNullOrEmpty(pbxCode))
+            {
+                 return System.Net.HttpStatusCode.MisdirectedRequest;
+            }
+            if (pbxCode.Where(char.IsDigit).Count() != 3)
+            {
+                return System.Net.HttpStatusCode.MisdirectedRequest;
+            }
+            if (String.IsNullOrEmpty(fw))
+            {
+                return System.Net.HttpStatusCode.MisdirectedRequest;
+            }
+            if (String.IsNullOrEmpty(callType)) 
+            {
+                return System.Net.HttpStatusCode.MisdirectedRequest;
+            }
+            string url = $"https://app.{fw}.voicex.center/{pbxCode}/stats/api_v2/app/change_call_type.php";
+
             string responseBody = "";
             try
             {
@@ -278,7 +308,7 @@ namespace VoiceX.Services
                 using (var httpClient = new HttpClient(handler))
                 {
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/change_call_type.php"), content);
+                    var response = await httpClient.PostAsync(new Uri(url), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                     await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
@@ -290,8 +320,25 @@ namespace VoiceX.Services
                 return System.Net.HttpStatusCode.BadRequest;
             }
         }
-        public async Task LogOut(string pbxCode, string userToken)
+        public async Task LogOut(string pbxCode, string userToken, string fw)
         {
+            if (String.IsNullOrEmpty(userToken))
+            {
+                return;
+            }
+            if (String.IsNullOrEmpty(pbxCode))
+            {
+                return;
+            }
+            if (pbxCode.Where(char.IsDigit).Count() != 3)
+            {
+                return;
+            }
+            if (String.IsNullOrEmpty(fw))
+            {
+                return;
+            }
+            string url = $"https://app.{fw}.voicex.center/{pbxCode}/stats/api_v2/app/logout.php";
             string responseBody = "";
             try
             {
@@ -304,7 +351,7 @@ namespace VoiceX.Services
                 using (var httpClient = new HttpClient(handler))
                 {
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/logout.php"), content);
+                    var response = await httpClient.PutAsync(new Uri(url), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                     await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
@@ -316,8 +363,33 @@ namespace VoiceX.Services
                 return;
             }
         }
-        public async Task<Account_data> GetAccountSettings(string pbxCode, string userToken)
+        public async Task<Account_data> GetAccountSettings(string pbxCode, string userToken, string fw)
         {
+            if (String.IsNullOrEmpty(userToken))
+            {
+                account.ResponseCode = System.Net.HttpStatusCode.MisdirectedRequest;
+                account.ResponseMessage = "Token is null";
+                return account;
+            }
+            if (String.IsNullOrEmpty(pbxCode))
+            {
+                account.ResponseCode = System.Net.HttpStatusCode.MisdirectedRequest;
+                account.ResponseMessage = "PBXcode is null";
+                return account;
+            }
+            if (pbxCode.Where(char.IsDigit).Count() != 3)
+            {
+                account.ResponseCode = System.Net.HttpStatusCode.MisdirectedRequest;
+                account.ResponseMessage = "Wrong pbxCode";
+                return account;
+            }
+            if (String.IsNullOrEmpty(fw))
+            {
+                account.ResponseCode = System.Net.HttpStatusCode.MisdirectedRequest;
+                account.ResponseMessage = "FW number is null";
+                return account;
+            }
+            string url = $"https://app.{fw}.voicex.center/{pbxCode}/stats/api_v2/app/get_account_settings.php";
             #region GET
             string responseBody = "";
             try
@@ -329,14 +401,13 @@ namespace VoiceX.Services
                     account.ResponseMessage = "Certificate don't found";
                     return account;
                 }
-                var content = new StringContent("", Encoding.UTF8, "application/json");
-                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                var content = new StringContent("", Encoding.UTF8);
                 var handler = new HttpClientHandler();
                 handler.ClientCertificates.Add(clientCertificate);
                 using (var httpClient = new HttpClient(handler))
                 {
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/get_account_settings.php"), content);
+                    var response = await httpClient.PutAsync(new Uri(url), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                     await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
@@ -354,6 +425,10 @@ namespace VoiceX.Services
                 try
                 {
                     account = JsonConvert.DeserializeObject<Account_data>(responseBody)!;
+                    if (account.ResponseCode != System.Net.HttpStatusCode.OK)
+                    {
+                        return account;
+                    }
                     var sipSettings = JObject.Parse(responseBody)?["data"]?["sip_settings"];
                     var usedData = JObject.Parse(responseBody)?["data"]?["user_data"];
                     var appData = JObject.Parse(responseBody)?["data"];
@@ -361,13 +436,13 @@ namespace VoiceX.Services
                     account.Data = JsonConvert.DeserializeObject<Data>(appData?.ToString()!)!;
                     account.Data.Sip_Settings = JsonConvert.DeserializeObject<Sip_settings>(sipSettings?.ToString()!)!;
                     account.Data.Sip_Settings.Sip_secret = Encoding.UTF8.GetString(Convert.FromBase64String(account.Data.Sip_Settings.Sip_secret));
-                    account.Data.Sip_Settings.Sip_server = $"pbx{pbxCode.Substring(1, 2)}.x-cloud.info";
+                    
                     account.Data.User_Data = JsonConvert.DeserializeObject<User_data>(usedData?.ToString()!)!;
                     account.Data.Ldap_Settings = JsonConvert.DeserializeObject<Ldap_settings>(ldapData?.ToString()!)!;
                 }
                 catch (Exception ex)
                 {
-                    account.ResponseCode = System.Net.HttpStatusCode.BadRequest;
+                    account.ResponseCode = System.Net.HttpStatusCode.InternalServerError;
                     account.ResponseMessage = ex.Message;
                     await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
                     return account;
@@ -376,7 +451,7 @@ namespace VoiceX.Services
             }
             return account;
         }
-        public async Task<Get_pauses> GetPauses(string sipUsername, string pbxCode, string userToken)
+        public async Task<Get_pauses> GetPauses(string sipUsername, string pbxCode, string userToken, string fw)
         {
             Get_pauses getPauses = new Get_pauses
             {
@@ -392,6 +467,12 @@ namespace VoiceX.Services
                 getPauses.ResponseMessage = "Empty User Name";
                 return getPauses;
             }
+            if (String.IsNullOrEmpty(userToken))
+            {
+                getPauses.ResponseCode = System.Net.HttpStatusCode.NotFound;
+                getPauses.ResponseMessage = "Token not exist";
+                return getPauses;
+            }
             if (String.IsNullOrEmpty(pbxCode))
             {
                 getPauses.ResponseCode = System.Net.HttpStatusCode.NotFound;
@@ -404,6 +485,13 @@ namespace VoiceX.Services
                 getPauses.ResponseMessage = "Wrong pbxCode";
                 return getPauses;
             }
+            if (String.IsNullOrEmpty(fw))
+            {
+                getPauses.ResponseCode = System.Net.HttpStatusCode.NotFound;
+                getPauses.ResponseMessage = "FW number not exist";
+                return getPauses;
+            }
+            string url = $"https://app.{fw}.voicex.center/{pbxCode}/stats/api_v2/app/pauses/get_pauses.php";
             string responseBody = "";
             try
             {
@@ -421,7 +509,7 @@ namespace VoiceX.Services
                 using (var httpClient = new HttpClient(handler))
                 {
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PutAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/pauses/get_pauses.php"), content);
+                    var response = await httpClient.PutAsync(new Uri(url), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                     await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
@@ -457,7 +545,7 @@ namespace VoiceX.Services
                 return getPauses;
             }
         }
-        public async Task<Responce_model> SetPause(string sipUsername, int PauseId, string pbxCode, string userToken)
+        public async Task<Responce_model> SetPause(string sipUsername, int PauseId, string pbxCode, string userToken, string fw)
         {
             Responce_model responceModel = new Responce_model
             {
@@ -481,6 +569,19 @@ namespace VoiceX.Services
                 responceModel.ResponseMessage = "Wrong pbxCode";
                 return responceModel;
             }
+            if (String.IsNullOrEmpty(userToken))
+            {
+                responceModel.ResponseCode = System.Net.HttpStatusCode.NotFound;
+                responceModel.ResponseMessage = "Token not exist";
+                return responceModel;
+            }
+            if (String.IsNullOrEmpty(fw))
+            {
+                responceModel.ResponseCode = System.Net.HttpStatusCode.NotFound;
+                responceModel.ResponseMessage = "FW number not exist";
+                return responceModel;
+            }
+            string url = $"https://app.{fw}.voicex.center/{pbxCode}/stats/api_v2/app/pauses/set_pause.php";
             string responseBody = "";
             try
             {
@@ -498,7 +599,7 @@ namespace VoiceX.Services
                 using (var httpClient = new HttpClient(handler))
                 {
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PostAsync(new Uri($"https://app.voicex.biz/{pbxCode}/stats/api_v2/app/pauses/set_pause.php"), content);
+                    var response = await httpClient.PostAsync(new Uri(url), content);
                     responseBody = await response.Content.ReadAsStringAsync();
                     await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }

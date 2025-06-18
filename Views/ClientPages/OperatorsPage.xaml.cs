@@ -34,7 +34,7 @@ namespace VoiceX.Views.ClientPages
         {
             int color = 1;
             ProfilePage.window!.LoadIcone.Visibility = Visibility.Visible;
-            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
+            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!, App.fw!);
             ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
             if (contacts.ResponseCode == HttpStatusCode.OK)
             {

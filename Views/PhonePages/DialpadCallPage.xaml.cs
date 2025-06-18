@@ -30,7 +30,22 @@ namespace VoiceX.Views.PhonePages
                 Interval = TimeSpan.FromMilliseconds(100) // Интервал между событиями (100 мс)
             };
             rightClickTimer.Tick += RightClickTimer_Tick;
+            DataObject.AddPastingHandler(NumberFild, OnTextBoxPasting);
         }
+        private void OnTextBoxPasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(DataFormats.Text))
+            {
+                string pastedText = e.DataObject.GetData(DataFormats.Text) as string;
+                if (pastedText.Length >= 8 && pastedText.Length <= 10)
+                {
+
+                    NumberFild.Text = "0" + pastedText;
+                    e.CancelCommand();
+                }
+            }
+        }
+
         private void CallButton_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrEmpty(NumberFild.Text))

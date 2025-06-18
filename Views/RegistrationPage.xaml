@@ -64,34 +64,40 @@
                     <ImageBrush ImageSource="/assets/icone_v2/illustration.png"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <Button Width="220" Height="38" Margin="0,355,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="Continue" x:Name="Send" Click="Button_Send" Foreground="#FF7B76FF" />
+            <Button Width="220" Height="38" Margin="0,360,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="Continue" x:Name="Send" Click="Button_Send" Foreground="#FF7B76FF" />
 
-            <Grid Background="Transparent" VerticalAlignment="Top" Margin="0,330,0,0" HorizontalAlignment="Center">
+            <Grid Background="Transparent" VerticalAlignment="Top" Margin="0,333,0,0" HorizontalAlignment="Center">
                 <CheckBox  x:Name="Select" Click="Select_Click" MinWidth="10" FontFamily="/Assets/Fonts/Inter-Regular.ttf#Inter" MinHeight="10" VerticalAlignment="Stretch" Foreground="#FF5C66BD" FontSize="6" HorizontalAlignment="Left" Background="Transparent"/>
                 <TextBlock x:Name="MyComputer" Text="This is my computer" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="22,0,0,0" FontSize="14" Foreground="#FF252422" FontFamily="Nunito Sans 10pt Normal"/>
             </Grid>
-            <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,256,0,0">
-                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="35" Height="35"  HorizontalAlignment="Left" Margin="8,0,0,0">
-                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Height="30" FontSize="18" Margin="3,5,0,0"  />
+            <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,266,0,0">
+                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="24" Height="30"  HorizontalAlignment="Left" Margin="12,0,0,0">
+                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="24" Height="24" FontSize="16" Padding="5,0,0,0"  />
                 </Border>
-                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="35" Height="35"  HorizontalAlignment="Left" Margin="47,0,0,0">
-                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Height="30" FontSize="18" Margin="4,5,0,0"  />
+                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="24" Height="30"  HorizontalAlignment="Left" Margin="40,0,0,0">
+                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="24" Height="24" FontSize="16" Padding="5,0,0,0" />
                 </Border>
-                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="35" Height="35"  HorizontalAlignment="Left" Margin="86,0,0,0">
-                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Height="30" FontSize="18" Margin="4,5,0,0"  />
+                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="24" Height="30"  HorizontalAlignment="Left" Margin="68,0,0,0">
+                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="24" Height="24" FontSize="16" Padding="5,0,0,0" />
                 </Border>
-                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="35" Height="35"  HorizontalAlignment="Right" Margin="0,0,85,0">
-                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm4" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Height="30" FontSize="18" Margin="4,5,0,0"  />
+                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="24" Height="30"  HorizontalAlignment="Left" Margin="96,0,0,0">
+                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm4" HorizontalAlignment="Center" VerticalAlignment="Center" Width="24" Height="24" FontSize="16" Padding="5,0,0,0" />
                 </Border>
-                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="35" Height="35"  HorizontalAlignment="Right" Margin="0,0,47,0">
-                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Height="30" Margin="4,5,0,0" FontSize="18"  />
+                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="24" Height="30"  HorizontalAlignment="Left" Margin="124.5,0,0,0">
+                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="24" Height="24" FontSize="16" Padding="5,0,0,0"  />
                 </Border>
-                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="35" Height="35"  HorizontalAlignment="Right" Margin="0,0,8,0">
-                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm6" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Height="30" FontSize="18" Margin="4,5,0,0"  />
+                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="24" Height="30"  HorizontalAlignment="Left" Margin="152.5,0,0,0">
+                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm6" HorizontalAlignment="Center" VerticalAlignment="Center" Width="24" Height="24" FontSize="16" Padding="5,0,0,0"  />
+                </Border>
+                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="24" Height="30"  HorizontalAlignment="Left" Margin="181,0,0,0">
+                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm7" HorizontalAlignment="Center" VerticalAlignment="Center" Width="24" Height="24" FontSize="16" Padding="5,0,0,0"  />
+                </Border>
+                <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="24" Height="30"  HorizontalAlignment="Left" Margin="209,0,0,0">
+                    <TextBox BorderThickness="0" TextChanged="RegistrationForm1_TextChanged" KeyDown="RegistrationForm1_KeyDown_1"  x:Name="RegistrationForm8" HorizontalAlignment="Center" VerticalAlignment="Center" Width="24" Height="24" FontSize="16" Padding="5,0,0,0"  />
                 </Border>
 
             </Grid>
-            <TextBlock HorizontalAlignment="Center" FontFamily="/Assets/Fonts/NunitoSans_10pt-Regular.ttf#NunitoSans" Text="Enter access code"  x:Name="StatusResponce" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" FontSize="11" Margin="0,296,0,0" Foreground="#FF898989"/>
+            <TextBlock HorizontalAlignment="Center" FontFamily="/Assets/Fonts/NunitoSans_10pt-Regular.ttf#NunitoSans" Text="Enter access code"  x:Name="StatusResponce" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" FontSize="11" Margin="0,310,0,0" Foreground="#FF7B76FF"/>
         </Grid>
         
     </Grid>

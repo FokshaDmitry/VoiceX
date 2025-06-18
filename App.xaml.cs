@@ -28,16 +28,17 @@ namespace VoiceX
     /// </summary>
     public partial class App : Application
     {
-        [DllImport("user32.dll")]
+        [DllImport("user64.dll")]
         private static extern IntPtr GetForegroundWindow();
 
-        [DllImport("user32.dll", SetLastError = true)]
+        [DllImport("user64.dll", SetLastError = true)]
         private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
         private const string PipeName = "VoiceXSingleInstance";
         private static Mutex mutex = new Mutex(true, "{VoiceX_Unique_Id}");
         public static Account_data? AccountData { get; set; }
         public static string? UserPbx { get; set; }
         public static string? userToken { get; set; }
+        public static string? fw { get; set; }
         public static bool MyComputer {  get; set; }
         public static DateTime timeOut {  get; set; }
         private FileSystemWatcher? _watcher;
@@ -80,7 +81,7 @@ namespace VoiceX
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message);
+                        //MessageBox.Show(ex.Message);
                     }
                 }
                 CreatePdf();
@@ -192,7 +193,7 @@ namespace VoiceX
                 }
                 catch (IOException ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    //MessageBox.Show(ex.Message);
                 }
             }
 

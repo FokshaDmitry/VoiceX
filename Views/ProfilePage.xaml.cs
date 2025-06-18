@@ -328,7 +328,7 @@ namespace VoiceX.Views
             CoreService.Instance.OutgoingCallEvent += Instance_OutgoingCallEvent;
 
             window!.LoadIcone.Visibility = Visibility.Visible;
-            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!);
+            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!, App.fw!);
             window!.LoadIcone.Visibility = Visibility.Collapsed;
             var AAlist = await localStoreService.LoadDataAsync("AACallList");
             if (!String.IsNullOrEmpty(AAlist))
@@ -512,7 +512,7 @@ namespace VoiceX.Views
                 };
                 getPauses.ResponseData.Pauses = new List<Pause>();
                 window!.LoadIcone.Visibility = Visibility.Visible;
-                getPauses = await webService.GetPauses(App.AccountData!.Data.Sip_Settings.Sip_username, App.UserPbx!, App.userToken!);
+                getPauses = await webService.GetPauses(App.AccountData!.Data.Sip_Settings.Sip_username, App.UserPbx!, App.userToken!, App.fw!);
                 window.LoadIcone.Visibility = Visibility.Collapsed;
                 if (getPauses.ResponseCode == HttpStatusCode.OK)
                 {
@@ -549,7 +549,7 @@ namespace VoiceX.Views
                     if (getPauses?.ResponseData!.Pause_active != id)
                     {
                         window!.LoadIcone.Visibility = Visibility.Visible;
-                        var result = await webService.SetPause(App.AccountData!.Data.Sip_Settings.Sip_username, id, App.UserPbx!, App.userToken!);
+                        var result = await webService.SetPause(App.AccountData!.Data.Sip_Settings.Sip_username, id, App.UserPbx!, App.userToken!, App.fw);
                         window!.LoadIcone.Visibility = Visibility.Collapsed;
                         if (result.ResponseCode == HttpStatusCode.OK)
                         {

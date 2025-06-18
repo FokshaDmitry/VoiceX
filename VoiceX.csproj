@@ -4,7 +4,6 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows</TargetFramework>
     <ApplicationIcon>Logo256.ico</ApplicationIcon>
-    <PlatformTarget>x86</PlatformTarget>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <UseWPF>True</UseWPF>
     <Nullable>enable</Nullable>
@@ -220,10 +219,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\VoiceX\PdfScribeCore\PdfScribeCore.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="ADAT_Common">
       <HintPath>..\..\edward_israel-master\c2c_adat\embed\ADAT_Common.dll</HintPath>
     </Reference>
@@ -404,6 +399,10 @@
 
   <ItemGroup>
     <Folder Include="PrinterInstaller\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\VoiceX\PdfScribeCore\PdfScribeCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
