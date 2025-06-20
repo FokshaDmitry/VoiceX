@@ -59,6 +59,31 @@ namespace VoiceX.Views.ControlPages
                     index++;
                 }
             }
+            var stun = await localStoreService.LoadDataAsync("stun");
+            var ice = await localStoreService.LoadDataAsync("ice");
+            var ip = await localStoreService.LoadDataAsync("ip");
+            if (!String.IsNullOrEmpty(stun))
+            {
+                if (stun == "1")
+                {
+                    Proxy.IsChecked = true;
+                }
+            }
+            if (!String.IsNullOrEmpty(ice))
+            {
+                if (ice == "1")
+                {
+                    Ice.IsChecked = true;
+                }
+            }
+            if (!String.IsNullOrEmpty(ip))
+            {
+                if (ip == "1")
+                {
+                    Ip.IsChecked = true;
+                }
+            }
+            
             Microphones.SelectionChanged += Microphones_SelectionChanged;
             Audio.SelectionChanged += Audio_SelectionChanged;
         }
@@ -110,7 +135,7 @@ namespace VoiceX.Views.ControlPages
             ProfilePage.onlineToken = false;
             await CoreService.Instance.UseProxy(Proxy.IsChecked == true ? App.AccountData?.Data.Sip_Settings.Sip_proxy : App.AccountData?.Data.Sip_Settings.Sip_server);
             ProfilePage.onlineToken = true;
-            await localStoreService.SaveDataAsync("proxy", Proxy.IsChecked == true ? "1" : "0");
+            await localStoreService.SaveDataAsync("stun", Proxy.IsChecked == true ? "1" : "0");
         }
 
         private async void Ice_Checked(object sender, RoutedEventArgs e)

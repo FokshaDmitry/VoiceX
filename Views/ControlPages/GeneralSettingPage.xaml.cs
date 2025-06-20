@@ -60,14 +60,15 @@ namespace VoiceX.Views.ControlPages
             if (App.AccountData?.Data.Is_mobile == 0)
             {
                 LopTop.IsChecked = true;
+                SmartPhone.IsChecked = false;
+
             }
             else
             {
                 SmartPhone.IsChecked = true;
+                LopTop.IsChecked = false;
             }
             _ = App.AccountData?.Data.Is_mobile == 0 ? LopTop.IsChecked = true : SmartPhone.IsChecked = true;
-            LopTop.Click += LopTop_Toggled;
-            SmartPhone.Click += SmartPhone_Toggled;
             Exit.Click += Exit_Click;
             Online();
         }
@@ -196,7 +197,21 @@ namespace VoiceX.Views.ControlPages
                 window!.LoadIcone.Visibility = Visibility.Visible;
                 if (await webService.ChangeCallType("mobile", App.UserPbx!, App.userToken!, App.fw!) == System.Net.HttpStatusCode.OK)
                 {
-                    CoreService.Instance.setRegistration(true);
+                    var info = CoreService.Instance.getInfo();
+                    if (info != null)
+                    {
+                        if (!info.regIsActive)
+                        {
+                            try
+                            {
+                                CoreService.Instance.setRegistration(true);
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                    }
                     LopTop.IsChecked = false;
                 }
                 else
@@ -217,14 +232,22 @@ namespace VoiceX.Views.ControlPages
 
         private async void LopTop_Toggled(object sender, RoutedEventArgs e)
         {
+            var info = CoreService.Instance.getInfo();
             var swich = (ToggleButton)sender;
             if ((bool)swich.IsChecked!)
             {
                 window!.LoadIcone.Visibility = Visibility.Visible;
                 if (await webService.ChangeCallType("fix", App.UserPbx!, App.userToken!, App.fw!) == System.Net.HttpStatusCode.OK)
                 {
-                    CoreService.Instance.setRegistration(false);
-                    await Task.Delay(1000);
+                    
+                    if (info != null) 
+                    {
+                        if (info.regIsActive)
+                        {
+                            CoreService.Instance.setRegistration(false);
+                            await Task.Delay(1000);
+                        }
+                    }
                     SmartPhone.IsChecked = false;
                 }
                 else

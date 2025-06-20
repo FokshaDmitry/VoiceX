@@ -315,11 +315,11 @@ namespace VoiceX.Views
             string audio = await localStoreService.LoadDataAsync("audio");
             string ip = await localStoreService.LoadDataAsync("ip");
             string ice = await localStoreService.LoadDataAsync("ice");
-            string proxy = await localStoreService.LoadDataAsync("proxy");
+            string stun = await localStoreService.LoadDataAsync("stun");
             string transport = await localStoreService.LoadDataAsync("transport");
             int transportId = 0;
             int.TryParse(transport, out transportId);
-            CoreService.Instance.Login(account?.Sip_username!, account!.Sip_server, account.Sip_proxy, account.Sip_secret, transportId, proxy == "1", ice == "1", ip == "1");
+            CoreService.Instance.Login(account?.Sip_username!, account!.Sip_server, account.Sip_proxy, account.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
             General.Checked += Filter_Checked;
             Addition.Checked += Filter_Checked;
             C2C.Checked += Filter_Checked;
@@ -328,7 +328,7 @@ namespace VoiceX.Views
             CoreService.Instance.OutgoingCallEvent += Instance_OutgoingCallEvent;
 
             window!.LoadIcone.Visibility = Visibility.Visible;
-            contacts = await webService.GetcontactsList(App.AccountData?.Data.Sip_Settings.Sip_username!, App.AccountData?.Data.User_Data.CompanyID!, App.UserPbx!, App.userToken!, App.fw!);
+            contacts = await webService.GetcontactsList( App.UserPbx!, App.userToken!, App.fw!);
             window!.LoadIcone.Visibility = Visibility.Collapsed;
             var AAlist = await localStoreService.LoadDataAsync("AACallList");
             if (!String.IsNullOrEmpty(AAlist))

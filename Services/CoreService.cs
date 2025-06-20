@@ -12,6 +12,7 @@ namespace VoiceX.Services
     {
         public static PjsipLogger? writer;
         public static CallService? activeCall;
+        public static string StunServer { get; set; } = "";
         //public static BuddyService? buddy;
         private static readonly CoreService instance = new CoreService();
         private Endpoint? core;
@@ -41,7 +42,7 @@ namespace VoiceX.Services
                     EpConfig epConfig = new EpConfig();
                     epConfig.logConfig.level = 5;
                     epConfig.logConfig.writer = writer;
-                    epConfig.uaConfig.stunServer.Add("ice.x-cloud.info:3478");
+                    epConfig.uaConfig.stunServer.Add(StunServer);
                     epConfig.uaConfig.natTypeInSdp = 1;
                     epConfig.uaConfig.maxCalls = 15;
                     
@@ -139,22 +140,26 @@ namespace VoiceX.Services
                 Debug.WriteLine($"[CALL] Ошибка при объединении звонков: {ex.Message}");
             }
         }
-        public void Login(string username, string domain, string proxy, string password, int transport, bool useProxy, bool iceEnabled, bool useIpRewrite)
+        public void Login(string username, string domain, string proxy, string password, int transport, bool useStun, bool iceEnabled, bool useIpRewrite)
         {
             try
             {
                 accCfg!.sipConfig.transportId = transport;
                 //REG
                 accCfg.idUri = $"sip:{username}@{domain}";
-                if (useProxy)
+                if (!String.IsNullOrEmpty(proxy))
                 {
                     accCfg.regConfig.registrarUri = $"sip:{proxy}";
+                    accCfg.sipConfig.proxies.Add($"sip:{proxy}");
                 }
                 else
                 {
                     accCfg.regConfig.registrarUri = $"sip:{domain}";
                 }
+
                 accCfg.natConfig.iceEnabled = iceEnabled;
+                accCfg.natConfig.sipStunUse = useStun ? pjsua_stun_use.PJSUA_STUN_USE_DEFAULT : pjsua_stun_use.PJSUA_STUN_USE_DISABLED;
+                
                 accCfg.natConfig.sdpNatRewriteUse = useIpRewrite ? 1 : 0;
                 //CREATE
                 accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));

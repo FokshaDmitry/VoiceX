@@ -197,7 +197,7 @@
                             <Button.Content>
                                 <Border Padding="0" BorderThickness="1" CornerRadius="15" Background="#FFFDFEFF" BorderBrush="#FF8560F2">
                                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="Cansel" FontSize="18" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+                                        <TextBlock Text="Cancel" FontSize="18" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
                                     </Grid>
                                 </Border>
                             </Button.Content>

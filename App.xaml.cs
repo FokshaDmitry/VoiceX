@@ -42,8 +42,6 @@ namespace VoiceX
         public static bool MyComputer {  get; set; }
         public static DateTime timeOut {  get; set; }
         private FileSystemWatcher? _watcher;
-        public CoreService Core { get; } = CoreService.Instance;
-        Endpoint core;
         private PdfScribeInstaller pdfScribeInstaller;
 
         public App()
@@ -150,7 +148,6 @@ namespace VoiceX
             MyComputer = true;
             timeOut = new DateTime();
             timeOut = DateTime.Now;
-            core = CoreService.Instance.Core;
         }
         protected override void OnStartup(StartupEventArgs e)
         {

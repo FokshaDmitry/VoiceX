@@ -6,6 +6,7 @@
         public string Sip_proxy { get; set; }
         public string Sip_username { get; set; }
         public string Sip_secret { get; set; }
+        public string Stun_server { get; set; }
         public Sip_settings()
         {
             Sip_server = "";

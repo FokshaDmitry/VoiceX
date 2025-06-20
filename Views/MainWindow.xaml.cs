@@ -1,4 +1,5 @@
-﻿using System;
+﻿using pj;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Windows;
@@ -21,6 +22,8 @@ namespace VoiceX.Views
         public delegate void MoveOnPage();
         public event MoveOnPage? moveOnDialpad;
         public event MoveOnPage? moveOnContact;
+        public CoreService Core { get; } = CoreService.Instance;
+        Endpoint core;
         public MainWindow()
         {
             InitializeComponent();
@@ -98,6 +101,7 @@ namespace VoiceX.Views
             var token = await localStoreService.LoadDataAsync("token");
             var pbx = await localStoreService.LoadDataAsync("pbxCode");
             var fw = await localStoreService.LoadDataAsync("fw");
+            string stun = await localStoreService.LoadDataAsync("stun");
             if (!String.IsNullOrEmpty(token))
             {
                 if (!String.IsNullOrEmpty(pbx))
@@ -114,6 +118,8 @@ namespace VoiceX.Views
                             App.userToken = token;
                             App.UserPbx = pbx;
                             App.fw = fw;
+                            CoreService.StunServer = App.AccountData.Data.Sip_Settings.Stun_server;
+                            core = CoreService.Instance.Core;
                             profilePage = new ProfilePage(this);
                             this.MainPage.Content = profilePage;
                         }

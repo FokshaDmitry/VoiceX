@@ -1,14 +1,15 @@
-﻿using System;
+﻿using pj;
+using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using VoiceX.Services;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using System.Linq;
 
 namespace VoiceX.Views
 {
@@ -22,6 +23,8 @@ namespace VoiceX.Views
         LocalStoreService localStoreService;
         MainWindow window;
         ProfilePage profilePage;
+        public CoreService Core { get; } = CoreService.Instance;
+        Endpoint core;
         public RegistrationPage(MainWindow mainWindow)
         {
             InitializeComponent();
@@ -78,8 +81,11 @@ namespace VoiceX.Views
                         await localStoreService.SaveDataAsync("pbxCode", pbxCode.Substring(0, 3));
                         await localStoreService.SaveDataAsync("token", cert.App_token!);
                         await localStoreService.SaveDataAsync("fw", pbxCode.Substring(3, 2));
+                        App.fw = pbxCode.Substring(3, 2);
                         webService = new WebService();
                         App.AccountData = await webService.GetAccountSettings(pbxCode.Substring(0, 3), App.userToken!, App.fw!);
+                        CoreService.StunServer = App.AccountData.Data.Sip_Settings.Stun_server;
+                        core = CoreService.Instance.Core;
                     }
                     catch (Exception ex)
                     {

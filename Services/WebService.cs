@@ -174,24 +174,12 @@ namespace VoiceX.Services
         //    }
         //    return responseBody;
         //}
-        public async Task<contacts_list> GetcontactsList(string sip_username, string companyID, string pbxCode, string userToken, string fw)
+        public async Task<contacts_list> GetcontactsList(string pbxCode, string userToken, string fw)
         {
             contacts_list contacts = new contacts_list
             {
                 contacts = new List<Contact>()
             };
-            if (String.IsNullOrEmpty(sip_username))
-            {
-                contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
-                contacts.ResponseMessage = "Empty User Name";
-                return contacts;
-            }
-            if (String.IsNullOrEmpty(companyID))
-            {
-                contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
-                contacts.ResponseMessage = "Company ID is 0";
-                return contacts;
-            }
             if (String.IsNullOrEmpty(pbxCode))
             {
                 contacts.ResponseCode = System.Net.HttpStatusCode.NotFound;
@@ -221,14 +209,13 @@ namespace VoiceX.Services
                     contacts.ResponseMessage = "Certificate don't found";
                     return contacts;
                 }
-                var content = new StringContent("{" + $"\"sip_account\":\"{sip_username}\",\"companyID\":\"{companyID}\"" + "}", Encoding.UTF8, "application/json");
-                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
                 var handler = new HttpClientHandler();
                 handler.ClientCertificates.Add(clientCertificate);
                 using (var httpClient = new HttpClient(handler))
                 {
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
-                    var response = await httpClient.PutAsync(new Uri(url), content);
+                    var request = new HttpRequestMessage(HttpMethod.Get, url) { Content = new StringContent("", Encoding.UTF8) };
+                    var response = await httpClient.SendAsync(request);
                     responseBody = await response.Content.ReadAsStringAsync();
                     await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
                 }
@@ -344,8 +331,7 @@ namespace VoiceX.Services
             {
                 X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("app-cert");
                
-                var content = new StringContent("", Encoding.UTF8, "application/json");
-                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                var content = new StringContent("", Encoding.UTF8);
                 var handler = new HttpClientHandler();
                 handler.ClientCertificates.Add(clientCertificate);
                 using (var httpClient = new HttpClient(handler))
