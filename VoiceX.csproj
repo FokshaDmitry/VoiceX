@@ -90,6 +90,7 @@
     <None Remove="Assets\Icone_v2\mdi_keypad.png" />
     <None Remove="Assets\Icone_v2\microphone.png" />
     <None Remove="Assets\Icone_v2\pause.png" />
+    <None Remove="Assets\Icone_v2\PC.png" />
     <None Remove="Assets\Icone_v2\plus.png" />
     <None Remove="Assets\Icone_v2\refresh.png" />
     <None Remove="Assets\Icone_v2\refreshblue.png" />
@@ -268,6 +269,9 @@
     </Resource>
     <Resource Include="Assets\Icone_v2\pause.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\PC.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\plus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

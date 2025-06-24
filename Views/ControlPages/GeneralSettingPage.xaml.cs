@@ -1,6 +1,7 @@
 ﻿using pj;
 using System;
 using System.Diagnostics;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
+using VoiceX.Models;
 using VoiceX.Services;
 
 namespace VoiceX.Views.ControlPages
@@ -23,6 +25,11 @@ namespace VoiceX.Views.ControlPages
         MainWindow window;
         private bool isRunning = true;
         int timeOut;
+        string ip;
+        string ice;
+        string stun;
+        string transport;
+        int transportId;
         public GeneralSettingPage(MainWindow window)
         {
             this.InitializeComponent();
@@ -32,10 +39,17 @@ namespace VoiceX.Views.ControlPages
             addDbContext = new AddDbContext();
             localStoreService = new LocalStoreService();
             timeOut = 1000;
+            transportId = 0;
         }
 
         private async void GeneralSettingPage_Loaded(object sender, RoutedEventArgs e)
         {
+
+            ip = await localStoreService.LoadDataAsync("ip");
+            ice = await localStoreService.LoadDataAsync("ice");
+            stun = await localStoreService.LoadDataAsync("stun");
+            transport = await localStoreService.LoadDataAsync("transport");
+            int.TryParse(transport, out transportId);
             AccountFild.Text = App.AccountData?.Data.User_Data.Name;
             phoneNumber.Text = App.AccountData?.Data.Sip_Settings.Sip_username;
             PbXText.Text = "PBX" + App.UserPbx?.TrimStart('0');
@@ -45,30 +59,31 @@ namespace VoiceX.Views.ControlPages
                 switch (type)
                 {
                     case "0":
-                        Tcp.IsChecked = true;
+                        Tls.IsChecked = true;
                         break;
                     case "1":
-                        Tls.IsChecked = true;
+                        Tcp.IsChecked = true;
                         break;
                 }
             }
             else
             {
                 await localStoreService.SaveDataAsync("transport", "0");
-                Tcp.IsChecked = true;
+                Tls.IsChecked = true;
             }
-            if (App.AccountData?.Data.Is_mobile == 0)
-            {
-                LopTop.IsChecked = true;
-                SmartPhone.IsChecked = false;
-
-            }
-            else
+            if (App.AccountData?.Data.Device_type == "softphone")
             {
                 SmartPhone.IsChecked = true;
                 LopTop.IsChecked = false;
+
+                CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
+                ProfilePage.onlineToken = true;
             }
-            _ = App.AccountData?.Data.Is_mobile == 0 ? LopTop.IsChecked = true : SmartPhone.IsChecked = true;
+            else
+            {
+                LopTop.IsChecked = true;
+                SmartPhone.IsChecked = false;
+            }
             Exit.Click += Exit_Click;
             Online();
         }
@@ -161,8 +176,8 @@ namespace VoiceX.Views.ControlPages
                 window!.LoadIcone.Visibility = Visibility.Visible;
                 Tls.IsChecked = false;
                 ProfilePage.onlineToken = false;
-                await localStoreService.SaveDataAsync("transport", "0");
-                await CoreService.Instance.ChangeTransport(0);
+                await localStoreService.SaveDataAsync("transport", "1");
+                await CoreService.Instance.ChangeTransport(1);
                 ProfilePage.onlineToken = true;
                 window!.LoadIcone.Visibility = Visibility.Collapsed;
             }
@@ -178,8 +193,8 @@ namespace VoiceX.Views.ControlPages
                 window!.LoadIcone.Visibility = Visibility.Visible;
                 Tcp.IsChecked = false;
                 ProfilePage.onlineToken = false;
-                await localStoreService.SaveDataAsync("transport", "1");
-                await CoreService.Instance.ChangeTransport(1);
+                await localStoreService.SaveDataAsync("transport", "0");
+                await CoreService.Instance.ChangeTransport(0);
                 ProfilePage.onlineToken = true;
                 window!.LoadIcone.Visibility = Visibility.Collapsed;
             }
@@ -195,24 +210,13 @@ namespace VoiceX.Views.ControlPages
             if ((bool)swich.IsChecked!)
             {
                 window!.LoadIcone.Visibility = Visibility.Visible;
-                if (await webService.ChangeCallType("mobile", App.UserPbx!, App.userToken!, App.fw!) == System.Net.HttpStatusCode.OK)
+                if (await webService.ChangeCallType("softphone", App.UserPbx!, App.userToken!, App.fw!) == System.Net.HttpStatusCode.OK)
                 {
-                    var info = CoreService.Instance.getInfo();
-                    if (info != null)
-                    {
-                        if (!info.regIsActive)
-                        {
-                            try
-                            {
-                                CoreService.Instance.setRegistration(true);
-                            }
-                            catch
-                            {
-
-                            }
-                        }
-                    }
+                    App.AccountData = await webService.GetAccountSettings(App.UserPbx!, App.userToken!, App.fw!);
+                    CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
+                    ProfilePage.onlineToken = true;
                     LopTop.IsChecked = false;
+                    App.AccountData!.Data.Device_type = "softphone";
                 }
                 else
                 {
@@ -245,9 +249,13 @@ namespace VoiceX.Views.ControlPages
                         if (info.regIsActive)
                         {
                             CoreService.Instance.setRegistration(false);
+                            info.onlineStatus = false;
+                            ProfilePage.onlineToken = false;
+                            CoreService.Instance.Logout();
                             await Task.Delay(1000);
                         }
                     }
+                    App.AccountData!.Data.Device_type = "fix";
                     SmartPhone.IsChecked = false;
                 }
                 else

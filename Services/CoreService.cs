@@ -42,8 +42,11 @@ namespace VoiceX.Services
                     EpConfig epConfig = new EpConfig();
                     epConfig.logConfig.level = 5;
                     epConfig.logConfig.writer = writer;
-                    epConfig.uaConfig.stunServer.Add(StunServer);
-                    epConfig.uaConfig.natTypeInSdp = 1;
+                    if (!String.IsNullOrEmpty(StunServer))
+                    {
+                        epConfig.uaConfig.stunServer.Add(StunServer);
+                    }
+                    //epConfig.uaConfig.natTypeInSdp = 1;
                     epConfig.uaConfig.maxCalls = 15;
                     
                     core.libInit(epConfig);

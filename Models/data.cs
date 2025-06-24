@@ -7,10 +7,13 @@
         public Ldap_settings Ldap_Settings { get; set; }
         public Sip_settings Sip_Settings { get; set; }
         public User_data User_Data { get; set; }
+        public string Device_type { get; set; }
+
         public Data()
         {
             Enable_log = 0;
             Is_mobile = 0;
+            Device_type = "";
             Ldap_Settings = new Ldap_settings
             {
                 Base = "",

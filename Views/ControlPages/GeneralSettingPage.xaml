@@ -130,7 +130,7 @@
         </Border>
         <Image Width="45" Height="66" HorizontalAlignment="Left" Margin="65,80,0,0" VerticalAlignment="Top">
             <Image.Source>
-                <BitmapImage UriSource="/Assets/Icone_v2/SmartPhone.png" DecodePixelWidth="100" DecodePixelHeight="200"/>
+                <BitmapImage UriSource="/Assets/Icone_v2/PC.png" DecodePixelWidth="470" DecodePixelHeight="650"/>
             </Image.Source>
         </Image>
         <Image Width="45"  Height="66" HorizontalAlignment="Left" Margin="65,170,0,0" VerticalAlignment="Top">

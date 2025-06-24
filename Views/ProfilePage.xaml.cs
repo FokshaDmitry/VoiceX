@@ -88,7 +88,7 @@ namespace VoiceX.Views
             clickToCallService = new ClickToCallService();
             incomingWindow = new IncomingWindow(mainWindow, this, activCallPage);
             LDAPService = new LDAPService();
-            onlineToken = true;
+            onlineToken = false;
             MenuIcons = new Dictionary<int, string>();
             window.moveOnDialpad += Window_moveOnDialpad;
             window.moveOnContact += Window_moveOnContact;
@@ -309,17 +309,9 @@ namespace VoiceX.Views
             
             addDbContext = new AddDbContext();
             addDbContext.InitializeDB();
-            var account = App.AccountData?.Data.Sip_Settings;
             LDAPService?.Authenticate(App.AccountData?.Data.Ldap_Settings.Dn!, App.AccountData?.Data.Ldap_Settings.Pass!);
             string mic = await localStoreService.LoadDataAsync("micro");
             string audio = await localStoreService.LoadDataAsync("audio");
-            string ip = await localStoreService.LoadDataAsync("ip");
-            string ice = await localStoreService.LoadDataAsync("ice");
-            string stun = await localStoreService.LoadDataAsync("stun");
-            string transport = await localStoreService.LoadDataAsync("transport");
-            int transportId = 0;
-            int.TryParse(transport, out transportId);
-            CoreService.Instance.Login(account?.Sip_username!, account!.Sip_server, account.Sip_proxy, account.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
             General.Checked += Filter_Checked;
             Addition.Checked += Filter_Checked;
             C2C.Checked += Filter_Checked;

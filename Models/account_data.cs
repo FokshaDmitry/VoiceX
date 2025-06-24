@@ -13,6 +13,7 @@ namespace VoiceX.Models
             {
                 Enable_log = 0,
                 Is_mobile = 0,
+                Device_type = "",
                 Ldap_Settings = new Ldap_settings()
             };
             Data.Ldap_Settings.Base = "";

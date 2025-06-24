@@ -118,7 +118,10 @@ namespace VoiceX.Views
                             App.userToken = token;
                             App.UserPbx = pbx;
                             App.fw = fw;
-                            CoreService.StunServer = App.AccountData.Data.Sip_Settings.Stun_server;
+                            if (stun == "1")
+                            {
+                                CoreService.StunServer = App.AccountData.Data.Sip_Settings.Stun_server;
+                            }
                             core = CoreService.Instance.Core;
                             profilePage = new ProfilePage(this);
                             this.MainPage.Content = profilePage;

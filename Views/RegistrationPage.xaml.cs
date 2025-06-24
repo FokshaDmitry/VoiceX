@@ -84,7 +84,6 @@ namespace VoiceX.Views
                         App.fw = pbxCode.Substring(3, 2);
                         webService = new WebService();
                         App.AccountData = await webService.GetAccountSettings(pbxCode.Substring(0, 3), App.userToken!, App.fw!);
-                        CoreService.StunServer = App.AccountData.Data.Sip_Settings.Stun_server;
                         core = CoreService.Instance.Core;
                     }
                     catch (Exception ex)
