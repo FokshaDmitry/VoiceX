@@ -8,6 +8,7 @@
     <UseWPF>True</UseWPF>
     <Nullable>enable</Nullable>
     <ApplicationManifest></ApplicationManifest>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -220,25 +221,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ADAT_Common">
-      <HintPath>..\..\edward_israel-master\c2c_adat\embed\ADAT_Common.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\edward_israel-master\pdfscribe\Lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="TTT.Generic">
-      <HintPath>..\..\VoiceX\SystrayComponent\embed\TTT.Generic.dll</HintPath>
-      <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <SpecificVersion>False</SpecificVersion>
-      <Aliases>global</Aliases>
+      <HintPath>..\..\edward_israel-master\c2c_adat\embed\TTT.Generic.dll</HintPath>
     </Reference>
     <Reference Include="TTT.WindowsControls">
-      <HintPath>..\..\VoiceX\SystrayComponent\embed\TTT.WindowsControls.dll</HintPath>
-      <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <SpecificVersion>False</SpecificVersion>
-      <Aliases>global</Aliases>
+      <HintPath>..\..\edward_israel-master\c2c_adat\embed\TTT.WindowsControls.dll</HintPath>
     </Reference>
   </ItemGroup>
 

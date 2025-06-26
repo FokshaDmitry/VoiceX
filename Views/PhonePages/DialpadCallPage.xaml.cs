@@ -41,8 +41,11 @@ namespace VoiceX.Views.PhonePages
                 {
                     if (pastedText.Length >= 8 && pastedText.Length <= 10)
                     {
-                        NumberFild.Text = "0" + pastedText;
-                        e.CancelCommand();
+                        if (pastedText[0] != '0')
+                        {
+                            NumberFild.Text = "0" + pastedText;
+                            e.CancelCommand();
+                        }
                     }
                 }
             }

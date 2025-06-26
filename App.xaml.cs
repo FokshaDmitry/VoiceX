@@ -1,25 +1,24 @@
-﻿using pj;
-using System.IO.Pipes;
+﻿using PdfScribeCore;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.Advanced;
+using PdfSharp.Pdf.Content;
+using PdfSharp.Pdf.Content.Objects;
+using PdfSharp.Pdf.IO;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Pipes;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using TTT.WindowsControls;
 using VoiceX.Models;
 using VoiceX.Services;
 using VoiceX.Views;
-using PdfSharp.Pdf.IO;
-using PdfSharp.Pdf.Content;
-using PdfSharp.Pdf.Content.Objects;
-using PdfSharp.Pdf.Advanced;
-using PdfSharp.Pdf;
-using System.Diagnostics;
-using System.Threading;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using PdfScribeCore;
-using System.Threading.Tasks;
-using System.Text;
-using System.Runtime.InteropServices;
 
 namespace VoiceX
 {
@@ -326,10 +325,11 @@ namespace VoiceX
             string globalSelectedText = "";
             try
             {
-                globalSelectedText = ClipboardHelper.getGlobalSelectedText(); 
+                ClipboardHelper.Backup();
+                globalSelectedText = ClipboardHelper.getGlobalSelectedText();
                 Debug.WriteLine("SELECT TEXT: " + globalSelectedText);
             }
-            catch (Exception ex)
+            catch (AccessViolationException ex)
             {
                 Debug.Write(ex.Message);
                 return "";

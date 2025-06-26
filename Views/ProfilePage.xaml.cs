@@ -109,18 +109,24 @@ namespace VoiceX.Views
 
         public void Hotkeys_HotkeyPressed(string Phone)
         {
-
             if (!String.IsNullOrEmpty(Phone))
             {
                 try
                 {
                     if (CoreService.activeCall == null)
                     {
-                        foreach (var regex in regexNotes?.Where(r => r.Check)!)
+                        if (Phone.Length >= 8 && Phone.Length <= 10)
+                        {
+                            if (Phone[0] != '0')
+                            {
+                                Phone = "0" + Phone;
+                            }
+                        }
+                        foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
                         {
                             Phone = Phone.Replace(regex.Search!, regex.Replace);
                         }
-                        Phone = Regex.Replace(Phone, @"^[0-9*#]", "");
+                        Phone = Regex.Replace(Phone, @"[^0-9*#]", "");
                         try
                         {
                             CoreService.Instance.MakeCall(Phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
