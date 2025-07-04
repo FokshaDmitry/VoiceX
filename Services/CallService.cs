@@ -18,6 +18,7 @@ namespace VoiceX.Services
         public bool EndAllCalls;
         public delegate void EndCall(string Name, string Phone, DateTime StartCall);
         public event EndCall? EndCallEvent;
+        public int DeviceId;
         public CallService(Account acc, int call_id = -1) : base(acc, call_id)
         {
             CallAdtess = new List<string>();
@@ -25,6 +26,7 @@ namespace VoiceX.Services
             startTime = DateTime.MinValue;
             isMute = false;
             EndAllCalls = false;
+            DeviceId = 0;
         }
         public void Accept()
         {
@@ -58,7 +60,6 @@ namespace VoiceX.Services
                 case pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED:
                     Debug.WriteLine("[CALL] Абонент ответил, отключаем гудок...");
                     StopRingTone();
-                    //SetupAudio();
                     break;
                 case pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED:
                     Debug.WriteLine($"[CALL] Вызов завершён: {ci.lastReason}");
@@ -299,9 +300,6 @@ namespace VoiceX.Services
                         case "Incoming":
                             ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "iphone-11-pro.wav");
                             break;
-                        case "Pause":
-                            ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "hold.wav");
-                            break;
                     }
                     ringTonePlayer = new AudioMediaPlayer();
                     ringTonePlayer.createPlayer(ringtonePath);
@@ -319,12 +317,38 @@ namespace VoiceX.Services
                 Debug.WriteLine($"[CALL] Ошибка при запуске гудка: {ex.Message}");
             }
         }
-        
+        public void PlayIncomingRing(int device)
+        {
+            try
+            {
+                if (ringTonePlayer == null)
+                {
+                    DeviceId = CoreService.Instance.Core.audDevManager().getPlaybackDev();
+                    var manager = CoreService.Instance.Core.audDevManager();
+                    manager.setPlaybackDev(device);
+                    ringTonePlayer = new AudioMediaPlayer();
+                    string ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "iphone-11-pro.wav");
+                    ringTonePlayer.createPlayer(ringtonePath);
+                    AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
+
+                    if (speaker != null)
+                    {
+                        ringTonePlayer.startTransmit(speaker);
+                        Debug.WriteLine("[CALL] Гудок запущен.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CALL] Ошибка при запуске гудка: {ex.Message}");
+            }
+        }
+
 
         /// <summary>
         /// Объединить два вызова в конференцию
         /// </summary>
-        
+
         public void TransferCall(string phone, string server)
         {
             try
@@ -348,6 +372,9 @@ namespace VoiceX.Services
             {
                 if (ringTonePlayer != null)
                 {
+
+                    var manager = CoreService.Instance.Core.audDevManager();
+                    manager.setPlaybackDev(DeviceId);
                     AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
                     if (speaker != null)
                     {

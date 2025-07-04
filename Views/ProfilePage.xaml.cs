@@ -92,7 +92,15 @@ namespace VoiceX.Views
             MenuIcons = new Dictionary<int, string>();
             window.moveOnDialpad += Window_moveOnDialpad;
             window.moveOnContact += Window_moveOnContact;
+            window.moveOnHistory += Window_moveOnHistory;
             this.PreviewKeyDown += OnPreviewKeyDown;
+        }
+
+        private void Window_moveOnHistory()
+        {
+            historyPage.IgnoreCall.IsChecked = true;
+            MainFrame.Navigate(historyPage);
+            slide.Begin();
         }
 
         private void Window_moveOnContact()
@@ -159,7 +167,7 @@ namespace VoiceX.Views
         {
             if (CoreService.activeCall != null)
             {
-                await Dispatcher.InvokeAsync(() =>
+                await Dispatcher.InvokeAsync(async () =>
                 {
                     try
                     {
@@ -174,8 +182,10 @@ namespace VoiceX.Views
                         }
                         else
                         {
-
-                            CoreService.activeCall?.PlayRingTone("Incoming");
+                            var idDev = await localStoreService.LoadDataAsync("ring");
+                            int id = 0;
+                            int.TryParse(idDev, out id);
+                            CoreService.activeCall?.PlayIncomingRing(id);
                             var visible = window?.Visibility == Visibility.Visible;
                             if (visible)
                             {

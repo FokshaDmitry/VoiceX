@@ -35,7 +35,7 @@ namespace VoiceX.Views.ClientPages
         private async void ContactsPage_Loaded(object sender, RoutedEventArgs e)
         {
             ProfilePage.window!.LoadIcone.Visibility = Visibility.Visible;
-            contacts = await webService.GetcontactsList( App.UserPbx!, App.userToken!, App.fw!);
+            contacts = await webService.GetcontactsList(App.UserPbx!, App.userToken!, App.fw!);
             ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
             if (contacts.ResponseCode != HttpStatusCode.OK || contacts.contacts == null)
             {

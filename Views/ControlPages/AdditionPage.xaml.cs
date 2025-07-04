@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,9 +10,12 @@ using VoiceX.Services;
 
 namespace VoiceX.Views.ControlPages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+    public enum StartupStatus
+    {
+        NotInStartup,
+        Enabled,
+        Disabled
+    }
     public sealed partial class AdditionPage : Page
     {
         LocalStoreService localStoreService;
@@ -25,6 +29,7 @@ namespace VoiceX.Views.ControlPages
         {
             string micro = await localStoreService.LoadDataAsync("micro");
             string audio = await localStoreService.LoadDataAsync("audio");
+            string ring = await localStoreService.LoadDataAsync("ring");
             Microphones.Items.Clear();
             Audio.Items.Clear();
             var manager = CoreService.Instance.Core.audDevManager();
@@ -32,6 +37,7 @@ namespace VoiceX.Views.ControlPages
             var deviceCount = manager.enumDev2();
             int mic = 0;
             int aud = 0;
+            int rng = 0;
             if (!String.IsNullOrEmpty(micro))
             {
                 int.TryParse(micro, out mic);
@@ -39,6 +45,10 @@ namespace VoiceX.Views.ControlPages
             if (!String.IsNullOrEmpty(audio))
             {
                 int.TryParse(audio, out aud);
+            }
+            if (!String.IsNullOrEmpty(ring))
+            {
+                int.TryParse(ring, out rng);
             }
             int index = 0;
             foreach (var device in deviceCount)
@@ -55,6 +65,7 @@ namespace VoiceX.Views.ControlPages
                     {
                         Debug.WriteLine($"[SIP] ID: Динамик (вывод): {device.name}");
                         Audio.Items.Add(new DeviceItem(device.name, index) { IsSelected = index == aud });
+                        Ringtone.Items.Add(new DeviceItem(device.name, index) { IsSelected = index == rng });
                     }
                     index++;
                 }
@@ -83,15 +94,31 @@ namespace VoiceX.Views.ControlPages
                     Ip.IsChecked = true;
                 }
             }
-            
+            Startup.IsChecked = IsInStartup() == StartupStatus.Enabled ? true : false;
             Microphones.SelectionChanged += Microphones_SelectionChanged;
             Audio.SelectionChanged += Audio_SelectionChanged;
+            Ringtone.SelectionChanged += Ringtone_SelectionChanged;
         }
         private void Include_Toggled(object sender, RoutedEventArgs e)
         {
             
         }
+        private async void Ringtone_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                var item = (ComboBox)sender;
+                var selectItem = (DeviceItem)item.SelectedItem;
+                if (selectItem != null)
+                {
+                    await localStoreService.SaveDataAsync("ring", selectItem.caps.ToString());
+                }
+            }
+            catch
+            {
 
+            }
+        }
         private async void Microphones_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -133,7 +160,7 @@ namespace VoiceX.Views.ControlPages
         private async void Proxy_Checked(object sender, RoutedEventArgs e)
         {
             ProfilePage.onlineToken = false;
-            await CoreService.Instance.UseProxy(Proxy.IsChecked == true ? App.AccountData?.Data.Sip_Settings.Sip_proxy : App.AccountData?.Data.Sip_Settings.Sip_server);
+            //await CoreService.Instance.UseProxy(Proxy.IsChecked == true ? App.AccountData?.Data.Sip_Settings.Sip_proxy : App.AccountData?.Data.Sip_Settings.Sip_server);
             ProfilePage.onlineToken = true;
             await localStoreService.SaveDataAsync("stun", Proxy.IsChecked == true ? "1" : "0");
         }
@@ -149,11 +176,77 @@ namespace VoiceX.Views.ControlPages
 
         private async void Ip_Checked(object sender, RoutedEventArgs e)
         {
-            var flag = (bool)Ice.IsChecked!;
+            var flag = (bool)Ip.IsChecked!;
             ProfilePage.onlineToken = false;
             await CoreService.Instance.UseIpRewrite(flag);
             ProfilePage.onlineToken = true;
             await localStoreService.SaveDataAsync("ip", flag ? "1": "0");
+        }
+        public StartupStatus IsInStartup()
+        {
+            RegistryKey runKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", false);
+            RegistryKey approvedKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", false);
+
+            bool inRun = runKey?.GetValue("VoiceX") != null;
+            byte[] statusBytes = approvedKey?.GetValue("VoiceX") as byte[];
+            
+            if (!inRun)
+                return StartupStatus.Disabled;
+
+            if (statusBytes != null && statusBytes.Length > 0)
+            {
+                byte status = statusBytes[0];
+
+                return status switch
+                {
+                    0x02 => StartupStatus.Enabled,
+                    0x03 => StartupStatus.NotInStartup,
+                    _ => StartupStatus.NotInStartup // по умолчанию считаем включённым
+                };
+            }
+
+            return StartupStatus.NotInStartup;
+        }
+        public void AddToStartupWithEnable()
+        {
+            // Устанавливаем флаг "Enabled" в StartupApproved
+            using (RegistryKey approvedKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", true))
+            {
+                byte[] enabledValue = new byte[] { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // 6 байт: статус + даты (можно нули)
+
+                approvedKey.SetValue("VoiceX", enabledValue, RegistryValueKind.Binary);
+            }
+        }
+        public static void AddToStartup()
+        {
+            var path = System.Reflection.Assembly.GetExecutingAssembly();
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            rk.SetValue("VoiceX", $"\"{path.Location}\"");
+        }
+        public static void RemoveFromStartup()
+        {
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            if (rk.GetValue("VoiceX") != null)
+            {
+                rk.DeleteValue("VoiceX", false);
+            }
+        }
+        private void Startup_Click(object sender, RoutedEventArgs e)
+        {
+            switch (IsInStartup())
+            {
+                case StartupStatus.NotInStartup:
+                    AddToStartupWithEnable();
+                    break;
+                case StartupStatus.Enabled:
+                    RemoveFromStartup();
+                    break;
+                case StartupStatus.Disabled:
+                    AddToStartup();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

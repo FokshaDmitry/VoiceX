@@ -25,16 +25,16 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <RadioButton Cursor="Hand" ToolTipService.ToolTip="General" ToolTipService.Placement="Mouse" Grid.Column="0" IsChecked="True" GroupName="Filter" x:Name="Operators"  MinWidth="55" Background="Transparent" MinHeight="25" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center">
+                <RadioButton Cursor="Hand" ToolTipService.ToolTip="General" ToolTipService.Placement="Mouse" Grid.Column="2" IsChecked="True" GroupName="Filter" x:Name="Operators"  MinWidth="55" Background="Transparent" MinHeight="25" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                         <TextBlock FontFamily="Nunito Sans 10pt Normal" x:Name="GeneralText" Text="Operators" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" Foreground="#FF252422"/>
-                        <Border CornerRadius="1" x:Name="OperatorsCheck" Height="2" Background="#FFC1BFFF" Width="106.5"/>
+                        <Border CornerRadius="1" x:Name="OperatorsCheck" Height="2" Background="#FFF0F0FF" Width="106.5"/>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton x:Name="Clients" Cursor="Hand" ToolTipService.ToolTip="Addition" ToolTipService.Placement="Mouse" Grid.Column="2" GroupName="Filter" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                <RadioButton x:Name="Clients" Cursor="Hand" ToolTipService.ToolTip="Addition" ToolTipService.Placement="Mouse" Grid.Column="0" GroupName="Filter" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                         <TextBlock FontFamily="Nunito Sans 10pt Normal" x:Name="AdditionText" Text="Clients" FontSize="14" Foreground="#FF252422" HorizontalAlignment="Center"/>
-                        <Border CornerRadius="1.5" x:Name="ClientsChek" Height="2" Background="#FFF0F0FF" Width="106.4"/>
+                        <Border CornerRadius="1.5" x:Name="ClientsChek" Background="#FFC1BFFF" Height="2"  Width="106.4"/>
                     </StackPanel>
                 </RadioButton>
             </Grid>

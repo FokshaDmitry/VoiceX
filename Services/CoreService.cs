@@ -13,7 +13,6 @@ namespace VoiceX.Services
         public static PjsipLogger? writer;
         public static CallService? activeCall;
         public static string StunServer { get; set; } = "";
-        //public static BuddyService? buddy;
         private static readonly CoreService instance = new CoreService();
         private Endpoint? core;
         public delegate void IncomingCall(); 
@@ -46,11 +45,19 @@ namespace VoiceX.Services
                     {
                         epConfig.uaConfig.stunServer.Add(StunServer);
                     }
-                    //epConfig.uaConfig.natTypeInSdp = 1;
                     epConfig.uaConfig.maxCalls = 15;
                     
                     core.libInit(epConfig);
-
+                    var codecs = core.codecEnum2();
+                    foreach (var codec in codecs) 
+                    {
+                        if (!codec.codecId.ToLower().Contains("pcmu") && !codec.codecId.ToLower().Contains("pcma"))
+                        {
+                            core.codecSetPriority(codec.codecId, (byte)0);
+                        }
+                        
+                    }
+                    
                     // Create transport
                     TransportConfig tcfg = new TransportConfig();
                     tcfg.port = 5060;
@@ -189,10 +196,10 @@ namespace VoiceX.Services
             accCfg!.natConfig.sdpNatRewriteUse = flag == true ? 1 : 0;
             await ReloadCore();
         }
-        public async Task UseProxy(string? proxy)
+        public async Task UseStun(string? proxy)
         {
-            accCfg!.regConfig.registrarUri = $"sip:{proxy}";
-            await ReloadCore();
+            //accCfg!.regConfig.registrarUri = $"sip:{proxy}";
+            //await ReloadCore();
         }
         private async Task ReloadCore()
         {
@@ -234,7 +241,7 @@ namespace VoiceX.Services
                 {
                     activeCall = new CallService(this);
                     CallOpParam prm = new CallOpParam(true);
-
+                    
                     activeCall.makeCall(sipUri, prm);
                     OutgoingCallEvent?.Invoke();
                     return activeCall;

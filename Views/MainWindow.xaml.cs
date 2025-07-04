@@ -22,6 +22,7 @@ namespace VoiceX.Views
         public delegate void MoveOnPage();
         public event MoveOnPage? moveOnDialpad;
         public event MoveOnPage? moveOnContact;
+        public event MoveOnPage? moveOnHistory;
         public CoreService Core { get; } = CoreService.Instance;
         Endpoint core;
         public MainWindow()
@@ -64,7 +65,16 @@ namespace VoiceX.Views
 
         private void TrayIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            this.ShowInBottomRight();
+            Debug.WriteLine(TrayIcon.IconSource.ToString());
+            if (TrayIcon.IconSource.ToString().Contains("TrayIcon"))
+            {
+                this.ShowInBottomRight();
+            }
+            else
+            {
+                 moveOnHistory?.Invoke();
+                this.ShowInBottomRight();
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -161,7 +171,7 @@ namespace VoiceX.Views
         {
             if (!String.IsNullOrEmpty(ErrorMessage.Text))
             {
-                System.Windows.Clipboard.SetText(ErrorMessage.Text);
+                Clipboard.SetText(ErrorMessage.Text);
             }
         }
         public void ShowError(string message)

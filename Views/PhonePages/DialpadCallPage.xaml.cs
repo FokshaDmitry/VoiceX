@@ -138,6 +138,10 @@ namespace VoiceX.Views.PhonePages
                         NumberFild.Text = phone;
                     }
                 }
+                NumberFild.CaretIndex = NumberFild.Text.Length;
+
+                // Предотвращаем стандартное поведение
+                e.Handled = true;
             }
             catch
             {

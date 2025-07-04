@@ -17,11 +17,10 @@ namespace VoiceX.Views
     public sealed partial class HistoryPage : Page, IMoreItems  
     {
         readonly AddDbContext addDbContext;
-        RadioButton filter;
+        public RadioButton filter;
         public HistoryPage()
         {
             this.InitializeComponent();
-            addDbContext = new AddDbContext();
             addDbContext = new AddDbContext();
             filter = new RadioButton();
             AddDbContext.ChangeHystory += AddDbContext_ChangeHystory;
@@ -81,9 +80,35 @@ namespace VoiceX.Views
 
         private void HistoryPage_Loaded(object sender, RoutedEventArgs e)
         {
-            List<HistoryNotes> historyNotes = addDbContext.GetNotes(50);
-            FillListBox(historyNotes, 0);
-            filter.Name = "AllCall";
+            if (!String.IsNullOrEmpty(filter.Name))
+            {
+                if (filter.Name == "IgnoreCall")
+                {
+                    var blueLine = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+                    var textCalor = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
+                    var darkTextColor = new SolidColorBrush(Color.FromArgb(255, 37, 36, 34));
+                    var whiteLine = new SolidColorBrush(Color.FromArgb(255, 240, 240, 255));
+                    AllText.Foreground = textCalor;
+                    InText.Foreground = textCalor;
+                    OutText.Foreground = textCalor;
+                    MinusText.Foreground = darkTextColor;
+
+                    CheckOut.Background = whiteLine;
+                    ChekIn.Background = whiteLine;
+                    CheckAll.Background = whiteLine;
+                    ChekIgnore.Background = blueLine;
+                    List<HistoryNotes> historyNotes = addDbContext.GetNotes(50, Enums.StatusCall.Ignore);
+                    FillListBox(historyNotes, 0);
+                    
+                }
+                else
+                {
+                    filter.Name = "AllCall";
+                }
+            }
+            else
+            {
+            }
             if (ProfilePage.window != null)
             {
                 ProfilePage.window.TrayIcon.IconSource = new BitmapImage(new Uri("pack://application:,,,/Assets/icone_v2/TrayIcon.ico"));

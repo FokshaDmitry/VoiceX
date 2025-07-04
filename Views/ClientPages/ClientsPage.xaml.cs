@@ -13,17 +13,15 @@ namespace VoiceX.Views.ClientPages
     /// </summary>
     public sealed partial class ClientsPage : Page
     {
-        readonly WebService webService;
         public static List<Items.Contact> userContactsList;
         OperatorsPage operatorsPage;
-        ContactsPage contactsPages;
+        ContactsPage clientPage;
         public ClientsPage()
         {
             this.InitializeComponent();
-            webService = new WebService();
             userContactsList = new List<Items.Contact>();
+            clientPage = new ContactsPage();
             operatorsPage = new OperatorsPage();
-            contactsPages = new ContactsPage();
         }
         private void Filter_Checked(object sender, RoutedEventArgs e)
         {
@@ -41,17 +39,17 @@ namespace VoiceX.Views.ClientPages
             {
                 OperatorsCheck.Background = whiteLine;
                 ClientsChek.Background = blueLine;
-                PageContent.Navigate(contactsPages);
+                PageContent.Navigate(clientPage);
             }
         }
 
         private void contactsPage_Loaded(object sender, RoutedEventArgs e)
         {
-            Clients.IsChecked = false;
-            Operators.IsChecked = true;
+            Clients.IsChecked = true;
+            Operators.IsChecked = false;
             Clients.Checked += Filter_Checked;
             Operators.Checked += Filter_Checked;
-            PageContent.Navigate(operatorsPage);
+            PageContent.Navigate(clientPage);
         }
     }
 }
