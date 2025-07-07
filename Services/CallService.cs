@@ -75,13 +75,21 @@ namespace VoiceX.Services
                                 {
                                     if (call != null)
                                     {
-                                        var info = call.getInfo();
-                                        if (info != null)
+                                        try
                                         {
-                                            if (info.remoteContact != ci.remoteContact)
+
+                                            var info = call.getInfo();
+                                            if (info != null)
                                             {
-                                                call.hangup(new CallOpParam());
+                                                if (info.remoteContact != ci.remoteContact)
+                                                {
+                                                    call.hangup(new CallOpParam());
+                                                }
                                             }
+                                        }
+                                        catch
+                                        {
+
                                         }
                                     }
                                 }
@@ -102,7 +110,7 @@ namespace VoiceX.Services
                                 var info = CoreService.activeCall.getInfo();
                                 if (CoreService.activeCall.CallAdtess != null && CoreService.activeCall.CallAdtess.Count() != 0)
                                 {
-                                    var phone = ExtractValue(info.remoteContact);
+                                    var phone = ExtractValue(ci.remoteContact);
                                     var address = CoreService.activeCall.CallAdtess.FirstOrDefault(c => c.Contains(phone));
                                     if (address != null)
                                     {

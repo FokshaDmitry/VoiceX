@@ -18,9 +18,18 @@ namespace VoiceX.Views
     {
         readonly AddDbContext addDbContext;
         public RadioButton filter;
+
+        SolidColorBrush blueLine; 
+        SolidColorBrush textCalor; 
+        SolidColorBrush darkTextColor; 
+        SolidColorBrush whiteLine;
         public HistoryPage()
         {
             this.InitializeComponent();
+            blueLine = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+            textCalor = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
+            darkTextColor = new SolidColorBrush(Color.FromArgb(255, 37, 36, 34));
+            whiteLine = new SolidColorBrush(Color.FromArgb(255, 240, 240, 255));
             addDbContext = new AddDbContext();
             filter = new RadioButton();
             AddDbContext.ChangeHystory += AddDbContext_ChangeHystory;
@@ -84,10 +93,6 @@ namespace VoiceX.Views
             {
                 if (filter.Name == "IgnoreCall")
                 {
-                    var blueLine = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
-                    var textCalor = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
-                    var darkTextColor = new SolidColorBrush(Color.FromArgb(255, 37, 36, 34));
-                    var whiteLine = new SolidColorBrush(Color.FromArgb(255, 240, 240, 255));
                     AllText.Foreground = textCalor;
                     InText.Foreground = textCalor;
                     OutText.Foreground = textCalor;
@@ -103,11 +108,36 @@ namespace VoiceX.Views
                 }
                 else
                 {
+                    AllText.Foreground = darkTextColor;
+                    InText.Foreground = textCalor;
+                    OutText.Foreground = textCalor;
+                    MinusText.Foreground = textCalor;
+
+                    CheckOut.Background = whiteLine;
+                    ChekIn.Background = whiteLine;
+                    CheckAll.Background = blueLine;
+                    ChekIgnore.Background = whiteLine;
+
+                    List<HistoryNotes> historyNotes = addDbContext.GetNotes(50);
+                    FillListBox(historyNotes, 0);
                     filter.Name = "AllCall";
                 }
             }
             else
             {
+                AllText.Foreground = darkTextColor;
+                InText.Foreground = textCalor;
+                OutText.Foreground = textCalor;
+                MinusText.Foreground = textCalor;
+
+                CheckOut.Background = whiteLine;
+                ChekIn.Background = whiteLine;
+                CheckAll.Background = blueLine;
+                ChekIgnore.Background = whiteLine;
+
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(50);
+                FillListBox(historyNotes, 0);
+                filter.Name = "AllCall";
             }
             if (ProfilePage.window != null)
             {
@@ -150,10 +180,6 @@ namespace VoiceX.Views
             {
                 return;
             }
-            var blueLine = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
-            var textCalor = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
-            var darkTextColor = new SolidColorBrush(Color.FromArgb(255, 37, 36, 34));
-            var whiteLine = new SolidColorBrush(Color.FromArgb(255, 240, 240, 255));
             if (filter.Name == "OutCall")
             {
                 AllText.Foreground = textCalor;

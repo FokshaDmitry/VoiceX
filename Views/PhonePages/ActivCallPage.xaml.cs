@@ -117,7 +117,7 @@ namespace VoiceX.Views.PhonePages
                         }
                         if (phonePage.MainFrame.Content.ToString() != "VoiceX.Views.PhonePages.DialpadCallPage")
                         {
-                            phonePage.Navigate_Click(new Button() { Name = "Phone" }, new RoutedEventArgs());
+                            phonePage.Navigate_Click(new Button() { Name = "Phone", ToolTip = "Dialpad" }, new RoutedEventArgs());
                         }
                     }
                 }
@@ -136,8 +136,19 @@ namespace VoiceX.Views.PhonePages
         {
             if(CoreService.activeCall != null)
             {
-                CoreService.activeCall.EndAllCalls = true;
-                CoreService.activeCall?.hangup(new CallOpParam());
+                try
+                {
+                    CoreService.activeCall.EndAllCalls = true;
+                    CoreService.activeCall?.hangup(new CallOpParam());
+                }
+                catch
+                {
+                    CoreService.activeCall = null;
+                    if (phonePage.MainFrame.Content.ToString() != "VoiceX.Views.PhonePages.DialpadCallPage")
+                    {
+                        phonePage.Navigate_Click(new Button() { Name = "Phone", ToolTip = "Dialpad" }, new RoutedEventArgs());
+                    }
+                }
             }
         }
         private void Sound_Click(object sender, RoutedEventArgs e)
