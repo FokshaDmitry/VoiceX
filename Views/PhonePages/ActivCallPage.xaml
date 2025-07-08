@@ -21,7 +21,7 @@
         </Style>
     </Page.Resources>
     <Grid x:Name="Activ" Background="White">
-        <TextBlock x:Name="StatusCurrentCall" HorizontalAlignment="Center" Text="Incoming call" VerticalAlignment="Top" Margin="0,10,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="12" Foreground="#FFC3C3C4"/>
+        <TextBlock x:Name="StatusCurrentCall" HorizontalAlignment="Center" Text="{DynamicResource m_IncomingCall}" VerticalAlignment="Top" Margin="0,10,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="12" Foreground="#FFC3C3C4"/>
         <TextBlock x:Name="UserNameText" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Foreground="#FF252422" FontWeight="Normal"/>
         <TextBlock x:Name="PhoneText" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,55,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="14" Foreground="#FF252422" FontWeight="Normal"/>
         <TextBlock x:Name="Time" HorizontalAlignment="Center" Text="00:00" VerticalAlignment="Top" Margin="0,95,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="12" Foreground="#FFC1BFFF" FontWeight="Normal"/>
@@ -89,12 +89,12 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <TextBlock Foreground="#FFC1BFFF" Text="Forwarding" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,40,0,0" />
-            <TextBlock Foreground="#FFC1BFFF" Text="Profile" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,40,0,0" />
-            <TextBlock Foreground="#FFC1BFFF" Text="Add" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,14,0" />
+            <TextBlock Foreground="#FFC1BFFF" Text="{DynamicResource m_Forwarding}" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,40,0,0" />
+            <TextBlock Foreground="#FFC1BFFF" Text="{DynamicResource m_Profile}" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,40,0,0" />
+            <TextBlock Foreground="#FFC1BFFF" Text="{DynamicResource m_Add}" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,14,0" />
             <TextBlock Foreground="#FFC1BFFF" x:Name="AutoAnswerText" Text="AA" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,108,0,0" />
-            <TextBlock Foreground="#FFC1BFFF" Text="Hold" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,108,0,0" />
-            <TextBlock Foreground="#FFC1BFFF" Text="KeyPad" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,108,7,0" />
+            <TextBlock Foreground="#FFC1BFFF" Text="{DynamicResource m_Hold}" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,108,0,0" />
+            <TextBlock Foreground="#FFC1BFFF" Text="{DynamicResource m_Keypad}" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,108,7,0" />
         </Grid>
         <Button Background="Transparent" BorderThickness="0" Cursor="Hand" Name="EndCall" Click="EndCall_Click" VerticalAlignment="Top" Width="40" Height="40" FontSize="24" FontFamily="Nunito Sans 10pt Normal" FontWeight="Normal" Padding="0,0,0,0" UseLayoutRounding="False" HorizontalAlignment="Center" Margin="0,265,0,0">
             <Button.Content>

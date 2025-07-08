@@ -1,10 +1,13 @@
 ﻿using pj;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Net;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
+using VoiceX.Items;
 using VoiceX.Services;
 
 namespace VoiceX.Views
@@ -41,6 +44,12 @@ namespace VoiceX.Views
                 timer.Start();
             }
             certificateService = new CertificateService();
+        }
+
+        private void LanguageChanged(object? sender, EventArgs e)
+        {
+            //WPFLocalizationCSharp.Properties.Settings.Default.DefaultLanguage = Language;
+            //WPFLocalizationCSharp.Properties.Settings.Default.Save();
         }
 
         private void ShowWindow(object sender, RoutedEventArgs e)
@@ -161,11 +170,21 @@ namespace VoiceX.Views
                 registrationPage = new RegistrationPage(this);
                 this.MainPage.Content = registrationPage;
             }
+
+            App.LanguageChanged += LanguageChanged;
+
+            CultureInfo currLang = App.Language;
+            LanguagesList.Items.Clear();
+            foreach (var lang in App.Languages)
+            {
+                LanguagesList.Items.Add(new LangItem(lang, lang.Equals(currLang)));
+            }
         }
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             ErrorPlate.Visibility = Visibility.Collapsed;
             PreAsk.Visibility = Visibility.Collapsed;
+            LanguagesFild.Visibility = Visibility.Collapsed;
         }
         private void Copy_Click(object sender, RoutedEventArgs e)
         {
@@ -180,7 +199,10 @@ namespace VoiceX.Views
             ErrorPlate.Visibility = Visibility.Visible;
             ShowInBottomRight();
         }
-        
+        public void ShowLanguages()
+        {
+            LanguagesFild.Visibility= Visibility.Visible;
+        }
         public void Exit_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -245,6 +267,22 @@ namespace VoiceX.Views
         private void Window_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             App.timeOut = DateTime.Now;
+        }
+
+        private void Send_Click(object sender, RoutedEventArgs e)
+        {
+            var items = LanguagesList.Items;
+            foreach (var item in items) 
+            {
+                var languge = (LangItem)item;
+                if (languge.Language.IsChecked == true)
+                {
+                    if (languge.cultureInfo != null)
+                    {
+                        App.Language = languge.cultureInfo;
+                    }
+                }
+            }
         }
     }
 }

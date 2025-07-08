@@ -219,7 +219,78 @@
                     </Grid>
                 </Border>
             </Grid>
-            <Grid x:Name="PreAsk" Visibility="Collapsed"  Background="#999692ED" Margin="-5,0,-5,0" >
+            <Grid Visibility="Collapsed" x:Name="LanguagesFild" Background="#999692ED" Margin="-5,0,-5,0" >
+                <Border CornerRadius="12" Background="White" Width="204" Height="186">
+                    <Grid Margin="0,11,0,0">
+                        <Button Cursor="Hand" Click="Close_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,5,8,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                            <Button.Content>
+                                <Border Background="White" Width="16" Height="16">
+                                    <Grid Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                        <Rectangle RadiusX="0.5" RadiusY="0.5" Width="12" Height="1" Fill="#FFC1BFFF" RenderTransformOrigin="0.5,0.5">
+                                            <Rectangle.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="45"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Rectangle.RenderTransform>
+
+                                        </Rectangle>
+                                        <Rectangle RadiusX="0.5" RadiusY="0.5" Width="12" Height="1" Fill="#FFC1BFFF" RenderTransformOrigin="0.5,0.5">
+                                            <Rectangle.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-45"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Rectangle.RenderTransform>
+                                        </Rectangle>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <TextBox BorderThickness="0" FontSize="18" FontFamily="Nunito Sans 10pt Normal" Text="{DynamicResource m_Language}" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADABFF" Margin="12,12,0,0"/>
+                        <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" x:Name="LanguagesList" Height="92" Margin="0,36,0,8" Width="187" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top">
+                            <ListBox.Template>
+                                <ControlTemplate TargetType="ListBox">
+                                    <ItemsPresenter />
+                                </ControlTemplate>
+                            </ListBox.Template>
+                        </ListBox>
+                        <Button Width="180" Height="36" Margin="0,133,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="{DynamicResource m_Save}" x:Name="Send" Click="Send_Click" Foreground="#FF7B76FF">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#FFE5E5FF"/>
+                                    <Setter Property="FontSize" Value="16"/>
+                                    <Setter Property="Padding" Value="10"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="#FFE5E5FF" CornerRadius="6">
+                                                    <ContentPresenter HorizontalAlignment="Center" 
+                          VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <!-- Отключаем изменение цвета при наведении -->
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#A459FC"/>
+                                            <!-- Оставляем тот же цвет -->
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
+                </Border>
+            </Grid>
+            <Grid x:Name="PreAsk" Visibility="Collapsed" Background="#999692ED" Margin="-5,0,-5,0" >
                 <Border CornerRadius="12" Background="White" Width="204" Height="246">
                     <Grid>
                         <Image Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Top" Width="90" Margin="0,18,0,0">
@@ -227,13 +298,13 @@
                                 <BitmapImage UriSource="/Assets/Icone_v2/Warning.png" DecodePixelWidth="1000" DecodePixelHeight="1000"/>
                             </Image.Source>
                         </Image>
-                        <TextBox BorderThickness="0" FontSize="20" FontFamily="Nunito Sans 10pt Normal" Text="Are you sure?" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,88,0,0"/>
-                        <TextBox TextWrapping="Wrap" BorderThickness="0" Width="143" Height="30" FontSize="14" FontFamily="Nunito Sans 10pt Normal" Text="You will not be able to undo this action!" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,114,0,0" HorizontalContentAlignment="Center"/>
+                        <TextBox BorderThickness="0" FontSize="20" FontFamily="Nunito Sans 10pt Normal" Text="{DynamicResource m_AreYouSure}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,88,0,0"/>
+                        <TextBox TextWrapping="Wrap" BorderThickness="0" Width="143" Height="30" FontSize="14" FontFamily="Nunito Sans 10pt Normal" Text="{DynamicResource m_NoUndo}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,114,0,0" HorizontalContentAlignment="Center"/>
                         <Button Cursor="Hand" Click="Continue_Click" VerticalAlignment="Top" Width="143" Height="28" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" Margin="0,158,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                             <Button.Content>
                                 <Border Padding="0" BorderThickness="0" CornerRadius="15" Background="#FF8861F7">
                                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="Continue" FontSize="18" Foreground="#FFF3F3F3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+                                        <TextBlock Text="{DynamicResource m_Continue}" FontSize="18" Foreground="#FFF3F3F3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
                                     </Grid>
                                 </Border>
                             </Button.Content>
@@ -242,7 +313,7 @@
                             <Button.Content>
                                 <Border Padding="0" BorderThickness="1" CornerRadius="15" Background="#FFFDFEFF" BorderBrush="#FF8560F2">
                                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="Cancel" FontSize="18" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+                                        <TextBlock Text="{DynamicResource m_Cancel}" FontSize="18" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
                                     </Grid>
                                 </Border>
                             </Button.Content>

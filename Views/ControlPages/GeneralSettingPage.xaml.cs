@@ -52,7 +52,7 @@ namespace VoiceX.Views.ControlPages
             int.TryParse(transport, out transportId);
             AccountFild.Text = App.AccountData?.Data.User_Data.Name;
             phoneNumber.Text = App.AccountData?.Data.Sip_Settings.Sip_username;
-            PbXText.Text = "PBX" + App.UserPbx?.TrimStart('0');
+            PbXText.Text = PbXText.Text + App.UserPbx?.TrimStart('0');
             var type = await localStoreService.LoadDataAsync("transport");
             if (!String.IsNullOrEmpty(type))
             {
@@ -90,6 +90,7 @@ namespace VoiceX.Views.ControlPages
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            GlobalWindow.Visibility = Visibility.Hidden;
             isRunning = false;
             window.Exit_Click(sender, e );
         }
@@ -272,6 +273,17 @@ namespace VoiceX.Views.ControlPages
                 SmartPhone.IsChecked = true;
                 LopTop_Toggled(SmartPhone, new RoutedEventArgs());
             }
+        }
+
+        private void Global_Click(object sender, RoutedEventArgs e)
+        {
+            GlobalWindow.Visibility = GlobalWindow.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        private void Language_Click(object sender, RoutedEventArgs e)
+        {
+            GlobalWindow.Visibility = Visibility.Hidden;
+            window.LanguagesFild.Visibility = Visibility.Visible;
         }
     }
 }

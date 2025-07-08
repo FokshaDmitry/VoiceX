@@ -8,7 +8,8 @@
     <UseWPF>True</UseWPF>
     <Nullable>enable</Nullable>
     <ApplicationManifest></ApplicationManifest>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -45,6 +46,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="FakesAssemblies\**" />
+    <EmbeddedResource Remove="FakesAssemblies\**" />
+    <None Remove="FakesAssemblies\**" />
+    <Page Remove="FakesAssemblies\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Remove="app.manifest" />
   </ItemGroup>
 
@@ -68,17 +76,19 @@
     <None Remove="Assets\Icone_v2\Dialpad.png" />
     <None Remove="Assets\Icone_v2\Doc.png" />
     <None Remove="Assets\Icone_v2\Error.png" />
-    <None Remove="Assets\Icone_v2\exitApp.png" />
     <None Remove="Assets\Icone_v2\Folder.png" />
     <None Remove="Assets\Icone_v2\GreyUser.png" />
     <None Remove="Assets\Icone_v2\Icon-Clock.png" />
     <None Remove="Assets\Icone_v2\Icon-File.png" />
+    <None Remove="Assets\Icone_v2\Icon-Globe.png" />
     <None Remove="Assets\Icone_v2\Icon-House.png" />
     <None Remove="Assets\Icone_v2\Icon-Phone-Menu.png" />
     <None Remove="Assets\Icone_v2\Icon-Phone.png" />
     <None Remove="Assets\Icone_v2\Icon-PhoneSlash.png" />
     <None Remove="Assets\Icone_v2\Icon-Printer.png" />
+    <None Remove="Assets\Icone_v2\Icon-SignOut.png" />
     <None Remove="Assets\Icone_v2\Icon-Subtitles.png" />
+    <None Remove="Assets\Icone_v2\Icon-Translate.png" />
     <None Remove="Assets\Icone_v2\Icon-TrashSimple.png" />
     <None Remove="Assets\Icone_v2\Icon-User.png" />
     <None Remove="Assets\Icone_v2\icon16.ico" />
@@ -154,10 +164,19 @@
     <Resource Include="Assets\Icone_v2\Icon-File.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Icone_v2\Icon-Globe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Icone_v2\Icon-Phone.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Icon-PhoneSlash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Icon-SignOut.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\Icon-Translate.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Icon-TrashSimple.png">
@@ -205,14 +224,12 @@
     <Resource Include="Assets\Icone_v2\Error.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\Icone_v2\exitApp.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.5" />
+    <PackageReference Include="Microsoft.QualityTools.Testing.Fakes" Version="17.5.0-beta.23060.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NSwag.Core" Version="14.3.0" />
     <PackageReference Include="PDFsharp" Version="6.1.1" />
@@ -389,6 +406,16 @@
     <Page Update="IncomingWindow.xaml">
       <CopyToOutputDirectory></CopyToOutputDirectory>
     </Page>
+    <Page Update="Items\LangItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Page>
+    <Page Update="Resources\lang.he-IL.xaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Page>
+    <Page Update="Resources\lang.xaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
@@ -403,6 +430,25 @@
     <Resource Include="Assets\Icone_v2\refreshblue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalDesignTimeBuildInput Remove="FakesAssemblies\**" />
   </ItemGroup>
 
 </Project>

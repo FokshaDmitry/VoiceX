@@ -1,0 +1,48 @@
+﻿<ListBoxItem
+    x:Class="VoiceX.Items.LangItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VoiceX.Items"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" BorderThickness="0" HorizontalAlignment="Stretch" Cursor="Hand" VerticalAlignment="Stretch" Name="Select" Background="White" Foreground="#FF252422" Padding="0,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,3,0,0">
+    <ListBoxItem.Content>
+        <Grid Background="White">
+            <Grid.Resources>
+                <Style TargetType="RadioButton">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="RadioButton">
+                                <StackPanel Orientation="Horizontal" Margin="4">
+                                    <Grid Width="16" Height="16" Margin="0,0,8,0">
+                                        <Ellipse Stroke="#C5C5FF"
+                                     StrokeThickness="1"
+                                     Fill="Transparent"/>
+                                        <Ellipse x:Name="CheckedEllipse"
+                                     Width="9" Height="9"
+                                     Fill="#8C63FF"
+                                     Visibility="Collapsed"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="CheckedEllipse" Property="Visibility" Value="Visible"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Opacity" Value="0.4"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Grid.Resources>
+            <RadioButton GroupName="Languages" x:Name="Language" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" Content="Test Pause" FontSize="16" />
+        </Grid>
+    </ListBoxItem.Content>
+</ListBoxItem>

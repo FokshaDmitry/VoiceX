@@ -73,8 +73,8 @@
                     <ColumnDefinition Width="7*"/>
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="Search" GotFocus="Search_GotFocus" LostFocus="Search_LosingFocus" BorderThickness="0,0,1,0" Background="Transparent" Grid.Column="0"  MinWidth="10" TextChanged="Search_TextChanged" x:Name="Search"    VerticalAlignment="Stretch" FontSize="14" BorderBrush="#FFBBBAFF" Padding="32,0,0,0" FontFamily="Nunito Sans 10pt Normal" Height="32" VerticalContentAlignment="Center" Foreground="#FFB5B5B5" />
-                <TextBox Text="Replace" GotFocus="Replece_GotFocus" LostFocus="Replece_LosingFocus" BorderThickness="1,0,0,0" Background="Transparent" Grid.Column="1"  x:Name="Replece" IsReadOnly="True" VerticalAlignment="Stretch" FontSize="14" BorderBrush="#FFB0AFF0" Padding="3,0,6,2" FlowDirection="LeftToRight" VerticalContentAlignment="Center" Foreground="#FFB5B5B5" />
+                <TextBox Text="{DynamicResource m_Search}" GotFocus="Search_GotFocus" LostFocus="Search_LosingFocus" BorderThickness="0,0,1,0" Background="Transparent" Grid.Column="0"  MinWidth="10" TextChanged="Search_TextChanged" x:Name="Search"    VerticalAlignment="Stretch" FontSize="14" BorderBrush="#FFBBBAFF" Padding="32,0,0,0" FontFamily="Nunito Sans 10pt Normal" Height="32" VerticalContentAlignment="Center" Foreground="#FFB5B5B5" />
+                <TextBox Text="{DynamicResource m_Replace}" GotFocus="Replece_GotFocus" LostFocus="Replece_LosingFocus" BorderThickness="1,0,0,0" Background="Transparent" Grid.Column="1"  x:Name="Replece" IsReadOnly="True" VerticalAlignment="Stretch" FontSize="14" BorderBrush="#FFB0AFF0" Padding="3,0,6,2" FlowDirection="LeftToRight" VerticalContentAlignment="Center" Foreground="#FFB5B5B5" />
                 <ToggleButton Click="Flag_Click" x:Name="Flag" VerticalAlignment="Center" Width="30" HorizontalAlignment="Left" Padding="0,0,0,1" />
             </Grid>
 

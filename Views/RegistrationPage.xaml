@@ -64,11 +64,11 @@
                     <ImageBrush ImageSource="/assets/icone_v2/illustration.png"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <Button Width="220" Height="38" Margin="0,360,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="Continue" x:Name="Send" Click="Button_Send" Foreground="#FF7B76FF" />
+            <Button Width="220" Height="38" Margin="0,360,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="{DynamicResource m_Continue}" x:Name="Send" Click="Button_Send" Foreground="#FF7B76FF" />
 
             <Grid Background="Transparent" VerticalAlignment="Top" Margin="0,333,0,0" HorizontalAlignment="Center">
                 <CheckBox  x:Name="Select" Click="Select_Click" MinWidth="10" FontFamily="/Assets/Fonts/Inter-Regular.ttf#Inter" MinHeight="10" VerticalAlignment="Stretch" Foreground="#FF5C66BD" FontSize="6" HorizontalAlignment="Left" Background="Transparent"/>
-                <TextBlock x:Name="MyComputer" Text="This is my computer" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="22,0,0,0" FontSize="14" Foreground="#FF252422" FontFamily="Nunito Sans 10pt Normal"/>
+                <TextBlock x:Name="MyComputer" Text="{DynamicResource m_MyComputer}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="22,0,0,0" FontSize="14" Foreground="#FF252422" FontFamily="Nunito Sans 10pt Normal"/>
             </Grid>
             <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,266,0,0">
                 <Border Background="White" CornerRadius="6" BorderThickness="1" Padding="2" MinWidth="20" MinHeight="20" VerticalAlignment="Top" Width="24" Height="30"  HorizontalAlignment="Left" Margin="12,0,0,0">
@@ -97,7 +97,7 @@
                 </Border>
 
             </Grid>
-            <TextBlock HorizontalAlignment="Center" FontFamily="/Assets/Fonts/NunitoSans_10pt-Regular.ttf#NunitoSans" Text="Enter access code"  x:Name="StatusResponce" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" FontSize="11" Margin="0,310,0,0" Foreground="#FF7B76FF"/>
+            <TextBlock HorizontalAlignment="Center" FontFamily="/Assets/Fonts/NunitoSans_10pt-Regular.ttf#NunitoSans" Text="{DynamicResource m_EnterAccessCode}"  x:Name="StatusResponce" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" FontSize="11" Margin="0,310,0,0" Foreground="#FF7B76FF"/>
         </Grid>
         
     </Grid>
