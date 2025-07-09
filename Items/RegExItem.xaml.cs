@@ -18,24 +18,30 @@ namespace VoiceX.Items
         public string? SearchText;
         public string? ReplaceText;
         public bool Check;
+        string replaceTitle; 
+        string searchTitle; 
         public RegExItem(ClickToCallPage clickToCallPage)
         {
             this.InitializeComponent();
             this.clickToCallPage = clickToCallPage;
             RegItem.Visibility = Visibility.Collapsed;
             AddButtom.Visibility = Visibility.Visible;
+            replaceTitle = this.TryFindResource("m_Replace") as String;
+            searchTitle = this.TryFindResource("m_Search") as String;
         }
         public RegExItem(ClickToCallPage clickToCallPage, string search, string replace, bool chek)
         {
             this.InitializeComponent();
+            replaceTitle = this.TryFindResource("m_Replace") as String;
+            searchTitle = this.TryFindResource("m_Search") as String;
             this.clickToCallPage = clickToCallPage;
-            this.Search.Text = search;
-            this.Replece.Text = replace;
-            if (search != "Search")
+            this.Search.Text = String.IsNullOrEmpty(search) ? searchTitle : search;
+            this.Replece.Text = String.IsNullOrEmpty(replace) ? replaceTitle : replaceTitle;
+            if (search != searchTitle)
             {
                 Search.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
             }
-            if (replace != "Replace")
+            if (replace != replaceTitle)
             {
                 Replece.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
             }
@@ -52,7 +58,7 @@ namespace VoiceX.Items
             {
                 Replece.IsReadOnly = false;
             }
-            if (Replece.Text == "Replace")
+            if (Replece.Text == replaceTitle)
             {
                 Replece.Text = "";
                 Replece.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
@@ -61,7 +67,7 @@ namespace VoiceX.Items
         }
         private void Search_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (Search.Text == "Search")
+            if (Search.Text == searchTitle)
             {
                 Search.Text = "";
                 Search.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
@@ -72,24 +78,24 @@ namespace VoiceX.Items
 
         private async void Search_LosingFocus(object sender, RoutedEventArgs args)
         {
-            SearchText = Search.Text == "Search" ? "" : Search.Text;
-            ReplaceText = Replece.Text == "Replace" ? "" : Replece.Text;
+            SearchText = Search.Text == searchTitle ? "" : Search.Text;
+            ReplaceText = Replece.Text == replaceTitle ? "" : Replece.Text;
             await clickToCallPage.UpdateRegExList();
             if (String.IsNullOrEmpty(Search.Text))
             {
-                Search.Text = "Search";
+                Search.Text = searchTitle;
                 Search.Foreground = new SolidColorBrush(Color.FromArgb(255, 181, 181, 181));
             }
             RegExBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 187, 186, 255));
         }
         private async void Replece_LosingFocus(object sender, RoutedEventArgs args)
         {
-            SearchText = Search.Text == "Search" ? "" : Search.Text;
-            ReplaceText = Replece.Text == "Replace" ? "" : Replece.Text;
+            SearchText = Search.Text == searchTitle ? "" : Search.Text;
+            ReplaceText = Replece.Text == replaceTitle ? "" : Replece.Text;
             await clickToCallPage.UpdateRegExList();
             if (String.IsNullOrEmpty(Replece.Text))
             {
-                Replece.Text = "Replace";
+                Replece.Text = replaceTitle;
                 Replece.Foreground = new SolidColorBrush(Color.FromArgb(255, 181, 181, 181));
             }
             RegExBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 187, 186, 255));
@@ -108,7 +114,7 @@ namespace VoiceX.Items
                 Replece.IsReadOnly = false;
 
             }
-            if (String.IsNullOrEmpty(Search.Text) && Search.Text != "Search")
+            if (String.IsNullOrEmpty(Search.Text) && Search.Text != searchTitle)
             {
                 Replece.IsReadOnly = true;
                 flag = true;
@@ -117,7 +123,7 @@ namespace VoiceX.Items
 
         private async void Flag_Click(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrEmpty(Search.Text) && Search.Text != "Search")
+            if (!String.IsNullOrEmpty(Search.Text) && Search.Text != searchTitle)
             {
                 Check = (bool)Flag.IsChecked!;
                 SearchText = Search.Text;

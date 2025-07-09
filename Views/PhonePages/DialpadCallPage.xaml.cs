@@ -21,6 +21,7 @@ namespace VoiceX.Views.PhonePages
     {
         private bool isRightButtonDown = false;
         private DispatcherTimer rightClickTimer;
+        String title;
         public DialpadCallPage()
         {
             this.InitializeComponent();
@@ -31,6 +32,7 @@ namespace VoiceX.Views.PhonePages
             };
             rightClickTimer.Tick += RightClickTimer_Tick;
             DataObject.AddPastingHandler(NumberFild, OnTextBoxPasting);
+            title = "";
         }
         private void OnTextBoxPasting(object sender, DataObjectPastingEventArgs e)
         {
@@ -115,16 +117,16 @@ namespace VoiceX.Views.PhonePages
                     {
                         Backspace.Visibility = Visibility.Collapsed;
                         isRightButtonDown = false;
-                        NumberFild.Text = "Enter phone number";
+                        NumberFild.Text = title;
                         NumberFild.Foreground = new SolidColorBrush(Color.FromArgb(255, 194, 194, 195));
                     }
                 }
-                else if(NumberFild.Text != "Enter phone number")
+                else if(NumberFild.Text != title)
                 {
                     if (Backspace != null && Backspace.Visibility != Visibility.Visible)
                     {
                         Backspace.Visibility = Visibility.Visible;
-                        NumberFild.Text = NumberFild.Text.Replace("Enter phone number", "");
+                        NumberFild.Text = NumberFild.Text.Replace(title, "");
                         NumberFild.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
                     }
                     string phone = NumberFild.Text;
@@ -156,6 +158,8 @@ namespace VoiceX.Views.PhonePages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            title = this.TryFindResource("m_EnterPhoneNumber") as String;
+            NumberFild.Text = title;
             NumberFild.Focus();
         }
 
@@ -169,7 +173,7 @@ namespace VoiceX.Views.PhonePages
             }
         }
 
-        private  void RightClickTimer_Tick(object? sender, EventArgs e)
+        private void RightClickTimer_Tick(object? sender, EventArgs e)
         {
             if (isRightButtonDown)
             {

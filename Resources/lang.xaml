@@ -6,7 +6,7 @@
     <v:String x:Key="m_Addition">Addition</v:String>
     <v:String x:Key="m_App">App</v:String>
     <v:String x:Key="m_Phone">Phone</v:String>
-    <v:String x:Key="m_Exit">Log Out</v:String>
+    <v:String x:Key="m_LogOut">Log Out</v:String>
     <v:String x:Key="m_DialTransform">Dail Transform</v:String>
     <v:String x:Key="m_EnterData">Enter Data</v:String>
     <v:String x:Key="m_AddField">Add field</v:String>
@@ -52,11 +52,18 @@
     <v:String x:Key="m_EnterAccessCode">Enter access code</v:String>
     <v:String x:Key="m_Continue">Continue</v:String>
     <v:String x:Key="m_Cancel">Cancel</v:String>
-    <v:String x:Key="m_AreYouSure">Are you sure</v:String>
-    <v:String x:Key="m_NoUndo">You will not be able to undo this action</v:String>
+    <v:String x:Key="m_AreYouSure">Are you sure?</v:String>
+    <v:String x:Key="m_NoUndo">You will not be able to undo this action!</v:String>
     <v:String x:Key="m_MyComputer">This is my computer</v:String>
     <v:String x:Key="m_PBX">PBX</v:String>
     <v:String x:Key="m_AddFile">Add file</v:String>
     <v:String x:Key="m_Active">Active</v:String>
     <v:String x:Key="m_Language">Language</v:String>
+    <v:String x:Key="m_AllCall">All Calls</v:String>
+    <v:String x:Key="m_OutCall">Outgoing Calls</v:String>
+    <v:String x:Key="m_Incall">Incoming Calls</v:String>
+    <v:String x:Key="m_MissedCall">Missed Calls</v:String>
+    <v:String x:Key="m_Open">Open</v:String>
+    <v:String x:Key="m_Help">Help</v:String>
+    <v:String x:Key="m_Exit">Exit</v:String>
 </ResourceDictionary>

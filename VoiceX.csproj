@@ -413,6 +413,9 @@
     <Page Update="Resources\lang.he-IL.xaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Page>
+    <Page Update="Resources\lang.ru-RU.xaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Page>
     <Page Update="Resources\lang.xaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Page>

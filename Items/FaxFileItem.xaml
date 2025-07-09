@@ -17,7 +17,7 @@
                             <BitmapImage UriSource="/Assets/Icone_v2/Cloud.png" DecodePixelWidth="300" DecodePixelHeight="200"/>
                         </Image.Source>
                     </Image>
-                    <TextBlock TextAlignment="Center" Text="Drag here or pick file." TextWrapping="Wrap" FontSize="14" FontFamily="Nunito Sans 10pt Normal" FlowDirection="LeftToRight" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="145" Margin="1,0,0,0" Foreground="#FF545454"/>
+                    <TextBlock TextAlignment="Center" Text="{DynamicResource m_DragOrPickFile}" TextWrapping="Wrap" FontSize="14" FontFamily="Nunito Sans 10pt Normal" FlowDirection="LeftToRight" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="145" Margin="1,0,0,0" Foreground="#FF545454"/>
                 </StackPanel>
             </Button.Content>
         </Button>

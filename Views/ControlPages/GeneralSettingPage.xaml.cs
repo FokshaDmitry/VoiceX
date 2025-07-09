@@ -52,7 +52,7 @@ namespace VoiceX.Views.ControlPages
             int.TryParse(transport, out transportId);
             AccountFild.Text = App.AccountData?.Data.User_Data.Name;
             phoneNumber.Text = App.AccountData?.Data.Sip_Settings.Sip_username;
-            PbXText.Text = PbXText.Text + App.UserPbx?.TrimStart('0');
+            PbXNumber.Text = App.UserPbx?.TrimStart('0');
             var type = await localStoreService.LoadDataAsync("transport");
             if (!String.IsNullOrEmpty(type))
             {

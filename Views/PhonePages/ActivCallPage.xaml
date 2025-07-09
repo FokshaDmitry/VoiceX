@@ -91,7 +91,7 @@
             </Button>
             <TextBlock Foreground="#FFC1BFFF" Text="{DynamicResource m_Forwarding}" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,40,0,0" />
             <TextBlock Foreground="#FFC1BFFF" Text="{DynamicResource m_Profile}" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,40,0,0" />
-            <TextBlock Foreground="#FFC1BFFF" Text="{DynamicResource m_Add}" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,14,0" />
+            <TextBlock Foreground="#FFC1BFFF" TextAlignment="Center" Text="{DynamicResource m_Add}" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="139,40,0,0" Width="44" />
             <TextBlock Foreground="#FFC1BFFF" x:Name="AutoAnswerText" Text="AA" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,108,0,0" />
             <TextBlock Foreground="#FFC1BFFF" Text="{DynamicResource m_Hold}" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,108,0,0" />
             <TextBlock Foreground="#FFC1BFFF" Text="{DynamicResource m_Keypad}" FontSize="10" FontFamily="Nunito Sans 10pt Normal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,108,7,0" />

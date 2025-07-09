@@ -206,9 +206,11 @@ namespace VoiceX
                 {
                     Application.Current.Resources.MergedDictionaries.Add(dict);
                 }
-
-                //4. Вызываем евент для оповещения всех окон.
-                LanguageChanged(Application.Current, new EventArgs());
+                if (LanguageChanged != null)
+                {
+                    //4. Вызываем евент для оповещения всех окон.
+                    LanguageChanged(Application.Current, new EventArgs());
+                }
             }
         }
         protected override void OnStartup(StartupEventArgs e)

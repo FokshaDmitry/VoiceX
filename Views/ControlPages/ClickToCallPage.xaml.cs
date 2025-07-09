@@ -254,7 +254,7 @@ namespace VoiceX.Views.ControlPages
         {
             if (RegExList.Items.Cast<RegExItem>().Last() == regEx)
             {
-                RegExList.Items.Insert(0, new RegExItem(this, "Search", "Replace", false));
+                RegExList.Items.Insert(0, new RegExItem(this, "", "", false));
             }
 
         }

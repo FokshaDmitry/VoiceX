@@ -6,7 +6,7 @@
     <v:String x:Key="m_Addition">מתקדם</v:String>
     <v:String x:Key="m_App">סופטפון</v:String>
     <v:String x:Key="m_Phone">טלפון</v:String>
-    <v:String x:Key="m_Exit">צא</v:String>
+    <v:String x:Key="m_LogOut">צא</v:String>
     <v:String x:Key="m_DialTransform">מקש חם</v:String>
     <v:String x:Key="m_EnterData">התאמת מספר</v:String>
     <v:String x:Key="m_AddField">הוספת שדה</v:String>
@@ -53,10 +53,17 @@
     <v:String x:Key="m_Continue">המשך</v:String>
     <v:String x:Key="m_Cancel">בטל</v:String>
     <v:String x:Key="m_AreYouSure">העם להמשיך ?</v:String>
-    <v:String x:Key="m_NoUndo">פעולה זאת תנתק את השלוחה שלך מה התקן</v:String>
+    <v:String x:Key="m_NoUndo">!פעולה זאת תנתק את השלוחה שלך מה התקן</v:String>
     <v:String x:Key="m_MyComputer">מחשב פרטי</v:String>
     <v:String x:Key="m_PBX">מרכזיה</v:String>
     <v:String x:Key="m_AddFile">הוסף קובץ</v:String>
     <v:String x:Key="m_Active">פָּעִיל</v:String>
     <v:String x:Key="m_Language">שָׂפָה</v:String>
+    <v:String x:Key="m_AllCall">כל השיחות</v:String>
+    <v:String x:Key="m_OutCall">שיחות יוצאות</v:String>
+    <v:String x:Key="m_Incall">שיחות נכנסות</v:String>
+    <v:String x:Key="m_MissedCall">שיחות שלא נענו</v:String>
+    <v:String x:Key="m_Open">פתוח</v:String>
+    <v:String x:Key="m_Help">עזרה</v:String>
+    <v:String x:Key="m_Exit">יציאה</v:String>
 </ResourceDictionary>

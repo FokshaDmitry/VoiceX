@@ -117,7 +117,7 @@ namespace VoiceX.Views.PhonePages
                         }
                         if (phonePage.MainFrame.Content.ToString() != "VoiceX.Views.PhonePages.DialpadCallPage")
                         {
-                            phonePage.Navigate_Click(new Button() { Name = "Phone", ToolTip = "Dialpad" }, new RoutedEventArgs());
+                            phonePage.Navigate_Click(new Button() { Name = "Dialpad" }, new RoutedEventArgs());
                         }
                     }
                 }
@@ -146,7 +146,7 @@ namespace VoiceX.Views.PhonePages
                     CoreService.activeCall = null;
                     if (phonePage.MainFrame.Content.ToString() != "VoiceX.Views.PhonePages.DialpadCallPage")
                     {
-                        phonePage.Navigate_Click(new Button() { Name = "Phone", ToolTip = "Dialpad" }, new RoutedEventArgs());
+                        phonePage.Navigate_Click(new Button() { Name = "Dialpad" }, new RoutedEventArgs());
                     }
                 }
             }

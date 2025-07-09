@@ -409,7 +409,7 @@ namespace VoiceX.Views
                     select.Fill = new SolidColorBrush(Color.FromArgb(255, 123, 118, 255));
                 }
             }
-            var page = Navigate.ToolTip.ToString();
+            var page = Navigate.Name;
             if (!String.IsNullOrEmpty(page))
             {
                 switch (page)

@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -46,10 +47,10 @@ namespace VoiceX.Views
             certificateService = new CertificateService();
         }
 
-        private void LanguageChanged(object? sender, EventArgs e)
+        private async void LanguageChanged(object? sender, EventArgs e)
         {
-            //WPFLocalizationCSharp.Properties.Settings.Default.DefaultLanguage = Language;
-            //WPFLocalizationCSharp.Properties.Settings.Default.Save();
+            LanguagesFild.Visibility = Visibility.Hidden;
+            await localStoreService.SaveDataAsync("lang", App.Language.Name);
         }
 
         private void ShowWindow(object sender, RoutedEventArgs e)
@@ -170,7 +171,11 @@ namespace VoiceX.Views
                 registrationPage = new RegistrationPage(this);
                 this.MainPage.Content = registrationPage;
             }
-
+            var language = await localStoreService.LoadDataAsync("lang");
+            if (!String.IsNullOrEmpty(language))
+            {
+                App.Language = new CultureInfo(language);
+            }
             App.LanguageChanged += LanguageChanged;
 
             CultureInfo currLang = App.Language;
