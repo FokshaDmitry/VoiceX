@@ -76,7 +76,6 @@
         </EventTrigger>
     </Window.Triggers>
     <Page>
-
         <Grid>
             <tb:TaskbarIcon x:Name="TrayIcon"
             IconSource="/Assets/icone_v2/TrayIcon.ico"
