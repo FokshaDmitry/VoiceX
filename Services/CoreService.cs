@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using VoiceX.DAL.Context;
+using Windows.Storage;
 
 namespace VoiceX.Services
 {
@@ -32,6 +33,7 @@ namespace VoiceX.Services
             {
                 if (core == null)
                 {
+                    //var ringtonePath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", "") + "\\VoiceX\\VoiceX\\Assets\\Ring\\iphone-11-pro.wav";
                     core = new Endpoint();
                     writer = new PjsipLogger();
                     accCfg = new AccountConfig();
@@ -49,18 +51,18 @@ namespace VoiceX.Services
                     
                     core.libInit(epConfig);
                     var codecs = core.codecEnum2();
-                    foreach (var codec in codecs) 
+                    foreach (var codec in codecs)
                     {
-                        if (!codec.codecId.ToLower().Contains("pcmu") && !codec.codecId.ToLower().Contains("pcma"))
+                        if (!codec.codecId.ToLower().Contains("pcmu") && !codec.codecId.ToLower().Contains("pcma") && !codec.codecId.ToLower().Contains("gsm"))
                         {
                             core.codecSetPriority(codec.codecId, (byte)0);
                         }
-                        
                     }
-                    
+
                     // Create transport
                     TransportConfig tcfg = new TransportConfig();
-                    tcfg.port = 5060;
+                    tcfg.port = 0; 
+                   
                     try
                     {
                         core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, tcfg);

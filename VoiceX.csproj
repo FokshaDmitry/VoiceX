@@ -118,6 +118,8 @@
     <None Remove="Assets\Icone_v2\Warning.png" />
     <None Remove="Assets\Icone_v2\whiteicon24.png" />
     <None Remove="Assets\Logo48.ico" />
+    <None Remove="Assets\Ring\iphone-11-pro.wav" />
+    <None Remove="Assets\Ring\telefon-poshli-gudki-24931.wav" />
     <None Remove="gsdll32.dll" />
     <None Remove="gsdll64.dll" />
     <None Remove="Logo256.ico" />
@@ -228,13 +230,14 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.5" />
-    <PackageReference Include="Microsoft.QualityTools.Testing.Fakes" Version="17.5.0-beta.23060.1" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.7" />
+    <PackageReference Include="Microsoft.QualityTools.Testing.Fakes" Version="17.14.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NSwag.Core" Version="14.3.0" />
-    <PackageReference Include="PDFsharp" Version="6.1.1" />
+    <PackageReference Include="NSwag.Core" Version="14.4.0" />
+    <PackageReference Include="PDFsharp" Version="6.2.1" />
     <PackageReference Include="pjsip-pjsua2-cs" Version="2.10.1" />
-    <PackageReference Include="System.DirectoryServices.Protocols" Version="9.0.4" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="9.0.7" />
+    <PackageReference Include="Uno.UI" Version="5.6.99" />
   </ItemGroup>
 
   <ItemGroup>
@@ -325,15 +328,15 @@
     <Resource Include="Assets\Logo48.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Content Include="Assets\Ring\iphone-11-pro.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Ring\telefon-poshli-gudki-24931.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Assets\Ring\iphone-11-pro.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Ring\telefon-poshli-gudki-24931.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="default-windowsrsa.p12">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -350,6 +353,72 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="PrinterInstaller\app.publish\SystrayComponent.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\gsdll32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\PdfScribeCore.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\PdfScribeCore.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\PS5UI.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\PSCRIPT.HLP">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\PSCRIPT.NTF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\PSCRIPT5.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\redmon64pdfscribe.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SCPDFPRN.PPD">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent.application">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent.exe.manifest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\gsdll32.dll.deploy">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\PdfScribeCore.dll.deploy">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\PS5UI.DLL.deploy">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\PSCRIPT5.DLL.deploy">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\SystrayComponent.application">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\SystrayComponent.exe.config.deploy">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\SystrayComponent.exe.deploy">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\SystrayComponent.exe.manifest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="PrinterInstaller\gsdll32.dll">
@@ -377,9 +446,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="PrinterInstaller\SCPDFPRN.PPD">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\SystrayComponent.application">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="PrinterInstaller\SystrayComponent.exe">

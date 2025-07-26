@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using VoiceX.Enums;
 using VoiceX.Items;
 using VoiceX.Services;
 
@@ -10,12 +12,7 @@ using VoiceX.Services;
 
 namespace VoiceX.Views.ControlPages
 {
-    public enum StartupStatus
-    {
-        NotInStartup,
-        Enabled,
-        Disabled
-    }
+    
     public sealed partial class AdditionPage : Page
     {
         LocalStoreService localStoreService;
@@ -32,6 +29,7 @@ namespace VoiceX.Views.ControlPages
             string ring = await localStoreService.LoadDataAsync("ring");
             Microphones.Items.Clear();
             Audio.Items.Clear();
+            Ringtone.Items.Clear();
             var manager = CoreService.Instance.Core.audDevManager();
             manager.refreshDevs();
             var deviceCount = manager.enumDev2();
@@ -217,11 +215,36 @@ namespace VoiceX.Views.ControlPages
                 approvedKey.SetValue("VoiceX", enabledValue, RegistryValueKind.Binary);
             }
         }
-        public static void AddToStartup()
+        public void AddToStartup()
         {
-            var path = System.Reflection.Assembly.GetExecutingAssembly();
-            RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-            rk.SetValue("VoiceX", $"\"{path.Location}\"");
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            Task.Run(() =>
+            {
+                try
+                {
+                    Process process = new Process();
+                    var psi = new ProcessStartInfo
+                    {
+                        FileName = path + "PrinterInstaller\\Application Files\\SystrayComponent.exe",
+                        Arguments = path + "VoiceX.exe",
+                        UseShellExecute = true,
+                        Verb = "runas", // Запуск с правами администратора
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    };
+                    process.StartInfo = psi;
+                    process.Start();
+                    Task.Delay(5000);
+                    if (!process.WaitForExit(10000))
+                    {
+                        process.Kill(true);
+                    }
+                }
+                catch
+                {
+
+                }
+            });
         }
         public static void RemoveFromStartup()
         {
@@ -233,20 +256,7 @@ namespace VoiceX.Views.ControlPages
         }
         private void Startup_Click(object sender, RoutedEventArgs e)
         {
-            switch (IsInStartup())
-            {
-                case StartupStatus.NotInStartup:
-                    AddToStartupWithEnable();
-                    break;
-                case StartupStatus.Enabled:
-                    RemoveFromStartup();
-                    break;
-                case StartupStatus.Disabled:
-                    AddToStartup();
-                    break;
-                default:
-                    break;
-            }
+            AddToStartup();
         }
     }
 }

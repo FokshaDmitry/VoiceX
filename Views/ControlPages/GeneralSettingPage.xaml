@@ -177,7 +177,6 @@
                                     </Image.Source>
                                 </Image>
                                 <TextBlock Text="{DynamicResource m_LogOut}" FontSize="16" FontFamily="Nunito Sans 10pt Normal" Foreground="#FF252422" Margin="24,0,0,0" VerticalAlignment="Center" />
-                                
                             </Grid>
                         </StackPanel>
                     </Button.Content>

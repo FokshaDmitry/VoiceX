@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Packaging;
 using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -20,6 +21,7 @@ using TTT.WindowsControls;
 using VoiceX.Models;
 using VoiceX.Services;
 using VoiceX.Views;
+using Windows.Storage;
 
 namespace VoiceX
 {
@@ -124,7 +126,7 @@ namespace VoiceX
                         process.StartInfo = psi;
                         process.Start();
                         Task.Delay(5000);
-                        if (process.WaitForExit(10000))
+                        if (!process.WaitForExit(5000))
                         {
                             process.Kill(true);
                         }
@@ -162,6 +164,11 @@ namespace VoiceX
             MyComputer = true;
             timeOut = new DateTime();
             timeOut = DateTime.Now;
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                Exception ex = (Exception)e.ExceptionObject;
+                MessageBox.Show("Unhandled exception: " + ex.Message);
+            };
         }
         public static CultureInfo Language
         {
@@ -348,6 +355,7 @@ namespace VoiceX
             }
             return false;
         }
+
         private void StartPipeServer()
         {
             new Thread(async () =>

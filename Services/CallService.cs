@@ -3,8 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Packaging;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows;
+using VoiceX.Views;
+using Windows.Storage;
 
 namespace VoiceX.Services
 {
@@ -39,6 +45,7 @@ namespace VoiceX.Services
         }
         public override void onCallState(OnCallStateParam prm)
         {
+
             CallInfo ci = getInfo();
             Debug.WriteLine($"[CALL] Статус: {ci.stateText}, Причина: {ci.lastReason}");
             switch (ci.state)
@@ -300,14 +307,31 @@ namespace VoiceX.Services
                 if (ringTonePlayer == null)
                 {
                     string ringtonePath = "";
-                    switch (state)
+                    try
                     {
-                        case "Outcmoing":
-                            ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "telefon-poshli-gudki-24931.wav");
-                            break;
-                        case "Incoming":
-                            ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "iphone-11-pro.wav");
-                            break;
+
+                        switch (state)
+                        {
+                            case "Outcmoing":
+                                ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "telefon-poshli-gudki-24931.wav");
+                                if (!File.Exists(ringtonePath))
+                                {
+
+                                    ringtonePath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", "") + "VoiceX\\Assets\\Ring\\telefon-poshli-gudki-24931.wav";
+                                }
+                                break;
+                            case "Incoming":
+                                ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "iphone-11-pro.wav");
+                                if (!File.Exists(ringtonePath))
+                                {
+                                    ringtonePath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", "") + "VoiceX\\Assets\\Ring\\iphone-11-pro.wav";
+                                }
+                                break;
+                        }
+                    }
+                    catch
+                    {
+
                     }
                     ringTonePlayer = new AudioMediaPlayer();
                     ringTonePlayer.createPlayer(ringtonePath);
@@ -325,8 +349,9 @@ namespace VoiceX.Services
                 Debug.WriteLine($"[CALL] Ошибка при запуске гудка: {ex.Message}");
             }
         }
-        public void PlayIncomingRing(int device)
+        public async Task PlayIncomingRing(int device)
         {
+            string ringtonePath = "";
             try
             {
                 if (ringTonePlayer == null)
@@ -334,8 +359,19 @@ namespace VoiceX.Services
                     DeviceId = CoreService.Instance.Core.audDevManager().getPlaybackDev();
                     var manager = CoreService.Instance.Core.audDevManager();
                     manager.setPlaybackDev(device);
-                    ringTonePlayer = new AudioMediaPlayer();
-                    string ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "iphone-11-pro.wav");
+                    ringTonePlayer = new AudioMediaPlayer(); 
+                    ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "iphone-11-pro.wav");
+                    if (!File.Exists(ringtonePath))
+                    {
+                        try
+                        {
+                            ringtonePath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", "") + "VoiceX\\Assets\\Ring\\iphone-11-pro.wav";
+                        }
+                        catch
+                        {
+
+                        }
+                    }
                     ringTonePlayer.createPlayer(ringtonePath);
                     AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
 
@@ -346,9 +382,9 @@ namespace VoiceX.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                Debug.WriteLine($"[CALL] Ошибка при запуске гудка: {ex.Message}");
+                ProfilePage.window.ShowError(ringtonePath);
             }
         }
 

@@ -73,11 +73,14 @@ namespace VoiceX.Views.ControlPages
             }
             if (App.AccountData?.Data.Device_type == "softphone")
             {
-                SmartPhone.IsChecked = true;
-                LopTop.IsChecked = false;
+                if (ProfilePage.onlineToken == false)
+                {
+                    SmartPhone.IsChecked = true;
+                    LopTop.IsChecked = false;
 
-                CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
-                ProfilePage.onlineToken = true;
+                    CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
+                    ProfilePage.onlineToken = true;
+                }
             }
             else
             {
