@@ -116,6 +116,7 @@
     <None Remove="Assets\Icone_v2\TrayIgnoreIcon.ico" />
     <None Remove="Assets\Icone_v2\User-48.png" />
     <None Remove="Assets\Icone_v2\Warning.png" />
+    <None Remove="Assets\Icone_v2\WebPhone.png" />
     <None Remove="Assets\Icone_v2\whiteicon24.png" />
     <None Remove="Assets\Logo48.ico" />
     <None Remove="Assets\Ring\iphone-11-pro.wav" />
@@ -320,6 +321,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\Warning.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icone_v2\WebPhone.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icone_v2\whiteicon24.png">

@@ -115,19 +115,19 @@
         </StackPanel>
         <Border Width="213" CornerRadius="5" Height="68" Background="#FFE8D6FE" VerticalAlignment="Top" Margin="0,90,0,0">
             <Grid>
-                <ToggleButton Click="SmartPhone_Toggled" Cursor="Hand" x:Name="SmartPhone" VerticalAlignment="Top" Width="49" HorizontalAlignment="Left" Height="26" Margin="0,5,0,0" />
-                <ToggleButton Click="LopTop_Toggled" Cursor="Hand" x:Name="LopTop" VerticalAlignment="Top"  Margin="94,5,0,0" Width="45" HorizontalAlignment="Left" Padding="0,0,0,0" />
+                <ToggleButton Click="App_Click" Cursor="Hand" x:Name="AppPhone" VerticalAlignment="Top" Width="49" HorizontalAlignment="Left" Height="26" Margin="0,5,0,0" />
+                <ToggleButton Click="Phone_Click" Cursor="Hand" x:Name="Phone" VerticalAlignment="Top"  Margin="94,5,0,0" Width="45" HorizontalAlignment="Left" Padding="0,0,0,0" />
                 <TextBlock Text="{DynamicResource m_App}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
                 <TextBlock Text="{DynamicResource m_Phone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8" Foreground="#FF6864D8"/>
             </Grid>
 
         </Border>
-        <Border Width="213" CornerRadius="5" Height="68" Background="#FFC5D2FF" VerticalAlignment="Top" Margin="0,175,0,0">
+        <Border Width="213" CornerRadius="5" Height="68" Background="#FFC5D2FF" VerticalAlignment="Top" Margin="0,185,0,0">
             <Grid>
-                <ToggleButton Click="Tcp_Toggled" Cursor="Hand" x:Name="Tcp" VerticalAlignment="Top" Margin="0,5,0,0" Width="48" Height="27" HorizontalAlignment="Left" />
-                <ToggleButton Click="Tls_Toggled" Cursor="Hand" x:Name="Tls" VerticalAlignment="Top" Margin="100,5,0,0" Width="46" HorizontalAlignment="Left" />
-                <TextBlock Text="TCP" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
-                <TextBlock Text="UDP" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8" Foreground="#FF6864D8"/>
+                <ToggleButton Click="Softphone_Click" Cursor="Hand" x:Name="Softphone" VerticalAlignment="Top" Margin="0,5,0,0" Width="48" Height="27" HorizontalAlignment="Left" />
+                <ToggleButton Click="Webphone_Click" Cursor="Hand" x:Name="Webphone" VerticalAlignment="Top" Margin="100,5,0,0" Width="46" HorizontalAlignment="Left" />
+                <TextBlock Text="Softphone" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
+                <TextBlock Text="Webphone" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8" Foreground="#FF6864D8"/>
             </Grid>
         </Border>
         <Image Width="45" Height="66" HorizontalAlignment="Left" Margin="65,80,0,0" VerticalAlignment="Top">
@@ -135,9 +135,9 @@
                 <BitmapImage UriSource="/Assets/Icone_v2/PC.png" DecodePixelWidth="470" DecodePixelHeight="650"/>
             </Image.Source>
         </Image>
-        <Image Width="45"  Height="66" HorizontalAlignment="Left" Margin="65,170,0,0" VerticalAlignment="Top">
+        <Image Width="45"  Height="66" HorizontalAlignment="Left" Margin="72,170,0,0" VerticalAlignment="Top">
             <Image.Source>
-                <BitmapImage UriSource="/Assets/Icone_v2/Folder.png" DecodePixelWidth="153" DecodePixelHeight="188"/>
+                <BitmapImage UriSource="/Assets/Icone_v2/SmartPhone.png" DecodePixelWidth="321" DecodePixelHeight="680"/>
             </Image.Source>
         </Image>
         <Image HorizontalAlignment="Left" Margin="167,80,0,0" VerticalAlignment="Top" Height="66">
@@ -147,7 +147,7 @@
         </Image>
         <Image Width="53" Height="66" HorizontalAlignment="Left" Margin="163,170,0,0" VerticalAlignment="Top">
             <Image.Source>
-                <BitmapImage UriSource="/Assets/Icone_v2/Key.png" DecodePixelWidth="180" DecodePixelHeight="189"/>
+                <BitmapImage UriSource="/Assets/Icone_v2/WebPhone.png" DecodePixelWidth="99" DecodePixelHeight="145"/>
             </Image.Source>
         </Image>
         <TextBlock HorizontalAlignment="Left" MinHeight="12" x:Name="Error" Margin="94,348,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="9" Foreground="#FFDF0505"/>

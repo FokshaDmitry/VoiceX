@@ -53,39 +53,29 @@ namespace VoiceX.Views.ControlPages
             AccountFild.Text = App.AccountData?.Data.User_Data.Name;
             phoneNumber.Text = App.AccountData?.Data.Sip_Settings.Sip_username;
             PbXNumber.Text = App.UserPbx?.TrimStart('0');
-            var type = await localStoreService.LoadDataAsync("transport");
-            if (!String.IsNullOrEmpty(type))
+            if (!String.IsNullOrEmpty(App.AccountData?.Data.Device_type))
             {
-                switch (type)
+                switch (App.AccountData?.Data.Device_type)
                 {
-                    case "0":
-                        Tls.IsChecked = true;
-                        break;
-                    case "1":
-                        Tcp.IsChecked = true;
-                        break;
-                }
-            }
-            else
-            {
-                await localStoreService.SaveDataAsync("transport", "0");
-                Tls.IsChecked = true;
-            }
-            if (App.AccountData?.Data.Device_type == "softphone")
-            {
-                if (ProfilePage.onlineToken == false)
-                {
-                    SmartPhone.IsChecked = true;
-                    LopTop.IsChecked = false;
+                    case "softphone":
+                        if (ProfilePage.onlineToken == false)
+                        {
+                            AppPhone.IsChecked = true;
 
-                    CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
-                    ProfilePage.onlineToken = true;
+                            CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
+                            ProfilePage.onlineToken = true;
+                        }
+                        break;
+                    case "webphone":
+                        Webphone.IsChecked = true;
+                        break;
+                    case "mobile":
+                        Softphone.IsChecked = true;
+                        break;
+                    case "fix":
+                        Phone.IsChecked = true;
+                        break;
                 }
-            }
-            else
-            {
-                LopTop.IsChecked = true;
-                SmartPhone.IsChecked = false;
             }
             Exit.Click += Exit_Click;
             Online();
@@ -114,7 +104,7 @@ namespace VoiceX.Views.ControlPages
                                 {
                                     try
                                     {
-                                        if (SmartPhone.IsChecked == true)
+                                        if (AppPhone.IsChecked == true)
                                         {
                                             var info = CoreService.Instance.getInfo();
                                             if (info.regIsActive)
@@ -172,60 +162,35 @@ namespace VoiceX.Views.ControlPages
                 }
             });
         }
-
-        private async void Tcp_Toggled(object sender, RoutedEventArgs e)
+        private async void Softphone_Click(object sender, RoutedEventArgs e)
         {
-            if ((bool)Tcp.IsChecked!)
-            {
-                window!.LoadIcone.Visibility = Visibility.Visible;
-                Tls.IsChecked = false;
-                ProfilePage.onlineToken = false;
-                await localStoreService.SaveDataAsync("transport", "1");
-                await CoreService.Instance.ChangeTransport(1);
-                ProfilePage.onlineToken = true;
-                window!.LoadIcone.Visibility = Visibility.Collapsed;
-            }
-            else if (Tls.IsChecked == false)
-            {
-                Tcp.IsChecked = true;
-            }
-        }
-        private async void Tls_Toggled(object sender, RoutedEventArgs e)
-        {
-            if ((bool)Tls.IsChecked!)
-            {
-                window!.LoadIcone.Visibility = Visibility.Visible;
-                Tcp.IsChecked = false;
-                ProfilePage.onlineToken = false;
-                await localStoreService.SaveDataAsync("transport", "0");
-                await CoreService.Instance.ChangeTransport(0);
-                ProfilePage.onlineToken = true;
-                window!.LoadIcone.Visibility = Visibility.Collapsed;
-            }
-            else if (Tls.IsChecked == false)
-            {
-                Tcp.IsChecked = true; 
-            }
-        }
-        
-        private async void SmartPhone_Toggled(object sender, RoutedEventArgs e)
-        {
+            var info = CoreService.Instance.getInfo();
             var swich = (ToggleButton)sender;
             if ((bool)swich.IsChecked!)
             {
                 window!.LoadIcone.Visibility = Visibility.Visible;
-                if (await webService.ChangeCallType("softphone", App.UserPbx!, App.userToken!, App.fw!) == System.Net.HttpStatusCode.OK)
+                if (await webService.ChangeCallType("mobile", App.UserPbx!, App.userToken!, App.fw!) == System.Net.HttpStatusCode.OK)
                 {
-                    App.AccountData = await webService.GetAccountSettings(App.UserPbx!, App.userToken!, App.fw!);
-                    CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
-                    ProfilePage.onlineToken = true;
-                    LopTop.IsChecked = false;
-                    App.AccountData!.Data.Device_type = "softphone";
+
+                    if (info != null)
+                    {
+                        if (info.regIsActive)
+                        {
+                            CoreService.Instance.setRegistration(false);
+                            info.onlineStatus = false;
+                            ProfilePage.onlineToken = false;
+                            CoreService.Instance.Logout();
+                            await Task.Delay(1000);
+                        }
+                    }
+                    App.AccountData!.Data.Device_type = "mobile";
+                    Phone.IsChecked = false;
+                    Webphone.IsChecked = false;
+                    AppPhone.IsChecked = false;
                 }
                 else
                 {
-                    SmartPhone.IsChecked = false;
-                    LopTop.IsChecked = true;
+                    Softphone.IsChecked = false;
                     window!.LoadIcone.Visibility = Visibility.Collapsed;
                     return;
                 }
@@ -233,12 +198,85 @@ namespace VoiceX.Views.ControlPages
             }
             else
             {
-                LopTop.IsChecked = true;
-                LopTop_Toggled(LopTop, new RoutedEventArgs());
+                Softphone.IsChecked = true;
+                //LopTop_Toggled(SmartPhone, new RoutedEventArgs());
             }
         }
 
-        private async void LopTop_Toggled(object sender, RoutedEventArgs e)
+        private async void Webphone_Click(object sender, RoutedEventArgs e)
+        {
+            var info = CoreService.Instance.getInfo();
+            var swich = (ToggleButton)sender;
+            if ((bool)swich.IsChecked!)
+            {
+                window!.LoadIcone.Visibility = Visibility.Visible;
+                if (await webService.ChangeCallType("webphone", App.UserPbx!, App.userToken!, App.fw!) == System.Net.HttpStatusCode.OK)
+                {
+
+                    if (info != null)
+                    {
+                        if (info.regIsActive)
+                        {
+                            CoreService.Instance.setRegistration(false);
+                            info.onlineStatus = false;
+                            ProfilePage.onlineToken = false;
+                            CoreService.Instance.Logout();
+                            await Task.Delay(1000);
+                        }
+                    }
+                    App.AccountData!.Data.Device_type = "webphone";
+                    Phone.IsChecked = false;
+                    Softphone.IsChecked = false;
+                    AppPhone.IsChecked = false;
+                }
+                else
+                {
+                    Webphone.IsChecked = false;
+                    window!.LoadIcone.Visibility = Visibility.Collapsed;
+                    return;
+                }
+                window!.LoadIcone.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                Webphone.IsChecked = true;
+                //LopTop_Toggled(SmartPhone, new RoutedEventArgs());
+            }
+        }
+
+        private async void App_Click(object sender, RoutedEventArgs e)
+        {
+            var swich = (ToggleButton)sender;
+            if ((bool)swich.IsChecked!)
+            {
+                window!.LoadIcone.Visibility = Visibility.Visible;
+                if (await webService.ChangeCallType("softphone", App.UserPbx!, App.userToken!, App.fw!) == System.Net.HttpStatusCode.OK)
+                {
+
+                    App.AccountData = await webService.GetAccountSettings(App.UserPbx!, App.userToken!, App.fw!);
+                    CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
+                    ProfilePage.onlineToken = true;
+                    App.AccountData!.Data.Device_type = "softphone";
+                    Phone.IsChecked = false;
+                    Softphone.IsChecked = false;
+                    Webphone.IsChecked = false;
+                }
+                else
+                {
+                    AppPhone.IsChecked = false;
+                    window!.LoadIcone.Visibility = Visibility.Collapsed;
+                    return;
+                }
+                window!.LoadIcone.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                AppPhone.IsChecked = true;
+                //LopTop_Toggled(SmartPhone, new RoutedEventArgs());
+            }
+        }
+
+        private async void Phone_Click(object sender, RoutedEventArgs e)
         {
             var info = CoreService.Instance.getInfo();
             var swich = (ToggleButton)sender;
@@ -247,8 +285,8 @@ namespace VoiceX.Views.ControlPages
                 window!.LoadIcone.Visibility = Visibility.Visible;
                 if (await webService.ChangeCallType("fix", App.UserPbx!, App.userToken!, App.fw!) == System.Net.HttpStatusCode.OK)
                 {
-                    
-                    if (info != null) 
+
+                    if (info != null)
                     {
                         if (info.regIsActive)
                         {
@@ -260,12 +298,13 @@ namespace VoiceX.Views.ControlPages
                         }
                     }
                     App.AccountData!.Data.Device_type = "fix";
-                    SmartPhone.IsChecked = false;
+                    AppPhone.IsChecked = false;
+                    Softphone.IsChecked = false;
+                    Webphone.IsChecked = false;
                 }
                 else
                 {
-                    SmartPhone.IsChecked = true;
-                    LopTop.IsChecked = false;
+                    Phone.IsChecked = false;
                     window!.LoadIcone.Visibility = Visibility.Collapsed;
                     return;
                 }
@@ -273,11 +312,10 @@ namespace VoiceX.Views.ControlPages
             }
             else
             {
-                SmartPhone.IsChecked = true;
-                LopTop_Toggled(SmartPhone, new RoutedEventArgs());
+                Phone.IsChecked = true;
+                //LopTop_Toggled(SmartPhone, new RoutedEventArgs());
             }
         }
-
         private void Global_Click(object sender, RoutedEventArgs e)
         {
             GlobalWindow.Visibility = GlobalWindow.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;

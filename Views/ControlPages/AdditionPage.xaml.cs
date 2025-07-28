@@ -16,11 +16,13 @@ namespace VoiceX.Views.ControlPages
     public sealed partial class AdditionPage : Page
     {
         LocalStoreService localStoreService;
+        string transport;
         public AdditionPage()
         {
             this.InitializeComponent(); 
             this.Loaded += AdditionPage_Loaded;
             localStoreService = new LocalStoreService();
+            transport = "0";
         }
         private async void AdditionPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -96,6 +98,20 @@ namespace VoiceX.Views.ControlPages
             Microphones.SelectionChanged += Microphones_SelectionChanged;
             Audio.SelectionChanged += Audio_SelectionChanged;
             Ringtone.SelectionChanged += Ringtone_SelectionChanged;
+            transport = await localStoreService.LoadDataAsync("transport");
+            switch (transport) 
+            {
+                case "0":
+                    udp.IsChecked = true;
+                    break;
+                case "1":
+                    tcp.IsChecked = true;
+                    break;
+                default:
+                    udp.IsChecked = true;
+                    break;
+            }
+
         }
         private void Include_Toggled(object sender, RoutedEventArgs e)
         {
@@ -205,19 +221,9 @@ namespace VoiceX.Views.ControlPages
 
             return StartupStatus.NotInStartup;
         }
-        public void AddToStartupWithEnable()
-        {
-            // Устанавливаем флаг "Enabled" в StartupApproved
-            using (RegistryKey approvedKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", true))
-            {
-                byte[] enabledValue = new byte[] { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // 6 байт: статус + даты (можно нули)
-
-                approvedKey.SetValue("VoiceX", enabledValue, RegistryValueKind.Binary);
-            }
-        }
         public void AddToStartup()
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory;
+            string path = AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", "") + "\\VoiceX\\";
             Task.Run(() =>
             {
                 try
@@ -246,17 +252,31 @@ namespace VoiceX.Views.ControlPages
                 }
             });
         }
-        public static void RemoveFromStartup()
-        {
-            RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-            if (rk.GetValue("VoiceX") != null)
-            {
-                rk.DeleteValue("VoiceX", false);
-            }
-        }
         private void Startup_Click(object sender, RoutedEventArgs e)
         {
             AddToStartup();
+        }
+
+        private async void tcp_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)tcp.IsChecked!)
+            {
+                ProfilePage.window!.LoadIcone.Visibility = Visibility.Visible;
+                ProfilePage.onlineToken = false;
+                await localStoreService.SaveDataAsync("transport", "1");
+                await CoreService.Instance.ChangeTransport(1);
+                ProfilePage.onlineToken = true;
+                ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
+            }
+            if ((bool)udp.IsChecked!)
+            {
+                ProfilePage.window!.LoadIcone.Visibility = Visibility.Visible;
+                ProfilePage.onlineToken = false;
+                await localStoreService.SaveDataAsync("transport", "0");
+                await CoreService.Instance.ChangeTransport(0);
+                ProfilePage.onlineToken = true;
+                ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

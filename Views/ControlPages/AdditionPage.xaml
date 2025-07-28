@@ -8,6 +8,38 @@
     mc:Ignorable="d"
     Background="White" MaxWidth="500" x:Name="additionPage">
     <Page.Resources>
+        <Style TargetType="RadioButton">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <StackPanel Orientation="Horizontal" Margin="4">
+                            <Grid Width="16" Height="16" Margin="0,0,8,0">
+                                <Ellipse Stroke="#C5C5FF"
+                     StrokeThickness="1"
+                     Fill="Transparent"/>
+                                <Ellipse x:Name="CheckedEllipse"
+                     Width="9" Height="9"
+                     Fill="#8C63FF"
+                     Visibility="Collapsed"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"/>
+                            </Grid>
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckedEllipse" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style TargetType="CheckBox">
             <Setter Property="Template">
                 <Setter.Value>
@@ -122,19 +154,29 @@
             </Setter>
         </Style>
     </Page.Resources>
-    <Grid>
-        <CheckBox Click="Proxy_Checked" x:Name="Proxy" Content="{DynamicResource m_STUNServer}" Margin="18,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
-        <CheckBox Click="Ice_Checked" x:Name="Ice" Content="ICE" Margin="18,35,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16"/>
-        <CheckBox Click="Ip_Checked" x:Name="Ip" Content="{DynamicResource m_IPRewrite}" Margin="17,65,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
-        <CheckBox Click="Startup_Click" x:Name="Startup" Content="{DynamicResource m_StartupWithWindows}" Margin="17,95,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
-        <Border CornerRadius="150" BorderThickness="0" Height="1" Width="213" Background="#FFC3B1FD" VerticalAlignment="Top" Margin="9,120,9,0" Grid.ColumnSpan="2"/>
-        <TextBlock Text="{DynamicResource m_Speaker}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,122,0,0" Foreground="#FFADADAD"/>
-        <ComboBox MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Audio" Background="Transparent" Width="213" Margin="18,140,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <TextBlock Text="{DynamicResource m_Microphone}" Margin="18,177,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
-        <ComboBox MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Microphones" Background="Transparent" Width="213" Margin="18,195,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBlock Text="{DynamicResource m_Ringtone}" Margin="18,232,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
-        <ComboBox x:Name="Ringtone" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="Transparent" Width="213" Margin="18,250,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBlock Text="{DynamicResource m_Version}" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="12,290,0,0"/>
-        <TextBlock Text="1.0.2.9" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="185,290,0,0"/>
+    <Grid Height="300" VerticalAlignment="Top">
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" PanningMode="Both">
+            <Grid>
+                <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <RadioButton Content="tcp" Click="tcp_Click" Margin="16,0,0,0" GroupName="Protocols" x:Name="tcp" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" FontSize="16"/>
+                    <RadioButton Content="udp" Click="tcp_Click" Margin="91,0,0,0" GroupName="Protocols" x:Name="udp" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" FontSize="16"/>
+                    <RadioButton Content="tls" Margin="166,0,0,0" GroupName="Protocols" x:Name="tlc" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" FontSize="16"/>
+                </Grid>
+                <Border CornerRadius="150" BorderThickness="0" Height="1" Width="213" Background="#FFC3B1FD" VerticalAlignment="Top" Margin="9,29,9,0" Grid.ColumnSpan="2"/>
+                <CheckBox Click="Proxy_Checked" x:Name="Proxy" Content="{DynamicResource m_STUNServer}" Margin="18,35,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
+                <CheckBox Click="Ice_Checked" x:Name="Ice" Content="ICE" Margin="18,65,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16"/>
+                <CheckBox Click="Ip_Checked" x:Name="Ip" Content="{DynamicResource m_IPRewrite}" Margin="17,95,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
+                <CheckBox Click="Startup_Click" x:Name="Startup" Content="{DynamicResource m_StartupWithWindows}" Margin="17,125,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
+                <Border CornerRadius="150" BorderThickness="0" Height="1" Width="213" Background="#FFC3B1FD" VerticalAlignment="Top" Margin="9,150,9,0" Grid.ColumnSpan="2"/>
+                <TextBlock Text="{DynamicResource m_Speaker}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,152,0,0" Foreground="#FFADADAD"/>
+                <ComboBox MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Audio" Background="Transparent" Width="213" Margin="18,170,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <TextBlock Text="{DynamicResource m_Microphone}" Margin="18,207,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
+                <ComboBox MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Microphones" Background="Transparent" Width="213" Margin="18,225,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock Text="{DynamicResource m_Ringtone}" Margin="18,262,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
+                <ComboBox x:Name="Ringtone" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="Transparent" Width="213" Margin="18,280,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock Text="{DynamicResource m_Version}" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="12,320,0,0"/>
+                <TextBlock Text="1.0.2.9" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="185,320,0,0"/>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>
