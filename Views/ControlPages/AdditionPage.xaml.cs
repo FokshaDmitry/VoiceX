@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -223,7 +224,7 @@ namespace VoiceX.Views.ControlPages
         }
         public void AddToStartup()
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", "") + "\\VoiceX\\";
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", ""), "VoiceX");
             Task.Run(() =>
             {
                 try
@@ -231,8 +232,8 @@ namespace VoiceX.Views.ControlPages
                     Process process = new Process();
                     var psi = new ProcessStartInfo
                     {
-                        FileName = path + "PrinterInstaller\\Application Files\\SystrayComponent.exe",
-                        Arguments = path + "VoiceX.exe",
+                        FileName = Path.Combine(path,  "PrinterInstaller", "SystrayComponent.exe"),
+                        Arguments = Path.Combine(path , "VoiceX.exe"),
                         UseShellExecute = true,
                         Verb = "runas", // Запуск с правами администратора
                         CreateNoWindow = true,

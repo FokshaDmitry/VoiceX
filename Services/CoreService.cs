@@ -33,7 +33,6 @@ namespace VoiceX.Services
             {
                 if (core == null)
                 {
-                    //var ringtonePath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", "") + "\\VoiceX\\VoiceX\\Assets\\Ring\\iphone-11-pro.wav";
                     core = new Endpoint();
                     writer = new PjsipLogger();
                     accCfg = new AccountConfig();

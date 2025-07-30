@@ -8,7 +8,6 @@
     <UseWPF>True</UseWPF>
     <Nullable>enable</Nullable>
     <ApplicationManifest></ApplicationManifest>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
@@ -359,72 +358,6 @@
     <None Update="PrinterInstaller\app.publish\SystrayComponent.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="PrinterInstaller\Application Files\gsdll32.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\PdfScribeCore.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\PdfScribeCore.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\PS5UI.DLL">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\PSCRIPT.HLP">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\PSCRIPT.NTF">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\PSCRIPT5.DLL">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\redmon64pdfscribe.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SCPDFPRN.PPD">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent.application">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent.exe.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent.exe.manifest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\gsdll32.dll.deploy">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\PdfScribeCore.dll.deploy">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\PS5UI.DLL.deploy">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\PSCRIPT5.DLL.deploy">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\SystrayComponent.application">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\SystrayComponent.exe.config.deploy">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\SystrayComponent.exe.deploy">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="PrinterInstaller\Application Files\SystrayComponent_1_0_0_0\SystrayComponent.exe.manifest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="PrinterInstaller\gsdll32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -464,11 +397,17 @@
     <None Update="PrinterInstaller\SystrayComponent.pdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="VC_redist.x64.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="VC_redist.x86.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="windowsdesktop-runtime-9.0.4-win-x86.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="windowsdesktop-runtime-9.0.7-win-x64.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

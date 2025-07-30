@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VoiceX"
-#define MyAppVersion "1.0.2.8"
+#define MyAppVersion "1.0.2.10"
 #define MyAppPublisher "X-Cloud"
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -20,7 +20,7 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 
 OutputDir=App
-OutputBaseFilename=VoiceX_1.0.2.8
+OutputBaseFilename=VoiceX_1.0.2.10
 Compression=lzma
 SetupIconFile=C:\Users\user\Work\Logo256.ico
 SolidCompression=yes
@@ -33,7 +33,7 @@ Name: "hebrew"; MessagesFile: "compiler:Languages\Hebrew.isl"; LicenseFile: lice
 
 
 [Icons]
-Name: "{commondesktop}\VoiceX Phone"; Filename: "{app}\VoiceX.exe"; IconFilename: "{app}\Logo256.ico";
+Name: "{commondesktop}\VoiceX Phone"; Filename: "{app}\VoiceX.exe"; IconFilename: "{app}\VoiceX\Logo256.ico";
 
 [Files]
 Source: "*"; DestDir: {app}; Flags: recursesubdirs createallsubdirs ignoreversion
@@ -41,5 +41,7 @@ Source: "*"; DestDir: {app}; Flags: recursesubdirs createallsubdirs ignoreversio
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "VoiceX"; ValueData: """{app}\VoiceX.exe"""; Flags: uninsdeletevalue
 [Run]
 Filename: "{app}\windowsdesktop-runtime-9.0.4-win-x86.exe"; Parameters: "/silent"; Flags: waituntilterminated
+Filename: "{app}\windowsdesktop-runtime-9.0.7-win-x64.exe"; Parameters: "/silent"; Flags: waituntilterminated
 Filename: "{app}\VC_redist.x86.exe"; Parameters: "/silent"; Flags: waituntilterminated
+Filename: "{app}\VC_redist.x64.exe"; Parameters: "/silent"; Flags: waituntilterminated
 Filename: "{app}\VoiceX.exe"; Description: "Run Program"; Flags:  nowait postinstall

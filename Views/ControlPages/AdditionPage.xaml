@@ -155,8 +155,10 @@
         </Style>
     </Page.Resources>
     <Grid Height="300" VerticalAlignment="Top">
-        <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" PanningMode="Both">
-            <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                  HorizontalScrollBarVisibility="Disabled"
+                  HorizontalAlignment="Stretch">
+            <Grid HorizontalAlignment="Stretch">
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                     <RadioButton Content="tcp" Click="tcp_Click" Margin="16,0,0,0" GroupName="Protocols" x:Name="tcp" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" FontSize="16"/>
                     <RadioButton Content="udp" Click="tcp_Click" Margin="91,0,0,0" GroupName="Protocols" x:Name="udp" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" FontSize="16"/>
@@ -175,7 +177,7 @@
                 <TextBlock Text="{DynamicResource m_Ringtone}" Margin="18,262,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
                 <ComboBox x:Name="Ringtone" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="Transparent" Width="213" Margin="18,280,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <TextBlock Text="{DynamicResource m_Version}" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="12,320,0,0"/>
-                <TextBlock Text="1.0.2.9" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="185,320,0,0"/>
+                <TextBlock Text="1.0.2.10" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="185,320,0,0"/>
             </Grid>
         </ScrollViewer>
     </Grid>

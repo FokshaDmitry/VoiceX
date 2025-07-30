@@ -3,14 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
 using VoiceX.Views;
-using Windows.Storage;
 
 namespace VoiceX.Services
 {
@@ -317,14 +313,14 @@ namespace VoiceX.Services
                                 if (!File.Exists(ringtonePath))
                                 {
 
-                                    ringtonePath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", "") + "VoiceX\\Assets\\Ring\\telefon-poshli-gudki-24931.wav";
+                                    ringtonePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", ""), "VoiceX", "Assets", "Ring", "telefon-poshli-gudki-24931.wav");
                                 }
                                 break;
                             case "Incoming":
                                 ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "iphone-11-pro.wav");
                                 if (!File.Exists(ringtonePath))
                                 {
-                                    ringtonePath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", "") + "VoiceX\\Assets\\Ring\\iphone-11-pro.wav";
+                                    ringtonePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", ""), "VoiceX", "Assets", "Ring", "iphone-11-pro.wav");
                                 }
                                 break;
                         }
@@ -365,7 +361,7 @@ namespace VoiceX.Services
                     {
                         try
                         {
-                            ringtonePath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", "") + "VoiceX\\Assets\\Ring\\iphone-11-pro.wav";
+                            ringtonePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", ""), "VoiceX", "Assets", "Ring", "iphone-11-pro.wav");
                         }
                         catch
                         {

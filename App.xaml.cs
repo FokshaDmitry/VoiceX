@@ -114,7 +114,7 @@ namespace VoiceX
                         Process process = new Process();
                         var psi = new ProcessStartInfo
                         {
-                            FileName = exePath + "PrinterInstaller\\SystrayComponent.exe",
+                            FileName = Path.Combine(exePath, "PrinterInstaller", "SystrayComponent.exe"),
                             Arguments = exePath + "VoiceX.exe",
                             UseShellExecute = true,
                             Verb = "runas", // Запуск с правами администратора
