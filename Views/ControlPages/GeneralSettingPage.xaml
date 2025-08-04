@@ -126,8 +126,8 @@
             <Grid>
                 <ToggleButton Click="Softphone_Click" Cursor="Hand" x:Name="Softphone" VerticalAlignment="Top" Margin="0,5,0,0" Width="48" Height="27" HorizontalAlignment="Left" />
                 <ToggleButton Click="Webphone_Click" Cursor="Hand" x:Name="Webphone" VerticalAlignment="Top" Margin="100,5,0,0" Width="46" HorizontalAlignment="Left" />
-                <TextBlock Text="Softphone" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
-                <TextBlock Text="Webphone" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8" Foreground="#FF6864D8"/>
+                <TextBlock Text="{DynamicResource m_Softphone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
+                <TextBlock Text="{DynamicResource m_Webphone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8" Foreground="#FF6864D8"/>
             </Grid>
         </Border>
         <Image Width="45" Height="66" HorizontalAlignment="Left" Margin="65,80,0,0" VerticalAlignment="Top">
@@ -145,7 +145,7 @@
                 <BitmapImage UriSource="/Assets/Icone_v2/LinePhone.png" DecodePixelWidth="200" DecodePixelHeight="240"/>
             </Image.Source>
         </Image>
-        <Image Width="53" Height="66" HorizontalAlignment="Left" Margin="163,170,0,0" VerticalAlignment="Top">
+        <Image Width="53" Height="66" HorizontalAlignment="Left" Margin="173,170,0,0" VerticalAlignment="Top">
             <Image.Source>
                 <BitmapImage UriSource="/Assets/Icone_v2/WebPhone.png" DecodePixelWidth="99" DecodePixelHeight="145"/>
             </Image.Source>
