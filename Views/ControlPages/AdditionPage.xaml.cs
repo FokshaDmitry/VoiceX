@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using VoiceX.Enums;
 using VoiceX.Items;
 using VoiceX.Services;
+using Windows.ApplicationModel;
+using Windows.System;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -95,7 +97,7 @@ namespace VoiceX.Views.ControlPages
                     Ip.IsChecked = true;
                 }
             }
-            Startup.IsChecked = IsInStartup() == StartupStatus.Enabled ? true : false;
+            Startup.IsChecked = await IsInStartup() == StartupStatus.Enabled ? true : false;
             Microphones.SelectionChanged += Microphones_SelectionChanged;
             Audio.SelectionChanged += Audio_SelectionChanged;
             Ringtone.SelectionChanged += Ringtone_SelectionChanged;
@@ -197,65 +199,119 @@ namespace VoiceX.Views.ControlPages
             ProfilePage.onlineToken = true;
             await localStoreService.SaveDataAsync("ip", flag ? "1": "0");
         }
-        public StartupStatus IsInStartup()
+        public async Task<StartupStatus> IsInStartup()
         {
-            RegistryKey runKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", false);
-            RegistryKey approvedKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", false);
-
-            bool inRun = runKey?.GetValue("VoiceX") != null;
-            byte[] statusBytes = approvedKey?.GetValue("VoiceX") as byte[];
-            
-            if (!inRun)
-                return StartupStatus.Disabled;
-
-            if (statusBytes != null && statusBytes.Length > 0)
+            if (App.IsMSIX)
             {
-                byte status = statusBytes[0];
-
-                return status switch
+                var startupTask = await StartupTask.GetAsync("VoiceXAppStartup");
+                switch (startupTask.State)
                 {
-                    0x02 => StartupStatus.Enabled,
-                    0x03 => StartupStatus.NotInStartup,
-                    _ => StartupStatus.NotInStartup // по умолчанию считаем включённым
-                };
+                    case StartupTaskState.Enabled:
+                        return StartupStatus.Enabled;
+
+                    case StartupTaskState.Disabled:
+                        return StartupStatus.Disabled;
+                }
+                return StartupStatus.NotInStartup;
             }
-
-            return StartupStatus.NotInStartup;
-        }
-        public void AddToStartup()
-        {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", ""), "VoiceX");
-            Task.Run(() =>
+            else
             {
-                try
+
+                RegistryKey runKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", false);
+                RegistryKey approvedKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", false);
+
+                bool inRun = runKey?.GetValue("VoiceX") != null;
+                byte[] statusBytes = approvedKey?.GetValue("VoiceX") as byte[];
+
+                if (!inRun)
+                    return StartupStatus.Disabled;
+
+                if (statusBytes != null && statusBytes.Length > 0)
                 {
-                    Process process = new Process();
-                    var psi = new ProcessStartInfo
+                    byte status = statusBytes[0];
+
+                    return status switch
                     {
-                        FileName = Path.Combine(path,  "PrinterInstaller", "SystrayComponent.exe"),
-                        Arguments = Path.Combine(path , "VoiceX.exe"),
-                        UseShellExecute = true,
-                        Verb = "runas", // Запуск с правами администратора
-                        CreateNoWindow = true,
-                        WindowStyle = ProcessWindowStyle.Hidden
+                        0x02 => StartupStatus.Enabled,
+                        0x03 => StartupStatus.NotInStartup,
+                        _ => StartupStatus.NotInStartup // по умолчанию считаем включённым
                     };
-                    process.StartInfo = psi;
-                    process.Start();
-                    Task.Delay(5000);
-                    if (!process.WaitForExit(10000))
-                    {
-                        process.Kill(true);
-                    }
                 }
-                catch
+
+                return StartupStatus.NotInStartup;
+            }
+        }
+        public async Task AddToStartup()
+        {
+            if (App.IsMSIX)
+            {
+                var startupTask = await StartupTask.GetAsync("VoiceXAppStartup");
+                var newState = await startupTask.RequestEnableAsync();
+                if (newState == StartupTaskState.Enabled)
                 {
 
                 }
-            });
+                else
+                {
+                    Startup.IsChecked = false;
+                }
+            }
+            else
+            {
+                string exePath = AppDomain.CurrentDomain.BaseDirectory;
+                RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+                rk.SetValue("VoiceX", $"\"{exePath + "Voice.exe"}\"");
+            }
         }
-        private void Startup_Click(object sender, RoutedEventArgs e)
+        public async Task RemoveFromStartup()
         {
-            AddToStartup();
+            if (App.IsMSIX)
+            {
+                var startupTask = await StartupTask.GetAsync("VoiceXAppStartup");
+                startupTask.Disable();
+            }
+            else
+            {
+                RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+                if (rk.GetValue("VoiceX") != null)
+                {
+                    rk.DeleteValue("VoiceX", false);
+                }
+
+            }
+        }
+        public async Task AddToStartupWithEnable()
+        {
+            if (App.IsMSIX)
+            {
+                await Launcher.LaunchUriAsync(new Uri("ms-settings:startupapps"));
+            }
+            else
+            {
+                using (RegistryKey approvedKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", true))
+                {
+                    byte[] enabledValue = new byte[] { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // 6 байт: статус + даты (можно нули)
+
+                    approvedKey.SetValue("VoiceX", enabledValue, RegistryValueKind.Binary);
+                }
+            }
+        }
+        private async void Startup_Click(object sender, RoutedEventArgs e)
+        {
+            var status = await IsInStartup();
+            switch (status)
+            {
+                case StartupStatus.NotInStartup:
+                    break;
+                case StartupStatus.Enabled:
+                    await RemoveFromStartup();
+                    break;
+                case StartupStatus.Disabled:
+                    await AddToStartup();
+                    break;
+                default:
+                    break;
+            }
         }
 
         private async void tcp_Click(object sender, RoutedEventArgs e)

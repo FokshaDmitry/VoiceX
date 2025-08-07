@@ -55,13 +55,13 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PdfScribeCore.dll" size="23552">
-      <assemblyIdentity name="PdfScribeCore" version="1.0.9.25561" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="PdfScribeCore" version="1.0.9.42168" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>P8P8EuqwkBESnbWHZmfGGSmn0H6yaSr/5EIODO1Mx9Y=</dsig:DigestValue>
+        <dsig:DigestValue>f6yIJZsYUeh6SM2ztYXL7zBej3Lxe4yWBBdvFSiN0rA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -73,7 +73,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>+nGBcIqBaJtJyph8iuwP78X6SODOp/anueUeobY9sng=</dsig:DigestValue>
+        <dsig:DigestValue>szdFdfLZnjK1nhH54JrtuQuU0YWR5poyYswVQjO0788=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

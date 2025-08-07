@@ -3,11 +3,14 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
 using VoiceX.Items;
 using VoiceX.Services;
+using Windows.ApplicationModel;
+using Windows.Foundation.Metadata;
 
 namespace VoiceX.Views
 {
@@ -217,7 +220,6 @@ namespace VoiceX.Views
 
             }
         }
-
         private async void Continue_Click(object sender, RoutedEventArgs e)
         {
             try

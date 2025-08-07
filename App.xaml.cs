@@ -20,6 +20,7 @@ using TTT.WindowsControls;
 using VoiceX.Models;
 using VoiceX.Services;
 using VoiceX.Views;
+using Windows.ApplicationModel;
 
 namespace VoiceX
 {
@@ -41,6 +42,7 @@ namespace VoiceX
         public static string? fw { get; set; }
         public static bool MyComputer {  get; set; }
         public static DateTime timeOut {  get; set; }
+        public static bool IsMSIX { get; set; }
         private FileSystemWatcher? _watcher;
         private PdfScribeInstaller pdfScribeInstaller;
         private static List<CultureInfo> m_Languages = new List<CultureInfo>();
@@ -218,10 +220,17 @@ namespace VoiceX
                 }
             }
         }
-        protected override void OnStartup(StartupEventArgs e)
+        protected async override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            
+            try
+            {
+                IsMSIX = Package.Current?.Id != null;
+            }
+            catch
+            {
+                IsMSIX = false;
+            }
             StartPipeServer();
             WatchDirectory(Path.GetTempPath()); // Следим за временной папкой
         }
