@@ -19,7 +19,8 @@
                 Base = "",
                 Dn = "",
                 Pass = "",
-                Type = ""
+                Type = "",
+                Server = ""
             };
             Sip_Settings = new Sip_settings
             {

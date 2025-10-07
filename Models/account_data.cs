@@ -20,6 +20,7 @@ namespace VoiceX.Models
             Data.Ldap_Settings.Dn = "";
             Data.Ldap_Settings.Pass = "";
             Data.Ldap_Settings.Type = "";
+            Data.Ldap_Settings.Server = "";
 
         }
     }

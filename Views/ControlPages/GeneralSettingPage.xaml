@@ -116,8 +116,8 @@
         <Border Width="213" CornerRadius="5" Height="68" Background="#FFE8D6FE" VerticalAlignment="Top" Margin="0,90,0,0">
             <Grid>
                 <ToggleButton Click="App_Click" Cursor="Hand" x:Name="AppPhone" VerticalAlignment="Top" Width="49" HorizontalAlignment="Left" Height="26" Margin="0,5,0,0" />
-                <ToggleButton Click="Phone_Click" Cursor="Hand" x:Name="Phone" VerticalAlignment="Top"  Margin="94,5,0,0" Width="45" HorizontalAlignment="Left" Padding="0,0,0,0" />
-                <TextBlock Text="{DynamicResource m_App}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
+                <ToggleButton Click="Phone_Click" Cursor="Hand" x:Name="Phone" VerticalAlignment="Top"  Margin="100,5,0,0" Width="45" HorizontalAlignment="Left" Padding="0,0,0,0" />
+                <TextBlock Text="{DynamicResource m_Softphone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
                 <TextBlock Text="{DynamicResource m_Phone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8" Foreground="#FF6864D8"/>
             </Grid>
 
@@ -126,11 +126,11 @@
             <Grid>
                 <ToggleButton Click="Softphone_Click" Cursor="Hand" x:Name="Softphone" VerticalAlignment="Top" Margin="0,5,0,0" Width="48" Height="27" HorizontalAlignment="Left" />
                 <ToggleButton Click="Webphone_Click" Cursor="Hand" x:Name="Webphone" VerticalAlignment="Top" Margin="100,5,0,0" Width="46" HorizontalAlignment="Left" />
-                <TextBlock Text="{DynamicResource m_Softphone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
+                <TextBlock Text="{DynamicResource m_App}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
                 <TextBlock Text="{DynamicResource m_Webphone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8" Foreground="#FF6864D8"/>
             </Grid>
         </Border>
-        <Image Width="45" Height="66" HorizontalAlignment="Left" Margin="65,80,0,0" VerticalAlignment="Top">
+        <Image Width="45" Height="66" HorizontalAlignment="Left" Margin="72,80,0,0" VerticalAlignment="Top">
             <Image.Source>
                 <BitmapImage UriSource="/Assets/Icone_v2/PC.png" DecodePixelWidth="470" DecodePixelHeight="650"/>
             </Image.Source>

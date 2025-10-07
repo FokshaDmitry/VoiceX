@@ -334,6 +334,78 @@ namespace VoiceX.DAL.Context
             }
             return historyNotes;
         }
+        public async Task<List<HistoryNotes>> GetNotesAsync(int NumberItems)
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+            List<HistoryNotes> historyNotes = new List<HistoryNotes>();
+            string openPathDB = Path.Combine(path + "\\HistoryDB.db");
+            try
+            {
+                using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
+                {
+                    await connection.OpenAsync();
+                    string command = $"SELECT * FROM History ORDER BY datetime(EndDialog) DESC LIMIT {NumberItems};";
+                    SqliteCommand sqliteCommand = new SqliteCommand(command, connection);
+                    var reader = await sqliteCommand.ExecuteReaderAsync();
+                    while (await reader.ReadAsync())
+                    {
+                        historyNotes.Add(new HistoryNotes { Id = Guid.Parse(reader.GetString(0)), Name = reader.GetString(1), Phone = reader.GetString(2), StatusCall = reader.GetString(3) == "Outgoing" ? StatusCall.Outgoing : reader.GetString(3) == "Incoming" ? StatusCall.Incoming : reader.GetString(3) == "Ignore" ? StatusCall.Ignore : StatusCall.IncomeIgnore, StartDialog = DateTime.Parse(reader.GetString(4)), EndDialog = DateTime.Parse(reader.GetString(5)) });
+                    }
+                    await connection.CloseAsync();
+                    await connection.DisposeAsync();
+                }
+            }
+            catch
+            {
+                return historyNotes;
+            }
+            return historyNotes;
+        }
+        public async Task<List<HistoryNotes>> GetNotesAsync(int NumberItems, StatusCall statusCall)
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+            List<HistoryNotes> historyNotes = new List<HistoryNotes>();
+            string openPathDB = Path.Combine(path + "\\HistoryDB.db");
+            string filter = "";
+            switch (statusCall)
+            {
+                case StatusCall.Outgoing:
+                    filter = "'Outgoing'";
+                    break;
+                case StatusCall.Incoming:
+                    filter = "'Incoming'";
+                    break;
+                case StatusCall.Ignore:
+                    filter = "'IncomeIgnore', 'Ignore'";
+                    break;
+                case StatusCall.IncomeIgnore:
+                    filter = "'IncomeIgnore', 'Ignore'";
+                    break;
+                default:
+                    break;
+            }
+            try
+            {
+                using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
+                {
+                    await connection.OpenAsync();
+                    string command = $"SELECT * FROM History WHERE StatusCall IN ({filter}) ORDER BY datetime(EndDialog) DESC LIMIT {NumberItems};";
+                    SqliteCommand sqliteCommand = new SqliteCommand(command, connection);
+                    var reader = await sqliteCommand.ExecuteReaderAsync();
+                    while (await reader.ReadAsync())
+                    {
+                        historyNotes.Add(new HistoryNotes { Id = Guid.Parse(reader.GetString(0)), Name = reader.GetString(1), Phone = reader.GetString(2), StatusCall = reader.GetString(3) == "Outgoing" ? StatusCall.Outgoing : reader.GetString(3) == "Incoming" ? StatusCall.Incoming : reader.GetString(3) == "Ignore" ? StatusCall.Ignore : StatusCall.IncomeIgnore, StartDialog = DateTime.Parse(reader.GetString(4)), EndDialog = DateTime.Parse(reader.GetString(5)) });
+                    }
+                    await connection.CloseAsync();
+                    await connection.DisposeAsync();
+                }
+            }
+            catch
+            {
+                return historyNotes;
+            }
+            return historyNotes;
+        }
         public List<HotKeyUser> GetHotKeyUsers()
         {
             List<HotKeyUser> hotKeyUsers = new List<HotKeyUser>();
@@ -353,6 +425,33 @@ namespace VoiceX.DAL.Context
                     }
                     connection.Close();
                     connection.Dispose();
+                }
+            }
+            catch
+            {
+                return hotKeyUsers;
+            }
+            return hotKeyUsers;
+        }
+        public async Task<List<HotKeyUser>> GetHotKeyUsersAsync()
+        {
+            List<HotKeyUser> hotKeyUsers = new List<HotKeyUser>();
+            try
+            {
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+                string openPathDB = Path.Combine(path + "\\HistoryDB.db");
+                using (SqliteConnection connection = new SqliteConnection($@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"))
+                {
+                    await connection.OpenAsync();
+                    string command = "SELECT * FROM HotKeyUsers";
+                    SqliteCommand sqliteCommand = new SqliteCommand(command, connection);
+                    var reader = await sqliteCommand.ExecuteReaderAsync();
+                    while (await reader.ReadAsync())
+                    {
+                        hotKeyUsers.Add(new HotKeyUser { Id = Guid.Parse(reader.GetString(0)), Name = reader.GetString(1), Phone = reader.GetString(2) });
+                    }
+                    await connection.CloseAsync();
+                    await connection.DisposeAsync();
                 }
             }
             catch

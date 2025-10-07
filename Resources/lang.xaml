@@ -14,7 +14,7 @@
     <v:String x:Key="m_ICE">ICE</v:String>
     <v:String x:Key="m_IPRewrite">IP rewrite</v:String>
     <v:String x:Key="m_StartupWithWindows">Startup with Windows</v:String>
-    <v:String x:Key="m_Speaker">Sreaker</v:String>
+    <v:String x:Key="m_Speaker">Speaker</v:String>
     <v:String x:Key="m_Microphone">Microphone</v:String>
     <v:String x:Key="m_Ringtone">Ringtone</v:String>
     <v:String x:Key="m_Version">Version</v:String>

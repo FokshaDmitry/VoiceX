@@ -4,6 +4,7 @@ using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.Content;
 using PdfSharp.Pdf.Content.Objects;
 using PdfSharp.Pdf.IO;
+using Squirrel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -150,9 +151,9 @@ namespace VoiceX
                             writer.Flush();
                         }
                     }
-                    catch 
+                    catch (Exception ex)
                     {
-                       
+                        Debug.WriteLine(ex.Message);
                     }
                 }
                 Environment.Exit(0);
@@ -167,8 +168,39 @@ namespace VoiceX
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
                 Exception ex = (Exception)e.ExceptionObject;
-                //MessageBox.Show("Unhandled exception: " + ex.Message);
+                Debug.WriteLine(ex.Message);
             };
+            DispatcherUnhandledException += (sender, e) =>
+            {
+                Debug.WriteLine(e.Exception.Message);
+            };
+        }
+        public async Task UpdateCheker()
+        {
+              await Task.Run(async () =>
+              {
+                  try
+                  {
+                      using var mgr = new UpdateManager("https://updates.example.com/updates/myapp/stable");
+                      var updateInfo = await mgr.CheckForUpdate();
+
+                      if (updateInfo.ReleasesToApply.Any())
+                      {
+                          Console.WriteLine($"Доступна версия {updateInfo.FutureReleaseEntry.Version}");
+                          await mgr.UpdateApp();
+                          Console.WriteLine("Обновление завершено. Перезапуск...");
+                          UpdateManager.RestartApp();
+                      }
+                      else
+                      {
+                          Console.WriteLine("Версия актуальна");
+                      }
+                  }
+                  catch (Exception ex)
+                  {
+                      Console.WriteLine($"Ошибка при обновлении: {ex.Message}");
+                  }
+              });
         }
         public static CultureInfo Language
         {
@@ -369,7 +401,7 @@ namespace VoiceX
             {
                 while (true)
                 {
-                    using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(PipeName, PipeDirection.In))
+                    using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly, 4096, 4096))
                     {
                         await pipeServer.WaitForConnectionAsync(); // Ждём сигнал от второго процесса
                         using (StreamReader reader = new StreamReader(pipeServer))
