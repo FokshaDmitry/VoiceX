@@ -406,12 +406,6 @@
     <None Update="VC_redist.x86.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="windowsdesktop-runtime-9.0.4-win-x86.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="windowsdesktop-runtime-9.0.7-win-x64.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>

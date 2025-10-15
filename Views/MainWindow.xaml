@@ -8,6 +8,10 @@
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         Closing="Window_Closing"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="Auto"
         Title="VoiceX" MinWidth="260" MouseEnter="Window_MouseEnter" MouseLeave="Window_MouseLeave" Icon="/Assets/Icone_v2/BlueIcon.ico" MinHeight="460" MaxHeight="460" MaxWidth="260" Background="#FFEBE2FF" Loaded="Window_Loaded">
     <Window.Resources>
         <Style TargetType="Button">
@@ -165,7 +169,7 @@
                 </tb:TaskbarIcon.ContextMenu>
             </tb:TaskbarIcon>
             <Frame NavigationUIVisibility="Hidden" x:Name="MainPage">
-                
+
             </Frame>
             <Grid Visibility="Collapsed" x:Name="ErrorPlate"  Background="#999692ED" Margin="-5,0,-5,0" >
                 <Border CornerRadius="12" Background="White" Width="204" Height="150">
@@ -213,7 +217,7 @@
                                 <BitmapImage UriSource="/Assets/Icone_v2/Error.png" DecodePixelWidth="1000" DecodePixelHeight="1000"/>
                             </Image.Source>
                         </Image>
-                        <TextBox BorderThickness="0" FontSize="20" FontFamily="Nunito Sans 10pt Normal" Text="Attention" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,80,0,0"/>
+                        <TextBox BorderThickness="0" FontSize="20" FontFamily="Nunito Sans 10pt Normal" Text="{DynamicResource m_Attention}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,80,0,0"/>
                         <TextBox TextWrapping="Wrap" BorderThickness="0" x:Name="ErrorMessage" Width="143" Height="30" FontSize="14" FontFamily="Nunito Sans 10pt Normal" Text="Attention" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,106,0,0" HorizontalContentAlignment="Center"/>
                     </Grid>
                 </Border>
@@ -383,7 +387,7 @@
                 </Grid>
             </Grid>
         </Grid>
-        
+
     </Page>
-    
+
 </Window>

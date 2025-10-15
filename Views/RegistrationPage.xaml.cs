@@ -67,7 +67,7 @@ namespace VoiceX.Views
                     certificateService.SaveCertificate(AppDomain.CurrentDomain.BaseDirectory + "\\default-windowsrsa.p12", "r7Z33th35XTCfym6", "default-windowsrsa");
                 }
                 var cert = await webService.GetCertificateAsync(pbxCode, "windows");
-                if (String.IsNullOrEmpty(cert.Error))
+                if (cert.ResponseCode == HttpStatusCode.OK)
                 {
                     try
                     {
@@ -95,7 +95,13 @@ namespace VoiceX.Views
                 }
                 else
                 {
-                    window.ShowError($"Token error: {cert.Error}");
+                    var error = cert.Error;
+                    var errorCode = cert.ResponseCode.ToString();
+                    if (errorCode == "10003" || errorCode == "0")
+                    {
+                        error = this.TryFindResource("m_WrongCode").ToString() ?? "Wrong PBX code";
+                    }
+                    window.ShowError(error);
                     window.LoadIcone.Visibility = Visibility.Collapsed;
                     return;
                 }
@@ -113,7 +119,7 @@ namespace VoiceX.Views
                 {
                     App.UserPbx = $"{pbxCode.Substring(0, 3)}";
                     window.LoadIcone.Visibility = Visibility.Collapsed;
-                    window.MainPage.Navigate(profilePage); 
+                    window.MainPage.Navigate(profilePage);
                 }
                 catch (Exception ex)
                 {

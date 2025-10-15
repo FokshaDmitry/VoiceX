@@ -85,7 +85,7 @@ namespace VoiceX.Views.ControlPages
         {
             GlobalWindow.Visibility = Visibility.Hidden;
             isRunning = false;
-            window.Exit_Click(sender, e );
+            window.Exit_Click(sender, e);
         }
 
         public void Online()
@@ -123,7 +123,20 @@ namespace VoiceX.Views.ControlPages
                                             {
                                                 if (info.regStatus != pjsip_status_code.PJSIP_SC_OK && info.regStatus != pjsip_status_code.PJSIP_SC_TRYING)
                                                 {
-                                                    window.ShowError(info.regStatusText);
+                                                    var errorMess = info.regStatusText;
+                                                    if (errorMess == "Forbidden")
+                                                    {
+                                                        errorMess = this.TryFindResource("m_ForbiddenWrong").ToString() ?? errorMess;
+                                                    }
+                                                    if (errorMess == "Bad Gateway")
+                                                    {
+                                                        errorMess = this.TryFindResource("m_ConnectionWrong").ToString() ?? errorMess;
+                                                    }
+                                                    if (errorMess == "Request Timeout")
+                                                    {
+                                                        errorMess = this.TryFindResource("m_ServerWrong").ToString() ?? errorMess;
+                                                    }
+                                                    window.ShowError(errorMess);
                                                     window.Show();
                                                     window.WindowState = WindowState.Normal;
                                                     window.Activate();
