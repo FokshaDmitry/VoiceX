@@ -68,4 +68,9 @@
     <v:String x:Key="m_Exit">Exit</v:String>
     <v:String x:Key="m_Softphone">Softphone</v:String>
     <v:String x:Key="m_Webphone">Webphone</v:String>
+    <v:String x:Key="m_ServerWrong">Server unavailable</v:String>
+    <v:String x:Key="m_ForbiddenWrong">Access denied</v:String>
+    <v:String x:Key="m_ConnectionWrong">Connection lost</v:String>
+    <v:String x:Key="m_WrongCode">Wrong code</v:String>
+    <v:String x:Key="m_CertificateWrong">Certificate error</v:String>
 </ResourceDictionary>
