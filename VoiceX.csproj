@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
     <ApplicationIcon>Logo256.ico</ApplicationIcon>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <UseWPF>True</UseWPF>
@@ -10,6 +10,7 @@
     <ApplicationManifest></ApplicationManifest>
     <NeutralLanguage>en</NeutralLanguage>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <UseWindowsForms>True</UseWindowsForms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -230,15 +231,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Clowd.Squirrel" Version="2.11.1" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.7" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.9" />
     <PackageReference Include="Microsoft.QualityTools.Testing.Fakes" Version="17.14.1" />
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NSwag.Core" Version="14.4.0" />
-    <PackageReference Include="PDFsharp" Version="6.2.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="NSwag.Core" Version="14.6.1" />
+    <PackageReference Include="PDFsharp" Version="6.2.2" />
     <PackageReference Include="pjsip-pjsua2-cs" Version="2.10.1" />
-    <PackageReference Include="System.DirectoryServices.Protocols" Version="9.0.7" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="9.0.9" />
   </ItemGroup>
 
   <ItemGroup>

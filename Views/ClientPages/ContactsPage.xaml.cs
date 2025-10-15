@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using VoiceX.Interfeces;
@@ -41,36 +42,15 @@ namespace VoiceX.Views.ClientPages
             {
                 contacts.contacts = new List<Models.Contact>();
             }
-            AddMoreNotes();
-            var clients = ProfilePage.LDAPService?.GetLdapUsers(50, App.AccountData?.Data.Ldap_Settings.Base!);
-            ContactsList.Items.Clear();
-            if (clients != null && clients.Count != 0)
-            {
-                clients = clients.Where(c => !contacts.contacts.Select(u => u.Telephone).Contains(c.Phone)).ToList();
-                var groupContacts = clients.GroupBy(c => c.Name?[0].ToString().ToUpper()).OrderBy(c => c.Key);
-                foreach (var groupcontact in groupContacts.ToList())
-                {
-                    if (groupcontact.Key!.All(char.IsDigit))
-                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key?.ToString()!));
-                    else
-                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key?.ToString()! + groupcontact.Key?.ToString()!.ToUpper().ToLower()));
-                    int color = 0;
-                    foreach (var client in groupcontact)
-                    {
-                        ContactsList.Items.Add(new Items.Contact(client.Name!, client.Phone!, color));
-                        color = color == 0 ? 1 : 0;
-                    }
-                }
-                ContactsList.Items.Add(new MoreItems(this));
-            }
+            await AddMoreNotes();
         }
-        public void AddMoreNotes()
+        public async Task AddMoreNotes()
         {
             int count = ContactsList.Items.Count;
             Debug.WriteLine(count);
             count += 25;
+            var clients = await ProfilePage.LDAPService?.GetLdapUsersAsync(count, App.AccountData?.Data.Ldap_Settings.Base!)!;
             ContactsList.Items.Clear();
-            var clients = ProfilePage.LDAPService?.GetLdapUsers(count, App.AccountData?.Data.Ldap_Settings.Base!);
 
             if (clients != null && clients.Count != 0)
             {
@@ -81,7 +61,7 @@ namespace VoiceX.Views.ClientPages
                     if (groupcontact.Key.All(char.IsDigit))
                         ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString()));
                     else
-                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString() + groupcontact.Key.ToString().ToUpper().ToLower()));
+                        ContactsList.Items.Add(new HeadingContactList(groupcontact.Key.ToString() + groupcontact.Key.ToString().ToLower()));
                     int color = 0;
                     foreach (var client in groupcontact)
                     {

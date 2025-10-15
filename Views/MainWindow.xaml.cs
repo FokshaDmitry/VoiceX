@@ -9,8 +9,6 @@ using System.Windows.Threading;
 using VoiceX.DAL.Context;
 using VoiceX.Items;
 using VoiceX.Services;
-using Windows.ApplicationModel;
-using Windows.Foundation.Metadata;
 
 namespace VoiceX.Views
 {
@@ -229,8 +227,11 @@ namespace VoiceX.Views
                 this.MainPage.Content = new RegistrationPage(this);
                 localStoreService.ClearIsolatedStorage();
                 await webService.LogOut(App.UserPbx!, App.userToken!, App.fw!);
-                CoreService.Instance.Logout();
                 await addDbContext.DropDatabaseAsync();
+                if (ProfilePage.onlineToken)
+                {
+                    CoreService.Instance.Logout();
+                }
                 LoadIcone.Visibility = Visibility.Hidden;
             }
             catch

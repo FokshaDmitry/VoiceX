@@ -8,6 +8,6 @@ namespace VoiceX.Interfeces
 {
     public interface IMoreItems
     {
-        void AddMoreNotes();
+        Task AddMoreNotes();
     }
 }

@@ -19,9 +19,9 @@ namespace VoiceX.Items
             this.moreItems = page; 
         }
 
-        private void More_Click(object sender, RoutedEventArgs e)
+        private async void More_Click(object sender, RoutedEventArgs e)
         {
-            moreItems.AddMoreNotes();
+            await moreItems.AddMoreNotes();
         }
 
         private void More_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
