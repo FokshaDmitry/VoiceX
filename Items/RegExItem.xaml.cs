@@ -36,7 +36,7 @@ namespace VoiceX.Items
             searchTitle = this.TryFindResource("m_Search") as String;
             this.clickToCallPage = clickToCallPage;
             this.Search.Text = String.IsNullOrEmpty(search) ? searchTitle : search;
-            this.Replece.Text = replace == null ? replaceTitle : replace;
+            this.Replece.Text = String.IsNullOrEmpty(replace) ? replaceTitle : replaceTitle;
             if (search != searchTitle)
             {
                 Search.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));

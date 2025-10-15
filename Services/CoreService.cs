@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using VoiceX.DAL.Context;
+using Windows.Storage;
 
 namespace VoiceX.Services
 {
@@ -172,7 +173,6 @@ namespace VoiceX.Services
                 
                 accCfg.natConfig.sdpNatRewriteUse = useIpRewrite ? 1 : 0;
                 //CREATE
-                accCfg.sipConfig.authCreds.Clear();
                 accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
                 
                 instance.create(accCfg, true);

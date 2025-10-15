@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VoiceX"
-#define MyAppVersion "1.0.2.12"
+#define MyAppVersion "1.0.2.10"
 #define MyAppPublisher "X-Cloud"
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -20,7 +20,7 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 
 OutputDir=App
-OutputBaseFilename=VoiceX_1.0.2.12
+OutputBaseFilename=VoiceX_1.0.2.10
 Compression=lzma
 SetupIconFile=C:\Users\user\Work\Logo256.ico
 SolidCompression=yes

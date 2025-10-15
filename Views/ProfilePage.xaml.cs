@@ -325,7 +325,7 @@ namespace VoiceX.Views
             
             addDbContext = new AddDbContext();
             addDbContext.InitializeDB();
-            await LDAPService?.Authenticate(App.AccountData?.Data.Ldap_Settings.Dn!, App.AccountData?.Data.Ldap_Settings.Pass!, App.AccountData?.Data.Ldap_Settings.Server!)!;
+            LDAPService?.Authenticate(App.AccountData?.Data.Ldap_Settings.Dn!, App.AccountData?.Data.Ldap_Settings.Pass!);
             string mic = await localStoreService.LoadDataAsync("micro");
             string audio = await localStoreService.LoadDataAsync("audio");
             General.Checked += Filter_Checked;
@@ -336,7 +336,7 @@ namespace VoiceX.Views
             CoreService.Instance.OutgoingCallEvent += Instance_OutgoingCallEvent;
 
             window!.LoadIcone.Visibility = Visibility.Visible;
-            contacts = await webService.GetcontactsList(App.UserPbx!, App.userToken!, App.fw!);
+            contacts = await webService.GetcontactsList( App.UserPbx!, App.userToken!, App.fw!);
             window!.LoadIcone.Visibility = Visibility.Collapsed;
             var AAlist = await localStoreService.LoadDataAsync("AACallList");
             if (!String.IsNullOrEmpty(AAlist))
@@ -780,21 +780,13 @@ namespace VoiceX.Views
 
         private void DTMFFild_TextChanged(object sender, TextChangedEventArgs e)
         {
-            try
+            var Num = (TextBox)sender;
+            if (CoreService.activeCall != null)
             {
-
-                var Num = (TextBox)sender;
-                if (CoreService.activeCall != null)
+                if (!String.IsNullOrEmpty(Num.Text))
                 {
-                    if (!String.IsNullOrEmpty(Num.Text))
-                    {
-                        CoreService.activeCall.dialDtmf(Num.Text.Last().ToString());
-                    }
+                    CoreService.activeCall.dialDtmf(Num.Text);
                 }
-            }
-            catch
-            {
-
             }
         }
 

@@ -74,13 +74,13 @@ namespace VoiceX.Views
             }
         }
 
-        private async void HotKeyPage_Loaded(object sender, RoutedEventArgs e)
+        private void HotKeyPage_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
                 ContactsList.Items.Clear();
                 hotKeyItems.Clear();
-                var hotKeyUsers = await addDbContext.GetHotKeyUsersAsync();
+                var hotKeyUsers = addDbContext.GetHotKeyUsers();
                 if (hotKeyUsers.Count != 0)
                 {
                     foreach (var user in hotKeyUsers)

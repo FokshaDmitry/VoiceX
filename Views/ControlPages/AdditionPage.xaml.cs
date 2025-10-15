@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -77,19 +78,24 @@ namespace VoiceX.Views.ControlPages
             var ip = await localStoreService.LoadDataAsync("ip");
             if (!String.IsNullOrEmpty(stun))
             {
-                Proxy.IsChecked = stun == "1" ? true : false;
+                if (stun == "1")
+                {
+                    Proxy.IsChecked = true;
+                }
             }
             if (!String.IsNullOrEmpty(ice))
             {
-                Ice.IsChecked = ice == "1" ? true : false;
+                if (ice == "1")
+                {
+                    Ice.IsChecked = true;
+                }
             }
             if (!String.IsNullOrEmpty(ip))
             {
-                Ip.IsChecked = ip == "1" ? true : false;
-            }
-            else
-            {
-                Ip.IsChecked = true;
+                if (ip == "1")
+                {
+                    Ip.IsChecked = true;
+                }
             }
             Startup.IsChecked = await IsInStartup() == StartupStatus.Enabled ? true : false;
             Microphones.SelectionChanged += Microphones_SelectionChanged;

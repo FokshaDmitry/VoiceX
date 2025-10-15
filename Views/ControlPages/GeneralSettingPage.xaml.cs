@@ -62,7 +62,7 @@ namespace VoiceX.Views.ControlPages
                         {
                             AppPhone.IsChecked = true;
 
-                            CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "0", ice == "0", ip == "1");
+                            CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
                             ProfilePage.onlineToken = true;
                         }
                         break;
@@ -164,7 +164,7 @@ namespace VoiceX.Views.ControlPages
         }
         private async void Softphone_Click(object sender, RoutedEventArgs e)
         {
-            var info = ProfilePage.onlineToken ? CoreService.Instance.getInfo() : null;
+            var info = CoreService.Instance.getInfo();
             var swich = (ToggleButton)sender;
             if ((bool)swich.IsChecked!)
             {
@@ -205,7 +205,7 @@ namespace VoiceX.Views.ControlPages
 
         private async void Webphone_Click(object sender, RoutedEventArgs e)
         {
-            var info = ProfilePage.onlineToken ? CoreService.Instance.getInfo() : null;
+            var info = CoreService.Instance.getInfo();
             var swich = (ToggleButton)sender;
             if ((bool)swich.IsChecked!)
             {
@@ -254,7 +254,7 @@ namespace VoiceX.Views.ControlPages
                 {
 
                     App.AccountData = await webService.GetAccountSettings(App.UserPbx!, App.userToken!, App.fw!);
-                    CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "0", ice == "0", ip == "1");
+                    CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "1", ice == "1", ip == "1");
                     ProfilePage.onlineToken = true;
                     App.AccountData!.Data.Device_type = "softphone";
                     Phone.IsChecked = false;
@@ -278,7 +278,7 @@ namespace VoiceX.Views.ControlPages
 
         private async void Phone_Click(object sender, RoutedEventArgs e)
         {
-            var info = ProfilePage.onlineToken ? CoreService.Instance.getInfo() : null;
+            var info = CoreService.Instance.getInfo();
             var swich = (ToggleButton)sender;
             if ((bool)swich.IsChecked!)
             {

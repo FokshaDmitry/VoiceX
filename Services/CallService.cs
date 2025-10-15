@@ -309,10 +309,19 @@ namespace VoiceX.Services
                         switch (state)
                         {
                             case "Outcmoing":
-                                ringtonePath = ResolveAssetPath(@"Assets\Ring\telefon-poshli-gudki-24931.wav");
+                                ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "telefon-poshli-gudki-24931.wav");
+                                if (!File.Exists(ringtonePath))
+                                {
+
+                                    ringtonePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", ""), "VoiceX", "Assets", "Ring", "telefon-poshli-gudki-24931.wav");
+                                }
                                 break;
                             case "Incoming":
-                                ringtonePath = ResolveAssetPath(@"Assets\Ring\iphone-11-pro.wav");
+                                ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "iphone-11-pro.wav");
+                                if (!File.Exists(ringtonePath))
+                                {
+                                    ringtonePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", ""), "VoiceX", "Assets", "Ring", "iphone-11-pro.wav");
+                                }
                                 break;
                         }
                     }
@@ -336,58 +345,45 @@ namespace VoiceX.Services
                 Debug.WriteLine($"[CALL] Ошибка при запуске гудка: {ex.Message}");
             }
         }
-        public void PlayIncomingRing(int device)
+        public async Task PlayIncomingRing(int device)
         {
             string ringtonePath = "";
             try
             {
                 if (ringTonePlayer == null)
                 {
+                    DeviceId = CoreService.Instance.Core.audDevManager().getPlaybackDev();
                     var manager = CoreService.Instance.Core.audDevManager();
-                    var prev = manager.getPlaybackDev();
                     manager.setPlaybackDev(device);
+                    ringTonePlayer = new AudioMediaPlayer(); 
+                    ringtonePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Ring", "iphone-11-pro.wav");
+                    if (!File.Exists(ringtonePath))
+                    {
+                        try
+                        {
+                            ringtonePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace("\\AppX\\VoiceX\\", ""), "VoiceX", "Assets", "Ring", "iphone-11-pro.wav");
+                        }
+                        catch
+                        {
 
-                    ringTonePlayer = new AudioMediaPlayer();
-                    ringtonePath = ResolveAssetPath(@"Assets\Ring\iphone-11-pro.wav");
-
+                        }
+                    }
                     ringTonePlayer.createPlayer(ringtonePath);
+                    AudioMedia speaker = CoreService.Instance.Core.audDevManager().getPlaybackDevMedia();
 
-                    AudioMedia speaker = manager.getPlaybackDevMedia();
                     if (speaker != null)
                     {
                         ringTonePlayer.startTransmit(speaker);
                         Debug.WriteLine("[CALL] Гудок запущен.");
                     }
-                    else
-                    {
-                        Debug.WriteLine("[CALL] Не удалось получить playback device media.");
-                    }
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                ProfilePage.window.ShowError($"{ringtonePath}\n{ex.Message}");
+                ProfilePage.window.ShowError(ringtonePath);
             }
         }
-        string ResolveAssetPath(string relativePath)
-        {
-            try
-            {
-                var installedRoot = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
-                var candidate = Path.Combine(installedRoot, relativePath);
-                if (File.Exists(candidate)) return candidate;
-            }
-            catch
-            {
-                // сюда попадём если приложение не упаковано (во время разработки)
-            }
 
-            var baseDir = AppContext.BaseDirectory;
-            var path = Path.Combine(baseDir, relativePath);
-            if (File.Exists(path)) return path;
-
-            throw new FileNotFoundException($"Asset not found: {relativePath}");
-        }
 
         /// <summary>
         /// Объединить два вызова в конференцию

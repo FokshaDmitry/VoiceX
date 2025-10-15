@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -88,7 +87,7 @@ namespace VoiceX.Views
             
         }
 
-        private async void HistoryPage_Loaded(object sender, RoutedEventArgs e)
+        private void HistoryPage_Loaded(object sender, RoutedEventArgs e)
         {
             if (!String.IsNullOrEmpty(filter.Name))
             {
@@ -103,7 +102,7 @@ namespace VoiceX.Views
                     ChekIn.Background = whiteLine;
                     CheckAll.Background = whiteLine;
                     ChekIgnore.Background = blueLine;
-                    List<HistoryNotes> historyNotes = await addDbContext.GetNotesAsync(50, Enums.StatusCall.Ignore);
+                    List<HistoryNotes> historyNotes = addDbContext.GetNotes(50, Enums.StatusCall.Ignore);
                     FillListBox(historyNotes, 0);
                     
                 }
@@ -119,7 +118,7 @@ namespace VoiceX.Views
                     CheckAll.Background = blueLine;
                     ChekIgnore.Background = whiteLine;
 
-                    List<HistoryNotes> historyNotes = await addDbContext.GetNotesAsync(50);
+                    List<HistoryNotes> historyNotes = addDbContext.GetNotes(50);
                     FillListBox(historyNotes, 0);
                     filter.Name = "AllCall";
                 }
@@ -136,7 +135,7 @@ namespace VoiceX.Views
                 CheckAll.Background = blueLine;
                 ChekIgnore.Background = whiteLine;
 
-                List<HistoryNotes> historyNotes = await addDbContext.GetNotesAsync(50);
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(50);
                 FillListBox(historyNotes, 0);
                 filter.Name = "AllCall";
             }
@@ -174,7 +173,7 @@ namespace VoiceX.Views
                 HistoryList.Items.Add(new MoreItems(this));
             }
         }
-        private async void Filter_Checked(object sender, RoutedEventArgs e)
+        private void Filter_Checked(object sender, RoutedEventArgs e)
         {
             filter = (RadioButton)sender;
             if (HistoryList == null)
@@ -194,7 +193,7 @@ namespace VoiceX.Views
                 CheckAll.Background = whiteLine;
                 ChekIgnore.Background = whiteLine;
 
-                List<HistoryNotes> historyNotes = await addDbContext.GetNotesAsync(50, Enums.StatusCall.Outgoing);
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(50, Enums.StatusCall.Outgoing);
                 FillListBox(historyNotes, 0);
             }
             else if(filter.Name == "InCall")
@@ -209,7 +208,7 @@ namespace VoiceX.Views
                 CheckAll.Background = whiteLine;
                 ChekIgnore.Background = whiteLine;
 
-                List<HistoryNotes> historyNotes = await addDbContext.GetNotesAsync(50, Enums.StatusCall.Incoming);
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(50, Enums.StatusCall.Incoming);
                 FillListBox(historyNotes, 0);
             }
             else if(filter.Name == "AllCall")
@@ -224,7 +223,7 @@ namespace VoiceX.Views
                 CheckAll.Background = blueLine;
                 ChekIgnore.Background = whiteLine;
 
-                List<HistoryNotes> historyNotes = await addDbContext.GetNotesAsync(50);
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(50);
                 FillListBox(historyNotes, 0);
             }
             else if (filter.Name == "IgnoreCall")
@@ -239,32 +238,32 @@ namespace VoiceX.Views
                 CheckAll.Background = whiteLine;
                 ChekIgnore.Background = blueLine;
 
-                List<HistoryNotes> historyNotes = await addDbContext.GetNotesAsync(50, Enums.StatusCall.Ignore);
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(50, Enums.StatusCall.Ignore);
                 FillListBox(historyNotes, 0);
             }
         }
 
-        public async Task AddMoreNotes()
+        public void AddMoreNotes()
         {
             int currentItems = HistoryList.Items.Count;
             if (filter.Name == "OutCall")
             {
-                List<HistoryNotes> historyNotes = await addDbContext.GetNotesAsync(currentItems + 50, Enums.StatusCall.Outgoing);
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50, Enums.StatusCall.Outgoing);
                 FillListBox(historyNotes, currentItems);
             }
             else if (filter.Name == "InCall")
             {
-                List<HistoryNotes> historyNotes = await addDbContext.GetNotesAsync(currentItems + 50, Enums.StatusCall.Incoming);
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50, Enums.StatusCall.Incoming);
                 FillListBox(historyNotes, currentItems);
             }
             else if (filter.Name == "AllCall")
             {
-                List<HistoryNotes> historyNotes = await addDbContext.GetNotesAsync(currentItems + 50);
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50);
                 FillListBox(historyNotes, currentItems);
             }
             else if (filter.Name == "IgnoreCall")
             {
-                List<HistoryNotes> historyNotes = await addDbContext.GetNotesAsync(currentItems + 50, Enums.StatusCall.Ignore);
+                List<HistoryNotes> historyNotes = addDbContext.GetNotes(currentItems + 50, Enums.StatusCall.Ignore);
                 FillListBox(historyNotes, currentItems);
             }
         }
