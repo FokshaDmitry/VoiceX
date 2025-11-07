@@ -8,6 +8,7 @@
         public Sip_settings Sip_Settings { get; set; }
         public User_data User_Data { get; set; }
         public string Device_type { get; set; }
+        public custom_data Custom_Data { get; set; }
 
         public Data()
         {
@@ -35,6 +36,10 @@
                 UserID = "",
                 Email = "",
                 Name = ""
+            };
+            Custom_Data = new custom_data
+            {
+                url = ""
             };
         }
     }

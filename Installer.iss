@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VoiceX"
-#define MyAppVersion "1.1.2.0"
+#define MyAppVersion "1.1.2.1"
 #define MyAppPublisher "X-Cloud"
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -20,7 +20,7 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 
 OutputDir=App
-OutputBaseFilename=VoiceX_1.1.2.0
+OutputBaseFilename=VoiceX_1.1.2.1
 Compression=lzma
 SetupIconFile=C:\Users\user\Work\Logo256.ico
 SolidCompression=yes
@@ -40,8 +40,8 @@ Source: "*"; DestDir: {app}; Flags: recursesubdirs createallsubdirs ignoreversio
 [Registry]
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "VoiceX"; ValueData: """{app}\VoiceX.exe"""; Flags: uninsdeletevalue
 [Run]
-Filename: "{app}\windowsdesktop-runtime-9.0.4-win-x86.exe"; Parameters: "/silent"; Flags: waituntilterminated
-Filename: "{app}\windowsdesktop-runtime-9.0.7-win-x64.exe"; Parameters: "/silent"; Flags: waituntilterminated
+Filename: "{app}\dotnet-sdk-10.0.100-rc.2.25502.107-win-x64.exe"; Parameters: "/silent"; Flags: waituntilterminated
+Filename: "{app}\dotnet-sdk-10.0.100-rc.2.25502.107-win-x86.exe"; Parameters: "/silent"; Flags: waituntilterminated
 Filename: "{app}\VC_redist.x86.exe"; Parameters: "/silent"; Flags: waituntilterminated
 Filename: "{app}\VC_redist.x64.exe"; Parameters: "/silent"; Flags: waituntilterminated
 Filename: "{app}\VoiceX.exe"; Description: "Run Program"; Flags:  nowait postinstall

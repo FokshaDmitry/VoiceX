@@ -209,7 +209,6 @@ namespace VoiceX.Views.PhonePages
         }
         private void AddCall_Click(object sender, RoutedEventArgs e)
         {
-            
             phonePage.AddContactsList(Enums.KeyPads.AddCallPad);
         }
 

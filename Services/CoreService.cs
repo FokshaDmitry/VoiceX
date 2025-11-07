@@ -157,21 +157,22 @@ namespace VoiceX.Services
                 accCfg!.sipConfig.transportId = transport;
                 //REG
                 accCfg.idUri = $"sip:{username}@{domain}";
-                if (!String.IsNullOrEmpty(proxy))
-                {
-                    accCfg.regConfig.registrarUri = $"sip:{proxy}";
-                    accCfg.sipConfig.proxies.Add($"sip:{proxy}");
-                }
-                else
-                {
-                    accCfg.regConfig.registrarUri = $"sip:{domain}";
-                }
-
+                //if (!String.IsNullOrEmpty(proxy))
+                //{
+                //    accCfg.regConfig.registrarUri = $"sip:{proxy}";
+                //    accCfg.sipConfig.proxies.Add($"sip:{proxy}");
+                //}
+                //else
+                //{
+                    
+                //}
+                accCfg.regConfig.registrarUri = $"sip:{domain}";
                 accCfg.natConfig.iceEnabled = iceEnabled;
                 accCfg.natConfig.sipStunUse = useStun ? pjsua_stun_use.PJSUA_STUN_USE_DEFAULT : pjsua_stun_use.PJSUA_STUN_USE_DISABLED;
                 
                 accCfg.natConfig.sdpNatRewriteUse = useIpRewrite ? 1 : 0;
                 //CREATE
+                
                 accCfg.sipConfig.authCreds.Clear();
                 accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
                 
@@ -185,28 +186,22 @@ namespace VoiceX.Services
         public async Task ChangeTransport(int id)
         {
             accCfg!.sipConfig.transportId = id;
-            await ReloadCore();
+            instance.modify(accCfg);
         }
         public async Task UseIceEnabled(bool flag)
         {
             accCfg!.natConfig.iceEnabled = flag;
-            await ReloadCore();
+            instance.modify(accCfg);
         }
         public async Task UseIpRewrite(bool flag)
         {
             accCfg!.natConfig.sdpNatRewriteUse = flag == true ? 1 : 0;
-            await ReloadCore();
+            instance.modify(accCfg);
         }
         public async Task UseStun(string? proxy)
         {
             //accCfg!.regConfig.registrarUri = $"sip:{proxy}";
             //await ReloadCore();
-        }
-        private async Task ReloadCore()
-        {
-            this.shutdown();
-            await Task.Delay(2000);
-            instance.create(accCfg, true);
         }
         public void Logout()
         {
@@ -267,6 +262,8 @@ namespace VoiceX.Services
                 {
                     
                     activeCall = new CallService(this, prm.callId);
+                    activeCall.prmMess = prm.rdata.wholeMsg;
+                    Debug.WriteLine(prm.rdata.wholeMsg);
                     IncomingCallEvent?.Invoke();
                 }
                 

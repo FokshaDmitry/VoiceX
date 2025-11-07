@@ -171,8 +171,28 @@ namespace VoiceX.Views
                 {
                     try
                     {
-
                         var info = CoreService.activeCall.getInfo();
+                        if (!String.IsNullOrEmpty(App.AccountData?.Data.Custom_Data.url))
+                        {
+
+                            if (!String.IsNullOrEmpty(CoreService.activeCall.prmMess))
+                            {
+                                if (!String.IsNullOrEmpty(info.remoteContact))
+                                {
+                                    var phone = ExtractValue(info.remoteContact);
+                                    var xuid = ParseSipHeader(CoreService.activeCall.prmMess, "X-uniqueid");
+                                    if (!String.IsNullOrEmpty(xuid))
+                                    {
+                                        var castom = ParseSipHeader(CoreService.activeCall.prmMess, "X-CampaignCustom");
+                                        if (!String.IsNullOrEmpty(castom))
+                                        {
+                                            await webService.OpenBrowser(App.AccountData.Data.Custom_Data.url, App.AccountData?.Data.Sip_Settings?.Sip_username!, phone, xuid, castom);
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
                         if (AutoAnswerNumbers != null && AutoAnswerNumbers.Contains(info.remoteContact))
                         {
                             Thread.Sleep(3000);
@@ -232,7 +252,70 @@ namespace VoiceX.Views
                 });
             }
         }
+        public string? ParseSipHeader(string? rawSip, string headerName)
+        {
+            if (string.IsNullOrWhiteSpace(rawSip) || string.IsNullOrWhiteSpace(headerName))
+                return null;
 
+            // Normalize line endings and unfold folded headers
+            var normalized = rawSip.Replace("\r\n", "\n").Replace("\r", "\n");
+            normalized = Regex.Replace(normalized, @"\n[ \t]+", " ");
+
+            // Split headers and body (stop at first empty line)
+            var parts = normalized.Split(new[] { "\n\n" }, StringSplitOptions.None);
+            var headersPart = parts.Length > 0 ? parts[0] : normalized;
+
+            var normalizedToValue = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var originalToValue = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var rawLine in headersPart.Split('\n'))
+            {
+                if (string.IsNullOrWhiteSpace(rawLine)) break;
+                var idx = rawLine.IndexOf(':');
+                if (idx <= 0) continue;
+
+                var name = rawLine.Substring(0, idx).Trim();
+                var value = rawLine.Substring(idx + 1).Trim();
+
+                // store by normalized key (remove non-alphanum), and by original name (case-insensitive)
+                var normKey = Regex.Replace(name, @"[^A-Za-z0-9]", "").ToLowerInvariant();
+                if (normalizedToValue.ContainsKey(normKey))
+                    normalizedToValue[normKey] = normalizedToValue[normKey] + ", " + value;
+                else
+                    normalizedToValue[normKey] = value;
+
+                if (originalToValue.ContainsKey(name))
+                    originalToValue[name] = originalToValue[name] + ", " + value;
+                else
+                    originalToValue[name] = value;
+            }
+
+            // Normalize lookup key same way
+            var lookup = Regex.Replace(headerName, @"[^A-Za-z0-9]", "").ToLowerInvariant();
+
+            if (normalizedToValue.TryGetValue(lookup, out var found))
+                return TrimHeaderValue(found);
+
+            // fallback: try direct case-insensitive match on original header names
+            foreach (var kv in originalToValue)
+            {
+                if (string.Equals(kv.Key, headerName, StringComparison.OrdinalIgnoreCase))
+                    return TrimHeaderValue(kv.Value);
+            }
+
+            return null;
+
+            static string TrimHeaderValue(string v)
+            {
+                v = v.Trim();
+                // cut at first semicolon or newline if present
+                var endIdx = v.IndexOfAny(new char[] { ';', '\r', '\n' });
+                if (endIdx > 0) v = v.Substring(0, endIdx).Trim();
+                // strip surrounding quotes
+                if (v.Length >= 2 && v.StartsWith("\"") && v.EndsWith("\"")) v = v.Substring(1, v.Length - 2);
+                return v;
+            }
+        }
         private async void ActiveCall_EndCallEvent(string Name, string Phone, DateTime StartCall)
         {
             await Dispatcher.InvokeAsync(async () => {
@@ -713,27 +796,7 @@ namespace VoiceX.Views
                     }
                     else
                     {
-                        var uri = $"sip:{KeypadFild.Text}@{App.AccountData!.Data.Sip_Settings.Sip_server}";
-                        if (CoreService.activeCall.CallAdtess?.Count == 0)
-                        {
-                            var info = CoreService.activeCall.getInfo();
-                            if (info != null) 
-                            {
-                                if (!String.IsNullOrEmpty(info.remoteContact))
-                                {
-                                    CoreService.activeCall.CallAdtess.Add(info.remoteContact);
-                                }
-                            }
-                        }
-                        if (!CoreService.activeCall.CallAdtess!.Contains(uri))
-                        {
-                            CoreService.activeCall.CallAdtess.Add(uri);
-                        }
-                        else
-                        {
-                            return;
-                        }
-                        CoreService.AddParticipant(KeypadFild.Text, App.AccountData.Data.Sip_Settings.Sip_server);
+                        CoreService.activeCall.AddCallToConference(KeypadFild.Text, App.AccountData.Data.Sip_Settings.Sip_server);
                     }
                 }
                 KeypadFild.Text = "";

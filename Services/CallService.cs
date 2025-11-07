@@ -21,6 +21,8 @@ namespace VoiceX.Services
         public delegate void EndCall(string Name, string Phone, DateTime StartCall);
         public event EndCall? EndCallEvent;
         public int DeviceId;
+        public string prmMess { get; set; }
+        // Fix for CS1737: Move the optional parameter 'call_id' after required parameters in the constructor
         public CallService(Account acc, int call_id = -1) : base(acc, call_id)
         {
             CallAdtess = new List<string>();
@@ -392,7 +394,30 @@ namespace VoiceX.Services
         /// <summary>
         /// Объединить два вызова в конференцию
         /// </summary>
-
+        public void AddCallToConference(String phone, String server)
+        {
+            var uri = $"sip:{phone}@{server}";
+            if (CallAdtess?.Count == 0)
+            {
+                var info = getInfo();
+                if (info != null)
+                {
+                    if (!String.IsNullOrEmpty(info.remoteContact))
+                    {
+                        CallAdtess.Add(info.remoteContact);
+                    }
+                }
+            }
+            if (!CallAdtess!.Contains(uri))
+            {
+                CallAdtess.Add(uri);
+            }
+            else
+            {
+                return;
+            }
+            CoreService.AddParticipant(phone, server);
+        }
         public void TransferCall(string phone, string server)
         {
             try

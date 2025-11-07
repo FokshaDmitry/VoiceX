@@ -14,7 +14,12 @@ namespace VoiceX.Models
                 Enable_log = 0,
                 Is_mobile = 0,
                 Device_type = "",
-                Ldap_Settings = new Ldap_settings()
+                Ldap_Settings = new Ldap_settings(),
+                Custom_Data = new custom_data
+                {
+                    url = ""
+                },
+
             };
             Data.Ldap_Settings.Base = "";
             Data.Ldap_Settings.Dn = "";

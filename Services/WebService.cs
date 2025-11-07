@@ -1,15 +1,16 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.IO;
-using System.Net.Http;
-using System.Text;
-using System.Security.Cryptography.X509Certificates;
-using VoiceX.Models;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
 using VoiceX.DAL.Context;
+using VoiceX.Models;
 
 namespace VoiceX.Services
 {
@@ -422,7 +423,7 @@ namespace VoiceX.Services
                     account.Data = JsonConvert.DeserializeObject<Data>(appData?.ToString()!)!;
                     account.Data.Sip_Settings = JsonConvert.DeserializeObject<Sip_settings>(sipSettings?.ToString()!)!;
                     account.Data.Sip_Settings.Sip_secret = Encoding.UTF8.GetString(Convert.FromBase64String(account.Data.Sip_Settings.Sip_secret));
-                    
+                    account.Data.Custom_Data = JsonConvert.DeserializeObject<custom_data>(appData?["custom_data"]?.ToString()!)!;
                     account.Data.User_Data = JsonConvert.DeserializeObject<User_data>(usedData?.ToString()!)!;
                     account.Data.Ldap_Settings = JsonConvert.DeserializeObject<Ldap_settings>(ldapData?.ToString()!)!;
                 }
@@ -613,6 +614,49 @@ namespace VoiceX.Services
                 responceModel.ResponseCode = System.Net.HttpStatusCode.NoContent;
             }
             return responceModel;
+        }
+        public async Task<string> OpenBrowser(String castomurl, String exten, String phone, String callid, String customdata)
+        {
+            if (String.IsNullOrEmpty(castomurl))
+            {
+                return "URL is Empty";
+            }
+            if (String.IsNullOrEmpty(phone))
+            {
+                return "Phone is Empty";
+            }
+            if (String.IsNullOrEmpty(callid))
+            {
+                return "Call Id is Empty";
+            }
+            if (String.IsNullOrEmpty(customdata))
+            {
+                return "Data is Empty";
+            }
+            if (String.IsNullOrEmpty(exten))
+            {
+                return "Exten is Empty";
+            }
+            string url = castomurl.Replace("{EXTEN}", exten).Replace("{CUSTOM_DATA}", customdata).Replace("{PHONE_NUMBER}", phone).Replace("{CALL_ID}", callid);
+
+            // Ensure scheme present
+            if (!url.Contains("://"))
+                url = "http://" + url;
+
+            try
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                };
+                Process.Start(psi);
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                return $"Failed to open url '{url}': {ex.Message}";
+            }
         }
     }
 }
