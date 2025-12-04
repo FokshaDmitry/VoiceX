@@ -1,6 +1,9 @@
 ﻿using pj;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -19,6 +22,7 @@ namespace VoiceX.Views.PhonePages
         DialpadCallPage phoneCallPage;
         ActivCallPage activCallPage;
         Storyboard slide;
+        WebService webService;
         public CallPage(ProfilePage profilePage, DialpadCallPage dialpadCallPage, ActivCallPage activCallPage)
         {
             this.InitializeComponent();
@@ -27,6 +31,7 @@ namespace VoiceX.Views.PhonePages
             this.activCallPage = activCallPage;
             slide = (Storyboard)profilePage.FindResource("SlideUpAnimation");
             this.Unloaded += CallPage_Unloaded;
+            webService = new WebService();
         }
 
         private void CallPage_Unloaded(object sender, RoutedEventArgs e)
@@ -84,7 +89,8 @@ namespace VoiceX.Views.PhonePages
                 phonePage.MainFrame.Navigate(phoneCallPage);
             }
         }
-        private void Accept_Click(object sender, RoutedEventArgs e)
+        
+        private async void Accept_Click(object sender, RoutedEventArgs e)
         {
             if (CoreService.activeCall != null) 
             {
@@ -92,6 +98,7 @@ namespace VoiceX.Views.PhonePages
                 phonePage.MainFrame.Navigate(activCallPage);
                 slide.Begin();
                 phonePage.incomingWindow.Hide();
+                await phonePage.OpenBrowser(PhoneText.Text);
             }
             else
             {

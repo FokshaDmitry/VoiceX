@@ -71,7 +71,11 @@ namespace VoiceX.Views.PhonePages
                 phone = Regex.Replace(phone, @"[^0-9*#]", "");
                 try
                 {
-                    CoreService.Instance.MakeCall(phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
+                    var call = CoreService.Instance.MakeCall(phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
+                    if (call == null)
+                    {
+                        ProfilePage.window?.ShowError("Call not create. Please check connection and audio.");
+                    }
                 }
                 catch
                 {

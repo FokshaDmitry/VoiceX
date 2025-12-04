@@ -2,8 +2,8 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
@@ -26,8 +26,7 @@ namespace VoiceX.Views
         public event MoveOnPage? moveOnDialpad;
         public event MoveOnPage? moveOnContact;
         public event MoveOnPage? moveOnHistory;
-        public CoreService Core { get; } = CoreService.Instance;
-        Endpoint core;
+        public string? Version;
         public MainWindow()
         {
             InitializeComponent();
@@ -44,6 +43,7 @@ namespace VoiceX.Views
                 timer.Start();
             }
             certificateService = new CertificateService();
+            Version = "1.1.2.9";
         }
 
         private async void LanguageChanged(object? sender, EventArgs e)
@@ -137,11 +137,22 @@ namespace VoiceX.Views
                             App.userToken = token;
                             App.UserPbx = pbx;
                             App.fw = fw;
-                            if (stun == "1")
+                            if (String.IsNullOrEmpty(App.FirstLoginDate))
                             {
-                                CoreService.StunServer = App.AccountData.Data.Sip_Settings.Stun_server;
+                                try
+                                {
+                                    string exe = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                                    var installDate = File.GetCreationTime(exe);
+                                    App.FirstLoginDate = installDate.Date.ToString("yyyy-MM-dd");
+                                }
+                                catch
+                                {
+                                    App.FirstLoginDate = "No-info";
+                                }
                             }
-                            core = CoreService.Instance.Core;
+                            CoreService.StunServer = App.AccountData.Data.Sip_Settings.Stun_server;
+                            CoreService.Version = Version!;
+                            var core = CoreService.Instance.Core;
                             profilePage = new ProfilePage(this);
                             this.MainPage.Content = profilePage;
                         }
@@ -226,9 +237,12 @@ namespace VoiceX.Views
                 PreAsk.Visibility = Visibility.Hidden;
                 this.MainPage.Content = new RegistrationPage(this);
                 localStoreService.ClearIsolatedStorage();
+
                 await webService.LogOut(App.UserPbx!, App.userToken!, App.fw!);
                 await addDbContext.DropDatabaseAsync();
-                if (ProfilePage.onlineToken)
+                var info = CoreService.Instance.getInfo();
+
+                if (info.onlineStatus)
                 {
                     CoreService.Instance.Logout();
                 }

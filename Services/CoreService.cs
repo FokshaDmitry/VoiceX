@@ -2,9 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 using VoiceX.DAL.Context;
+using VoiceX.Views;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace VoiceX.Services
 {
@@ -13,6 +14,7 @@ namespace VoiceX.Services
         public static PjsipLogger? writer;
         public static CallService? activeCall;
         public static string StunServer { get; set; } = "";
+        public static string Version { get; set; } = "";
         private static readonly CoreService instance = new CoreService();
         private Endpoint? core;
         public delegate void IncomingCall(); 
@@ -39,31 +41,29 @@ namespace VoiceX.Services
                     core.libCreate();
                     // Init library
                     EpConfig epConfig = new EpConfig();
-                    epConfig.logConfig.level = 5;
+                    epConfig.logConfig.level = 6;
                     epConfig.logConfig.writer = writer;
                     if (!String.IsNullOrEmpty(StunServer))
                     {
                         epConfig.uaConfig.stunServer.Add(StunServer);
                     }
+                    epConfig.uaConfig.userAgent = $"VoiceX_{Version}/{App.FirstLoginDate}";
                     epConfig.uaConfig.maxCalls = 15;
-                    
                     core.libInit(epConfig);
                     var codecs = core.codecEnum2();
                     foreach (var codec in codecs)
                     {
-                        if (!codec.codecId.ToLower().Contains("pcmu") && !codec.codecId.ToLower().Contains("pcma") && !codec.codecId.ToLower().Contains("gsm"))
+                        if (!codec.codecId.ToLower().Contains("pcmu") && !codec.codecId.ToLower().Contains("pcma"))
                         {
                             core.codecSetPriority(codec.codecId, (byte)0);
                         }
                     }
-
-                    // Create transport
-                    TransportConfig tcfg = new TransportConfig();
-                    tcfg.port = 0; 
-                   
+                    var tpConf = new TransportConfig();
+                    tpConf.port = 0;
                     try
                     {
-                        core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, tcfg);
+                        var res = core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, tpConf);
+
                     }
                     catch (Exception e)
                     {
@@ -71,7 +71,7 @@ namespace VoiceX.Services
                     }
                     try
                     {
-                        core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, tcfg);
+                        var res = core.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, tpConf);
                     }
                     catch (Exception e)
                     {
@@ -82,6 +82,140 @@ namespace VoiceX.Services
                 }
                 return core; 
             } 
+        }
+        public async void Login(string username, string domain, string proxy, string password, int transport, bool useStun, bool iceEnabled, bool useIpRewrite)
+        {
+            try
+            {
+                var transportStr = transport == 0 ? ";transport=udp" : ";transport=tcp";
+                //REG
+                accCfg?.idUri = $"sip:{username}@{domain}" + transportStr;
+                if (!String.IsNullOrEmpty(proxy))
+                {
+                    accCfg?.regConfig.registrarUri = $"sip:{domain}" + transportStr;
+                    accCfg?.sipConfig.proxies.Clear();
+                    accCfg?.sipConfig.proxies.Add($"<sip:{proxy}{transportStr};lr>");
+                }
+                else
+                {
+                    accCfg?.regConfig.registrarUri = $"sip:{domain}" + transportStr;
+                }
+
+                accCfg?.natConfig.iceEnabled = iceEnabled;
+                
+                accCfg?.natConfig.sipStunUse =  useStun ? pjsua_stun_use.PJSUA_STUN_USE_DEFAULT : pjsua_stun_use.PJSUA_STUN_USE_DISABLED;
+                
+                accCfg?.natConfig.sdpNatRewriteUse = useIpRewrite ? 1 : 0;
+                //CREATE
+                accCfg?.sipConfig.authCreds.Clear();
+                accCfg?.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
+                
+                instance.create(accCfg, true);
+            }
+            catch
+            {
+
+            }
+        }
+        public async Task ChangeTransport(int id, string proxy, string username, string domain)
+        {
+            var transportStr = id == 0 ? ";transport=tcp" : ";transport=udp";
+            accCfg?.idUri = $"sip:{username}@{domain}" + transportStr;
+            if (!String.IsNullOrEmpty(proxy))
+            {
+                accCfg?.regConfig.registrarUri = $"sip:{domain}" + transportStr;
+                accCfg?.sipConfig.proxies.Clear();
+                accCfg?.sipConfig.proxies.Add($"<sip:{proxy}{transportStr};lr>");
+            }
+            else
+            {
+                accCfg?.regConfig.registrarUri = $"sip:{domain}" + transportStr;
+            }
+            instance.modify(accCfg);
+        }
+        public async Task UseIceEnabled(bool flag)
+        {
+            accCfg?.natConfig.iceEnabled = flag;
+            instance.modify(accCfg);
+        }
+        public async Task UseIpRewrite(bool flag)
+        {
+            accCfg?.natConfig.sdpNatRewriteUse = flag == true ? 1 : 0;
+            instance.modify(accCfg);
+        }
+        public async Task UseStun(bool flag)
+        {
+            accCfg?.natConfig.sipStunUse = flag ? pjsua_stun_use.PJSUA_STUN_USE_DEFAULT : pjsua_stun_use.PJSUA_STUN_USE_DISABLED;
+            instance.modify(accCfg);
+        }
+        public void Logout()
+        {
+            try
+            {
+                Debug.WriteLine("[SIP] Выход из аккаунта...");
+                instance.setRegistration(false);
+                shutdown();
+                
+
+                Debug.WriteLine("[SIP] Аккаунт успешно разлогинен.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SIP] Ошибка выхода из аккаунта: {ex.Message}");
+            }
+        }
+        public CallService MakeCall(string phone, string pbx)
+        {
+            if (this == null)
+            {
+                Debug.WriteLine("Ошибка: SIP-аккаунт не зарегистрирован!");
+                return null!;
+            }
+
+            // Закрываем предыдущий вызов перед созданием нового
+            if (activeCall == null)
+            {
+                string sipUri = $"sip:{phone}@{pbx}";
+
+                try
+                {
+                    activeCall = new CallService(this);
+                    CallOpParam prm = new CallOpParam(true);
+                    
+                    activeCall.makeCall(sipUri, prm);
+                    OutgoingCallEvent?.Invoke();
+                    return activeCall;
+                }
+                catch (Exception ex)
+                {
+                    activeCall = null;
+                    Debug.WriteLine($"Ошибка при вызове: {ex.Message}");
+                    return null!;
+                }
+            }
+            return null!;
+            // Создаём новый вызов
+            
+        }
+        public override void onIncomingCall(OnIncomingCallParam prm)
+        {
+            Debug.WriteLine("[CALL] Входящий вызов...");
+            try
+            {
+                if (activeCall == null)
+                {
+                    
+                    activeCall = new CallService(this, prm.callId);
+                    activeCall.prmMess = prm.rdata.wholeMsg;
+                    Debug.WriteLine(prm.rdata.wholeMsg);
+                    IncomingCallEvent?.Invoke();
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CALL] Ошибка при ответе на вызов: {ex.Message}");
+            }
         }
         public async static void AddParticipant(string phone, string server)
         {
@@ -148,129 +282,6 @@ namespace VoiceX.Services
             catch (Exception ex)
             {
                 Debug.WriteLine($"[CALL] Ошибка при объединении звонков: {ex.Message}");
-            }
-        }
-        public void Login(string username, string domain, string proxy, string password, int transport, bool useStun, bool iceEnabled, bool useIpRewrite)
-        {
-            try
-            {
-                accCfg!.sipConfig.transportId = transport;
-                //REG
-                accCfg.idUri = $"sip:{username}@{domain}";
-                //if (!String.IsNullOrEmpty(proxy))
-                //{
-                //    accCfg.regConfig.registrarUri = $"sip:{proxy}";
-                //    accCfg.sipConfig.proxies.Add($"sip:{proxy}");
-                //}
-                //else
-                //{
-                    
-                //}
-                accCfg.regConfig.registrarUri = $"sip:{domain}";
-                accCfg.natConfig.iceEnabled = iceEnabled;
-                accCfg.natConfig.sipStunUse = useStun ? pjsua_stun_use.PJSUA_STUN_USE_DEFAULT : pjsua_stun_use.PJSUA_STUN_USE_DISABLED;
-                
-                accCfg.natConfig.sdpNatRewriteUse = useIpRewrite ? 1 : 0;
-                //CREATE
-                
-                accCfg.sipConfig.authCreds.Clear();
-                accCfg.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
-                
-                instance.create(accCfg, true);
-            }
-            catch
-            {
-
-            }
-        }
-        public async Task ChangeTransport(int id)
-        {
-            accCfg!.sipConfig.transportId = id;
-            instance.modify(accCfg);
-        }
-        public async Task UseIceEnabled(bool flag)
-        {
-            accCfg!.natConfig.iceEnabled = flag;
-            instance.modify(accCfg);
-        }
-        public async Task UseIpRewrite(bool flag)
-        {
-            accCfg!.natConfig.sdpNatRewriteUse = flag == true ? 1 : 0;
-            instance.modify(accCfg);
-        }
-        public async Task UseStun(string? proxy)
-        {
-            //accCfg!.regConfig.registrarUri = $"sip:{proxy}";
-            //await ReloadCore();
-        }
-        public void Logout()
-        {
-            try
-            {
-                Debug.WriteLine("[SIP] Выход из аккаунта...");
-                setRegistration(false);
-
-                Thread.Sleep(500);
-                shutdown();
-
-                Debug.WriteLine("[SIP] Аккаунт успешно разлогинен.");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[SIP] Ошибка выхода из аккаунта: {ex.Message}");
-            }
-        }
-        public CallService MakeCall(string phone, string pbx)
-        {
-            if (this == null)
-            {
-                Debug.WriteLine("Ошибка: SIP-аккаунт не зарегистрирован!");
-                return null!;
-            }
-
-            // Закрываем предыдущий вызов перед созданием нового
-            if (activeCall == null)
-            {
-                string sipUri = $"sip:{phone}@{pbx}";
-
-                try
-                {
-                    activeCall = new CallService(this);
-                    CallOpParam prm = new CallOpParam(true);
-                    
-                    activeCall.makeCall(sipUri, prm);
-                    OutgoingCallEvent?.Invoke();
-                    return activeCall;
-                }
-                catch (Exception ex)
-                {
-                    activeCall = null;
-                    Debug.WriteLine($"Ошибка при вызове: {ex.Message}");
-                    return null!;
-                }
-            }
-            return null!;
-            // Создаём новый вызов
-            
-        }
-        public override void onIncomingCall(OnIncomingCallParam prm)
-        {
-            Debug.WriteLine("[CALL] Входящий вызов...");
-            try
-            {
-                if (activeCall == null)
-                {
-                    
-                    activeCall = new CallService(this, prm.callId);
-                    activeCall.prmMess = prm.rdata.wholeMsg;
-                    Debug.WriteLine(prm.rdata.wholeMsg);
-                    IncomingCallEvent?.Invoke();
-                }
-                
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[CALL] Ошибка при ответе на вызов: {ex.Message}");
             }
         }
     }

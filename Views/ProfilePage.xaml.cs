@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,6 +23,7 @@ using VoiceX.Services;
 using VoiceX.Views.ClientPages;
 using VoiceX.Views.ControlPages;
 using VoiceX.Views.PhonePages;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace VoiceX.Views
 {
@@ -95,7 +98,32 @@ namespace VoiceX.Views
             window.moveOnHistory += Window_moveOnHistory;
             this.PreviewKeyDown += OnPreviewKeyDown;
         }
+        private async Task SetVersion()
+        {
+            var projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\..\..\"));
+            var filePath = Path.Combine(projectRoot, "Installer.iss");
+            if (!File.Exists(filePath))
+                return;
 
+            // 1. Читаем исходный текст
+            string original = await File.ReadAllTextAsync(filePath);
+            var match = Regex.Match(original, @"#define\s+MyAppVersion\s+""([^""]+)""");
+            string version = "";
+            if (match.Success)
+            {
+                version = match.Groups[1].Value;
+            }
+            else
+            {
+                return;
+
+            }
+            if (version != window?.Version)
+            {
+                string updated = original.Replace(version, window?.Version);
+                await File.WriteAllTextAsync(filePath, updated);
+            }
+        } 
         private void Window_moveOnHistory()
         {
             historyPage.IgnoreCall.IsChecked = true;
@@ -135,9 +163,18 @@ namespace VoiceX.Views
                             Phone = Phone.Replace(regex.Search!, regex.Replace);
                         }
                         Phone = Regex.Replace(Phone, @"[^0-9*#]", "");
+                        if (String.IsNullOrEmpty(Phone))
+                        {
+                            ProfilePage.window?.ShowError("Number is empty.");
+                            return;
+                        }
                         try
                         {
-                            CoreService.Instance.MakeCall(Phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
+                           var call = CoreService.Instance.MakeCall(Phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
+                            if (call == null)
+                            {
+                                ProfilePage.window?.ShowError("Call not create. Please check connection and audio.");
+                            }
                         }
                         catch
                         {
@@ -172,27 +209,7 @@ namespace VoiceX.Views
                     try
                     {
                         var info = CoreService.activeCall.getInfo();
-                        if (!String.IsNullOrEmpty(App.AccountData?.Data.Custom_Data.url))
-                        {
-
-                            if (!String.IsNullOrEmpty(CoreService.activeCall.prmMess))
-                            {
-                                if (!String.IsNullOrEmpty(info.remoteContact))
-                                {
-                                    var phone = ExtractValue(info.remoteContact);
-                                    var xuid = ParseSipHeader(CoreService.activeCall.prmMess, "X-uniqueid");
-                                    if (!String.IsNullOrEmpty(xuid))
-                                    {
-                                        var castom = ParseSipHeader(CoreService.activeCall.prmMess, "X-CampaignCustom");
-                                        if (!String.IsNullOrEmpty(castom))
-                                        {
-                                            await webService.OpenBrowser(App.AccountData.Data.Custom_Data.url, App.AccountData?.Data.Sip_Settings?.Sip_username!, phone, xuid, castom);
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
+                        
                         if (AutoAnswerNumbers != null && AutoAnswerNumbers.Contains(info.remoteContact))
                         {
                             Thread.Sleep(3000);
@@ -250,70 +267,6 @@ namespace VoiceX.Views
 
                     }
                 });
-            }
-        }
-        public string? ParseSipHeader(string? rawSip, string headerName)
-        {
-            if (string.IsNullOrWhiteSpace(rawSip) || string.IsNullOrWhiteSpace(headerName))
-                return null;
-
-            // Normalize line endings and unfold folded headers
-            var normalized = rawSip.Replace("\r\n", "\n").Replace("\r", "\n");
-            normalized = Regex.Replace(normalized, @"\n[ \t]+", " ");
-
-            // Split headers and body (stop at first empty line)
-            var parts = normalized.Split(new[] { "\n\n" }, StringSplitOptions.None);
-            var headersPart = parts.Length > 0 ? parts[0] : normalized;
-
-            var normalizedToValue = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            var originalToValue = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-            foreach (var rawLine in headersPart.Split('\n'))
-            {
-                if (string.IsNullOrWhiteSpace(rawLine)) break;
-                var idx = rawLine.IndexOf(':');
-                if (idx <= 0) continue;
-
-                var name = rawLine.Substring(0, idx).Trim();
-                var value = rawLine.Substring(idx + 1).Trim();
-
-                // store by normalized key (remove non-alphanum), and by original name (case-insensitive)
-                var normKey = Regex.Replace(name, @"[^A-Za-z0-9]", "").ToLowerInvariant();
-                if (normalizedToValue.ContainsKey(normKey))
-                    normalizedToValue[normKey] = normalizedToValue[normKey] + ", " + value;
-                else
-                    normalizedToValue[normKey] = value;
-
-                if (originalToValue.ContainsKey(name))
-                    originalToValue[name] = originalToValue[name] + ", " + value;
-                else
-                    originalToValue[name] = value;
-            }
-
-            // Normalize lookup key same way
-            var lookup = Regex.Replace(headerName, @"[^A-Za-z0-9]", "").ToLowerInvariant();
-
-            if (normalizedToValue.TryGetValue(lookup, out var found))
-                return TrimHeaderValue(found);
-
-            // fallback: try direct case-insensitive match on original header names
-            foreach (var kv in originalToValue)
-            {
-                if (string.Equals(kv.Key, headerName, StringComparison.OrdinalIgnoreCase))
-                    return TrimHeaderValue(kv.Value);
-            }
-
-            return null;
-
-            static string TrimHeaderValue(string v)
-            {
-                v = v.Trim();
-                // cut at first semicolon or newline if present
-                var endIdx = v.IndexOfAny(new char[] { ';', '\r', '\n' });
-                if (endIdx > 0) v = v.Substring(0, endIdx).Trim();
-                // strip surrounding quotes
-                if (v.Length >= 2 && v.StartsWith("\"") && v.EndsWith("\"")) v = v.Substring(1, v.Length - 2);
-                return v;
             }
         }
         private async void ActiveCall_EndCallEvent(string Name, string Phone, DateTime StartCall)
@@ -467,6 +420,7 @@ namespace VoiceX.Views
                     manager.setPlaybackDev(id);
                 }
             }
+            await SetVersion();
         }
         
         #region Navigete Button
@@ -932,6 +886,88 @@ namespace VoiceX.Views
             {
                 MoreRight.Visibility = Visibility.Visible;
                 MenuItems.Margin = new Thickness(MenuItems.Margin.Left - 38, 0, 0, 0);
+            }
+        }
+        public async Task OpenBrowser(string phone)
+        {
+            if (!String.IsNullOrEmpty(App.AccountData?.Data.Custom_Data.url))
+            {
+                if (!String.IsNullOrEmpty(CoreService.activeCall?.prmMess))
+                {
+                    var xuid = ParseSipHeader(CoreService.activeCall.prmMess, "X-uniqueid");
+                    if (!String.IsNullOrEmpty(xuid))
+                    {
+                        var castom = ParseSipHeader(CoreService.activeCall.prmMess, "X-CampaignCustom");
+                        if (!String.IsNullOrEmpty(castom))
+                        {
+                            await webService.OpenBrowser(App.AccountData.Data.Custom_Data.url, App.AccountData?.Data.Sip_Settings?.Sip_username!, phone, xuid, castom);
+                        }
+                    }
+                }
+            }
+        }
+        public string? ParseSipHeader(string? rawSip, string headerName)
+        {
+            if (string.IsNullOrWhiteSpace(rawSip) || string.IsNullOrWhiteSpace(headerName))
+                return null;
+
+            // Normalize line endings and unfold folded headers
+            var normalized = rawSip.Replace("\r\n", "\n").Replace("\r", "\n");
+            normalized = Regex.Replace(normalized, @"\n[ \t]+", " ");
+
+            // Split headers and body (stop at first empty line)
+            var parts = normalized.Split(new[] { "\n\n" }, StringSplitOptions.None);
+            var headersPart = parts.Length > 0 ? parts[0] : normalized;
+
+            var normalizedToValue = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var originalToValue = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var rawLine in headersPart.Split('\n'))
+            {
+                if (string.IsNullOrWhiteSpace(rawLine)) break;
+                var idx = rawLine.IndexOf(':');
+                if (idx <= 0) continue;
+
+                var name = rawLine.Substring(0, idx).Trim();
+                var value = rawLine.Substring(idx + 1).Trim();
+
+                // store by normalized key (remove non-alphanum), and by original name (case-insensitive)
+                var normKey = Regex.Replace(name, @"[^A-Za-z0-9]", "").ToLowerInvariant();
+                if (normalizedToValue.ContainsKey(normKey))
+                    normalizedToValue[normKey] = normalizedToValue[normKey] + ", " + value;
+                else
+                    normalizedToValue[normKey] = value;
+
+                if (originalToValue.ContainsKey(name))
+                    originalToValue[name] = originalToValue[name] + ", " + value;
+                else
+                    originalToValue[name] = value;
+            }
+
+            // Normalize lookup key same way
+            var lookup = Regex.Replace(headerName, @"[^A-Za-z0-9]", "").ToLowerInvariant();
+
+            if (normalizedToValue.TryGetValue(lookup, out var found))
+                return TrimHeaderValue(found);
+
+            // fallback: try direct case-insensitive match on original header names
+            foreach (var kv in originalToValue)
+            {
+                if (string.Equals(kv.Key, headerName, StringComparison.OrdinalIgnoreCase))
+                    return TrimHeaderValue(kv.Value);
+            }
+
+            return null;
+
+            static string TrimHeaderValue(string v)
+            {
+                v = v.Trim();
+                // cut at first semicolon or newline if present
+                var endIdx = v.IndexOfAny(new char[] { ';', '\r', '\n' });
+                if (endIdx > 0) v = v.Substring(0, endIdx).Trim();
+                // strip surrounding quotes
+                if (v.Length >= 2 && v.StartsWith("\"") && v.EndsWith("\"")) v = v.Substring(1, v.Length - 2);
+                return v;
             }
         }
     }

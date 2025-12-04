@@ -28,6 +28,7 @@ namespace VoiceX.Views.ControlPages
         }
         private async void AdditionPage_Loaded(object sender, RoutedEventArgs e)
         {
+            Version.Text = ProfilePage.window?.Version;
             string micro = await localStoreService.LoadDataAsync("micro");
             string audio = await localStoreService.LoadDataAsync("audio");
             string ring = await localStoreService.LoadDataAsync("ring");
@@ -53,6 +54,8 @@ namespace VoiceX.Views.ControlPages
                 int.TryParse(ring, out rng);
             }
             int index = 0;
+            bool micFind = false;
+            bool audioFind = false;
             foreach (var device in deviceCount)
             {
                 if (device != null)
@@ -62,15 +65,25 @@ namespace VoiceX.Views.ControlPages
                         Debug.WriteLine($"[SIP] ID: Микрофон (ввод): {device.name}");
                         
                         Microphones.Items.Add(new DeviceItem(device.name, index) { IsSelected = index == mic });
+                        micFind = true;
                     }
                     if (device.outputCount > 0)
                     {
                         Debug.WriteLine($"[SIP] ID: Динамик (вывод): {device.name}");
                         Audio.Items.Add(new DeviceItem(device.name, index) { IsSelected = index == aud });
                         Ringtone.Items.Add(new DeviceItem(device.name, index) { IsSelected = index == rng });
+                        audioFind = true;
                     }
                     index++;
                 }
+            }
+            if (!micFind)
+            {
+                ProfilePage.window?.ShowError("Microphone not found");
+            }
+            if (!audioFind)
+            {
+                ProfilePage.window?.ShowError("Audio not found");
             }
             var stun = await localStoreService.LoadDataAsync("stun");
             var ice = await localStoreService.LoadDataAsync("ice");
@@ -315,7 +328,7 @@ namespace VoiceX.Views.ControlPages
                 ProfilePage.window!.LoadIcone.Visibility = Visibility.Visible;
                 ProfilePage.onlineToken = false;
                 await localStoreService.SaveDataAsync("transport", "1");
-                await CoreService.Instance.ChangeTransport(1);
+                await CoreService.Instance.ChangeTransport(0, App.AccountData?.Data.Sip_Settings.Sip_proxy!, App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server);
                 ProfilePage.onlineToken = true;
                 ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
             }
@@ -324,7 +337,7 @@ namespace VoiceX.Views.ControlPages
                 ProfilePage.window!.LoadIcone.Visibility = Visibility.Visible;
                 ProfilePage.onlineToken = false;
                 await localStoreService.SaveDataAsync("transport", "0");
-                await CoreService.Instance.ChangeTransport(0);
+                await CoreService.Instance.ChangeTransport(1, App.AccountData?.Data.Sip_Settings.Sip_proxy!, App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server);
                 ProfilePage.onlineToken = true;
                 ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
             }

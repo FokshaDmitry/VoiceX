@@ -52,7 +52,7 @@ namespace VoiceX
             }
         }
 
-        private void Accept_Click(object sender, RoutedEventArgs e)
+        private async void Accept_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
             if (CoreService.activeCall != null)
@@ -60,6 +60,7 @@ namespace VoiceX
                 CoreService.activeCall.Accept();
                 profilePage.MainFrame.Navigate(activCallPage);
                 window.ShowInBottomRight();
+                await profilePage.OpenBrowser(UserPhone.Text);
             }
         }
 

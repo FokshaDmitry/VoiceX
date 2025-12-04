@@ -39,7 +39,7 @@ namespace VoiceX.Views.ControlPages
             addDbContext = new AddDbContext();
             localStoreService = new LocalStoreService();
             timeOut = 1000;
-            transportId = 0;
+            transportId = 1;
         }
 
         private async void GeneralSettingPage_Loaded(object sender, RoutedEventArgs e)
@@ -76,6 +76,34 @@ namespace VoiceX.Views.ControlPages
                         Phone.IsChecked = true;
                         break;
                 }
+            }
+
+            var manager = CoreService.Instance.Core.audDevManager();
+            manager.refreshDevs();
+            var deviceCount = manager.enumDev2();
+            bool micFound = false;
+            bool audFound = false;
+            foreach (var device in deviceCount)
+            {
+                if (device != null)
+                {
+                    if (device.inputCount > 0)
+                    {
+                        micFound = true;
+                    }
+                    if (device.outputCount > 0)
+                    {
+                        audFound = true;
+                    }
+                }
+            }
+            if (!micFound)
+            {
+                window.ShowError("Microphone not found");
+            }
+            if (!audFound)
+            {
+                window.ShowError("Audio not found");
             }
             Exit.Click += Exit_Click;
             Online();

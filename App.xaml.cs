@@ -4,7 +4,6 @@ using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.Content;
 using PdfSharp.Pdf.Content.Objects;
 using PdfSharp.Pdf.IO;
-using Squirrel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -44,6 +43,7 @@ namespace VoiceX
         public static bool MyComputer {  get; set; }
         public static DateTime timeOut {  get; set; }
         public static bool IsMSIX { get; set; }
+        public static string? FirstLoginDate { get; set; }
         private FileSystemWatcher? _watcher;
         private PdfScribeInstaller pdfScribeInstaller;
         private static List<CultureInfo> m_Languages = new List<CultureInfo>();
@@ -174,33 +174,6 @@ namespace VoiceX
             {
                 Debug.WriteLine(e.Exception.Message);
             };
-        }
-        public async Task UpdateCheker()
-        {
-              await Task.Run(async () =>
-              {
-                  try
-                  {
-                      using var mgr = new UpdateManager("https://updates.example.com/updates/myapp/stable");
-                      var updateInfo = await mgr.CheckForUpdate();
-
-                      if (updateInfo.ReleasesToApply.Any())
-                      {
-                          Console.WriteLine($"Доступна версия {updateInfo.FutureReleaseEntry.Version}");
-                          await mgr.UpdateApp();
-                          Console.WriteLine("Обновление завершено. Перезапуск...");
-                          UpdateManager.RestartApp();
-                      }
-                      else
-                      {
-                          Console.WriteLine("Версия актуальна");
-                      }
-                  }
-                  catch (Exception ex)
-                  {
-                      Console.WriteLine($"Ошибка при обновлении: {ex.Message}");
-                  }
-              });
         }
         public static CultureInfo Language
         {
@@ -443,6 +416,7 @@ namespace VoiceX
             }
             catch (AccessViolationException ex)
             {
+                ProfilePage.window?.ShowError("Error. Number not found.");
                 Debug.Write(ex.Message);
                 return "";
             }

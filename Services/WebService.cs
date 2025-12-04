@@ -423,7 +423,14 @@ namespace VoiceX.Services
                     account.Data = JsonConvert.DeserializeObject<Data>(appData?.ToString()!)!;
                     account.Data.Sip_Settings = JsonConvert.DeserializeObject<Sip_settings>(sipSettings?.ToString()!)!;
                     account.Data.Sip_Settings.Sip_secret = Encoding.UTF8.GetString(Convert.FromBase64String(account.Data.Sip_Settings.Sip_secret));
-                    account.Data.Custom_Data = JsonConvert.DeserializeObject<custom_data>(appData?["custom_data"]?.ToString()!)!;
+                    try
+                    {
+                        account.Data.Custom_Data = JsonConvert.DeserializeObject<custom_data>(appData?["custom_data"]?.ToString()!)!;
+                    }
+                    catch
+                    {
+                        account.Data.Custom_Data = new custom_data() { url = ""};
+                    }
                     account.Data.User_Data = JsonConvert.DeserializeObject<User_data>(usedData?.ToString()!)!;
                     account.Data.Ldap_Settings = JsonConvert.DeserializeObject<Ldap_settings>(ldapData?.ToString()!)!;
                 }

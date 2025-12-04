@@ -43,7 +43,7 @@ namespace VoiceX.Services
         }
         public override void onCallState(OnCallStateParam prm)
         {
-
+            
             CallInfo ci = getInfo();
             Debug.WriteLine($"[CALL] Статус: {ci.stateText}, Причина: {ci.lastReason}");
             switch (ci.state)
@@ -275,6 +275,18 @@ namespace VoiceX.Services
                 Debug.WriteLine($"[AUDIO] Ошибка при изменении состояния динамиков: {ex.Message}");
                 return false;
             }
+        }
+        public override void onCallSdpCreated(OnCallSdpCreatedParam prm)
+        {
+            base.onCallSdpCreated(prm); // можно и в конце вызвать
+
+            SdpSession sdp = prm.sdp;
+            if (sdp == null)
+                return;
+
+            const string targetPt = "101";   // то, что нам нужно
+            const string oldPt = "120";   // то, что pjsip сейчас выдаёт (посмотри в своём SDP)
+
         }
         public void SetHold(bool hold)
         {

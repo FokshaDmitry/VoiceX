@@ -52,7 +52,11 @@ namespace VoiceX.Items
 
         private void Call_Click(object sender, RoutedEventArgs e)
         {
-            CoreService.Instance.MakeCall(userPhone, App.AccountData!.Data.Sip_Settings.Sip_server);
+            var call = CoreService.Instance.MakeCall(userPhone, App.AccountData!.Data.Sip_Settings.Sip_server);
+            if (call == null)
+            {
+                ProfilePage.window?.ShowError("Call not create. Please check connection and audio.");
+            }
         }
 
         private void UserName_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

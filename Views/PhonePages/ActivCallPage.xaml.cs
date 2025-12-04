@@ -1,15 +1,17 @@
-﻿using VoiceX.Services;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using pj;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Windows.Controls;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using pj;
-using System.Threading;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+using VoiceX.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -42,7 +44,7 @@ namespace VoiceX.Views.PhonePages
 
         private async void EnalebleCalling(object sender)
         {
-            await Dispatcher.InvokeAsync(() =>
+            await Dispatcher.InvokeAsync(async () =>
             {
                 try
                 {
@@ -96,6 +98,7 @@ namespace VoiceX.Views.PhonePages
                                     var contactName = ProfilePage.LDAPService?.SearchLdaps(App.AccountData?.Data.Ldap_Settings.Base!, userName).Where(l => l.Phone == userName).Select(l => l.Name).FirstOrDefault();
                                     UserNameText.Text = String.IsNullOrEmpty(contactName) ? userName : contactName;
                                 }
+                                
                             }
                         }
                         Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");

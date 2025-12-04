@@ -61,7 +61,11 @@ namespace VoiceX.Items
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            CoreService.Instance.MakeCall(HotKeyPhone, App.AccountData?.Data.Sip_Settings.Sip_server!);
+            var call = CoreService.Instance.MakeCall(HotKeyPhone, App.AccountData?.Data.Sip_Settings.Sip_server!);
+            if (call == null)
+            {
+                ProfilePage.window?.ShowError("Call not create. Please check connection and audio.");
+            }
         }
     }
 }

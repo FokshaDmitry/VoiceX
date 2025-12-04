@@ -1,6 +1,7 @@
 ﻿using pj;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -82,6 +83,19 @@ namespace VoiceX.Views
                         await localStoreService.SaveDataAsync("token", cert.App_token!);
                         await localStoreService.SaveDataAsync("fw", pbxCode.Substring(3, 2));
                         App.fw = pbxCode.Substring(3, 2);
+                        if (String.IsNullOrEmpty(App.FirstLoginDate))
+                        {
+                            try
+                            {
+                                string exe = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                                var installDate = File.GetCreationTime(exe);
+                                App.FirstLoginDate = installDate.Date.ToString("yyyy-MM-dd");
+                            }
+                            catch
+                            {
+                                App.FirstLoginDate = "No-info";
+                            }
+                        }
                         webService = new WebService();
                         App.AccountData = await webService.GetAccountSettings(pbxCode.Substring(0, 3), App.userToken!, App.fw!);
                         core = CoreService.Instance.Core;
