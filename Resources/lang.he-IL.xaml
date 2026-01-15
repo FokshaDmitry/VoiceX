@@ -68,4 +68,5 @@
     <v:String x:Key="m_Exit">יציאה</v:String>
     <v:String x:Key="m_Softphone">סופטפון</v:String>
     <v:String x:Key="m_Webphone">טלפון וובי</v:String>
+    <v:String x:Key="m_Pin">פִּין</v:String>
 </ResourceDictionary>

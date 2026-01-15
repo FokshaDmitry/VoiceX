@@ -15,6 +15,7 @@ namespace VoiceX.Services
         public static CallService? activeCall;
         public static string StunServer { get; set; } = "";
         public static string Version { get; set; } = "";
+        public static bool useStunSetver { get; set; } = false;
         private static readonly CoreService instance = new CoreService();
         private Endpoint? core;
         public delegate void IncomingCall(); 
@@ -36,14 +37,17 @@ namespace VoiceX.Services
                 {
                     core = new Endpoint();
                     writer = new PjsipLogger();
-                    accCfg = new AccountConfig();
-                    
+                    if (accCfg == null)
+                    {
+                        accCfg = new AccountConfig();
+                    }
                     core.libCreate();
                     // Init library
-                    EpConfig epConfig = new EpConfig();
+                    var epConfig = new EpConfig();
                     epConfig.logConfig.level = 6;
                     epConfig.logConfig.writer = writer;
-                    if (!String.IsNullOrEmpty(StunServer))
+                    epConfig.uaConfig.stunServer = new StringVector();
+                    if (!String.IsNullOrEmpty(StunServer) && useStunSetver)
                     {
                         epConfig.uaConfig.stunServer.Add(StunServer);
                     }
@@ -100,12 +104,10 @@ namespace VoiceX.Services
                 {
                     accCfg?.regConfig.registrarUri = $"sip:{domain}" + transportStr;
                 }
-
                 accCfg?.natConfig.iceEnabled = iceEnabled;
                 
-                accCfg?.natConfig.sipStunUse =  useStun ? pjsua_stun_use.PJSUA_STUN_USE_DEFAULT : pjsua_stun_use.PJSUA_STUN_USE_DISABLED;
-                
                 accCfg?.natConfig.sdpNatRewriteUse = useIpRewrite ? 1 : 0;
+                accCfg?.natConfig.iceEnabled = true;
                 //CREATE
                 accCfg?.sipConfig.authCreds.Clear();
                 accCfg?.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));
@@ -115,6 +117,22 @@ namespace VoiceX.Services
             catch
             {
 
+            }
+        }
+        public void reloadCore()
+        {
+            try
+            {
+                Logout();
+                core?.libDestroy();
+                core?.Dispose();
+                core = null;
+                core = Core;
+                instance.create(accCfg, true);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
         }
         public async Task ChangeTransport(int id, string proxy, string username, string domain)
@@ -143,11 +161,6 @@ namespace VoiceX.Services
             accCfg?.natConfig.sdpNatRewriteUse = flag == true ? 1 : 0;
             instance.modify(accCfg);
         }
-        public async Task UseStun(bool flag)
-        {
-            accCfg?.natConfig.sipStunUse = flag ? pjsua_stun_use.PJSUA_STUN_USE_DEFAULT : pjsua_stun_use.PJSUA_STUN_USE_DISABLED;
-            instance.modify(accCfg);
-        }
         public void Logout()
         {
             try
@@ -155,8 +168,6 @@ namespace VoiceX.Services
                 Debug.WriteLine("[SIP] Выход из аккаунта...");
                 instance.setRegistration(false);
                 shutdown();
-                
-
                 Debug.WriteLine("[SIP] Аккаунт успешно разлогинен.");
             }
             catch (Exception ex)

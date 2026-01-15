@@ -43,7 +43,7 @@ namespace VoiceX.Views
                 timer.Start();
             }
             certificateService = new CertificateService();
-            Version = "1.1.2.9";
+            Version = "1.1.3.3";
         }
 
         private async void LanguageChanged(object? sender, EventArgs e)
@@ -150,6 +150,7 @@ namespace VoiceX.Views
                                     App.FirstLoginDate = "No-info";
                                 }
                             }
+                            CoreService.useStunSetver = stun == "1" ? true : false;
                             CoreService.StunServer = App.AccountData.Data.Sip_Settings.Stun_server;
                             CoreService.Version = Version!;
                             var core = CoreService.Instance.Core;

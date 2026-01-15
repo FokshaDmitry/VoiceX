@@ -184,7 +184,8 @@ namespace VoiceX.Views.ControlPages
         private async void Proxy_Checked(object sender, RoutedEventArgs e)
         {
             ProfilePage.onlineToken = false;
-            //await CoreService.Instance.UseProxy(Proxy.IsChecked == true ? App.AccountData?.Data.Sip_Settings.Sip_proxy : App.AccountData?.Data.Sip_Settings.Sip_server);
+            CoreService.useStunSetver = Proxy.IsChecked == true;
+            CoreService.Instance.reloadCore();
             ProfilePage.onlineToken = true;
             await localStoreService.SaveDataAsync("stun", Proxy.IsChecked == true ? "1" : "0");
         }
@@ -341,6 +342,11 @@ namespace VoiceX.Views.ControlPages
                 ProfilePage.onlineToken = true;
                 ProfilePage.window!.LoadIcone.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void Pin_Click(object sender, RoutedEventArgs e)
+        {
+            ProfilePage.window?.Topmost = Pin.IsChecked == true ? true : false;
         }
     }
 }

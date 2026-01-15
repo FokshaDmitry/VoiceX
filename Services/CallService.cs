@@ -71,7 +71,6 @@ namespace VoiceX.Services
                     try
                     {
                         StopRingTone();
-                        
                         if (CoreService.activeCall != null)
                         {
                             if (EndAllCalls && CoreService.activeCalls != null && CoreService.activeCalls.Count != 0)
@@ -152,6 +151,8 @@ namespace VoiceX.Services
                 {
                     try
                     {
+
+                        StopRingTone();
                         AudioMedia aud_med = CoreService.activeCall!.getAudioMedia(i);
                         
                         AudDevManager mgr = CoreService.Instance.Core.audDevManager();

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 using VoiceX.Services;
 using VoiceX.Views;
 using VoiceX.Views.PhonePages;
@@ -48,13 +49,16 @@ namespace VoiceX
                 }
                 UserName.Text = Name;
                 UserPhone.Text = Phone;
-                this.Show();
+                this.Visibility = Visibility.Visible;
             }
         }
-
+        public void CloseWindow()
+        {
+            this.Visibility = Visibility.Collapsed;
+        }
         private async void Accept_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
+            this.CloseWindow();
             if (CoreService.activeCall != null)
             {
                 CoreService.activeCall.Accept();
@@ -66,10 +70,23 @@ namespace VoiceX
 
         private void Ignore_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
+            this.CloseWindow();
             if (CoreService.activeCall != null)
             {
                 CoreService.activeCall.hangup(new pj.CallOpParam() { statusCode = pj.pjsip_status_code.PJSIP_SC_BUSY_HERE});
+            }
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            CloseWindow();
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
             }
         }
     }
