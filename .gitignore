@@ -375,3 +375,6 @@ windowsdesktop-runtime-10.0.2-win-x64.exe
 windowsdesktop-runtime-10.0.2-win-x86.exe
 dotnet-sdk-10.0.100-win-x64.exe
 dotnet-sdk-10.0.100-win-x86.exe
+
+# ignore big installers
+*.exe
