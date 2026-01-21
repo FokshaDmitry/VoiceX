@@ -9,7 +9,7 @@
     Loaded="Page_Loaded">
 
     <Grid>
-        <Border VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,2,0,0" BorderThickness="0, 0, 0, 1" BorderBrush="#FFDADADB">
+        <Border RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,2,0,0" BorderThickness="0, 0, 0, 1" BorderBrush="#FFDADADB">
             <Grid>
                 <TextBox BorderThickness="0" Cursor="Hand" x:Name="Search"  MinHeight="26" TextChanged="Search_TextChanged" Width="225" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="14" Height="25" Padding="6,0,6,0"/>
                 <Grid Height="15" x:Name="magnifyingGlass" Width="15" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,3">
@@ -28,6 +28,6 @@
                 </Grid>
             </Grid>
         </Border>
-        <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" Height="280" ScrollViewer.HorizontalScrollBarVisibility="Hidden" x:Name="ContactsList" BorderThickness="0" Margin="5,29,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="White" Padding="0,0,0,0"/>
+        <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" Height="280" ScrollViewer.HorizontalScrollBarVisibility="Hidden" x:Name="ContactsList" BorderThickness="0" Margin="5,29,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="White" Padding="0,0,0,0"/>
     </Grid>
 </Page>

@@ -11,7 +11,7 @@
     <Grid >
         <Border CornerRadius="4" Background="#FFF1F2FF">
             <Grid>
-                <TextBlock Text="Aa" FontSize="12" x:Name="Heanding" Foreground="#FF7B76FF" Height="15.9609" Margin="8,0,0,0"/>
+                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Text="Aa" FontSize="12" x:Name="Heanding" Foreground="#FF7B76FF" Height="15.9609" Margin="8,0,8,0"/>
             </Grid>
         </Border>
     </Grid>

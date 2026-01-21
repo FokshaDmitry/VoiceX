@@ -18,7 +18,7 @@
             </Setter>
         </Style>
     </Page.Resources>
-    <Grid x:Name="MainGrid" Width="245">
+    <Grid RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="MainGrid" Width="245">
         <Grid Margin="0,55,0,0" >
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="25" MaxWidth="500" Margin="16,0,16,0">
                 <Grid.ColumnDefinitions>
@@ -27,13 +27,13 @@
                 </Grid.ColumnDefinitions>
                 <RadioButton Cursor="Hand" ToolTipService.Placement="Mouse" Grid.Column="2" IsChecked="True" GroupName="Filter" x:Name="Operators"  MinWidth="55" Background="Transparent" MinHeight="25" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock FontFamily="Nunito Sans 10pt Normal" x:Name="GeneralText" Text="{DynamicResource m_Operators}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" Foreground="#FF252422"/>
+                        <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" FontFamily="Nunito Sans 10pt Normal" x:Name="OperatorsText" Text="{DynamicResource m_Operators}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" Foreground="#FF252422"/>
                         <Border CornerRadius="1" x:Name="OperatorsCheck" Height="2" Background="#FFF0F0FF" Width="106.5"/>
                     </StackPanel>
                 </RadioButton>
                 <RadioButton x:Name="Clients" Cursor="Hand" ToolTipService.Placement="Mouse" Grid.Column="0" GroupName="Filter" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock FontFamily="Nunito Sans 10pt Normal" x:Name="AdditionText" Text="{DynamicResource m_Clients}" FontSize="14" Foreground="#FF252422" HorizontalAlignment="Center"/>
+                        <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" FontFamily="Nunito Sans 10pt Normal" x:Name="ClientsText" Text="{DynamicResource m_Clients}" FontSize="14" Foreground="#FF252422" HorizontalAlignment="Center"/>
                         <Border CornerRadius="1.5" x:Name="ClientsChek" Background="#FFC1BFFF" Height="2"  Width="106.4"/>
                     </StackPanel>
                 </RadioButton>

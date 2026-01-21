@@ -51,6 +51,7 @@ namespace VoiceX.Services
                     {
                         epConfig.uaConfig.stunServer.Add(StunServer);
                     }
+                    //epConfig.uaConfig.stunServer.Add("stun.12voip.com:3478");
                     epConfig.uaConfig.userAgent = $"VoiceX_{Version}/{App.FirstLoginDate}";
                     epConfig.uaConfig.maxCalls = 15;
                     core.libInit(epConfig);

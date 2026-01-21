@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using TTT.WindowsControls;
 using VoiceX.Models;
 using VoiceX.Services;
@@ -190,17 +191,23 @@ namespace VoiceX
                 Thread.CurrentThread.CurrentUICulture = value;
 
                 //2. Создаём ResourceDictionary для новой культуры
-                ResourceDictionary dict = new ResourceDictionary();
+                ResourceDictionary dict = new ResourceDictionary(); 
                 switch (value.Name)
                 {
                     case "ru-RU":
                         dict.Source = new Uri(String.Format("/Resources/lang.{0}.xaml", value.Name), UriKind.Relative);
+
+                        Application.Current.Resources["GlobalFlip"] = new ScaleTransform(1, 1);
                         break;
                     case "he-IL":
                         dict.Source = new Uri(String.Format("/Resources/lang.{0}.xaml", value.Name), UriKind.Relative);
+
+                        Application.Current.Resources["GlobalFlip"] = new ScaleTransform(-1, 1);
                         break;
                     default:
                         dict.Source = new Uri("/Resources/lang.xaml", UriKind.Relative);
+                        //flip.ScaleX = 1;
+                        Application.Current.Resources["GlobalFlip"] = new ScaleTransform(1, 1);
                         break;
                 }
 

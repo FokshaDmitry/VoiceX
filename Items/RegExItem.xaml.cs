@@ -28,6 +28,7 @@ namespace VoiceX.Items
             AddButtom.Visibility = Visibility.Visible;
             replaceTitle = this.TryFindResource("m_Replace") as String;
             searchTitle = this.TryFindResource("m_Search") as String;
+            
         }
         public RegExItem(ClickToCallPage clickToCallPage, string search, string replace, bool chek)
         {
@@ -134,6 +135,10 @@ namespace VoiceX.Items
             {
                 Flag.IsChecked = false;
             }
+        }
+
+        private void ListBoxItem_Loaded(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

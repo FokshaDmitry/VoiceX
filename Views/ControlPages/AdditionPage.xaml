@@ -26,7 +26,7 @@
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"/>
                             </Grid>
-                            <ContentPresenter VerticalAlignment="Center"/>
+                            <ContentPresenter RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" VerticalAlignment="Center"/>
                         </StackPanel>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
@@ -69,7 +69,7 @@
                                 </Path>
                             </Grid>
 
-                            <ContentPresenter VerticalAlignment="Center"/>
+                            <ContentPresenter RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <ControlTemplate.Triggers>
@@ -160,9 +160,9 @@
                   HorizontalAlignment="Stretch">
             <Grid HorizontalAlignment="Stretch">
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <RadioButton Content="tcp" Click="tcp_Click" Margin="16,0,0,0" GroupName="Protocols" x:Name="tcp" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" FontSize="16"/>
-                    <RadioButton Content="udp" Click="tcp_Click" Margin="91,0,0,0" GroupName="Protocols" x:Name="udp" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" FontSize="16"/>
-                    <RadioButton Content="tls" Margin="166,0,0,0" GroupName="Protocols" x:Name="tlc" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" FontSize="16"/>
+                    <RadioButton Content="tcp" Click="tcp_Click" Margin="16,0,0,0" GroupName="Protocols" x:Name="tcp" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="70" FontSize="16" HorizontalAlignment="Left"/>
+                    <RadioButton Content="udp" Click="tcp_Click" Margin="91,0,0,0" GroupName="Protocols" x:Name="udp" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="70" FontSize="16" HorizontalAlignment="Left"/>
+                    <RadioButton Content="tls" Margin="166,0,0,0" GroupName="Protocols" x:Name="tlc" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="70" FontSize="16" HorizontalAlignment="Left"/>
                 </Grid>
                 <Border CornerRadius="150" BorderThickness="0" Height="1" Width="213" Background="#FFC3B1FD" VerticalAlignment="Top" Margin="9,29,9,0" Grid.ColumnSpan="2"/>
                 <CheckBox Click="Proxy_Checked" x:Name="Proxy" Content="{DynamicResource m_STUNServer}" Margin="18,35,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
@@ -171,14 +171,14 @@
                 <CheckBox Click="Startup_Click" x:Name="Startup" Content="{DynamicResource m_StartupWithWindows}" Margin="17,125,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
                 <CheckBox Click="Pin_Click" x:Name="Pin" Content="{DynamicResource m_Pin}" Margin="17,155,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" />
                 <Border CornerRadius="150" BorderThickness="0" Height="1" Width="213" Background="#FFC3B1FD" VerticalAlignment="Top" Margin="9,180,9,0" Grid.ColumnSpan="2"/>
-                <TextBlock Text="{DynamicResource m_Speaker}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,182,0,0" Foreground="#FFADADAD"/>
-                <ComboBox MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Audio" Background="Transparent" Width="213" Margin="18,200,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                <TextBlock Text="{DynamicResource m_Microphone}" Margin="18,237,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
-                <ComboBox MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Microphones" Background="Transparent" Width="213" Margin="18,255,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBlock Text="{DynamicResource m_Ringtone}" Margin="18,292,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
-                <ComboBox x:Name="Ringtone" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="Transparent" Width="213" Margin="18,310,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBlock Text="{DynamicResource m_Version}" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="12,350,0,0"/>
-                <TextBlock x:Name="Version" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="185,350,0,0"/>
+                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Text="{DynamicResource m_Speaker}" x:Name="SpeakerText" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,182,0,0" Foreground="#FFADADAD"/>
+                <ComboBox RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Audio" Background="Transparent" Width="213" Margin="18,200,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Text="{DynamicResource m_Microphone}" x:Name="MicroText" Margin="18,237,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
+                <ComboBox RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="Microphones" Background="Transparent" Width="213" Margin="18,255,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Text="{DynamicResource m_Ringtone}" x:Name="RingText" Margin="18,292,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADADAD"/>
+                <ComboBox RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="Ringtone" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="Transparent" Width="213" Margin="18,310,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Text="{DynamicResource m_Version}" x:Name="VersionText" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="12,350,0,0"/>
+                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="Version" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF" FontFamily="Nunito Sans 10pt Normal" Margin="185,350,0,0"/>
             </Grid>
         </ScrollViewer>
     </Grid>

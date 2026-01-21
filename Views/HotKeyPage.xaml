@@ -55,7 +55,7 @@
                 </Button>
             </Grid>
         </Grid>
-        <Grid x:Name="AddHotkeyFild" Visibility="Collapsed" Background="#CC202244">
+        <Grid RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="AddHotkeyFild" Visibility="Collapsed" Background="#CC202244">
             <Border CornerRadius="12" Background="White" Width="204" Height="200">
                 <Grid>
                     <Button Click="Button_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,5,6,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
@@ -86,16 +86,16 @@
                             </Grid>
                         </Button.Content>
                     </Button>
-                    <TextBlock Text="Add Hotkey" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0" FontSize="20" FontFamily="Nunito Sans 10pt Normal"/>
+                    <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Text="Add Hotkey" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0" FontSize="20" FontFamily="Nunito Sans 10pt Normal"/>
                     <Button Name="SaveHotkey" Click="SaveHotkey_Click" VerticalAlignment="Bottom" Margin="0,0,10,15" Width="148" Height="32" FontSize="18" FontFamily="Jost" Foreground="#E4FFFFFF" Padding="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold">
                         <Button.Content>
                             <Border CornerRadius="17" Background="#FF8A63FB">
-                                <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Button.Content>
                     </Button>
-                    <TextBox x:Name="UserName" BorderThickness="1" Width="172" Height="32" BorderBrush="#FFBBBAFF" VerticalAlignment="Top" Margin="0,54,0,0" FontFamily="Nunito Sans 10pt Normal" Padding="10,6.5,6,6"/>
-                    <TextBox x:Name="UserPhone" BorderThickness="1" Width="172" Height="32" BorderBrush="#FFBBBAFF" VerticalAlignment="Top" Margin="0,102,0,0" FontFamily="Nunito Sans 10pt Normal" Padding="10,6.5,6,6"/>
+                    <TextBox RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="UserName" BorderThickness="1" Width="172" Height="32" BorderBrush="#FFBBBAFF" VerticalAlignment="Top" Margin="0,54,0,0" FontFamily="Nunito Sans 10pt Normal" Padding="10,6.5,6,6"/>
+                    <TextBox RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="UserPhone" BorderThickness="1" Width="172" Height="32" BorderBrush="#FFBBBAFF" VerticalAlignment="Top" Margin="0,102,0,0" FontFamily="Nunito Sans 10pt Normal" Padding="10,6.5,6,6"/>
                 </Grid>
             </Border>
         </Grid>

@@ -14,6 +14,14 @@
         TextOptions.TextRenderingMode="Auto"
         Title="VoiceX" MinWidth="260" MouseEnter="Window_MouseEnter" MouseLeave="Window_MouseLeave" Icon="/Assets/Icone_v2/BlueIcon.ico" MinHeight="460" MaxHeight="460" MaxWidth="260" Background="#FFEBE2FF" Loaded="Window_Loaded">
     <Window.Resources>
+        <ScaleTransform x:Key="GlobalFlip" ScaleX="-1" ScaleY="1"/>
+
+        <!-- общий origin -->
+        <Point x:Key="GlobalOrigin">0.5,0.5</Point>
+        <Style TargetType="MenuItem">
+            <Setter Property="ToolTipService.ToolTip"
+            Value="{Binding RelativeSource={RelativeSource Self}, Path=Header}" />
+        </Style>
         <Style TargetType="Button">
             <Setter Property="Template">
                 <Setter.Value>
@@ -115,7 +123,7 @@
                                 </Setter>
                             </Style>
                         </ContextMenu.Resources>
-                        <MenuItem BorderThickness="0, 0, 0, 1" BorderBrush="Black" Padding="0" Cursor="Hand" FontFamily="Nunito Sans 10pt Normal" Click="ShowWindow" FontSize="18">
+                        <MenuItem x:Name="MenuBar"  BorderThickness="0, 0, 0, 1" BorderBrush="Black" Padding="0" Cursor="Hand" FontFamily="Nunito Sans 10pt Normal" Click="ShowWindow" FontSize="18">
                             <MenuItem.Header>
                                 <Border>
                                     <Grid Width="160" VerticalAlignment="Center">
@@ -222,7 +230,7 @@
                     </Grid>
                 </Border>
             </Grid>
-            <Grid Visibility="Collapsed" x:Name="LanguagesFild" Background="#999692ED" Margin="-5,0,-5,0" >
+            <Grid RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Visibility="Collapsed" x:Name="LanguagesFild" Background="#999692ED" Margin="-5,0,-5,0" >
                 <Border CornerRadius="12" Background="White" Width="204" Height="186">
                     <Grid Margin="0,11,0,0">
                         <Button Cursor="Hand" Click="Close_Click" Height="16" Padding="0,0,0,0" BorderBrush="Transparent" Width="16" Background="Transparent" HorizontalAlignment="Right" Margin="0,5,8,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
@@ -254,7 +262,7 @@
                                 </Border>
                             </Button.Content>
                         </Button>
-                        <TextBox BorderThickness="0" FontSize="18" FontFamily="Nunito Sans 10pt Normal" Text="{DynamicResource m_Language}" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADABFF" Margin="12,12,0,0"/>
+                        <TextBox RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" BorderThickness="0" FontSize="18" FontFamily="Nunito Sans 10pt Normal" Text="{DynamicResource m_Language}" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFADABFF" Margin="12,12,0,0"/>
                         <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" x:Name="LanguagesList" Height="92" Margin="0,36,0,8" Width="187" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top">
                             <ListBox.Template>
                                 <ControlTemplate TargetType="ListBox">
@@ -262,7 +270,7 @@
                                 </ControlTemplate>
                             </ListBox.Template>
                         </ListBox>
-                        <Button Width="180" Height="36" Margin="0,133,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="{DynamicResource m_Save}" x:Name="Send" Click="Send_Click" Foreground="#FF7B76FF">
+                        <Button RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Width="180" Height="36" Margin="0,133,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="{DynamicResource m_Save}" x:Name="Send" Click="Send_Click" Foreground="#FF7B76FF">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="#FFE5E5FF"/>
@@ -274,7 +282,7 @@
                                         <Setter.Value>
                                             <ControlTemplate TargetType="Button">
                                                 <Border Background="#FFE5E5FF" CornerRadius="6">
-                                                    <ContentPresenter HorizontalAlignment="Center" 
+                                                    <ContentPresenter  RenderTransformOrigin="{DynamicResource GlobalOrigin}" HorizontalAlignment="Center" 
                           VerticalAlignment="Center"/>
                                                 </Border>
                                             </ControlTemplate>

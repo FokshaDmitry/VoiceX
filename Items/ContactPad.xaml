@@ -10,8 +10,8 @@
     Background="Transparent" BorderThickness="0" Margin="10, 2, 0, 0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="0,0,0,0" BorderBrush="#FFF2F3F4">
     <Border Background="#FFFDFEFF"  BorderThickness="0, 0, 0, 1">
         <Grid>
-            <TextBlock x:Name="userName" Text="Amelia Rogers" FontSize="14" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,3,0,0"/>
-            <TextBlock x:Name="userPhone" Text="050 245 4884" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,23,0,3" Foreground="#FF959595"/>
+            <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="userName" Text="Amelia Rogers" FontSize="14" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,3,0,0"/>
+            <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="userPhone" Text="050 245 4884" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,23,0,3" Foreground="#FF959595"/>
             <CheckBox Cursor="Hand" x:Name="Select" Click="Select_Click" MinWidth="10" FontFamily="/Assets/Fonts/Inter-Regular.ttf#Inter" MinHeight="10" VerticalAlignment="Top" Foreground="#FF5C66BD" FontSize="6" HorizontalAlignment="Right" Background="Transparent" Margin="0,11,0,0" Height="20"/>
             <Button BorderThickness="0" Cursor="Hand" x:Name="Transfer" Click="Transfer_Click" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top" Width="16" Height="16" Margin="0,13,2.2,0" Padding="0,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <Button.Content>

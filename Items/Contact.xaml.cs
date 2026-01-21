@@ -54,5 +54,10 @@ namespace VoiceX.Items
 
             }
         }
+
+        private void ListBoxItem_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

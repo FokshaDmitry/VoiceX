@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using VoiceX.Enums;
 using VoiceX.Items;
 using VoiceX.Services;
@@ -121,7 +122,6 @@ namespace VoiceX.Views.ControlPages
                     udp.IsChecked = true;
                     break;
             }
-
         }
         private void Include_Toggled(object sender, RoutedEventArgs e)
         {

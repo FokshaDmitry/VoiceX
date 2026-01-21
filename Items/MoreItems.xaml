@@ -24,7 +24,7 @@
         <Button BorderThickness="0" Height="19" Width="84"  MouseEnter="More_MouseEnter" MouseLeave="More_MouseLeave" Cursor="Hand" Background="Transparent" x:Name="More" Click="More_Click">
             <Button.Content>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Name="TextColor" Text="{DynamicResource m_ShowMore}" Foreground="#FF8761F6" FontFamily="Nunito Sans 10pt Normal" FontSize="14"/>
+                    <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="TextColor" Text="{DynamicResource m_ShowMore}" Foreground="#FF8761F6" FontFamily="Nunito Sans 10pt Normal" FontSize="14"/>
                     <Polyline x:Name="AngleColor" Stroke="#FF8761F6" Points="0, 5, 5, 0, 10, 5" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="3,2,0,0" >
                         <Polyline.RenderTransform>
                             <TransformGroup>

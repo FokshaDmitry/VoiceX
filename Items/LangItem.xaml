@@ -42,7 +42,7 @@
                     </Setter>
                 </Style>
             </Grid.Resources>
-            <RadioButton GroupName="Languages" x:Name="Language" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" Content="Test Pause" FontSize="16" />
+            <RadioButton RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" GroupName="Languages" x:Name="Language" FontFamily="Nunito Sans 10pt Normal" MinHeight="25" MinWidth="100" Content="Test Pause" FontSize="16" />
         </Grid>
     </ListBoxItem.Content>
 </ListBoxItem>

@@ -4,7 +4,10 @@
              xmlns:local="clr-namespace:VoiceX"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
+
         <ResourceDictionary>
+            <ScaleTransform x:Key="GlobalFlip" ScaleX="1" ScaleY="1"/>
+            <Point x:Key="GlobalOrigin">0.5,0.5</Point>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/lang.xaml" />
             </ResourceDictionary.MergedDictionaries>

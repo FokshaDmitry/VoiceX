@@ -27,7 +27,7 @@
                                      HorizontalAlignment="Center"
                                      VerticalAlignment="Center"/>
                                     </Grid>
-                                    <ContentPresenter VerticalAlignment="Center"/>
+                                    <ContentPresenter RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsChecked" Value="True">

@@ -68,7 +68,7 @@
     </ListBoxItem.Resources>
     <Border x:Name="RegExBorder" Background="#FFFDFEFF" BorderThickness="1" CornerRadius="6" BorderBrush="#FFBBBAFF" >
         <Grid>
-            <Grid x:Name="RegItem" Height="32" VerticalAlignment="Top" Margin="3,0,0,0">
+            <Grid RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="RegItem" Height="32" VerticalAlignment="Top" Margin="3,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="7*"/>
                     <ColumnDefinition Width="4*"/>
@@ -80,7 +80,7 @@
 
             <Grid Visibility="Collapsed" x:Name="AddButtom" Background="White" Margin="-1,-1,-1,-1">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="{DynamicResource m_AddField}" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFC2C2C3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,6,0" FontSize="14"/>
+                    <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Text="{DynamicResource m_AddField}" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFC2C2C3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,6,0" FontSize="14"/>
                     <Button Cursor="Hand" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" x:Name="AddRegItem" Click="AddRegItem_Click" VerticalContentAlignment="Stretch"  Width="26" Height="26" Padding="0,0,0,0" HorizontalAlignment="Center">
                         <Button.Content>
                             <Border Background="#FFE6E5FF" CornerRadius="50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

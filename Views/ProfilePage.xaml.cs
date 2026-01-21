@@ -335,9 +335,59 @@ namespace VoiceX.Views
                     if (window != null)
                     {
                         window.TrayIcon.IconSource = new BitmapImage(new Uri("pack://application:,,,/Assets/icone_v2/TrayIgnoreIcon.ico"));
+                        if (window.TrayIcon.ToolTipText == "VoiceX")
+                        {
+                            window.TrayIcon.ToolTipText = Phone;
+                        }
+                        else
+                        {
+                            if (!window.TrayIcon.ToolTipText!.Contains(Phone))
+                            {
+                                window.TrayIcon.ToolTipText += ",\n" + Phone;
+                            }
+                            else
+                            {
+                                window.TrayIcon.ToolTipText = AddOrIncrement(window.TrayIcon.ToolTipText!, Phone);
+                            }
+                        }
                     }
                 }
             });
+        }
+        public string AddOrIncrement(string source, string number)
+        {
+            var parts = source.Split(',')
+                              .Select(p => p.Trim())
+                              .ToList();
+
+            bool found = false;
+
+            for (int i = 0; i < parts.Count; i++)
+            {
+                // 998 | 998 (x2) | 998(x10)
+                var match = Regex.Match(
+                    parts[i],
+                    $@"^{number}(?:\s*\(x(\d+)\))?$"
+                );
+
+                if (match.Success)
+                {
+                    int count = match.Groups[1].Success
+                        ? int.Parse(match.Groups[1].Value) + 1
+                        : 2;
+
+                    parts[i] = $"{number} (x{count})";
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                parts.Add(number.ToString());
+            }
+
+            return string.Join(",\n", parts);
         }
         public string ExtractValue(string input)
         {
@@ -421,8 +471,13 @@ namespace VoiceX.Views
                 }
             }
             await SetVersion();
+            var lang = App.Language.Name;
+            if (lang == "he-IL") 
+            {
+                
+            }
+            //ChangePerspectiveIl();
         }
-        
         #region Navigete Button
         public void Navigate_Click(object sender, RoutedEventArgs e)
         {

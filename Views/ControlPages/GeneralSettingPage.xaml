@@ -77,7 +77,7 @@
     </Grid.Resources>
 
     <Grid x:Name="MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="245" Margin="0,7,0,0">
-        
+
         <Border BorderThickness="1" CornerRadius="5" Height="42" Margin="0,15,0,0" Width="230" VerticalAlignment="Top"  Background="#FFFEFEFF" HorizontalAlignment="Stretch"  BorderBrush="#FFECECF1" >
             <Grid>
                 <Image Height="28" Width="28" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="7,0,0,0">
@@ -85,9 +85,13 @@
                         <BitmapImage UriSource="/Assets/Icone_v2/User-48.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
                     </Image.Source>
                 </Image>
-                <TextBlock  FontFamily="Nunito Sans 10pt Normal" Text="Sunny Aveiro"   HorizontalAlignment="Left" x:Name="AccountFild" Margin="40,11,0,0"  VerticalAlignment="Top" FontSize="12" Foreground="#FF252422" Width="106"/>
+                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" FontFamily="Nunito Sans 10pt Normal" Text="Sunny Aveiro"   HorizontalAlignment="Left" x:Name="AccountFild" Margin="40,11,0,0"  VerticalAlignment="Top" FontSize="12" Foreground="#FF252422"/>
                 <Grid  x:Name="ActivGrid" VerticalAlignment="Bottom" Margin="41,0,66,5" HorizontalAlignment="Stretch" >
-                    <TextBlock  x:Name="phoneNumber" FontFamily="Nunito Sans 10pt Normal" Text="{DynamicResource m_Active}"  VerticalAlignment="Center" FontSize="10" Foreground="#FF101010" HorizontalAlignment="Left" Margin="8,0,0,0" Width="98"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="21*"/>
+                        <ColumnDefinition Width="100*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="phoneNumber" FontFamily="Nunito Sans 10pt Normal" Text="{DynamicResource m_Active}"  VerticalAlignment="Center" FontSize="10" Foreground="#FF101010" HorizontalAlignment="Left" Margin="8,0,0,0" Grid.ColumnSpan="2"/>
                     <Ellipse Height="6" x:Name="Activ"  Fill="#FFF31E38" VerticalAlignment="Center" Width="6" HorizontalAlignment="Left"/>
                 </Grid>
                 <Border Width="1" CornerRadius="0.5" Background="#FFC1BFFF" Height="26" HorizontalAlignment="Right" Margin="0,0,48,0" VerticalAlignment="Center"/>
@@ -104,21 +108,21 @@
                         </StackPanel>
                     </Button.Content>
                 </Button>
-                
+
             </Grid>
 
         </Border>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,67,0,0" Height="14">
-            <TextBlock FontFamily="/Assets/Fonts/Inter-Regular.ttf#Inter" x:Name="PbXText" Text="{DynamicResource m_PBX}" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="11"/>
-            <TextBlock FontFamily="/Assets/Fonts/Inter-Regular.ttf#Inter" HorizontalAlignment="Left" x:Name="PbXNumber" Text="50" VerticalAlignment="Center" FontSize="11" TextWrapping="Wrap"/>
+            <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" FontFamily="/Assets/Fonts/Inter-Regular.ttf#Inter" x:Name="PbXText" Text="{DynamicResource m_PBX}" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="11"/>
+            <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" FontFamily="/Assets/Fonts/Inter-Regular.ttf#Inter" HorizontalAlignment="Left" x:Name="PbXNumber" Text="50" VerticalAlignment="Center" FontSize="11" TextWrapping="Wrap"/>
         </StackPanel>
         <Border Width="213" CornerRadius="5" Height="68" Background="#FFE8D6FE" VerticalAlignment="Top" Margin="0,90,0,0">
             <Grid>
                 <ToggleButton Click="App_Click" Cursor="Hand" x:Name="AppPhone" VerticalAlignment="Top" Width="49" HorizontalAlignment="Left" Height="26" Margin="0,5,0,0" />
                 <ToggleButton Click="Phone_Click" Cursor="Hand" x:Name="Phone" VerticalAlignment="Top"  Margin="100,5,0,0" Width="45" HorizontalAlignment="Left" Padding="0,0,0,0" />
-                <TextBlock Text="{DynamicResource m_Softphone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
-                <TextBlock Text="{DynamicResource m_Phone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8" Foreground="#FF6864D8"/>
+                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="SoftphoneText" Text="{DynamicResource m_Softphone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
+                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="PhoneText" Text="{DynamicResource m_Phone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8" Foreground="#FF6864D8"/>
             </Grid>
 
         </Border>
@@ -126,8 +130,8 @@
             <Grid>
                 <ToggleButton Click="Softphone_Click" Cursor="Hand" x:Name="Softphone" VerticalAlignment="Top" Margin="0,5,0,0" Width="48" Height="27" HorizontalAlignment="Left" />
                 <ToggleButton Click="Webphone_Click" Cursor="Hand" x:Name="Webphone" VerticalAlignment="Top" Margin="100,5,0,0" Width="46" HorizontalAlignment="Left" />
-                <TextBlock Text="{DynamicResource m_App}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
-                <TextBlock Text="{DynamicResource m_Webphone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8" Foreground="#FF6864D8"/>
+                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="AppText" Text="{DynamicResource m_App}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,8" Foreground="#FF6864D8"/>
+                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="WebText" Text="{DynamicResource m_Webphone}" FontSize="12" FontFamily="Nunito Sans 10pt Normal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="111,0,0,8" Foreground="#FF6864D8"/>
             </Grid>
         </Border>
         <Image Width="45" Height="66" HorizontalAlignment="Left" Margin="72,80,0,0" VerticalAlignment="Top">
@@ -162,7 +166,7 @@
                                         <BitmapImage UriSource="/Assets/Icone_v2/Icon-Translate.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
                                     </Image.Source>
                                 </Image>
-                                <TextBlock Text="{DynamicResource m_Language}" FontSize="16" FontFamily="Nunito Sans 10pt Normal" Foreground="#FF252422" Margin="24,0,0,0" VerticalAlignment="Center" />
+                                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Text="{DynamicResource m_Language}" FontSize="16" FontFamily="Nunito Sans 10pt Normal" Foreground="#FF252422" Margin="24,0,0,0" VerticalAlignment="Center" />
                             </Grid>
                         </StackPanel>
                     </Button.Content>
@@ -176,7 +180,7 @@
                                         <BitmapImage UriSource="/Assets/Icone_v2/Icon-SignOut.png" DecodePixelWidth="50" DecodePixelHeight="50"/>
                                     </Image.Source>
                                 </Image>
-                                <TextBlock Text="{DynamicResource m_LogOut}" FontSize="16" FontFamily="Nunito Sans 10pt Normal" Foreground="#FF252422" Margin="24,0,0,0" VerticalAlignment="Center" />
+                                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Text="{DynamicResource m_LogOut}" FontSize="16" FontFamily="Nunito Sans 10pt Normal" Foreground="#FF252422" Margin="24,0,0,0" VerticalAlignment="Center" />
                             </Grid>
                         </StackPanel>
                     </Button.Content>

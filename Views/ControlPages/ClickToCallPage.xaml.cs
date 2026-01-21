@@ -1,14 +1,15 @@
-﻿using System.Windows;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using VoiceX.Items;
 using VoiceX.Models;
 using VoiceX.Services;
-using System.Linq;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 

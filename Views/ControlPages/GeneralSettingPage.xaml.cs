@@ -108,7 +108,6 @@ namespace VoiceX.Views.ControlPages
             Exit.Click += Exit_Click;
             Online();
         }
-
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             GlobalWindow.Visibility = Visibility.Hidden;

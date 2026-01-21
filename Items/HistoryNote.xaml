@@ -24,11 +24,11 @@
             <Grid Width="30" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Margin="0,3,0,0" >
                 <Image Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill"/>
                 <Border x:Name="contactBackgroundColor" Background="#FFE5A7E0" CornerRadius="50" >
-                    <TextBlock Text="N" x:Name="FirstWord" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Inter" Foreground="#FFFDFEFF"/>
+                    <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Text="N" x:Name="FirstWord" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Inter" Foreground="#FFFDFEFF"/>
                 </Border>
             </Grid>
-            <TextBlock ToolTip="Copy Number" Cursor="Hand" MouseDown="UserName_MouseDown" TextTrimming="CharacterEllipsis" FontFamily="Nunito Sans 10pt Normal" Text="Name" x:Name="UserName" HorizontalAlignment="Left" Margin="40,5,0,0"  TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="12" Foreground="Black" Width="85"/>
-            <TextBlock FontFamily="Nunito Sans 10pt Normal" Text="Time" x:Name="Time" HorizontalAlignment="Left" Margin="54,22,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="10" Foreground="#FF727070" Width="75"/>
+            <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" ToolTip="Copy Number" Cursor="Hand" MouseDown="UserName_MouseDown" TextTrimming="CharacterEllipsis" FontFamily="Nunito Sans 10pt Normal" Text="Name" x:Name="UserName" HorizontalAlignment="Left" Margin="40,5,0,0"  TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="12" Foreground="Black"/>
+            <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" FontFamily="Nunito Sans 10pt Normal" Text="Time" x:Name="Time" HorizontalAlignment="Left" Margin="54,22,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="10" Foreground="#FF727070"/>
             <Grid Height="12" Width="12" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,22,0,0">
                 <Grid x:Name="IncomeCall" Visibility="Collapsed">
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">

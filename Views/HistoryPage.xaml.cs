@@ -143,6 +143,7 @@ namespace VoiceX.Views
             if (ProfilePage.window != null)
             {
                 ProfilePage.window.TrayIcon.IconSource = new BitmapImage(new Uri("pack://application:,,,/Assets/icone_v2/TrayIcon.ico"));
+                ProfilePage.window.TrayIcon.ToolTipText = "VoiceX";
             }
         }
         public void FillListBox(List<HistoryNotes> historyNotes, int quality)
