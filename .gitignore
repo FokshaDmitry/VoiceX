@@ -378,3 +378,6 @@ dotnet-sdk-10.0.100-win-x86.exe
 
 # ignore big installers
 *.exe
+
+# big installers
+*.exe
