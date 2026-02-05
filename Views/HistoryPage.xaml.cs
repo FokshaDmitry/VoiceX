@@ -269,5 +269,18 @@ namespace VoiceX.Views
                 FillListBox(historyNotes, currentItems);
             }
         }
+
+        private async void Search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (Search.Text != "")
+            {
+                List<HistoryNotes> historyNotes = await addDbContext.SearchNotesAsync(Search.Text);
+                FillListBox(historyNotes, 0);
+            }
+            else
+            {
+                Filter_Checked(filter, new RoutedEventArgs());
+            }
+        }
     }
 }

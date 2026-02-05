@@ -1,14 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using VoiceX.Services;
 using VoiceX.Views;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -28,7 +24,9 @@ namespace VoiceX.Items
             contactPhone = Phone;
             FirstWord.Text = Name.Substring(0, 1);
             this.UserName.Text = Name;
+            this.UserName.ToolTip = Name;
             this.Phone.Text = Phone;
+            this.Phone.ToolTip = Phone;
             contactBackgroundColor.Background = color == 1 ?  new SolidColorBrush(Color.FromArgb(255, 138, 99, 251)) : new SolidColorBrush(Color.FromArgb(255, 229, 167, 224));
         }
 
@@ -58,6 +56,11 @@ namespace VoiceX.Items
         private void ListBoxItem_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Sms_Click(object sender, RoutedEventArgs e)
+        {
+            ProfilePage.window?.ShowSmsBlock();
         }
     }
 }

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VoiceX"
-#define MyAppVersion "1.1.3.3"
+#define MyAppVersion "1.1.3.6"
 #define MyAppPublisher "X-Cloud"
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -42,6 +42,4 @@ Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: 
 [Run]
 Filename: "{app}\windowsdesktop-runtime-10.0.2-win-x64.exe"; Parameters: "/silent"; Flags: waituntilterminated
 Filename: "{app}\windowsdesktop-runtime-10.0.2-win-x86.exe"; Parameters: "/silent"; Flags: waituntilterminated
-Filename: "{app}\VC_redist.x86.exe"; Parameters: "/silent"; Flags: waituntilterminated
-Filename: "{app}\VC_redist.x64.exe"; Parameters: "/silent"; Flags: waituntilterminated
 Filename: "{app}\VoiceX.exe"; Description: "Run Program"; Flags:  nowait postinstall

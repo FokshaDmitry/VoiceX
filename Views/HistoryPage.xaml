@@ -60,7 +60,7 @@
                         </Grid.ColumnDefinitions>
                         <RadioButton Cursor="Hand" ToolTipService.ToolTip="{DynamicResource m_AllCall}" ToolTipService.Placement="Mouse" Grid.Column="0" MinWidth="20" GroupName="Filter" x:Name="AllCall" Checked="Filter_Checked" Background="Transparent" Height="25" HorizontalAlignment="Stretch" Padding="0,6,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                             <StackPanel HorizontalAlignment="Center" Width="53.7">
-                                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="AllText" Text="{DynamicResource m_All}" FontFamily="Nunito Sans 10pt Normal" FontSize="14" Foreground="#FF252422" Margin="6,0,0,0"/>
+                                <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="AllText" Text="{DynamicResource m_All}" FontFamily="Nunito Sans 10pt Normal" FontSize="14" Foreground="#FF252422" HorizontalAlignment="Center"/>
                                 <Border CornerRadius="1" x:Name="CheckAll" Height="2" Background="#FFC1BFFF" />
                             </StackPanel>
                         </RadioButton>
@@ -83,7 +83,26 @@
                             </StackPanel>
                         </RadioButton>
                     </Grid>
-                    <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" Margin="0,47,0,0" x:Name="HistoryList" Background="White" Padding="0,0,10,0" Grid.RowSpan="2"/>
+                    <Border RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" BorderThickness="0, 0, 0, 1" BorderBrush="#FFC1BFFF" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,35,0,0">
+                        <Grid>
+                            <TextBox BorderThickness="0" x:Name="Search"  MinHeight="26" TextChanged="Search_TextChanged" Width="225" BorderBrush="#FF8F8F8F" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="14" Height="25" Padding="6,0,6,0"/>
+                            <Grid Height="15" x:Name="magnifyingGlass" Width="15" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,3">
+                                <Border x:Name="magnifyingGlassLine" Background="#FFC1BFFF" Height="1.1" Width="6" CornerRadius="1" RenderTransformOrigin="0.5,0.5" Margin="8,8.6,0,0">
+                                    <Border.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform Angle="45"/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Border.RenderTransform>
+
+                                </Border>
+                                <Ellipse x:Name="magnifyingGlassEllipse" Fill="White" StrokeThickness="1" Width="10" Height="11" Stroke="#FFC1BFFF"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <ListBox ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0" Margin="0,66,0,0" x:Name="HistoryList" Background="White" Padding="0,0,10,0" Grid.RowSpan="2"/>
 
                 </Grid>
             </Grid>

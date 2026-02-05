@@ -36,7 +36,7 @@ namespace VoiceX.Services
         {
             if (CoreService.activeCall != null)
             {
-                CallOpParam answerPrm = new CallOpParam();
+                var answerPrm = new CallOpParam();
                 answerPrm.statusCode = pjsip_status_code.PJSIP_SC_OK;
                 CoreService.activeCall.answer(answerPrm);
             }

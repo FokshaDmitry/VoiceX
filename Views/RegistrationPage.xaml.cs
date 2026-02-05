@@ -82,6 +82,8 @@ namespace VoiceX.Views
                         await localStoreService.SaveDataAsync("pbxCode", pbxCode.Substring(0, 3));
                         await localStoreService.SaveDataAsync("token", cert.App_token!);
                         await localStoreService.SaveDataAsync("fw", pbxCode.Substring(3, 2));
+                        await localStoreService.SaveDataAsync("ip", "1");
+                        await localStoreService.SaveDataAsync("ice", "0");
                         App.fw = pbxCode.Substring(3, 2);
                         if (String.IsNullOrEmpty(App.FirstLoginDate))
                         {

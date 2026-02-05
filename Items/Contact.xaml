@@ -30,9 +30,9 @@
         <Image PointerPressed="ListBoxItem_PointerPressed" Source="/Assets/Icone/Chek.png" Width="5.7" Margin="0.1,0.8,0,0" />
     </Grid>-->
             </Grid>
-            <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" TextTrimming="CharacterEllipsis" FontFamily="Nunito Sans 10pt Normal" Text="Name" x:Name="UserName" HorizontalAlignment="Left" Margin="40,4,0,0"  TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="14" Foreground="Black" />
+            <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" TextTrimming="CharacterEllipsis" MaxWidth="115" FontFamily="Nunito Sans 10pt Normal" Text="Name" x:Name="UserName" HorizontalAlignment="Left" Margin="40,4,0,0"  TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="14" Foreground="Black" />
             <TextBlock RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" FontFamily="Nunito Sans 10pt Normal" Text="Phone" x:Name="Phone" HorizontalAlignment="Left" Margin="40,21,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top" FontWeight="Normal" FontSize="11" Foreground="#FF727070" />
-            <Button BorderThickness="0" Cursor="Hand" Height="18" Width="18" HorizontalAlignment="Right" Margin="0,6,15,0" VerticalAlignment="Top" Padding="0,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <Button x:Name="Sms" Click="Sms_Click" BorderThickness="0" Cursor="Hand" Height="18" Width="18" HorizontalAlignment="Right" Margin="0,6,15,0" VerticalAlignment="Top" Padding="0,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <Button.Content>
                     <Border Height="18" Width="18">
                         <Border.Background>

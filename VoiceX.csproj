@@ -232,14 +232,14 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.2" />
     <PackageReference Include="Microsoft.QualityTools.Testing.Fakes" Version="18.1.1" />
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NSwag.Core" Version="14.6.3" />
-    <PackageReference Include="PDFsharp" Version="6.2.3" />
+    <PackageReference Include="PDFsharp" Version="6.2.4" />
     <PackageReference Include="pjsip-pjsua2-cs" Version="2.10.1" />
-    <PackageReference Include="System.DirectoryServices.Protocols" Version="10.0.0" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="10.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -412,12 +412,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="PrinterInstaller\SystrayComponent.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="VC_redist.x64.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="VC_redist.x86.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="windowsdesktop-runtime-10.0.2-win-x64.exe">

@@ -9,7 +9,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
-using VoiceX.Models;
 using VoiceX.Services;
 
 namespace VoiceX.Views.ControlPages
@@ -27,7 +26,6 @@ namespace VoiceX.Views.ControlPages
         int timeOut;
         string ip;
         string ice;
-        string stun;
         string transport;
         int transportId;
         public GeneralSettingPage(MainWindow window)
@@ -47,7 +45,6 @@ namespace VoiceX.Views.ControlPages
 
             ip = await localStoreService.LoadDataAsync("ip");
             ice = await localStoreService.LoadDataAsync("ice");
-            stun = await localStoreService.LoadDataAsync("stun");
             transport = await localStoreService.LoadDataAsync("transport");
             int.TryParse(transport, out transportId);
             AccountFild.Text = App.AccountData?.Data.User_Data.Name;
@@ -62,7 +59,7 @@ namespace VoiceX.Views.ControlPages
                         {
                             AppPhone.IsChecked = true;
 
-                            CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "0", ice == "0", ip == "1");
+                            CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, ice == "1", ip == "0");
                             ProfilePage.onlineToken = true;
                         }
                         break;
@@ -294,7 +291,7 @@ namespace VoiceX.Views.ControlPages
                 {
 
                     App.AccountData = await webService.GetAccountSettings(App.UserPbx!, App.userToken!, App.fw!);
-                    CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, stun == "0", ice == "0", ip == "1");
+                    CoreService.Instance.Login(App.AccountData!.Data.Sip_Settings?.Sip_username!, App.AccountData.Data.Sip_Settings!.Sip_server, App.AccountData.Data.Sip_Settings.Sip_proxy, App.AccountData.Data.Sip_Settings.Sip_secret, transportId, ice == "0" ? false : true, ip == "0" ? false : true);
                     ProfilePage.onlineToken = true;
                     App.AccountData!.Data.Device_type = "softphone";
                     Phone.IsChecked = false;

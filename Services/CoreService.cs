@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using VoiceX.DAL.Context;
-using VoiceX.Views;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace VoiceX.Services
 {
@@ -51,8 +49,8 @@ namespace VoiceX.Services
                     {
                         epConfig.uaConfig.stunServer.Add(StunServer);
                     }
-                    //epConfig.uaConfig.stunServer.Add("stun.12voip.com:3478");
                     epConfig.uaConfig.userAgent = $"VoiceX_{Version}/{App.FirstLoginDate}";
+                    
                     epConfig.uaConfig.maxCalls = 15;
                     core.libInit(epConfig);
                     var codecs = core.codecEnum2();
@@ -88,7 +86,8 @@ namespace VoiceX.Services
                 return core; 
             } 
         }
-        public async void Login(string username, string domain, string proxy, string password, int transport, bool useStun, bool iceEnabled, bool useIpRewrite)
+       
+        public async void Login(string username, string domain, string proxy, string password, int transport, bool iceEnabled, bool useIpRewrite)
         {
             try
             {
@@ -108,7 +107,6 @@ namespace VoiceX.Services
                 accCfg?.natConfig.iceEnabled = iceEnabled;
                 
                 accCfg?.natConfig.sdpNatRewriteUse = useIpRewrite ? 1 : 0;
-                accCfg?.natConfig.iceEnabled = true;
                 //CREATE
                 accCfg?.sipConfig.authCreds.Clear();
                 accCfg?.sipConfig.authCreds.Add(new AuthCredInfo("digest", "*", username, 0, password));

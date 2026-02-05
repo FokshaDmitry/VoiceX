@@ -361,6 +361,59 @@ namespace VoiceX.DAL.Context
             }
             return historyNotes;
         }
+        public async Task<List<HistoryNotes>> SearchNotesAsync(string search)
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";
+            var openPathDB = Path.Combine(path, "HistoryDB.db");
+
+            List<HistoryNotes> historyNotes = new();
+
+            try
+            {
+                using var connection = new SqliteConnection(
+                    $@"Data Source={openPathDB};Cache=Shared;Mode=ReadWriteCreate;"
+                );
+
+                await connection.OpenAsync();
+
+                string commandText = @"
+            SELECT *
+            FROM History
+            WHERE Name LIKE @search
+               OR Phone LIKE @search
+            ORDER BY datetime(EndDialog) DESC;
+        ";
+
+                using var command = new SqliteCommand(commandText, connection);
+                command.Parameters.AddWithValue("@search", $"%{search}%");
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    historyNotes.Add(new HistoryNotes
+                    {
+                        Id = Guid.Parse(reader.GetString(0)),
+                        Name = reader.GetString(1),
+                        Phone = reader.GetString(2),
+                        StatusCall =
+                            reader.GetString(3) == "Outgoing" ? StatusCall.Outgoing :
+                            reader.GetString(3) == "Incoming" ? StatusCall.Incoming :
+                            reader.GetString(3) == "Ignore" ? StatusCall.Ignore :
+                                                              StatusCall.IncomeIgnore,
+                        StartDialog = DateTime.Parse(reader.GetString(4)),
+                        EndDialog = DateTime.Parse(reader.GetString(5))
+                    });
+                }
+            }
+            catch
+            {
+                return historyNotes;
+            }
+
+            return historyNotes;
+        }
+
         public async Task<List<HistoryNotes>> GetNotesAsync(int NumberItems, StatusCall statusCall)
         {
             var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Database";

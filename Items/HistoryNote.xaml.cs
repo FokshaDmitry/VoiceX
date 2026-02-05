@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using VoiceX.Enums;
@@ -65,6 +63,11 @@ namespace VoiceX.Items
             {
                 Clipboard.SetText(userPhone);
             }
+        }
+
+        private void Sms_Click(object sender, RoutedEventArgs e)
+        {
+            ProfilePage.window?.ShowSmsBlock();
         }
     }
 

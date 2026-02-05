@@ -11,7 +11,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
@@ -23,7 +22,6 @@ using VoiceX.Services;
 using VoiceX.Views.ClientPages;
 using VoiceX.Views.ControlPages;
 using VoiceX.Views.PhonePages;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace VoiceX.Views
 {
@@ -55,8 +53,8 @@ namespace VoiceX.Views
         HistoryPage historyPage;
         ClickToCallPage clickToCallPage;
         FaxPage faxPage;
-        Storyboard slide;
-        Storyboard slideLeft;
+        //Storyboard slide;
+        //Storyboard slideLeft;
         HotKeyPage hotKeyPage;
         AdditionPage additionPage;
         public IncomingWindow incomingWindow;
@@ -86,8 +84,8 @@ namespace VoiceX.Views
                 contacts = new List<Models.Contact>()
             };
             localStoreService = new LocalStoreService();
-            slide = (Storyboard)FindResource("SlideUpAnimation");
-            slideLeft = (Storyboard)FindResource("SlideLeftAnimation");
+            //slide = (Storyboard)FindResource("SlideUpAnimation");
+            //slideLeft = (Storyboard)FindResource("SlideLeftAnimation");
             clickToCallService = new ClickToCallService();
             incomingWindow = new IncomingWindow(mainWindow, this, activCallPage);
             LDAPService = new LDAPService();
@@ -128,22 +126,22 @@ namespace VoiceX.Views
         {
             historyPage.IgnoreCall.IsChecked = true;
             MainFrame.Navigate(historyPage);
-            slide.Begin();
+            //slide.Begin();
         }
 
         private void Window_moveOnContact()
         {
             MainFrame.Navigate(clientsPage);
-            slide.Begin();
+            //slide.Begin();
         }
 
         private void Window_moveOnDialpad()
         {
             MainFrame.Navigate(dialpadCallPage);
-            slide.Begin();
+            //slide.Begin();
         }
 
-        public void Hotkeys_HotkeyPressed(string Phone)
+        public async void Hotkeys_HotkeyPressed(string Phone)
         {
             if (!String.IsNullOrEmpty(Phone))
             {
@@ -170,10 +168,14 @@ namespace VoiceX.Views
                         }
                         try
                         {
-                           var call = CoreService.Instance.MakeCall(Phone, App.AccountData?.Data.Sip_Settings.Sip_server!);
+                            var call = await webService.ClickToCall(Phone, App.AccountData?.Data.User_Data.CompanyID!, App.AccountData?.Data.User_Data.UserID!, App.UserPbx!, App.userToken!, App.fw!);
                             if (call == null)
                             {
                                 ProfilePage.window?.ShowError("Call not create. Please check connection and audio.");
+                            }
+                            else if (!call.Contains("success"))
+                            {
+                                ProfilePage.window?.ShowError(call);
                             }
                         }
                         catch
@@ -195,7 +197,7 @@ namespace VoiceX.Views
             window!.WindowState = WindowState.Normal;
             window.Activate();
             MainFrame.Navigate(activCallPage);
-            slide.Begin();
+            //slide.Begin();
             CoreService.activeCall!.EndCallEvent += ActiveCall_EndCallEvent;
             StatusCall = StatusCall.Outgoing;
         }
@@ -215,7 +217,7 @@ namespace VoiceX.Views
                             Thread.Sleep(3000);
                             CoreService.activeCall.Accept();
                             MainFrame.Navigate(activCallPage);
-                            slide.Begin();
+                            //slide.Begin();
                         }
                         else
                         {
@@ -230,7 +232,7 @@ namespace VoiceX.Views
                                 window!.WindowState = WindowState.Normal;
                                 window.Activate();
                                 MainFrame.Navigate(callPage);
-                                slide.Begin();
+                                //slide.Begin();
                                 if (!String.IsNullOrEmpty(info.remoteContact))
                                 {
                                     var userName = ExtractValue(info.remoteContact);
@@ -273,7 +275,7 @@ namespace VoiceX.Views
         {
             await Dispatcher.InvokeAsync(async () => {
                 Navigate_Click(Dialpad, new RoutedEventArgs());
-                slide.Begin();
+                //slide.Begin();
                 incomingWindow.Hide();
                 foreach (var regex in ProfilePage.regexNotes?.Where(r => r.Check)!)
                 {
@@ -407,6 +409,7 @@ namespace VoiceX.Views
         }
         private async void ControlPage_Loaded(object sender, RoutedEventArgs e)
         {
+            MainFrame.Navigate(dialpadCallPage);
             var items = MenuIcons.OrderByDescending(m => m.Key);
             
             addDbContext = new AddDbContext();
@@ -471,12 +474,6 @@ namespace VoiceX.Views
                 }
             }
             await SetVersion();
-            var lang = App.Language.Name;
-            if (lang == "he-IL") 
-            {
-                
-            }
-            //ChangePerspectiveIl();
         }
         #region Navigete Button
         public void Navigate_Click(object sender, RoutedEventArgs e)
@@ -518,7 +515,7 @@ namespace VoiceX.Views
                         break;
                     case "Contacts":
                         MainFrame.Navigate(clientsPage);
-                        slide.Begin();
+                        //slide.Begin();
                         break;
                     case "Dialpad":
                         if (CoreService.activeCall != null)
@@ -529,19 +526,19 @@ namespace VoiceX.Views
                         {
                             MainFrame.Navigate(dialpadCallPage);
                         }
-                        slide.Begin();
+                        //slide.Begin();
                         break;
                     case "History":
                         MainFrame.Navigate(historyPage);
-                        slide.Begin();
+                        //slide.Begin();
                         break;
                     case "Fax":
                         MainFrame.Navigate(faxPage);
-                        slide.Begin();
+                        //slide.Begin();
                         break;
                     case "Hotkeys":
                         MainFrame.Navigate(hotKeyPage);
-                        slide.Begin();
+                        //slide.Begin();
                         break;
                     default:
 
@@ -564,7 +561,7 @@ namespace VoiceX.Views
                     AdditionChek.Visibility = Visibility.Collapsed;
                 }
                 ContentControl.Navigate(generalSettingPage);
-                slideLeft.Begin();
+                //slideLeft.Begin();
             }
             else if (filter.Name == "C2C")
             {
@@ -575,7 +572,7 @@ namespace VoiceX.Views
                     AdditionChek.Visibility = Visibility.Collapsed;
                 }
                 ContentControl.Navigate(clickToCallPage);
-                slideLeft.Begin();
+                //slideLeft.Begin();
             }
             else if (filter.Name == "Addition")
             {
@@ -586,7 +583,7 @@ namespace VoiceX.Views
                     AdditionChek.Visibility = Visibility.Visible;
                 }
                 ContentControl.Navigate(additionPage);
-                slideLeft.Begin();
+                //slideLeft.Begin();
             }
         }
         private void Menu_Click(object sender, RoutedEventArgs e)

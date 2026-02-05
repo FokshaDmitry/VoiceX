@@ -134,47 +134,50 @@ namespace VoiceX.Services
             return certificate;
         }
 
-        //public async Task<string> ClickToCall(string phone, string companyID, string userID, string pbxCode)
-        //{
-        //    if (String.IsNullOrEmpty(userID))
-        //    {
-        //        return "Empty User Id";
-        //    }
-        //    if (String.IsNullOrEmpty(companyID))
-        //    {
+        public async Task<string> ClickToCall(string phone, string companyID, string userID, string pbxCode, string userToken, string fw)
+        {
+            if (String.IsNullOrEmpty(userID))
+            {
+                return "Empty User Id";
+            }
+            if (String.IsNullOrEmpty(companyID))
+            {
 
-        //        return "Company ID is 0";
-        //    }
-        //    if (String.IsNullOrEmpty(pbxCode))
-        //    {
-        //        return "PBX not exist";
-        //    }
-        //    if (pbxCode.Where(char.IsDigit).Count() != 3)
-        //    {
-        //        return "Wrong PBX";
-        //    }
-        //    string responseBody = "";
-        //    try
-        //    {
-        //        //var content = new HttpStringContent("{" + $"\"user_id\":\"{userID}\",\"phone\":\"{phone}\", \"company_id\":\"{companyID}\"" + "}", UnicodeEncoding.Utf8);
-        //        //content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
-        //        //var certificate = await CertificateStores.FindAllAsync(new CertificateQuery() { FriendlyName = "app-cert" });
-        //        //var clientCertificate = certificate.First();
-        //        //var filter = new HttpBaseProtocolFilter();
-        //        //filter.ClientCertificate = clientCertificate;
-        //        //using (var httpClient = new Windows.Web.Http.HttpClient(filter))
-        //        //{
-        //        //    httpClient.DefaultRequestHeaders.Add("X-APP-TOKEN", userToken);
-        //        //    var response = await httpClient.PostAsync(new Uri($"https://pbx{pbxCode.TrimStart('0')}.x-cloud.info/stats/api/CrossPlatform/click2call/call.php"), content);
-        //        //    responseBody = await response.Content.ReadAsStringAsync();
-        //        //}
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return ex.Message;
-        //    }
-        //    return responseBody;
-        //}
+                return "Company ID is 0";
+            }
+            if (String.IsNullOrEmpty(pbxCode))
+            {
+                return "PBX not exist";
+            }
+            if (pbxCode.Where(char.IsDigit).Count() != 3)
+            {
+                return "Wrong PBX";
+            }
+            string responseBody = "";
+            try
+            {
+                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("default-windowsrsa");
+                if (clientCertificate == null)
+                {
+                    return "Certificate don't found";
+                }
+                var content = new StringContent("{" + $"\"user_id\":\"{userID}\",\"phone\":\"{phone}\", \"company_id\":\"{companyID}\"" + "}", Encoding.UTF8, "application/json");
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                var handler = new HttpClientHandler();
+                handler.ClientCertificates.Add(clientCertificate);
+                using (var httpClient = new HttpClient(handler))
+                {
+                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
+                    var response = await httpClient.PostAsync(new Uri($"https://api.{fw}.voicex.center/{pbxCode}/stats/api/CrossPlatform/click2call/call.php"), content);
+                    responseBody = await response.Content.ReadAsStringAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return responseBody;
+        }
         public async Task<contacts_list> GetcontactsList(string pbxCode, string userToken, string fw)
         {
             contacts_list contacts = new contacts_list
@@ -257,7 +260,7 @@ namespace VoiceX.Services
             
             return contacts!;
         }
-        public async Task<System.Net.HttpStatusCode> ChangeCallType(string callType, string pbxCode, string userToken, string fw   )
+        public async Task<System.Net.HttpStatusCode> ChangeCallType(string callType, string pbxCode, string userToken, string fw)
         {
             if (String.IsNullOrEmpty(userToken))
             {

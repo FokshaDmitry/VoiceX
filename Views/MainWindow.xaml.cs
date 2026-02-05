@@ -1,14 +1,15 @@
-﻿using pj;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 using VoiceX.DAL.Context;
 using VoiceX.Items;
 using VoiceX.Services;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace VoiceX.Views
 {
@@ -43,7 +44,7 @@ namespace VoiceX.Views
                 timer.Start();
             }
             certificateService = new CertificateService();
-            Version = "1.1.3.3";
+            Version = "1.1.3.6";
         }
 
         private async void LanguageChanged(object? sender, EventArgs e)
@@ -201,6 +202,10 @@ namespace VoiceX.Views
             ErrorPlate.Visibility = Visibility.Collapsed;
             PreAsk.Visibility = Visibility.Collapsed;
             LanguagesFild.Visibility = Visibility.Collapsed;
+            SmsBlock.Visibility = Visibility.Collapsed;
+            TextMessage.Text = "Text";
+            TextMessage.Foreground = new SolidColorBrush(Color.FromArgb(255, 195, 195, 196));
+            SmsType.SelectedItem = null;
         }
         private void Copy_Click(object sender, RoutedEventArgs e)
         {
@@ -214,6 +219,10 @@ namespace VoiceX.Views
             ErrorMessage.Text = message;
             ErrorPlate.Visibility = Visibility.Visible;
             ShowInBottomRight();
+        }
+        public void ShowSmsBlock()
+        {
+            SmsBlock.Visibility = Visibility.Visible;
         }
         public void ShowLanguages()
         {
@@ -303,6 +312,24 @@ namespace VoiceX.Views
                         App.Language = languge.cultureInfo;
                     }
                 }
+            }
+        }
+
+        private void TextMessage_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (TextMessage.Text == "Text")
+            {
+                TextMessage.Text = "";
+                TextMessage.Foreground = new SolidColorBrush(Color.FromArgb(255, 92, 102, 189));
+            }
+        }
+
+        private void TextMessage_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (TextMessage.Text == "")
+            {
+                TextMessage.Text = "Text";
+                TextMessage.Foreground = new SolidColorBrush(Color.FromArgb(255, 195, 195, 196));
             }
         }
     }

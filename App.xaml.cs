@@ -417,8 +417,7 @@ namespace VoiceX
             string globalSelectedText = "";
             try
             {
-                ClipboardHelper.Backup();
-                globalSelectedText = ClipboardHelper.getGlobalSelectedText();
+                globalSelectedText = ClickToCallService.getGlobalSelectedText();
                 Debug.WriteLine("SELECT TEXT: " + globalSelectedText);
             }
             catch (AccessViolationException ex)

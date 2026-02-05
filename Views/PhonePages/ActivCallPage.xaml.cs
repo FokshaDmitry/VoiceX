@@ -51,12 +51,12 @@ namespace VoiceX.Views.PhonePages
                     if (CoreService.activeCall != null)
                     {
                         var boo = CoreService.Instance.Core.mediaActivePorts();
-                        if (CoreService.activeCall.CallAdtess.Count() != 0)
+                        if (CoreService.activeCall.CallAdtess?.Count() != 0)
                         {
                             var calls = CoreService.activeCall.CallAdtess;
                             Time.Text = (DateTime.Now - startCall).ToString(@"mm\:ss");
                             StatusCurrentCall.Text = ProfilePage.StatusCall.ToString().ToUpper() + " " + "CALL";
-                            PhoneText.Text = CoreService.activeCall.CallAdtess.Count() == 1 ? phonePage.ExtractValue(CoreService.activeCall.CallAdtess.First()) : CoreService.activeCall.CallAdtess.Aggregate((current, next) => phonePage.ExtractValue(current) + ", " + phonePage.ExtractValue(next)).TrimEnd(' ', ',');
+                            PhoneText.Text = CoreService.activeCall.CallAdtess?.Count() == 1 ? phonePage.ExtractValue(CoreService.activeCall.CallAdtess.First()) : CoreService.activeCall.CallAdtess.Aggregate((current, next) => phonePage.ExtractValue(current) + ", " + phonePage.ExtractValue(next)).TrimEnd(' ', ',');
                             TransferCall.IsEnabled = false;
                             Pause.IsEnabled = false;
                         }
