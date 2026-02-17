@@ -72,4 +72,6 @@
     <v:String x:Key="m_Message">הודעה</v:String>
     <v:String x:Key="m_ChooseWhere">טקסט</v:String>
     <v:String x:Key="m_Text">בחר</v:String>
+    <v:String x:Key="m_From">שולח</v:String>
+    <v:String x:Key="m_SuccessPlate">הושלם בהצלחה</v:String>
 </ResourceDictionary>

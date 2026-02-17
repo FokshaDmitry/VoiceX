@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.22621.0</TargetFramework>
     <ApplicationIcon>Logo256.ico</ApplicationIcon>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <UseWPF>True</UseWPF>
@@ -232,14 +232,14 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.3" />
     <PackageReference Include="Microsoft.QualityTools.Testing.Fakes" Version="18.1.1" />
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NSwag.Core" Version="14.6.3" />
     <PackageReference Include="PDFsharp" Version="6.2.4" />
     <PackageReference Include="pjsip-pjsua2-cs" Version="2.10.1" />
-    <PackageReference Include="System.DirectoryServices.Protocols" Version="10.0.2" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>

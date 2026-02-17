@@ -33,7 +33,7 @@
                         <Grid>
                             <Border x:Name="Border"
                             Background="White"
-                            BorderBrush="#D1D0FF"
+                            BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="1"
                             CornerRadius="4"
                             Padding="12, 0, 0, 0"
@@ -355,6 +355,46 @@
                     </Grid>
                 </Border>
             </Grid>
+            <Grid Visibility="Collapsed" RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" x:Name="SuccessPlate"  Background="#999692ED" Margin="-5,0,-5,0" >
+                <Border CornerRadius="12" Background="White" Width="204" Height="188">
+                    <Grid>
+                        <Image RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Top" Width="60" Height="60" Margin="0,12,0,0">
+                            <Image.Source>
+                                <BitmapImage UriSource="/Assets/Icone_v2/Success.png" DecodePixelWidth="1000" DecodePixelHeight="1000"/>
+                            </Image.Source>
+                        </Image>
+                        <TextBox RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" BorderThickness="0" TextAlignment="Center" Width="125" Height="44" FontSize="20" FontFamily="Nunito Sans 10pt Normal" Text="{DynamicResource m_SuccessPlate}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,80,0,0" Foreground="#FF7B76FF" TextWrapping="Wrap"/>
+                        <Button RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Width="180" Height="36" Margin="0,140,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="{DynamicResource m_Continue}" x:Name="ContinueSuccess" Click="ContinueSuccess_Click" Foreground="#FF7B76FF" FontSize="18">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#FFE5E5FF"/>
+                                    <Setter Property="FontSize" Value="16"/>
+                                    <Setter Property="Padding" Value="10"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="#FFE5E5FF" CornerRadius="6">
+                                                    <ContentPresenter  RenderTransformOrigin="{DynamicResource GlobalOrigin}" HorizontalAlignment="Center" 
+  VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <!-- Отключаем изменение цвета при наведении -->
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#A459FC"/>
+                                            <!-- Оставляем тот же цвет -->
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
+                </Border>
+            </Grid>
             <Grid RenderTransform="{DynamicResource GlobalFlip}" RenderTransformOrigin="{DynamicResource GlobalOrigin}" Visibility="Collapsed" x:Name="LanguagesFild" Background="#999692ED" Margin="-5,0,-5,0" >
                 <Border CornerRadius="12" Background="White" Width="204" Height="186">
                     <Grid Margin="0,11,0,0">
@@ -460,7 +500,7 @@
             <Grid Visibility="Collapsed" x:Name="SmsBlock" Background="#999692ED" Margin="-5,0,-5,0" >
                 <Border CornerRadius="12" Background="White" Width="204" Height="279">
                     <Grid>
-                        <Button Cursor="Hand" Click="Close_Click" Height="18" Padding="0,0,0,0" BorderBrush="Transparent" Width="18" Background="Transparent" HorizontalAlignment="Right" Margin="0,15,12,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                        <Button Cursor="Hand" x:Name="CloseMessage" Click="CloseMessage_Click" Height="18" Padding="0,0,0,0" BorderBrush="Transparent" Width="18" Background="Transparent" HorizontalAlignment="Right" Margin="0,15,12,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
                             <Button.Content>
                                 <Border Background="White" Width="16" Height="16">
                                     <Grid Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -490,8 +530,8 @@
                             </Button.Content>
                         </Button>
 
-                        <TextBlock  Text="{DynamicResource m_Message}" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Margin="12,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF"/>
-                        <ComboBox x:Name="SmsType" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="Transparent" Width="180" Margin="0,44,0,0" BorderBrush="#FFBBBAFF" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                        <TextBlock Text="{DynamicResource m_Message}" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Margin="12,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF"/>
+                        <ComboBox BorderBrush="#FFC1BFFF" x:Name="SmsType" MaxDropDownHeight="90" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="Transparent" Width="180" Margin="0,44,0,0" FontFamily="Nunito Sans 10pt Normal" FontSize="14"  Foreground="#FF252422" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2">
                             <ComboBoxItem Cursor="Hand" Foreground="#FF8776FF" Width="180" Height="32" FontFamily="Nunito Sans 10pt Normal" Content="WhatsApp" IsSelected="False" FontSize="16">
                                 <ComboBoxItem.Style>
                                     <Style TargetType="ComboBoxItem">
@@ -500,7 +540,7 @@
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="ComboBoxItem">
-                                                    <Border  x:Name="Border" Background="Transparent" CornerRadius="12" Padding="5, 0, 0, 0">
+                                                    <Border   x:Name="Border" Background="Transparent" CornerRadius="12" Padding="5, 0, 0, 0">
                                                         <ContentPresenter VerticalAlignment="Center"/>
                                                     </Border>
                                                 </ControlTemplate>
@@ -527,13 +567,15 @@
                                 </ComboBoxItem.Style>
                             </ComboBoxItem>
                         </ComboBox>
-                        <Border Width="180" CornerRadius="4" BorderThickness="1" Height="131" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,88,0,0" BorderBrush="#FFC1BFFF">
-
+                        <Border x:Name="FromUserBorder" Padding="1" CornerRadius="4" BorderThickness="1" VerticalAlignment="Top" BorderBrush="#FFC1BFFF" Width="180" Height="32" Margin="0,88,0,0">
+                            <TextBox GotFocus="FromUser_GotFocus" LostFocus="FromUser_LostFocus" Text="{DynamicResource m_From}" BorderThickness="0" Grid.Column="1" x:Name="FromUser" FontFamily="Nunito Sans 10pt Normal" Foreground="#FFC3C3C4" Padding="6,0,6,0" FontSize="14"  VerticalContentAlignment="Center"/>
+                        </Border>
+                        <Border x:Name="TextBorder" Width="180" CornerRadius="4" BorderThickness="1" Height="86" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,128,0,0" BorderBrush="#FFC1BFFF">
                             <TextBox FontFamily="Nunito Sans 10pt Normal" AcceptsReturn="True" TextWrapping="Wrap" Width="175" x:Name="TextMessage" Text="{DynamicResource m_Text}" GotFocus="TextMessage_GotFocus" LostFocus="TextMessage_LostFocus" BorderThickness="0" Margin="2" FontSize="16" Foreground="#FFB5B5B5">
 
                             </TextBox>
                         </Border>
-                        <Button  Width="180" Height="36" Margin="0,231,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="{DynamicResource m_Send}" x:Name="Save" Click="Send_Click" Foreground="#FF7B76FF">
+                        <Button  Width="180" Height="36" Margin="0,231,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="{DynamicResource m_Send}" x:Name="SendMessage" Click="SendMessage_Click" Foreground="#FF7B76FF">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="#FFE5E5FF"/>
@@ -547,6 +589,78 @@
                                                 <Border Background="#FFE5E5FF" CornerRadius="6">
                                                     <ContentPresenter  RenderTransformOrigin="{DynamicResource GlobalOrigin}" HorizontalAlignment="Center" 
   VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <!-- Отключаем изменение цвета при наведении -->
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#A459FC"/>
+                                            <!-- Оставляем тот же цвет -->
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                    </Grid>
+                </Border>
+            </Grid>
+            <Grid Visibility="Collapsed" x:Name="OperatorSmsBlock" Background="#999692ED" Margin="-5,0,-5,0" >
+                <Border CornerRadius="12" Background="White" Width="204" Height="194">
+                    <Grid>
+                        <Button Cursor="Hand" x:Name="OperatorCloseMessage" Click="OperatorCloseMessage_Click" Height="18" Padding="0,0,0,0" BorderBrush="Transparent" Width="18" Background="Transparent" HorizontalAlignment="Right" Margin="0,15,12,0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                            <Button.Content>
+                                <Border Background="White" Width="16" Height="16">
+                                    <Grid Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                        <Rectangle RadiusX="1" RadiusY="1" Width="14" Height="1.2" Fill="#FFC1BFFF" RenderTransformOrigin="0.5,0.5">
+                                            <Rectangle.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="45"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Rectangle.RenderTransform>
+
+                                        </Rectangle>
+                                        <Rectangle RadiusX="1" RadiusY="1" Width="14" Height="1.2" Fill="#FFC1BFFF" RenderTransformOrigin="0.5,0.5">
+                                            <Rectangle.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-45"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Rectangle.RenderTransform>
+                                        </Rectangle>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Text="{DynamicResource m_Message}" FontFamily="Nunito Sans 10pt Normal" FontSize="18" Margin="12,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC1BFFF"/>
+                        
+                        <Border x:Name="TextBorderOperator" Width="180" CornerRadius="4" BorderThickness="1" Height="86" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,44,0,0" BorderBrush="#FFC1BFFF">
+                            <TextBox FontFamily="Nunito Sans 10pt Normal" AcceptsReturn="True" TextWrapping="Wrap" Width="175" x:Name="TextMessageOperator" Text="{DynamicResource m_Text}" GotFocus="TextMessageOperator_GotFocus" LostFocus="TextMessageOperator_LostFocus" BorderThickness="0" Margin="2" FontSize="16" Foreground="#FFB5B5B5">
+
+                            </TextBox>
+                        </Border>
+                        <Button  Width="180" Height="36" Margin="0,143,0,0" Background="#FFE5E5FF" VerticalAlignment="Top" HorizontalAlignment="Center" Cursor="Hand" BorderThickness="0" Padding="0" FontFamily="Nunito Sans 10pt Normal" Content="{DynamicResource m_Send}" x:Name="SendOperatorMessage" Click="SendOperatorMessage_Click" Foreground="#FF7B76FF">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#FFE5E5FF"/>
+                                    <Setter Property="FontSize" Value="16"/>
+                                    <Setter Property="Padding" Value="10"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="#FFE5E5FF" CornerRadius="6">
+                                                    <ContentPresenter  RenderTransformOrigin="{DynamicResource GlobalOrigin}" HorizontalAlignment="Center" 
+VerticalAlignment="Center"/>
                                                 </Border>
                                             </ControlTemplate>
                                         </Setter.Value>

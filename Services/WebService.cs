@@ -353,6 +353,7 @@ namespace VoiceX.Services
                 return;
             }
         }
+
         public async Task<Account_data> GetAccountSettings(string pbxCode, string userToken, string fw)
         {
             if (String.IsNullOrEmpty(userToken))
@@ -622,6 +623,202 @@ namespace VoiceX.Services
             else
             {
                 responceModel.ResponseCode = System.Net.HttpStatusCode.NoContent;
+            }
+            return responceModel;
+        }
+        public async Task<responce_sms> SendOperatorSms(string text, string number, string userId, string pbxCode, string userToken, string fw)
+        {
+            responce_sms responceModel = new responce_sms
+            {
+                type = "",
+                message = ""
+            };
+            if (String.IsNullOrEmpty(text))
+            {
+                responceModel.type = "error";
+                responceModel.message = "Text is Empty";
+                return responceModel;
+            }
+            if (String.IsNullOrEmpty(number))
+            {
+                responceModel.type = "error";
+                responceModel.message = "Number is Empty";
+                return responceModel;
+            }
+            if (pbxCode.Where(char.IsDigit).Count() != 3)
+            {
+                responceModel.type = "error";
+                responceModel.message = "Wrong pbxCode";
+                return responceModel;
+            }
+            if (String.IsNullOrEmpty(userToken))
+            {
+                responceModel.type = "error";
+                responceModel.message = "Token not exist";
+                return responceModel;
+            }
+            if (String.IsNullOrEmpty(fw))
+            {
+                responceModel.type = "error";
+                responceModel.message = "FW number not exist";
+                return responceModel;
+            }
+            string url = $"https://app.{fw}.voicex.center/{pbxCode}/stats/api_v2/app/send_internal_sms.php";
+            string responseBody = "";
+            try
+            {
+                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("app-cert");
+                if (clientCertificate == null)
+                {
+                    responceModel.message = "Certificate not found";
+                    return responceModel;
+                }
+                JObject json = new JObject
+                {
+                    ["messageData"] = new JObject
+                    {
+                        ["src_user_id"] = userId,
+                        ["dst_user_id"] = number,
+                        ["msg"] = text
+                    }
+                };
+                var content = new StringContent(JsonConvert.SerializeObject(json), Encoding.UTF8, "application/json");
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                var handler = new HttpClientHandler();
+                handler.ClientCertificates.Add(clientCertificate);
+                using (var httpClient = new HttpClient(handler))
+                {
+                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
+                    var response = await httpClient.PostAsync(new Uri(url), content);
+                    responseBody = await response.Content.ReadAsStringAsync();
+                    await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
+                }
+            }
+            catch (Exception ex)
+            {
+                responceModel.type = "error";
+                responceModel.message = ex.Message;
+                await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
+                return responceModel;
+            }
+            if (!String.IsNullOrEmpty(responseBody))
+            {
+                try
+                {
+                    responceModel.type = "error";
+                    responceModel = JsonConvert.DeserializeObject<responce_sms>(responseBody)!;
+                }
+                catch (Exception ex)
+                {
+                    responceModel.type = "error";
+                    responceModel.message = ex.Message + " " + responseBody;
+                }
+            }
+            else
+            {
+                responceModel.type = "error";
+                responceModel.message = "Empty Responce";
+            }
+            return responceModel;
+        }
+        public async Task<responce_sms> SendSms(string text, string from, string number, string pbxCode, string userToken, string fw)
+        {
+            responce_sms responceModel = new responce_sms
+            {
+                type = "",
+                message = ""
+            };
+            if (String.IsNullOrEmpty(text))
+            {
+                responceModel.type = "error";
+                responceModel.message = "Text is Empty";
+                return responceModel;
+            }
+            if (String.IsNullOrEmpty(from))
+            {
+                responceModel.type = "error";
+                responceModel.message = "From is Empty";
+                return responceModel;
+            }
+            if (String.IsNullOrEmpty(number))
+            {
+                responceModel.type = "error";
+                responceModel.message = "Number is Empty";
+                return responceModel;
+            }
+            if (pbxCode.Where(char.IsDigit).Count() != 3)
+            {
+                responceModel.type = "error";
+                responceModel.message = "Wrong pbxCode";
+                return responceModel;
+            }
+            if (String.IsNullOrEmpty(userToken))
+            {
+                responceModel.type = "error";
+                responceModel.message = "Token not exist";
+                return responceModel;
+            }
+            if (String.IsNullOrEmpty(fw))
+            {
+                responceModel.type = "error";
+                responceModel.message = "FW number not exist";
+                return responceModel;
+            }
+            string url = $"https://app.{fw}.voicex.center/{pbxCode}/stats/api_v2/app/send_sms.php";
+            string responseBody = "";
+            try
+            {
+                X509Certificate2 clientCertificate = certificateService.GetCertificateByFriendlyName("app-cert");
+                if (clientCertificate == null)
+                {
+                    responceModel.message = "Certificate not found";
+                    return responceModel;
+                }
+                JObject json = new JObject
+                {
+                    ["messageData"] = new JObject
+                    {
+                        ["from"] = from,
+                        ["phone"] = number,
+                        ["message"] = text
+                    }
+                };
+                var content = new StringContent(JsonConvert.SerializeObject(json), Encoding.UTF8, "application/json");
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                var handler = new HttpClientHandler();
+                handler.ClientCertificates.Add(clientCertificate);
+                using (var httpClient = new HttpClient(handler))
+                {
+                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-APP-TOKEN", userToken);
+                    var response = await httpClient.PostAsync(new Uri(url), content);
+                    responseBody = await response.Content.ReadAsStringAsync();
+                    await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = responseBody, Created = DateTime.Now });
+                }
+            }
+            catch (Exception ex)
+            {
+                responceModel.type = "error";
+                responceModel.message = ex.Message;
+                await dbContext.AddLogAsync(new DAL.Entity.LogginNotes { Id = Guid.NewGuid(), Level = 0, Domain = pbxCode.Substring(0, 3), Message = ex.Message, Created = DateTime.Now });
+                return responceModel;
+            }
+            if (!String.IsNullOrEmpty(responseBody))
+            {
+                try
+                {
+                    responceModel.type = "error";
+                    responceModel = JsonConvert.DeserializeObject<responce_sms>(responseBody)!;
+                }
+                catch(Exception ex)
+                {
+                    responceModel.type = "error";
+                    responceModel.message = ex.Message + " " + responseBody;
+                }
+            }
+            else
+            {
+                responceModel.type = "error";
+                responceModel.message = "Empty Responce";
             }
             return responceModel;
         }

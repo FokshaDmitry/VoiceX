@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -28,12 +30,14 @@ namespace VoiceX.Views
         public event MoveOnPage? moveOnContact;
         public event MoveOnPage? moveOnHistory;
         public string? Version;
+        public string? SmsNumber;
         public MainWindow()
         {
             InitializeComponent();
             localStoreService = new LocalStoreService();
             addDbContext = new AddDbContext();
             webService = new WebService();
+            SmsNumber = "";
             timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMinutes(1)
@@ -202,10 +206,6 @@ namespace VoiceX.Views
             ErrorPlate.Visibility = Visibility.Collapsed;
             PreAsk.Visibility = Visibility.Collapsed;
             LanguagesFild.Visibility = Visibility.Collapsed;
-            SmsBlock.Visibility = Visibility.Collapsed;
-            TextMessage.Text = "Text";
-            TextMessage.Foreground = new SolidColorBrush(Color.FromArgb(255, 195, 195, 196));
-            SmsType.SelectedItem = null;
         }
         private void Copy_Click(object sender, RoutedEventArgs e)
         {
@@ -214,15 +214,27 @@ namespace VoiceX.Views
                 Clipboard.SetText(ErrorMessage.Text);
             }
         }
+        public void ShowSuccess()
+        {
+            SuccessPlate.Visibility = Visibility.Visible;
+        }
         public void ShowError(string message)
         {
             ErrorMessage.Text = message;
             ErrorPlate.Visibility = Visibility.Visible;
             ShowInBottomRight();
         }
-        public void ShowSmsBlock()
+        public void ShowSmsBlock(string number)
         {
-            SmsBlock.Visibility = Visibility.Visible;
+            SmsNumber = Regex.Replace(number, @"\D", "");
+            if (SmsNumber.Length < 7)
+            {
+                OperatorSmsBlock.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SmsBlock.Visibility = Visibility.Visible;
+            }
         }
         public void ShowLanguages()
         {
@@ -331,6 +343,186 @@ namespace VoiceX.Views
                 TextMessage.Text = "Text";
                 TextMessage.Foreground = new SolidColorBrush(Color.FromArgb(255, 195, 195, 196));
             }
+        }
+
+        private async void SendOperatorMessage_Click(object sender, RoutedEventArgs e)
+        {
+            TextBorderOperator.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+            if (TextMessageOperator.Text == "Text" || String.IsNullOrEmpty(TextMessage.Text))
+            {
+                TextBorderOperator.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                return;
+            }
+            var userId = App.AccountData?.Data.User_Data.UserID;
+            if (String.IsNullOrEmpty(userId))
+            {
+                ShowError("User ID not found");
+                DefaultOperatorMessagePlate();
+                return;
+            }
+            var res = await webService.SendOperatorSms(TextMessageOperator.Text, SmsNumber!, userId, App.UserPbx!, App.userToken!, App.fw!);
+            if (res != null)
+            {
+                if (res.type?.ToLower() == "success")
+                {
+                    OperatorSmsBlock.Visibility = Visibility.Collapsed;
+                    ShowSuccess();
+                    DefaultOperatorMessagePlate();
+                    return;
+                }
+                else
+                {
+                    if (!String.IsNullOrEmpty(res.message))
+                        ShowError(res.message);
+                    else
+                        ShowError("Failed to send message. Responce is empty");
+                }
+            }
+            else
+            {
+                ShowError("Failed to send message");
+            }
+            DefaultOperatorMessagePlate();
+        }
+
+        private async void SendMessage_Click(object sender, RoutedEventArgs e)
+        {
+            TextBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+            SmsType.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+            FromUserBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+            var selectItem = SmsType.SelectionBoxItem;
+            string? smsType = "";
+            if (selectItem != null) {
+                smsType = selectItem.ToString();
+                if (String.IsNullOrEmpty(TextMessage.Text) || smsType == "Select type")
+                {
+                    SmsType.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                    return;
+                }
+            }
+            else
+            {
+                SmsType.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                return;
+            }
+            if (FromUser.Text == "From" || String.IsNullOrEmpty(FromUser.Text))
+            {
+                FromUserBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                return;
+            }
+            if (TextMessage.Text == "Text" || String.IsNullOrEmpty(TextMessage.Text))
+            {
+                TextBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                return;
+            }
+            if (String.IsNullOrEmpty(SmsNumber))
+            {
+                ShowError("Number not found");
+                DefaultMessagePlate();
+                return;
+            }
+            else
+            {
+                string pattern = @"^(?:972|0)?(\d+)$";
+                string replacement = "972$1";
+                SmsNumber = Regex.Replace(SmsNumber, pattern, replacement);
+            }
+            if (smsType == "SMS")
+            {
+                var res = await webService.SendSms(TextMessage.Text, FromUser.Text, SmsNumber!, App.UserPbx!, App.userToken!, App.fw!);
+                if (res != null) {
+                    if (res.type == "success")
+                    {
+                        SmsBlock.Visibility = Visibility.Collapsed;
+                        ShowSuccess();
+                        DefaultMessagePlate();
+                        return;
+                    }
+                    else
+                    {
+                        if (!String.IsNullOrEmpty(res.message))
+                            ShowError(res.message);
+                        else
+                            ShowError("Failed to send message. Responce is empty");
+                    }
+                }
+                else
+                {
+                    ShowError("Failed to send message");
+                }
+
+            }
+            DefaultMessagePlate();
+            return;
+        }
+
+        private void FromUser_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (FromUser.Text == "From")
+            {
+                FromUser.Text = "";
+                FromUser.Foreground = new SolidColorBrush(Color.FromArgb(255, 92, 102, 189));
+            }
+        }
+
+        private void FromUser_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (FromUser.Text == "")
+            {
+                FromUser.Text = "From";
+                FromUser.Foreground = new SolidColorBrush(Color.FromArgb(255, 195, 195, 196));
+            }
+        }
+
+        private void ContinueSuccess_Click(object sender, RoutedEventArgs e)
+        {
+            SuccessPlate.Visibility = Visibility.Collapsed;
+        }
+        public void DefaultMessagePlate()
+        {
+            SmsBlock.Visibility = Visibility.Collapsed;
+            TextMessage.Text = "Text";
+            FromUser.Text = "From";
+            TextMessage.Foreground = new SolidColorBrush(Color.FromArgb(255, 195, 195, 196));
+            FromUser.Foreground = new SolidColorBrush(Color.FromArgb(255, 195, 195, 196));
+            SmsType.SelectedItem = null;
+            TextBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+            SmsType.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+            FromUserBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+        }
+        public void DefaultOperatorMessagePlate()
+        {
+            OperatorSmsBlock.Visibility = Visibility.Collapsed;
+            TextMessageOperator.Text = "Text";
+            TextMessageOperator.Foreground = new SolidColorBrush(Color.FromArgb(255, 195, 195, 196));
+            TextMessageOperator.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 193, 191, 255));
+        }
+        private void CloseMessage_Click(object sender, RoutedEventArgs e)
+        {
+            DefaultMessagePlate();
+        }
+
+        private void TextMessageOperator_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (TextMessageOperator.Text == "Text")
+            {
+                TextMessageOperator.Text = "";
+                TextMessageOperator.Foreground = new SolidColorBrush(Color.FromArgb(255, 92, 102, 189));
+            }
+        }
+
+        private void TextMessageOperator_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (TextMessageOperator.Text == "")
+            {
+                TextMessageOperator.Text = "Text";
+                TextMessageOperator.Foreground = new SolidColorBrush(Color.FromArgb(255, 195, 195, 196));
+            }
+        }
+
+        private void OperatorCloseMessage_Click(object sender, RoutedEventArgs e)
+        {
+            DefaultOperatorMessagePlate();
         }
     }
 }

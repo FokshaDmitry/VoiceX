@@ -60,7 +60,7 @@ namespace VoiceX.Items
 
         private void Sms_Click(object sender, RoutedEventArgs e)
         {
-            ProfilePage.window?.ShowSmsBlock();
+            ProfilePage.window?.ShowSmsBlock(contactPhone);
         }
     }
 }
