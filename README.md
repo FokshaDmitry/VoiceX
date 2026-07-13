@@ -11,7 +11,7 @@
 # VoiceX
 
 <p align="center">
-  <img width="437" height="260" alt="image" src="https://github.com/user-attachments/assets/c165c753-5e6a-4909-b38e-00258f4631a3"/>
+  <img width="200" height="120" alt="image" src="https://github.com/user-attachments/assets/c165c753-5e6a-4909-b38e-00258f4631a3"/>
   <br>
   <b>An advanced, lightweight, and high-performance cross-platform SIP softphone.</b>
   <br>
