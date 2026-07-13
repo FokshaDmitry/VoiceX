@@ -7,3 +7,64 @@
 <img width="250" height="440" alt="image" src="https://github.com/user-attachments/assets/bedd82de-6446-4691-9842-cfd85e7c868c" />
 <img width="250" height="440" alt="image" src="https://github.com/user-attachments/assets/a585fe69-0ebb-4d22-af32-0bb6cb5038e0" />
 <img width="250" height="440" alt="image" src="https://github.com/user-attachments/assets/decdba57-b6bc-404f-8cd2-78e42b87243a" />
+
+# VoiceX
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/FokshaDmitry/VoiceX/main/assets/logo.png" alt="VoiceX Logo" width="120" height="120">\
+  <br>
+  <b>An advanced, lightweight, and high-performance cross-platform SIP softphone.</b>
+  <br>
+  <sub>A modern, feature-rich alternative to MicroSIP built for seamless VoIP communication.</sub>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/github/license/FokshaDmitry/VoiceX?style=flat-square&color=blue" alt="License">
+  <img src="https://img.shields.io/github/v/release/FokshaDmitry/VoiceX?style=flat-square&color=success" alt="Latest Release">
+  <img src="https://img.shields.io/badge/.NET-8.0-blueviolet?style=flat-square" alt=".NET Version">
+  <img src="https://img.shields.io/badge/Engine-PJSIP%20%2F%20PJSUA2-orange?style=flat-square" alt="PJSIP Engine">
+</p>
+
+---
+
+## 📌 Overview
+
+**VoiceX** is a next-generation VoIP softphone designed for users who appreciate the lightning-fast, resource-efficient nature of MicroSIP but require modern interfaces, cross-platform flexibility, and enhanced feature sets. 
+
+Powered by the robust, industry-standard **PJSIP (PJSUA2)** engine and leveraging the performance of modern **.NET**, VoiceX ensures crystal-clear audio, low latency, and rock-solid connection stability with any standard SIP-based PBX (such as Asterisk, FreePBX, 3CX, or cloud VoIP providers).
+
+---
+
+## ✨ Key Features
+
+- **🚀 Ultra-Lightweight & Fast:** Minimal memory footprint and instant startup times, just like MicroSIP.
+- **🎧 Crystal Clear Audio:** Advanced media pipeline with support for high-quality codecs (Opus, G.711, G.722), Acoustic Echo Cancellation (AEC), and Adaptive Jitter Buffer.
+- **🎨 Modern UX/UI:** A clean, intuitive, and highly responsive user interface designed for both everyday business tasks and intensive call-center environments.
+- **🔄 Standalone Auto-Updates:** Features an integrated background update system communicating with a custom ASP.NET WebAPI microservice, ensuring you always run the latest, most secure version automatically.
+- **🛡️ Enterprise Ready:** Fully compatible with standard SIP extensions, authentication schemas, and advanced call control (Hold, Mute, Attended/Blind Transfer).
+- **📋 Core Telephony Essentials:** Quick-access dialer, localized configuration, precise call history logs, and system tray integration.
+
+---
+
+## 🏗️ Architecture
+
+VoiceX uses a decoupled architecture to separate high-level presentation logic from sensitive audio and network management:
+
+1. **Presentation Layer:** Built using scalable modern UI frameworks to deliver a smooth user experience across target desktop environments.
+2. **Service Abstraction:** A managed C# (.NET) service layer managing account lifecycles, connection statuses, background workers, and thread orchestration.
+3. **Core Telecom Engine:** Native bindings to **PJSUA2** ensuring high performance for SIP registration, signaling, and secure RTP media transport.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- [.NET SDK 8.0](https://dotnet.microsoft.com/download) or higher.
+- A valid SIP/VoIP account from your provider or local PBX.
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/FokshaDmitry/VoiceX.git](https://github.com/FokshaDmitry/VoiceX.git)
+   cd VoiceX
